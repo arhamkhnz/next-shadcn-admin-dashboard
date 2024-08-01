@@ -1,0 +1,6 @@
+node_modules
+.next
+.eslintrc.json
+.prettierrc
+public
+src/components/ui
