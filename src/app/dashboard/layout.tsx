@@ -55,7 +55,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center justify-between px-4 py-2 lg:justify-end">
             <Button
               onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-              variant="secondary"
+              variant="default"
               className="size-9 p-1 md:flex lg:hidden"
             >
               <Menu className="size-6" />
