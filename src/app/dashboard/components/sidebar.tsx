@@ -54,16 +54,12 @@ function SidebarItemWithChildren({
             </TooltipTrigger>
             <TooltipContent side="right" className="flex items-center gap-4">
               {item.title}
-              {item.label && <span className="ml-auto text-muted-foreground">{item.label}</span>}
             </TooltipContent>
           </Tooltip>
         ) : (
           <div className="flex items-center">
             <item.icon className="mr-2 size-4" />
             {item.title}
-            {item.label && (
-              <span className={cn("ml-auto", item.variant === "default" && "text-background")}>{item.label}</span>
-            )}
           </div>
         )}
       </AccordionTrigger>
@@ -95,6 +91,7 @@ function SidebarItemWithChildren({
             >
               <Circle className={cn("mr-2 h-3 w-3")} />
               <div className={cn("text-sm duration-200")}>{child.title}</div>
+              {child.label && <span className="ml-auto">{child.label}</span>}
             </Link>
           ),
         )}
@@ -109,7 +106,6 @@ function CollapsedSidebar({ item, getVariant }: { item: NavItem; getVariant: Get
   }
 
   const variant = getVariant(item.route || "")
-
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
@@ -132,7 +128,6 @@ function ExpandedSidebar({ item, getVariant }: { item: NavItem; getVariant: GetV
   }
 
   const variant = getVariant(item.route || "")
-
   return (
     <Link
       href={item.route || "#"}
@@ -140,9 +135,7 @@ function ExpandedSidebar({ item, getVariant }: { item: NavItem; getVariant: GetV
     >
       <item.icon className="mr-2 size-4" />
       {item.title}
-      {item.label && (
-        <span className={cn("ml-auto", item.variant === "default" && "text-background")}>{item.label}</span>
-      )}
+      {item.label && <span className={cn("ml-auto")}>{item.label}</span>}
     </Link>
   )
 }
