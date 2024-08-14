@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Circle } from "lucide-react"
 import initials from "initials"
 import { sidebarItems, SidebarItem, NavItem, NavHeader } from "@/navigation/sidebar-items/sidebarItems"
-import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
@@ -13,8 +12,27 @@ import useVariantBasedOnRoute from "@/hooks/useVariantBasedOnRoute"
 
 type GetVariantFunction = (route: string) => "default" | "ghost"
 
-function SidebarHeading({ heading, isMobileSidebar = false }: { heading: string; isMobileSidebar: boolean }) {
-  return (
+function SidebarHeading({
+  heading,
+  isMobileSidebar = false,
+  isCollapsed,
+}: {
+  heading: string
+  isMobileSidebar: boolean
+  isCollapsed: boolean
+}) {
+  return isCollapsed ? (
+    <Tooltip delayDuration={0}>
+      <TooltipTrigger asChild>
+        <div className="flex size-9 items-center justify-center rounded-md bg-gray-200">
+          <span className="text-sm uppercase text-zinc-500">{initials(heading)}</span>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent side="right" className="flex items-center gap-4">
+        {heading}
+      </TooltipContent>
+    </Tooltip>
+  ) : (
     <h4 className={cn("px-3 text-zinc-500 text-sm mt-2 mb-1 uppercase text-left", isMobileSidebar && "px-1")}>
       {heading}
     </h4>
@@ -162,13 +180,10 @@ export default function Sidebar({ isCollapsed, isMobileSidebar = false }: NavPro
             )}
           >
             {sidebarItems.map((item: SidebarItem) => {
-              if (isCollapsed) {
-                if (isNavItem(item)) {
+              if (isNavItem(item)) {
+                if (isCollapsed) {
                   return <CollapsedSidebar key={item.title} item={item} getVariant={getVariant} />
                 }
-                return <Separator key={(item as NavHeader).heading} />
-              }
-              if (isNavItem(item)) {
                 return <ExpandedSidebar key={item.title} item={item} getVariant={getVariant} />
               }
               return (
@@ -176,6 +191,7 @@ export default function Sidebar({ isCollapsed, isMobileSidebar = false }: NavPro
                   isMobileSidebar={isMobileSidebar}
                   key={(item as NavHeader).heading}
                   heading={(item as NavHeader).heading}
+                  isCollapsed={isCollapsed}
                 />
               )
             })}
