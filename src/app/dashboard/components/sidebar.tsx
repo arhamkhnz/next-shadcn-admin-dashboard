@@ -1,14 +1,17 @@
 import React from "react"
-import { usePathname } from "next/navigation"
+
 import Link from "next/link"
-import { Circle } from "lucide-react"
+import { usePathname } from "next/navigation"
+
 import initials from "initials"
-import { sidebarItems, SidebarItem, NavItem, NavHeader } from "@/navigation/sidebar-items/sidebarItems"
-import { cn } from "@/lib/utils"
+import { Circle } from "lucide-react"
+
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { buttonVariants } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import useVariantBasedOnRoute from "@/hooks/useVariantBasedOnRoute"
+import { cn } from "@/lib/utils"
+import { sidebarItems, SidebarItem, NavItem, NavHeader } from "@/navigation/sidebar-items/sidebarItems"
 
 type GetVariantFunction = (route: string) => "default" | "ghost"
 
@@ -17,9 +20,9 @@ function SidebarHeading({
   isMobileSidebar = false,
   isCollapsed,
 }: {
-  heading: string
-  isMobileSidebar: boolean
-  isCollapsed: boolean
+  readonly heading: string
+  readonly isMobileSidebar: boolean
+  readonly isCollapsed: boolean
 }) {
   return isCollapsed ? (
     <Tooltip delayDuration={0}>
@@ -44,11 +47,11 @@ function SidebarItemWithChildren({
   isCollapsed = false,
   getVariant,
 }: {
-  item: NavItem
-  isCollapsed?: boolean
-  getVariant: GetVariantFunction
+  readonly item: NavItem
+  readonly isCollapsed?: boolean
+  readonly getVariant: GetVariantFunction
 }) {
-  const childRoutes = item.children?.map((child) => child.route || "") || []
+  const childRoutes = item.children?.map((child) => child.route || "") ?? []
   const currentPath = usePathname()
   const isActive = childRoutes.some((route) => currentPath.includes(route))
 
@@ -118,16 +121,16 @@ function SidebarItemWithChildren({
   )
 }
 
-function CollapsedSidebar({ item, getVariant }: { item: NavItem; getVariant: GetVariantFunction }) {
+function CollapsedSidebar({ item, getVariant }: { readonly item: NavItem; readonly getVariant: GetVariantFunction }) {
   if (item.children) {
     return <SidebarItemWithChildren item={item} isCollapsed getVariant={getVariant} />
   }
 
-  const variant = getVariant(item.route || "")
+  const variant = getVariant(item.route ?? "")
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
-        <Link href={item.route || "#"} className={cn(buttonVariants({ variant, size: "icon" }), "h-9 w-9")}>
+        <Link href={item.route ?? "#"} className={cn(buttonVariants({ variant, size: "icon" }), "h-9 w-9")}>
           <item.icon className="size-4" />
           <span className="sr-only">{item.title}</span>
         </Link>
@@ -140,15 +143,15 @@ function CollapsedSidebar({ item, getVariant }: { item: NavItem; getVariant: Get
   )
 }
 
-function ExpandedSidebar({ item, getVariant }: { item: NavItem; getVariant: GetVariantFunction }) {
+function ExpandedSidebar({ item, getVariant }: { readonly item: NavItem; readonly getVariant: GetVariantFunction }) {
   if (item.children) {
     return <SidebarItemWithChildren item={item} getVariant={getVariant} />
   }
 
-  const variant = getVariant(item.route || "")
+  const variant = getVariant(item.route ?? "")
   return (
     <Link
-      href={item.route || "#"}
+      href={item.route ?? "#"}
       className={cn(buttonVariants({ variant, size: "sm" }), "flex justify-start items-center")}
     >
       <item.icon className="mr-2 size-4" />
@@ -159,8 +162,8 @@ function ExpandedSidebar({ item, getVariant }: { item: NavItem; getVariant: GetV
 }
 
 interface NavProps {
-  isCollapsed: boolean
-  isMobileSidebar?: boolean
+  readonly isCollapsed: boolean
+  readonly isMobileSidebar?: boolean
 }
 
 function isNavItem(item: SidebarItem): item is NavItem {
@@ -189,8 +192,8 @@ export default function Sidebar({ isCollapsed, isMobileSidebar = false }: NavPro
               return (
                 <SidebarHeading
                   isMobileSidebar={isMobileSidebar}
-                  key={(item as NavHeader).heading}
-                  heading={(item as NavHeader).heading}
+                  key={item.heading}
+                  heading={item.heading}
                   isCollapsed={isCollapsed}
                 />
               )

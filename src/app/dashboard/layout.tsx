@@ -1,20 +1,23 @@
 "use client"
 
 import React, { ReactNode, useState } from "react"
+
 import { Menu } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
-import useScreenSize from "@/hooks/useScreenSize"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
 import useRouteChange from "@/hooks/useRouteChange"
+import useScreenSize from "@/hooks/useScreenSize"
+import { cn } from "@/lib/utils"
+
+import { AccountSwitcher } from "./components/account-switcher"
 import Sidebar from "./components/sidebar"
 import { UserNav } from "./components/user-nav"
-import { AccountSwitcher } from "./components/account-switcher"
 
 interface LayoutProps {
-  children: ReactNode
+  readonly children: ReactNode
 }
 
 export default function Layout({ children }: LayoutProps) {

@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
 
 interface LayoutProps {
-  children: ReactNode
+  readonly children: ReactNode
 }
 
 export default function Layout({ children }: LayoutProps) {

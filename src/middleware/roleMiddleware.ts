@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+
 import { roles } from "../utils/roles"
 
 function hasAccess(userRole: string, pathname: string): boolean {

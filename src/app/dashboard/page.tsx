@@ -1,16 +1,18 @@
 "use client"
 
 import React from "react"
+
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
+import initials from "initials"
 import { DollarSign, Users, CreditCard, Activity } from "lucide-react"
+import { DateRange } from "react-day-picker"
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+
+import { DateRangePicker } from "@/components/DateRangePicker"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { DateRangePicker } from "@/components/DateRangePicker"
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
-import initials from "initials"
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
 import { salesData, overviewChartData } from "@/constants/dummyData"
-import { DateRange } from "react-day-picker"
 
 export default function Page() {
   const [selectedRange, setSelectedRange] = React.useState<DateRange | undefined>(undefined)

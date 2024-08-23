@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+
 import { usePathname } from "next/navigation"
 
 const useRouteChange = (callback: () => void) => {

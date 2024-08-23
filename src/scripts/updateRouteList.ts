@@ -1,5 +1,6 @@
 import * as fs from "fs"
 import * as path from "path"
+
 import fg from "fast-glob"
 
 const appPath = path.join(__dirname, "../app")
