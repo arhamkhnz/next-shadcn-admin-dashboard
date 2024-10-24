@@ -11,7 +11,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 import useVariantBasedOnRoute from "@/hooks/useVariantBasedOnRoute"
 import { cn } from "@/lib/utils"
-import { sidebarItems, SidebarItem, NavItem, NavHeader } from "@/navigation/sidebar-items/sidebarItems"
+import { sidebarItems, SidebarItem, NavItem, NavHeader } from "@/navigation/sidebar/sidebarItems"
 
 type GetVariantFunction = (route: string) => "default" | "ghost"
 

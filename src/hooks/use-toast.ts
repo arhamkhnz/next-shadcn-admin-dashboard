@@ -62,7 +62,6 @@ const addToRemoveQueue = (toastId: string) => {
 
   const timeout = setTimeout(() => {
     toastTimeouts.delete(toastId)
-    // eslint-disable-next-line
     dispatch({
       type: "REMOVE_TOAST",
       toastId,
@@ -94,8 +93,8 @@ export const reducer = (state: State, action: Action): State => {
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
-        state.toasts.forEach((currentToast) => {
-          addToRemoveQueue(currentToast.id)
+        state.toasts.forEach((toast) => {
+          addToRemoveQueue(toast.id)
         })
       }
 
@@ -122,8 +121,6 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       }
-    default:
-      return state
   }
 }
 
@@ -143,10 +140,10 @@ type Toast = Omit<ToasterToast, "id">
 function toast({ ...props }: Toast) {
   const id = genId()
 
-  const update = (toastProps: ToasterToast) =>
+  const update = (props: ToasterToast) =>
     dispatch({
       type: "UPDATE_TOAST",
-      toast: { ...toastProps, id },
+      toast: { ...props, id },
     })
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
 

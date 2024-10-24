@@ -7,7 +7,6 @@ package-lock.json
 package.json
 postcss.config.mjs
 README.md
-tailwind.config.ts
 tsconfig.json
 .env
 src/components/ui
