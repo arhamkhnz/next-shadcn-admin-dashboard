@@ -1,18 +1,4 @@
-import {
-  AlertCircle,
-  Archive,
-  ArchiveX,
-  File,
-  Inbox,
-  MessagesSquare,
-  Send,
-  ShoppingCart,
-  Trash2,
-  Users2,
-  Receipt,
-  LucideIcon,
-  PanelsTopLeft,
-} from "lucide-react"
+import { File, Inbox, Send, Receipt, LucideIcon, PanelsTopLeft } from "lucide-react"
 
 export interface NavSubItem {
   title: string
@@ -24,7 +10,7 @@ export interface NavMainItem {
   url: string
   icon?: LucideIcon
   isActive?: boolean
-  items?: NavSubItem[]
+  subItems?: NavSubItem[]
 }
 
 export interface NavGroup {
@@ -58,18 +44,18 @@ export const sidebarItems: NavGroup[] = [
         title: "Invoice",
         url: "#",
         icon: Receipt,
-        items: [
+        subItems: [
           { title: "List", url: `${basePath}/invoice/list-preview` },
-          { title: "View", url: `${basePath}/invoice/list-preview` },
-          { title: "Add", url: `${basePath}/invoice/list-preview` },
-          { title: "Edit", url: `${basePath}/invoice/list-preview` },
+          { title: "View", url: `${basePath}/invoice/view` },
+          { title: "Add", url: `${basePath}/invoice/add` },
+          { title: "Edit", url: `${basePath}/invoice/edit` },
         ],
       },
       {
         title: "Auth",
         url: "#",
         icon: Receipt,
-        items: [{ title: "Unauthorized", url: `${basePath}/auth/unauthorized` }],
+        subItems: [{ title: "Unauthorized", url: `${basePath}/auth/unauthorized` }],
       },
       {
         title: "Drafts",

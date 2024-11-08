@@ -2,15 +2,14 @@
 
 import * as React from "react"
 
-import { AudioWaveform, Frame, PieChart, Command, GalleryVerticalEnd, Map } from "lucide-react"
+import { AudioWaveform, Command, Frame, GalleryVerticalEnd, Map, PieChart } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
+import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
 import { sidebarItems } from "@/navigation/sidebar/sidebarItems"
-
-import { NavProjects } from "./nav-projects"
 
 const user = {
   name: "shadcn",
@@ -61,7 +60,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain navItems={sidebarItems} />
+        <NavMain sidebarItems={sidebarItems} />
         <NavProjects projects={projects} />
       </SidebarContent>
       <SidebarFooter>

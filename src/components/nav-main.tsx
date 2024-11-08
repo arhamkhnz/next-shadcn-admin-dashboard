@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import {
@@ -15,29 +15,29 @@ import {
 } from "@/components/ui/sidebar"
 import { NavGroup } from "@/navigation/sidebar/sidebarItems"
 
-export function NavMain({ navItems }: { readonly navItems: NavGroup[] }) {
+export function NavMain({ sidebarItems }: { sidebarItems: NavGroup[] }) {
   return (
-    <SidebarGroup>
-      {navItems.map((group) => (
-        <div key={group.label}>
-          <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+    <>
+      {sidebarItems.map((navGroup) => (
+        <SidebarGroup key={navGroup.label}>
+          {navGroup.label && <SidebarGroupLabel>{navGroup.label}</SidebarGroupLabel>}
           <SidebarMenu>
-            {group.items.map((item) => (
+            {navGroup.items.map((item) => (
               <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton tooltip={item.title}>
                       {item.icon && <item.icon />}
                       <span>{item.title}</span>
-                      {item.items && (
+                      {item.subItems && (
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       )}
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
-                  {item.items && (
+                  {item.subItems && (
                     <CollapsibleContent>
                       <SidebarMenuSub>
-                        {item.items.map((subItem) => (
+                        {item.subItems.map((subItem) => (
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton asChild>
                               <a href={subItem.url}>
@@ -53,8 +53,8 @@ export function NavMain({ navItems }: { readonly navItems: NavGroup[] }) {
               </Collapsible>
             ))}
           </SidebarMenu>
-        </div>
+        </SidebarGroup>
       ))}
-    </SidebarGroup>
+    </>
   )
 }
