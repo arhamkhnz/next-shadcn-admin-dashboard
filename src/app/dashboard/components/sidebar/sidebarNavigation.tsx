@@ -15,11 +15,11 @@ import {
 } from "@/components/ui/sidebar"
 import { NavGroup } from "@/navigation/sidebar/sidebarItems"
 
-export function NavMain({ sidebarItems }: { sidebarItems: NavGroup[] }) {
+export default function SidebarNavigation({ sidebarItems }: { readonly sidebarItems: NavGroup[] }) {
   return (
     <>
       {sidebarItems.map((navGroup) => (
-        <SidebarGroup key={navGroup.label}>
+        <SidebarGroup key={navGroup.id}>
           {navGroup.label && <SidebarGroupLabel>{navGroup.label}</SidebarGroupLabel>}
           <SidebarMenu>
             {navGroup.items.map((item) => (

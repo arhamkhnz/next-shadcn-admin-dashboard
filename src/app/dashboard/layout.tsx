@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from "react"
 
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/app/dashboard/components/sidebar/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,

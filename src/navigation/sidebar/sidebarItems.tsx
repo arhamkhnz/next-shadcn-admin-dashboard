@@ -14,6 +14,7 @@ export interface NavMainItem {
 }
 
 export interface NavGroup {
+  id: number
   label: string
   items: NavMainItem[]
 }
@@ -22,6 +23,7 @@ const basePath = "/dashboard"
 
 export const sidebarItems: NavGroup[] = [
   {
+    id: 1,
     label: "Overview",
     items: [
       {
@@ -33,6 +35,7 @@ export const sidebarItems: NavGroup[] = [
     ],
   },
   {
+    id: 2,
     label: "Apps & Pages",
     items: [
       {
@@ -70,6 +73,7 @@ export const sidebarItems: NavGroup[] = [
     ],
   },
   {
+    id: 3,
     label: "Billing",
     items: [
       {

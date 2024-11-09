@@ -1,6 +1,7 @@
 "use client"
 
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react"
+import { CaretSortIcon, ComponentPlaceholderIcon } from "@radix-ui/react-icons"
+import { BadgeCheck, Bell, LogOut, Sparkles } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -14,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
 
-export function NavUser({
+export default function SidebarFooterMenu({
   user,
 }: {
   readonly user: {
@@ -42,7 +43,7 @@ export function NavUser({
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <CaretSortIcon className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -77,7 +78,7 @@ export function NavUser({
                 Account
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <CreditCard />
+                <ComponentPlaceholderIcon />
                 Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
