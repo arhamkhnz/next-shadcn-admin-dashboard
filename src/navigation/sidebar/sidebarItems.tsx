@@ -1,13 +1,13 @@
-import { File, Inbox, Send, Receipt, LucideIcon, PanelsTopLeft } from "lucide-react"
+import { File, Inbox, Send, Receipt, KeySquare, LucideIcon, PanelsTopLeft } from "lucide-react"
 
 export interface NavSubItem {
   title: string
-  url: string
+  path: string
 }
 
 export interface NavMainItem {
   title: string
-  url: string
+  path: string
   icon?: LucideIcon
   isActive?: boolean
   subItems?: NavSubItem[]
@@ -28,7 +28,7 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Dashboard",
-        url: basePath,
+        path: basePath,
         icon: PanelsTopLeft,
         isActive: true,
       },
@@ -40,34 +40,34 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Inbox",
-        url: `${basePath}/inbox`,
+        path: `${basePath}/inbox`,
         icon: Inbox,
       },
       {
         title: "Invoice",
-        url: "#",
+        path: "#",
         icon: Receipt,
         subItems: [
-          { title: "List", url: `${basePath}/invoice/list-preview` },
-          { title: "View", url: `${basePath}/invoice/view` },
-          { title: "Add", url: `${basePath}/invoice/add` },
-          { title: "Edit", url: `${basePath}/invoice/edit` },
+          { title: "List", path: `${basePath}/invoice/list-preview` },
+          { title: "View", path: `${basePath}/invoice/view` },
+          { title: "Add", path: `${basePath}/invoice/add` },
+          { title: "Edit", path: `${basePath}/invoice/edit` },
         ],
       },
       {
         title: "Auth",
-        url: "#",
-        icon: Receipt,
-        subItems: [{ title: "Unauthorized", url: `${basePath}/auth/unauthorized` }],
+        path: "#",
+        icon: KeySquare,
+        subItems: [{ title: "Unauthorized", path: `${basePath}/auth/unauthorized` }],
       },
       {
         title: "Drafts",
-        url: `${basePath}/drafts`,
+        path: `${basePath}/drafts`,
         icon: File,
       },
       {
         title: "Sent",
-        url: `${basePath}/sent`,
+        path: `${basePath}/sent`,
         icon: Send,
       },
     ],
@@ -78,7 +78,7 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Billing",
-        url: `${basePath}/billing`,
+        path: `${basePath}/billing`,
         icon: Receipt,
       },
     ],
