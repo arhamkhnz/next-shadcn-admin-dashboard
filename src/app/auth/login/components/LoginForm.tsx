@@ -27,7 +27,7 @@ export default function LoginForm() {
     },
   })
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async(data: z.infer<typeof FormSchema>) => {
     setIsLoading(true)
     toast({
       title: "Login successful",
