@@ -5,6 +5,8 @@ import pluginReact from "eslint-plugin-react";
 import tailwind from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import securityPlugin from "eslint-plugin-security";
+import sonarjs from "eslint-plugin-sonarjs";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -13,9 +15,15 @@ const compat = new FlatCompat({
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  { ignores: [".github/", ".husky/", "node_modules/", ".next/", "src/components/ui", "*.config.ts"] },
+  { ignores: [".github/", ".husky/", "node_modules/", ".next/", "src/components/ui", "*.config.ts", "*.mjs"] },
   {
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      globals: globals.browser,
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
     settings: {
       react: {
         version: "detect",
@@ -24,10 +32,13 @@ export default [
     plugins: {
       import: pluginImport,
       tailwindcss: tailwind,
+      security: securityPlugin,
     },
   },
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
+  securityPlugin.configs.recommended,
+  sonarjs.configs.recommended,
   ...tseslint.configs.recommended,
   ...tailwind.configs["flat/recommended"],
   ...compat.extends("next/core-web-vitals", "next/typescript"),
@@ -79,9 +90,33 @@ export default [
       // Naming Conventions
       "no-underscore-dangle": ["error", { allow: ["_id", "__dirname"] }],
 
-      // Unused Variables
-      "no-unused-vars": "off",
+      // SonarJS Recommended Rules (customized)
+      "sonarjs/cognitive-complexity": ["warn", 15], // Customized threshold
+      "sonarjs/no-duplicate-string": ["warn", { threshold: 3 }], // Customized threshold
+      "sonarjs/unused-import": "off",
+
+      // Complexity
+      "complexity": ["error", { max: 10 }],
+      "max-lines": ["error", { max: 300, skipBlankLines: true, skipComments: true }],
+      "max-depth": ["error", 4],
+
+      // TypeScript-Specific Rules (customized)
+      "@typescript-eslint/prefer-nullish-coalescing": "error",
+      "@typescript-eslint/no-unnecessary-type-assertion": "error",
+      "@typescript-eslint/no-unnecessary-condition": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": ["warn"],
+
+      // Tailwind CSS - Enforce Predefined Classes over Arbitrary Values
+      "tailwindcss/no-arbitrary-value": [
+        "warn",
+        {
+          config: "tailwind.config.ts",
+        },
+      ],
+
+      // React unnecessary import rules
+      "react/jsx-no-useless-fragment": ["warn", { allowExpressions: true }],
     },
   },
 ];
