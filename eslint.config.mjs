@@ -6,7 +6,6 @@ import tailwind from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 import securityPlugin from "eslint-plugin-security";
-import sonarjs from "eslint-plugin-sonarjs";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -38,7 +37,6 @@ export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
   securityPlugin.configs.recommended,
-  sonarjs.configs.recommended,
   ...tseslint.configs.recommended,
   ...tailwind.configs["flat/recommended"],
   ...compat.extends("next/core-web-vitals", "next/typescript"),
@@ -89,11 +87,6 @@ export default [
 
       // Naming Conventions
       "no-underscore-dangle": ["error", { allow: ["_id", "__dirname"] }],
-
-      // SonarJS Recommended Rules (customized)
-      "sonarjs/cognitive-complexity": ["warn", 15], // Customized threshold
-      "sonarjs/no-duplicate-string": ["warn", { threshold: 3 }], // Customized threshold
-      "sonarjs/unused-import": "off",
 
       // Complexity
       "complexity": ["error", { max: 10 }],
