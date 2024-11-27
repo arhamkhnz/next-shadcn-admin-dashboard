@@ -47,9 +47,9 @@
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
-    "@tanstack/react-query": "^5.61.0",
-    "axios": "^1.7.7",
-    "class-variance-authority": "^0.7.0",
+    "@tanstack/react-query": "^5.61.4",
+    "axios": "^1.7.8",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
@@ -67,7 +67,7 @@
     "react-resizable-panels": "^2.1.7",
     "recharts": "^2.13.3",
     "sonner": "^1.7.0",
-    "tailwind-merge": "^2.5.4",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.1",
     "zod": "^3.23.8"
@@ -75,7 +75,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.14.0",
-    "@types/node": "^20.17.7",
+    "@types/node": "^20.17.8",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18",
     "@typescript-eslint/parser": "^8.13.0",
@@ -89,10 +89,10 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "postcss": "^8.4.49",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.1",
     "tailwindcss": "^3.4.15",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.15.0"
+    "typescript-eslint": "^8.16.0"
   }
 }
