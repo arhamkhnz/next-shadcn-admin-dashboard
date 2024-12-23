@@ -1,25 +1,25 @@
-import { File, Inbox, Send, Receipt, KeySquare, LucideIcon, PanelsTopLeft } from "lucide-react"
+import { File, Inbox, Send, Receipt, KeySquare, LucideIcon, PanelsTopLeft } from "lucide-react";
 
 export interface NavSubItem {
-  title: string
-  path: string
+  title: string;
+  path: string;
 }
 
 export interface NavMainItem {
-  title: string
-  path: string
-  icon?: LucideIcon
-  isActive?: boolean
-  subItems?: NavSubItem[]
+  title: string;
+  path: string;
+  icon?: LucideIcon;
+  isActive?: boolean;
+  subItems?: NavSubItem[];
 }
 
 export interface NavGroup {
-  id: number
-  label: string
-  items: NavMainItem[]
+  id: number;
+  label: string;
+  items: NavMainItem[];
 }
 
-const basePath = "/dashboard"
+const basePath = "/dashboard";
 
 export const sidebarItems: NavGroup[] = [
   {
@@ -83,4 +83,4 @@ export const sidebarItems: NavGroup[] = [
       },
     ],
   },
-]
+];

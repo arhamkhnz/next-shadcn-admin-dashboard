@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import React from "react"
+import React from "react";
 
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
-import initials from "initials"
-import { DollarSign, Users, CreditCard, Activity } from "lucide-react"
-import { DateRange } from "react-day-picker"
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+import initials from "initials";
+import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
+import { DateRange } from "react-day-picker";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { DateRangePicker } from "@/components/DateRangePicker"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { salesData, overviewChartData } from "@/constants/dummyData"
+import { DateRangePicker } from "@/components/DateRangePicker";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { salesData, overviewChartData } from "@/constants/dummyData";
 
 export default function Page() {
-  const [selectedRange, setSelectedRange] = React.useState<DateRange | undefined>(undefined)
+  const [selectedRange, setSelectedRange] = React.useState<DateRange | undefined>(undefined);
   return (
     <div className="flex-col md:flex">
       <div className="flex-1 space-y-4">
@@ -127,5 +127,5 @@ export default function Page() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }

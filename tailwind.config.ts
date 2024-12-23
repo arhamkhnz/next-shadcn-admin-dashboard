@@ -1,8 +1,8 @@
-import type { Config } from "tailwindcss"
-import tailwindcssAnimate from "tailwindcss-animate"
+import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config = {
-  darkMode: ["selector"],
+  darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
@@ -96,6 +96,6 @@ const config = {
     },
   },
   plugins: [tailwindcssAnimate],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

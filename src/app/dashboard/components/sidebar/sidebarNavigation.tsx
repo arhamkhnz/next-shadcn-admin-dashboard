@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react";
 
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -12,8 +12,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
-import { NavGroup } from "@/navigation/sidebar/sidebarItems"
+} from "@/components/ui/sidebar";
+import { NavGroup } from "@/navigation/sidebar/sidebarItems";
 
 export default function SidebarNavigation({ sidebarItems }: { readonly sidebarItems: NavGroup[] }) {
   return (
@@ -56,5 +56,5 @@ export default function SidebarNavigation({ sidebarItems }: { readonly sidebarIt
         </SidebarGroup>
       ))}
     </>
-  )
+  );
 }

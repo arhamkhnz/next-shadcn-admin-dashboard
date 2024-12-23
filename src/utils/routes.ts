@@ -1,1 +1,1 @@
-export const routes: string[] = ["/", "/dashboard", "/auth/login"]
+export const routes: string[] = ["/", "/dashboard", "/auth/login"];

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { CaretSortIcon, ComponentPlaceholderIcon } from "@radix-ui/react-icons"
-import { BadgeCheck, Bell, LogOut, Sparkles } from "lucide-react"
+import { CaretSortIcon, ComponentPlaceholderIcon } from "@radix-ui/react-icons";
+import { BadgeCheck, Bell, LogOut, Sparkles } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,19 +12,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
+} from "@/components/ui/dropdown-menu";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 
 export default function SidebarFooterMenu({
   user,
 }: {
   readonly user: {
-    name: string
-    email: string
-    avatar: string
-  }
+    name: string;
+    email: string;
+    avatar: string;
+  };
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
 
   return (
     <SidebarMenu>
@@ -95,5 +95,5 @@ export default function SidebarFooterMenu({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

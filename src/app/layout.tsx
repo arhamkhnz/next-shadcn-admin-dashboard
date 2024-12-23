@@ -1,19 +1,19 @@
-import React from "react"
+import React from "react";
 
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
-import { ToastProvider } from "@/components/ui/toast"
-import { Toaster } from "@/components/ui/toaster"
+import { ToastProvider } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
 
-import "./globals.css"
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Studio Admin",
   description: "",
-}
+};
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -25,5 +25,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </body>
       </ToastProvider>
     </html>
-  )
+  );
 }

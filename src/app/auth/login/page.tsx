@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import React from "react"
+import React from "react";
 
-import Link from "next/link"
+import Link from "next/link";
 
-import LoginForm from "./components/LoginForm"
+import LoginForm from "./components/LoginForm";
 
 export default function page() {
   return (
@@ -26,5 +26,5 @@ export default function page() {
         .
       </p>
     </div>
-  )
+  );
 }

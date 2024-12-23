@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import React, { ReactNode } from "react"
+import React, { ReactNode } from "react";
 
-import { AppSidebar } from "@/app/dashboard/components/sidebar/app-sidebar"
+import { AppSidebar } from "@/app/dashboard/components/sidebar/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,12 +10,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 interface LayoutProps {
-  readonly children: ReactNode
+  readonly children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
@@ -45,5 +45,5 @@ export default function Layout({ children }: LayoutProps) {
         </SidebarInset>
       </SidebarProvider>
     </main>
-  )
+  );
 }

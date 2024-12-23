@@ -1,8 +1,8 @@
-import React from "react"
+import React from "react";
 
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  redirect("/dashboard")
-  return <>Coming Soon</>
+  redirect("/dashboard");
+  return <>Coming Soon</>;
 }

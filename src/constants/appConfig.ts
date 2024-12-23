@@ -1,6 +1,6 @@
 const appConfig = {
   appName: "Studio Admin",
   appShortName: "SA",
-}
+};
 
-export default appConfig
+export default appConfig;

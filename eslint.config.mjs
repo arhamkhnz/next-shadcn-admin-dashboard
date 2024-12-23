@@ -6,6 +6,7 @@ import tailwind from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 import securityPlugin from "eslint-plugin-security";
+import prettier from "eslint-plugin-prettier";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -32,6 +33,7 @@ export default [
       import: pluginImport,
       tailwindcss: tailwind,
       security: securityPlugin,
+      prettier: prettier,
     },
   },
   pluginJs.configs.recommended,
@@ -42,6 +44,9 @@ export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
+      // Prettier integration rules
+      "prettier/prettier": "warn",
+
       // Custom Rules (Not covered by plugins)
       "spaced-comment": ["error", "always", { exceptions: ["-", "+"] }],
       "key-spacing": ["error", { beforeColon: false, afterColon: true }],

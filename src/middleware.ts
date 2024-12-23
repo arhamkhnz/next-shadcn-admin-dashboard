@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server";
 
-import { authMiddleware } from "./middleware/authMiddleware"
-import { roleMiddleware } from "./middleware/roleMiddleware"
+import { authMiddleware } from "./middleware/authMiddleware";
+import { roleMiddleware } from "./middleware/roleMiddleware";
 
 export function middleware(req: NextRequest) {
   // authMiddleware
@@ -16,9 +16,9 @@ export function middleware(req: NextRequest) {
   //   return roleResponse
   // }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: ["/dashboard/:path*", "/auth/login"],
-}
+};

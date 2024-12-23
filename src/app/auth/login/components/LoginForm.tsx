@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
+import React, { useState } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { LoaderCircle } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
-})
+});
 
 export default function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
-  })
+  });
 
   const onSubmit = async(data: z.infer<typeof FormSchema>) => {
-    setIsLoading(true)
+    setIsLoading(true);
     toast({
       title: "Login successful",
       description: "You are now logged in.",
-    })
-    setIsLoading(false)
-  }
+    });
+    setIsLoading(false);
+  };
 
   return (
     <Form {...form}>
@@ -71,5 +71,5 @@ export default function LoginForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

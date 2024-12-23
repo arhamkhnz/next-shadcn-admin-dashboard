@@ -24,7 +24,7 @@ export const salesData = [
     email: "sofia.davis@email.com",
     amount: "+$39.00",
   },
-]
+];
 
 export const overviewChartData = [
   {
@@ -75,4 +75,4 @@ export const overviewChartData = [
     name: "Dec",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
-]
+];
