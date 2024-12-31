@@ -83,7 +83,14 @@ export default [
       // Whitespace and Punctuation (Style Rules)
       "no-trailing-spaces": "error",
       "no-multiple-empty-lines": ["error", { max: 1, maxEOF: 1 }],
-      "space-before-function-paren": ["error", "never"],
+      "space-before-function-paren": [
+        "error",
+        {
+          anonymous: "always",
+          named: "never",
+          asyncArrow: "always",
+        },
+      ],
       "space-in-parens": ["error", "never"],
       "array-bracket-spacing": ["error", "never"],
       "object-curly-spacing": ["error", "always"],
