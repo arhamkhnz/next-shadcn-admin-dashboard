@@ -7,6 +7,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import securityPlugin from "eslint-plugin-security";
 import prettier from "eslint-plugin-prettier";
+import unicorn from "eslint-plugin-unicorn";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -34,6 +35,8 @@ export default [
       tailwindcss: tailwind,
       security: securityPlugin,
       prettier: prettier,
+      unicorn: unicorn,
+      react: pluginReact,
     },
   },
   pluginJs.configs.recommended,
@@ -46,6 +49,15 @@ export default [
     rules: {
       // Prettier integration rules
       "prettier/prettier": "warn",
+
+      // File Naming
+      "unicorn/filename-case": [
+        "error",
+        {
+          case: "kebabCase",
+          ignore: ["^.*\\.config\\.(js|ts|mjs)$", "^.*\\.d\\.ts$"],
+        },
+      ],
 
       // Custom Rules (Not covered by plugins)
       "spaced-comment": ["error", "always", { exceptions: ["-", "+"] }],
@@ -79,6 +91,12 @@ export default [
         },
       ],
       "import/newline-after-import": "error",
+      "import/no-unresolved": [
+        "error",
+        {
+          caseSensitive: true,
+        },
+      ],
 
       // Whitespace and Punctuation (Style Rules)
       "no-trailing-spaces": "error",
@@ -122,6 +140,15 @@ export default [
 
       // React unnecessary import rules
       "react/jsx-no-useless-fragment": ["warn", { allowExpressions: true }],
+
+      // React JSX Pascal Case Rule
+      "react/jsx-pascal-case": [
+        "error",
+        {
+          allowAllCaps: false,
+          ignore: [],
+        },
+      ],
     },
   },
 ];

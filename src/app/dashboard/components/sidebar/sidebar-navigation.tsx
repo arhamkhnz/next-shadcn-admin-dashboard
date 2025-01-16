@@ -13,7 +13,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { NavGroup } from "@/navigation/sidebar/sidebarItems";
+import { NavGroup } from "@/navigation/sidebar/sidebar-items";
 
 export default function SidebarNavigation({ sidebarItems }: { readonly sidebarItems: NavGroup[] }) {
   return (

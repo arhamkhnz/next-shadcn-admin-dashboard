@@ -6,11 +6,11 @@ import { AudioWaveform, Command, Frame, GalleryVerticalEnd, Map, PieChart } from
 
 import { TeamSwitcher } from "@/app/dashboard/components/sidebar/team-switcher";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
-import { sidebarItems } from "@/navigation/sidebar/sidebarItems";
+import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
 
-import SidebarFooterMenu from "./sidebarFooterMenu";
-import SidebarNavigation from "./sidebarNavigation";
-import SidebarProjects from "./sidebarProjects";
+import SidebarFooterMenu from "./sidebar-footer-menu";
+import SidebarNavigation from "./sidebar-navigation";
+import SidebarProjects from "./sidebar-projects";
 
 const user = {
   name: "shadcn",

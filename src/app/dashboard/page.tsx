@@ -8,11 +8,11 @@ import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { DateRangePicker } from "@/components/DateRangePicker";
+import { DateRangePicker } from "@/components/date-range-picker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { salesData, overviewChartData } from "@/constants/dummyData";
+import { salesData, overviewChartData } from "@/constants/dummy-data";
 
 export default function Page() {
   const [selectedRange, setSelectedRange] = React.useState<DateRange | undefined>(undefined);
