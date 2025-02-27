@@ -149,6 +149,9 @@ export default [
           ignore: [],
         },
       ],
+
+      // React: Prevent nesting component definitions inside another component
+      "react/no-unstable-nested-components": ["error", { allowAsProps: true }],
     },
   },
 ];
