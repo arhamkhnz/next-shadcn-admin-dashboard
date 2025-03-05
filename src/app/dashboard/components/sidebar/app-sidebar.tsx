@@ -1,16 +1,9 @@
-"use client";
-
-import * as React from "react";
-
-import { AudioWaveform, Command, Frame, GalleryVerticalEnd, Map, PieChart } from "lucide-react";
-
-import { TeamSwitcher } from "@/app/dashboard/components/sidebar/team-switcher";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
 import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
 
 import SidebarFooterMenu from "./sidebar-footer-menu";
+import SidebarBrandHeader from "./sidebar-header";
 import SidebarNavigation from "./sidebar-navigation";
-import SidebarProjects from "./sidebar-projects";
 
 const user = {
   name: "shadcn",
@@ -18,51 +11,14 @@ const user = {
   avatar: "",
 };
 
-const teams = [
-  {
-    name: "Acme Inc",
-    logo: GalleryVerticalEnd,
-    plan: "Enterprise",
-  },
-  {
-    name: "Acme Corp.",
-    logo: AudioWaveform,
-    plan: "Startup",
-  },
-  {
-    name: "Evil Corp.",
-    logo: Command,
-    plan: "Free",
-  },
-];
-
-const projects = [
-  {
-    name: "Design Engineering",
-    url: "#",
-    icon: Frame,
-  },
-  {
-    name: "Sales & Marketing",
-    url: "#",
-    icon: PieChart,
-  },
-  {
-    name: "Travel",
-    url: "#",
-    icon: Map,
-  },
-];
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar className="border-none" collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={teams} />
+        <SidebarBrandHeader />
       </SidebarHeader>
       <SidebarContent>
         <SidebarNavigation sidebarItems={sidebarItems} />
-        <SidebarProjects projects={projects} />
       </SidebarContent>
       <SidebarFooter>
         <SidebarFooterMenu user={user} />

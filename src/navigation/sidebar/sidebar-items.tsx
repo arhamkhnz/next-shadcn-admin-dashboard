@@ -1,85 +1,162 @@
-import { File, Inbox, Send, Receipt, KeySquare, LucideIcon, PanelsTopLeft } from "lucide-react";
+import {
+  User,
+  Users,
+  ChartPie,
+  UserPen,
+  Logs,
+  AlertTriangle,
+  LucideIcon,
+  MessagesSquare,
+  Calendar,
+  History,
+  Home,
+  Grid2X2,
+  ChartLine,
+  ShoppingBag,
+  BookA,
+  Forklift,
+  Mail,
+  MessageSquare,
+  Kanban,
+  ReceiptText,
+  Lock,
+  Fingerprint,
+  SquareArrowUpRight,
+} from "lucide-react";
+
+export const ICON_MAP = {
+  User,
+  Users,
+  ChartPie,
+  UserPen,
+  Logs,
+  MessagesSquare,
+  Calendar,
+  History,
+  Home,
+  Grid2X2,
+  ChartLine,
+  ShoppingBag,
+  BookA,
+  Forklift,
+  Mail,
+  MessageSquare,
+  Kanban,
+  ReceiptText,
+  Lock,
+  Fingerprint,
+  SquareArrowUpRight,
+};
+
+export const resolveIcon = (iconName: keyof typeof ICON_MAP | undefined): LucideIcon => {
+  if (!iconName) return AlertTriangle;
+  return ICON_MAP[iconName] || AlertTriangle;
+};
 
 export interface NavSubItem {
   title: string;
   path: string;
+  icon?: keyof typeof ICON_MAP;
+  comingSoon?: boolean;
 }
 
 export interface NavMainItem {
   title: string;
   path: string;
-  icon?: LucideIcon;
-  isActive?: boolean;
+  icon?: keyof typeof ICON_MAP;
   subItems?: NavSubItem[];
+  comingSoon?: boolean;
 }
 
 export interface NavGroup {
   id: number;
-  label: string;
+  label?: string;
   items: NavMainItem[];
 }
-
-const basePath = "/dashboard";
 
 export const sidebarItems: NavGroup[] = [
   {
     id: 1,
-    label: "Overview",
+    label: "Dashboards",
     items: [
       {
-        title: "Dashboard",
-        path: basePath,
-        icon: PanelsTopLeft,
-        isActive: true,
+        title: "Dashboards",
+        path: "/dashboard",
+        icon: "Home",
+        subItems: [
+          { title: "Default", path: `/dashboard/default`, icon: "ChartPie" },
+          { title: "CRM", path: `/dashboard/crm`, icon: "Grid2X2", comingSoon: true },
+          { title: "Analytics", path: `/dashboard/analytics`, icon: "ChartLine", comingSoon: true },
+          { title: "eCommerce", path: `/dashboard/e-commerce`, icon: "ShoppingBag", comingSoon: true },
+          { title: "Academy", path: `/dashboard/academy`, icon: "BookA", comingSoon: true },
+          { title: "Logistics", path: `/dashboard/logistics`, icon: "Forklift", comingSoon: true },
+        ],
       },
     ],
   },
   {
     id: 2,
-    label: "Apps & Pages",
+    label: "Pages",
     items: [
       {
-        title: "Inbox",
-        path: `${basePath}/inbox`,
-        icon: Inbox,
+        title: "Email",
+        path: "/email",
+        icon: "Mail",
+        comingSoon: true,
+      },
+      {
+        title: "Chat",
+        path: "/chat",
+        icon: "MessageSquare",
+        comingSoon: true,
+      },
+      {
+        title: "Calendar",
+        path: "/calendar",
+        icon: "Calendar",
+        comingSoon: true,
+      },
+      {
+        title: "Kanban",
+        path: "/kanban",
+        icon: "Kanban",
+        comingSoon: true,
       },
       {
         title: "Invoice",
-        path: "#",
-        icon: Receipt,
-        subItems: [
-          { title: "List", path: `${basePath}/invoice/list-preview` },
-          { title: "View", path: `${basePath}/invoice/view` },
-          { title: "Add", path: `${basePath}/invoice/add` },
-          { title: "Edit", path: `${basePath}/invoice/edit` },
-        ],
+        path: "/invoice",
+        icon: "ReceiptText",
+        comingSoon: true,
       },
       {
-        title: "Auth",
-        path: "#",
-        icon: KeySquare,
-        subItems: [{ title: "Unauthorized", path: `${basePath}/auth/unauthorized` }],
+        title: "Users",
+        path: "/users",
+        icon: "Users",
+        comingSoon: true,
       },
       {
-        title: "Drafts",
-        path: `${basePath}/drafts`,
-        icon: File,
+        title: "Roles",
+        path: "/roles",
+        icon: "Lock",
+        comingSoon: true,
       },
       {
-        title: "Sent",
-        path: `${basePath}/sent`,
-        icon: Send,
+        title: "Auth Screens",
+        path: "/auth",
+        icon: "Fingerprint",
+        comingSoon: true,
       },
     ],
   },
   {
     id: 3,
-    label: "Billing",
+    label: "Misc",
     items: [
       {
-        title: "Billing",
-        path: `${basePath}/billing`,
-        icon: Receipt,
+        title: "Others",
+        path: "/others",
+        icon: "SquareArrowUpRight",
+        comingSoon: true,
       },
     ],
   },
