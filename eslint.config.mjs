@@ -97,6 +97,7 @@ export default [
           caseSensitive: true,
         },
       ],
+      "no-duplicate-imports": ["error", { includeExports: true }],
 
       // Whitespace and Punctuation (Style Rules)
       "no-trailing-spaces": "error",

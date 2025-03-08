@@ -16,9 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { NavGroup, NavMainItem } from "@/navigation/sidebar/sidebar-items";
-import { resolveIcon } from "@/navigation/sidebar/sidebar-items";
-import { ICON_MAP } from "@/navigation/sidebar/sidebar-items";
+import { NavGroup, NavMainItem, resolveIcon, ICON_MAP } from "@/navigation/sidebar/sidebar-items";
 
 interface SidebarNavigationProps {
   sidebarItems: NavGroup[];
