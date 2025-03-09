@@ -153,6 +153,9 @@ export default [
 
       // React: Prevent nesting component definitions inside another component
       "react/no-unstable-nested-components": ["error", { allowAsProps: true }],
+
+      // React: Prevent re-renders by ensuring context values are memoized
+      "react/jsx-no-constructed-context-values": "error"
     },
   },
 ];
