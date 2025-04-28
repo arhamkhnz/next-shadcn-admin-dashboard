@@ -98,6 +98,7 @@ export default [
         },
       ],
       "no-duplicate-imports": ["error", { includeExports: true }],
+      "import/no-cycle": ["error", { maxDepth: 2 }],
 
       // Whitespace and Punctuation (Style Rules)
       "no-trailing-spaces": "error",
