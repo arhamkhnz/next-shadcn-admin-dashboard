@@ -1,28 +1,34 @@
-import * as Icons from "lucide-react";
-import { AlertTriangle, type LucideProps } from "lucide-react";
-
-export const resolveIcon = (iconName: string): React.ComponentType<LucideProps> => {
-  const icon = Icons[iconName as keyof typeof Icons];
-
-  // Icon must be a valid React component
-  if (typeof icon === "function" || typeof icon === "object") {
-    return icon as React.ComponentType<LucideProps>;
-  }
-
-  return AlertTriangle;
-};
+import {
+  Home,
+  ChartPie,
+  Grid2X2,
+  ChartLine,
+  ShoppingBag,
+  BookA,
+  Forklift,
+  Mail,
+  MessageSquare,
+  Calendar,
+  Kanban,
+  ReceiptText,
+  Users,
+  Lock,
+  Fingerprint,
+  SquareArrowUpRight,
+  type LucideIcon,
+} from "lucide-react";
 
 export interface NavSubItem {
   title: string;
   url: string;
-  icon: string;
+  icon?: LucideIcon;
   comingSoon?: boolean;
 }
 
 export interface NavMainItem {
   title: string;
   url: string;
-  icon: string;
+  icon?: LucideIcon;
   subItems?: NavSubItem[];
   comingSoon?: boolean;
 }
@@ -41,14 +47,14 @@ export const sidebarItems: NavGroup[] = [
       {
         title: "Dashboards",
         url: "/dashboard",
-        icon: "Home",
+        icon: Home,
         subItems: [
-          { title: "Default", url: `/dashboard/default`, icon: "ChartPie" },
-          { title: "CRM", url: `/dashboard`, icon: "Grid2X2", comingSoon: true },
-          { title: "Analytics", url: `/dashboard/analytics`, icon: "ChartLine", comingSoon: true },
-          { title: "eCommerce", url: `/dashboard/e-commerce`, icon: "ShoppingBag", comingSoon: true },
-          { title: "Academy", url: `/dashboard/academy`, icon: "BookA", comingSoon: true },
-          { title: "Logistics", url: `/dashboard/logistics`, icon: "Forklift", comingSoon: true },
+          { title: "Default", url: `/dashboard/default`, icon: ChartPie },
+          { title: "CRM", url: `/dashboard`, icon: Grid2X2, comingSoon: true },
+          { title: "Analytics", url: `/dashboard/analytics`, icon: ChartLine, comingSoon: true },
+          { title: "eCommerce", url: `/dashboard/e-commerce`, icon: ShoppingBag, comingSoon: true },
+          { title: "Academy", url: `/dashboard/academy`, icon: BookA, comingSoon: true },
+          { title: "Logistics", url: `/dashboard/logistics`, icon: Forklift, comingSoon: true },
         ],
       },
     ],
@@ -59,50 +65,50 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Email",
-        url: "/email",
-        icon: "Mail",
+        url: "/mail",
+        icon: Mail,
         comingSoon: true,
       },
       {
         title: "Chat",
         url: "/chat",
-        icon: "MessageSquare",
+        icon: MessageSquare,
         comingSoon: true,
       },
       {
         title: "Calendar",
         url: "/calendar",
-        icon: "Calendar",
+        icon: Calendar,
         comingSoon: true,
       },
       {
         title: "Kanban",
         url: "/kanban",
-        icon: "Kanban",
+        icon: Kanban,
         comingSoon: true,
       },
       {
         title: "Invoice",
         url: "/invoice",
-        icon: "ReceiptText",
+        icon: ReceiptText,
         comingSoon: true,
       },
       {
         title: "Users",
         url: "/users",
-        icon: "Users",
+        icon: Users,
         comingSoon: true,
       },
       {
         title: "Roles",
         url: "/roles",
-        icon: "Lock",
+        icon: Lock,
         comingSoon: true,
       },
       {
         title: "Auth Screens",
         url: "/auth",
-        icon: "Fingerprint",
+        icon: Fingerprint,
         comingSoon: true,
       },
     ],
@@ -114,7 +120,7 @@ export const sidebarItems: NavGroup[] = [
       {
         title: "Others",
         url: "/others",
-        icon: "SquareArrowUpRight",
+        icon: SquareArrowUpRight,
         comingSoon: true,
       },
     ],

@@ -18,7 +18,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { resolveIcon, type NavGroup, type NavMainItem } from "@/navigation/sidebar/sidebar-items";
+import { type NavGroup, type NavMainItem } from "@/navigation/sidebar/sidebar-items";
 
 interface NavMainProps {
   items: NavGroup[];
@@ -30,11 +30,6 @@ const IsComingSoon = () => (
 
 export function NavMain({ items }: NavMainProps) {
   const path = usePathname();
-
-  const renderIcon = (iconName: string) => {
-    const Icon = resolveIcon(iconName);
-    return <Icon />;
-  };
 
   const isItemActive = (url: string, subItems?: NavMainItem["subItems"]) => {
     if (subItems?.length) {
@@ -55,7 +50,7 @@ export function NavMain({ items }: NavMainProps) {
             <SidebarMenuItem className="flex items-center gap-2">
               <SidebarMenuButton
                 tooltip="Quick Create"
-                className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
               >
                 <PlusCircleIcon />
                 <span>Quick Create</span>
@@ -92,23 +87,24 @@ export function NavMain({ items }: NavMainProps) {
                           isActive={isItemActive(item.url, item.subItems)}
                           tooltip={item.title}
                         >
-                          {item.icon && renderIcon(item.icon)}
+                          {item.icon && <item.icon />}
                           <span>{item.title}</span>
                           {item.comingSoon && <IsComingSoon />}
                           <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                         </SidebarMenuButton>
                       ) : (
-                        <Link aria-disabled={item.comingSoon} href={item.url}>
-                          <SidebarMenuButton
-                            disabled={item.comingSoon}
-                            isActive={isItemActive(item.url)}
-                            tooltip={item.title}
-                          >
-                            {item.icon && renderIcon(item.icon)}
+                        <SidebarMenuButton
+                          asChild
+                          aria-disabled={item.comingSoon}
+                          isActive={isItemActive(item.url)}
+                          tooltip={item.title}
+                        >
+                          <Link href={item.url}>
+                            {item.icon && <item.icon />}
                             <span>{item.title}</span>
                             {item.comingSoon && <IsComingSoon />}
-                          </SidebarMenuButton>
-                        </Link>
+                          </Link>
+                        </SidebarMenuButton>
                       )}
                     </CollapsibleTrigger>
                     {item.subItems && (
@@ -121,11 +117,11 @@ export function NavMain({ items }: NavMainProps) {
                                 isActive={isItemActive(subItem.url)}
                                 asChild
                               >
-                                <a href={subItem.url}>
-                                  {renderIcon(subItem.icon)}
+                                <Link href={subItem.url}>
+                                  {subItem.icon && <subItem.icon />}
                                   <span>{subItem.title}</span>
                                   {subItem.comingSoon && <IsComingSoon />}
-                                </a>
+                                </Link>
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           ))}

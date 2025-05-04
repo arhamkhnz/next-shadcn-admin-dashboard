@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-
 import {
   IconDatabase,
   IconFileWord,
@@ -12,10 +10,6 @@ import {
   IconSettings,
 } from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents";
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +21,11 @@ import {
 } from "@/components/ui/sidebar";
 import { PROJECT_CONFIG } from "@/config/project-config";
 import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
+
+import { NavDocuments } from "./nav-documents";
+import { NavMain } from "./nav-main";
+import { NavSecondary } from "./nav-secondary";
+import { NavUser } from "./nav-user";
 
 const data = {
   user: {
@@ -88,7 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={sidebarItems} />
         {/* <NavDocuments items={data.documents} /> */}
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

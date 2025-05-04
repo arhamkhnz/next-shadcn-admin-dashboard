@@ -2,7 +2,6 @@ import { FlatCompat } from "@eslint/eslintrc";
 import pluginJs from "@eslint/js";
 import pluginImport from "eslint-plugin-import";
 import pluginReact from "eslint-plugin-react";
-// import tailwind from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 import securityPlugin from "eslint-plugin-security";
@@ -32,7 +31,6 @@ export default [
     },
     plugins: {
       import: pluginImport,
-      // tailwindcss: tailwind,
       security: securityPlugin,
       prettier: prettier,
       unicorn: unicorn,
@@ -43,7 +41,6 @@ export default [
   pluginReact.configs.flat.recommended,
   securityPlugin.configs.recommended,
   ...tseslint.configs.recommended,
-  // ...tailwind.configs["flat/recommended"],
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
@@ -131,14 +128,6 @@ export default [
       "@typescript-eslint/no-unnecessary-condition": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": ["warn"],
-
-      // Tailwind CSS - Enforce Predefined Classes over Arbitrary Values
-      // "tailwindcss/no-arbitrary-value": [
-      //   "warn",
-      //   {
-      //     config: "tailwind.config.ts",
-      //   },
-      // ],
 
       // React unnecessary import rules
       "react/jsx-no-useless-fragment": ["warn", { allowExpressions: true }],
