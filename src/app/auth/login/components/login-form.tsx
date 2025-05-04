@@ -10,7 +10,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+// import { toast } from "@/components/ui/use-toast";
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -29,10 +29,10 @@ export default function LoginForm() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setIsLoading(true);
-    toast({
-      title: "Login successful",
-      description: "You are now logged in.",
-    });
+    // toast({
+    //   title: "Login successful",
+    //   description: "You are now logged in.",
+    // });
     setIsLoading(false);
   };
 
