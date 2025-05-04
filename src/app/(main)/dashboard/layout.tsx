@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 import { cookies } from "next/headers";
 
-import { AppSidebar } from "@/app/dashboard/components/sidebar/app-sidebar";
+import { AppSidebar } from "@/app/(main)/dashboard/components/sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import { SiteHeader } from "./components/sidebar/site-header";
