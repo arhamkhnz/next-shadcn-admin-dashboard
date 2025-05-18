@@ -7,6 +7,7 @@ import tseslint from "typescript-eslint";
 import securityPlugin from "eslint-plugin-security";
 import prettier from "eslint-plugin-prettier";
 import unicorn from "eslint-plugin-unicorn";
+import sonarjs from "eslint-plugin-sonarjs";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -35,6 +36,7 @@ export default [
       prettier: prettier,
       unicorn: unicorn,
       react: pluginReact,
+      sonarjs: sonarjs,
     },
   },
   pluginJs.configs.recommended,
@@ -145,7 +147,10 @@ export default [
       "react/no-unstable-nested-components": ["error", { allowAsProps: true }],
 
       // React: Prevent re-renders by ensuring context values are memoized
-      "react/jsx-no-constructed-context-values": "error"
+      "react/jsx-no-constructed-context-values": "error",
+
+      // SonarJS: Detect commented-out code
+      "sonarjs/no-commented-code": "warn",
     },
   },
 ];

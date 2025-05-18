@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-// import { ToastProvider } from "@/components/ui/toast";
-// import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import { PROJECT_CONFIG } from "@/config/project-config";
 
 import "./globals.css";
@@ -14,15 +15,13 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      {/* <ToastProvider> */}
       <body className={`${inter.className} min-h-screen`}>
         {children}
-        {/* <Toaster /> */}
+        <Toaster />
       </body>
-      {/* </ToastProvider> */}
     </html>
   );
 }

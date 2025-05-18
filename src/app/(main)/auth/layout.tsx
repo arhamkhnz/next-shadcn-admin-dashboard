@@ -1,10 +1,6 @@
 import { ReactNode } from "react";
 
-interface LayoutProps {
-  readonly children: ReactNode;
-}
-
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <main>
       <div className="relative container h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">

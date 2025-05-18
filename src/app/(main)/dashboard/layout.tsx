@@ -7,11 +7,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import { SiteHeader } from "./_components/sidebar/site-header";
 
-interface LayoutProps {
-  readonly children: ReactNode;
-}
-
-export default async function Layout({ children }: LayoutProps) {
+export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
