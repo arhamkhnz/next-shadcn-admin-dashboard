@@ -21,7 +21,7 @@ import {
 import { type NavGroup, type NavMainItem } from "@/navigation/sidebar/sidebar-items";
 
 interface NavMainProps {
-  items: NavGroup[];
+  readonly items: readonly NavGroup[];
 }
 
 const IsComingSoon = () => (

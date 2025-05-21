@@ -22,10 +22,10 @@ import {
 export function NavDocuments({
   items,
 }: {
-  items: {
-    name: string;
-    url: string;
-    icon: Icon;
+  readonly items: readonly {
+    readonly name: string;
+    readonly url: string;
+    readonly icon: Icon;
   }[];
 }) {
   const { isMobile } = useSidebar();

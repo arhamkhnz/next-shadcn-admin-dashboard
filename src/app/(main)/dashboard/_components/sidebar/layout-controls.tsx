@@ -10,8 +10,8 @@ import type { SidebarVariant, SidebarCollapsible } from "@/lib/layout-preference
 import { setValueToCookie } from "@/server/server-actions";
 
 type LayoutControlsProps = {
-  variant: SidebarVariant;
-  collapsible: SidebarCollapsible;
+  readonly variant: SidebarVariant;
+  readonly collapsible: SidebarCollapsible;
 };
 
 export default function LayoutControls({ variant, collapsible }: LayoutControlsProps) {
