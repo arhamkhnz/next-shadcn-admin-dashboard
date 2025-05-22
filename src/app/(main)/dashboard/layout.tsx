@@ -8,6 +8,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { getSidebarVariant, getSidebarCollapsible } from "@/lib/layout-preferences";
 
 import LayoutControls from "./_components/sidebar/layout-controls";
+import ThemeSwitcher from "./_components/sidebar/theme-switcher";
 
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
   const cookieStore = await cookies();
@@ -27,7 +28,10 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
               <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
               <h1 className="text-base font-medium">Documents</h1>
             </div>
-            <LayoutControls variant={sidebarVariant} collapsible={sidebarCollapsible} />
+            <div className="flex items-center gap-2">
+              <LayoutControls variant={sidebarVariant} collapsible={sidebarCollapsible} />
+              <ThemeSwitcher />
+            </div>
           </div>
         </header>
         {children}

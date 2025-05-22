@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { ThemeProvider } from "next-themes";
+
 import { Toaster } from "@/components/ui/sonner";
 import { PROJECT_CONFIG } from "@/config/project-config";
 
@@ -17,10 +19,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="light" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen`}>
-        {children}
-        <Toaster />
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange enableSystem={false}>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
