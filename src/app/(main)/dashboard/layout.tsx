@@ -5,8 +5,10 @@ import { cookies } from "next/headers";
 import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { users } from "@/data/users";
 import { getSidebarVariant, getSidebarCollapsible } from "@/lib/layout-preferences";
 
+import AccountSwitcher from "./_components/sidebar/account-switcher";
 import LayoutControls from "./_components/sidebar/layout-controls";
 import ThemeSwitcher from "./_components/sidebar/theme-switcher";
 
@@ -31,6 +33,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
             <div className="flex items-center gap-2">
               <LayoutControls variant={sidebarVariant} collapsible={sidebarCollapsible} />
               <ThemeSwitcher />
+              <AccountSwitcher users={users} />
             </div>
           </div>
         </header>

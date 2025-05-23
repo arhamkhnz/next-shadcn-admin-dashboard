@@ -20,17 +20,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { PROJECT_CONFIG } from "@/config/project-config";
+import { rootUser } from "@/data/users";
 import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
 
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 
 const data = {
-  user: {
-    name: "arhamkhnz",
-    email: "hello@arhamkhnz.com",
-    avatar: "/avatars/arhamkhnz.png",
-  },
   navSecondary: [
     {
       title: "Settings",
@@ -88,7 +84,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={rootUser} />
       </SidebarFooter>
     </Sidebar>
   );
