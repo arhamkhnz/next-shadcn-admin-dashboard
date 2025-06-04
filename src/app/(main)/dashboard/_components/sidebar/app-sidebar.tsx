@@ -1,15 +1,8 @@
 "use client";
 
-import {
-  IconDatabase,
-  IconFileWord,
-  IconHelp,
-  IconInnerShadowTop,
-  IconReport,
-  IconSearch,
-  IconSettings,
-} from "@tabler/icons-react";
+import { Settings, CircleHelp, Search, Database, ClipboardList, File } from "lucide-react";
 
+import Logo from "@/components/icon/logo";
 import {
   Sidebar,
   SidebarContent,
@@ -31,34 +24,34 @@ const data = {
     {
       title: "Settings",
       url: "#",
-      icon: IconSettings,
+      icon: Settings,
     },
     {
       title: "Get Help",
       url: "#",
-      icon: IconHelp,
+      icon: CircleHelp,
     },
     {
       title: "Search",
       url: "#",
-      icon: IconSearch,
+      icon: Search,
     },
   ],
   documents: [
     {
       name: "Data Library",
       url: "#",
-      icon: IconDatabase,
+      icon: Database,
     },
     {
       name: "Reports",
       url: "#",
-      icon: IconReport,
+      icon: ClipboardList,
     },
     {
       name: "Word Assistant",
       url: "#",
-      icon: IconFileWord,
+      icon: File,
     },
   ],
 };
@@ -71,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
+                <Logo />
                 <span className="text-base font-semibold">{APP_CONFIG.name}</span>
               </a>
             </SidebarMenuButton>

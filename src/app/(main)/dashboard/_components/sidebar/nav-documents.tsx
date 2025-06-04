@@ -1,6 +1,6 @@
 "use client";
 
-import { IconDots, IconFolder, IconShare3, IconTrash, type Icon } from "@tabler/icons-react";
+import { LucideIcon, Ellipsis, Folder, Forward, Trash2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -25,7 +25,7 @@ export function NavDocuments({
   readonly items: readonly {
     readonly name: string;
     readonly url: string;
-    readonly icon: Icon;
+    readonly icon: LucideIcon;
   }[];
 }) {
   const { isMobile } = useSidebar();
@@ -45,7 +45,7 @@ export function NavDocuments({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover className="data-[state=open]:bg-accent rounded-sm">
-                  <IconDots />
+                  <Ellipsis />
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
@@ -55,16 +55,16 @@ export function NavDocuments({
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <IconFolder />
+                  <Folder />
                   <span>Open</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <IconShare3 />
+                  <Forward />
                   <span>Share</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
-                  <IconTrash />
+                  <Trash2 />
                   <span>Delete</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -73,7 +73,7 @@ export function NavDocuments({
         ))}
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
-            <IconDots className="text-sidebar-foreground/70" />
+            <Ellipsis className="text-sidebar-foreground/70" />
             <span>More</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
