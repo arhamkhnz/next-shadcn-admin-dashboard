@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+import { DataTableColumnHeader } from "../../_components/data-table/data-table-column-header";
+
 import { TableCellViewer } from "./table-cell-viewer";
 
 export const dashboardColumns: ColumnDef<any>[] = [
@@ -44,15 +46,14 @@ export const dashboardColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "header",
-    header: "Header",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Header" />,
     cell: ({ row }) => {
       return <TableCellViewer item={row.original} />;
     },
-    enableHiding: false,
   },
   {
     accessorKey: "type",
-    header: "Section Type",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Section Type" />,
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
@@ -63,7 +64,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.status === "Done" ? (
@@ -77,7 +78,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "target",
-    header: () => <div className="w-full text-right">Target</div>,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Target" />,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -102,7 +103,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "limit",
-    header: () => <div className="w-full text-right">Limit</div>,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Limit" />,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -127,7 +128,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "reviewer",
-    header: "Reviewer",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Reviewer" />,
     cell: ({ row }) => {
       const isAssigned = row.original.reviewer !== "Assign reviewer";
 

@@ -24,7 +24,6 @@ export function DataTableColumnHeader<TData, TValue>({
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
-
   return (
     <div className={cn("flex items-center space-x-2", className)}>
       <DropdownMenu>
@@ -49,11 +48,15 @@ export function DataTableColumnHeader<TData, TValue>({
             <ArrowDown className="text-muted-foreground/70 h-3.5 w-3.5" />
             Desc
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeOff className="text-muted-foreground/70 h-3.5 w-3.5" />
-            Hide
-          </DropdownMenuItem>
+          {column.columnDef.enableHiding !== false && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+                <EyeOff className="text-muted-foreground/70 h-3.5 w-3.5" />
+                Hide
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
