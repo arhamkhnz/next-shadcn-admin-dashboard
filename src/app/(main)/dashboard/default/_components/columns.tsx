@@ -50,6 +50,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       return <TableCellViewer item={row.original} />;
     },
+    enableSorting: false,
   },
   {
     accessorKey: "type",
@@ -61,6 +62,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
         </Badge>
       </div>
     ),
+    enableSorting: false,
   },
   {
     accessorKey: "status",
@@ -75,10 +77,11 @@ export const dashboardColumns: ColumnDef<any>[] = [
         {row.original.status}
       </Badge>
     ),
+    enableSorting: false,
   },
   {
     accessorKey: "target",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Target" />,
+    header: ({ column }) => <DataTableColumnHeader className="w-full text-right" column={column} title="Target" />,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -100,10 +103,11 @@ export const dashboardColumns: ColumnDef<any>[] = [
         />
       </form>
     ),
+    enableSorting: false,
   },
   {
     accessorKey: "limit",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Limit" />,
+    header: ({ column }) => <DataTableColumnHeader className="w-full text-right" column={column} title="Limit" />,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -125,6 +129,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
         />
       </form>
     ),
+    enableSorting: false,
   },
   {
     accessorKey: "reviewer",
@@ -157,6 +162,7 @@ export const dashboardColumns: ColumnDef<any>[] = [
         </>
       );
     },
+    enableSorting: false,
   },
   {
     id: "actions",
@@ -177,5 +183,6 @@ export const dashboardColumns: ColumnDef<any>[] = [
         </DropdownMenuContent>
       </DropdownMenu>
     ),
+    enableSorting: false,
   },
 ];

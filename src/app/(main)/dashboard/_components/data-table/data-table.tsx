@@ -4,7 +4,6 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { ColumnDef, flexRender, type Table as TanStackTable } from "@tanstack/react-table";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 
 import { DraggableRow } from "./draggable-row";
 
@@ -43,7 +42,7 @@ export function DataTable<TData, TValue>({
         ))}
       </TableHeader>
       <TableBody className="**:data-[slot=table-cell]:first:w-8">
-        {table.getRowModel().rows?.length ? (
+        {table.getRowModel().rows.length ? (
           dndEnabled ? (
             <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
               {table.getRowModel().rows.map((row) => (

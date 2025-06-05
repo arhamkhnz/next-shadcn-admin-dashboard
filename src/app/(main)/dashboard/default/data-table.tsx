@@ -12,17 +12,11 @@ import {
   type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { ChevronDown, Columns2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { z } from "zod";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -30,6 +24,7 @@ import { useDataTableInstance } from "@/hooks/use-data-table-instance";
 
 import { DataTable as DataTableNew } from "../_components/data-table/data-table";
 import { DataTablePagination } from "../_components/data-table/data-table-pagination";
+import { DataTableViewOptions } from "../_components/data-table/data-table-view-options";
 import { withDndColumn } from "../_components/data-table/table-utils";
 
 import { dashboardColumns } from "./_components/columns";
@@ -93,33 +88,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
           <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
         </TabsList>
         <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Columns2 />
-                <span className="hidden lg:inline">Customize Columns</span>
-                <span className="lg:hidden">Columns</span>
-                <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              {table
-                .getAllColumns()
-                .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <DataTableViewOptions table={table} />
           <Button variant="outline" size="sm">
             <Plus />
             <span className="hidden lg:inline">Add Section</span>
