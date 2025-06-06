@@ -6,15 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { SidebarVariant, SidebarCollapsible } from "@/lib/layout-preferences";
+import type { SidebarVariant, SidebarCollapsible, ContentLayout } from "@/lib/layout-preferences";
 import { setValueToCookie } from "@/server/server-actions";
 
 type LayoutControlsProps = {
   readonly variant: SidebarVariant;
   readonly collapsible: SidebarCollapsible;
+  readonly contentLayout: ContentLayout;
 };
 
-export default function LayoutControls({ variant, collapsible }: LayoutControlsProps) {
+export default function LayoutControls({ variant, collapsible, contentLayout }: LayoutControlsProps) {
   const handleValueChange = async (key: string, value: string) => {
     await setValueToCookie(key, value);
   };
@@ -71,6 +72,25 @@ export default function LayoutControls({ variant, collapsible }: LayoutControlsP
                 </ToggleGroupItem>
                 <ToggleGroupItem className="text-xs" value="offcanvas" aria-label="Toggle offcanvas">
                   OffCanvas
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+            <div className="space-y-1">
+              <Label className="text-xs font-medium">Content Layout</Label>
+              <ToggleGroup
+                className="w-full"
+                size="sm"
+                variant="outline"
+                type="single"
+                value={contentLayout}
+                onValueChange={(value) => handleValueChange("content_layout", value)}
+              >
+                <ToggleGroupItem className="text-xs" value="centered" aria-label="Toggle centered">
+                  Centered
+                </ToggleGroupItem>
+                <ToggleGroupItem className="text-xs" value="full-width" aria-label="Toggle full-width">
+                  Full Width
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>

@@ -6,7 +6,8 @@ import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sideb
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { users } from "@/data/users";
-import { getSidebarVariant, getSidebarCollapsible } from "@/lib/layout-preferences";
+import { getSidebarVariant, getSidebarCollapsible, getContentLayout } from "@/lib/layout-preferences";
+import { cn } from "@/lib/utils";
 
 import AccountSwitcher from "./_components/sidebar/account-switcher";
 import LayoutControls from "./_components/sidebar/layout-controls";
@@ -18,11 +19,19 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
 
   const sidebarVariant = await getSidebarVariant();
   const sidebarCollapsible = await getSidebarCollapsible();
+  const contentLayout = await getContentLayout();
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar variant={sidebarVariant} collapsible={sidebarCollapsible} />
-      <SidebarInset>
+      <SidebarInset
+        className={cn(
+          contentLayout === "centered" && "container !mx-auto",
+          // Keeps right margin for inset sidebar until content is centered at wide screens.
+          // Only affects the centered layout; in full-width layout, this has no effect.
+          "max-[113rem]:peer-data-[variant=inset]:!mr-2",
+        )}
+      >
         <header className="flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex w-full items-center justify-between px-4 lg:px-6">
             <div className="flex items-center gap-1 lg:gap-2">
@@ -31,7 +40,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
               <h1 className="text-base font-medium">Documents</h1>
             </div>
             <div className="flex items-center gap-2">
-              <LayoutControls variant={sidebarVariant} collapsible={sidebarCollapsible} />
+              <LayoutControls contentLayout={contentLayout} variant={sidebarVariant} collapsible={sidebarCollapsible} />
               <ThemeSwitcher />
               <AccountSwitcher users={users} />
             </div>
