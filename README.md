@@ -63,7 +63,7 @@ The current version uses the [Tweakcn Tangerine](https://tweakcn.com/) theme for
 - 🚧 Invoice
 - 🚧 Users
 - 🚧 Roles
-- 🚧 Authentication
+- ✅ Authentication
 
 ## Colocation File System Architecture
 
