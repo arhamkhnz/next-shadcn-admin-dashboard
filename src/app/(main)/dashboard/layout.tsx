@@ -17,9 +17,9 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
-  const sidebarVariant = getSidebarVariant(cookieStore);
-  const sidebarCollapsible = getSidebarCollapsible(cookieStore);
-  const contentLayout = getContentLayout(cookieStore);
+  const sidebarVariant = await getSidebarVariant();
+  const sidebarCollapsible = await getSidebarCollapsible();
+  const contentLayout = await getContentLayout();
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
