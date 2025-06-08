@@ -23,6 +23,7 @@ export interface NavSubItem {
   url: string;
   icon?: LucideIcon;
   comingSoon?: boolean;
+  newTab?: boolean;
 }
 
 export interface NavMainItem {
@@ -31,6 +32,7 @@ export interface NavMainItem {
   icon?: LucideIcon;
   subItems?: NavSubItem[];
   comingSoon?: boolean;
+  newTab?: boolean;
 }
 
 export interface NavGroup {
@@ -49,12 +51,12 @@ export const sidebarItems: NavGroup[] = [
         url: "/dashboard",
         icon: Home,
         subItems: [
-          { title: "Default", url: `/dashboard/default`, icon: ChartPie },
-          { title: "CRM", url: `/dashboard`, icon: Grid2X2, comingSoon: true },
-          { title: "Analytics", url: `/dashboard/analytics`, icon: ChartLine, comingSoon: true },
-          { title: "eCommerce", url: `/dashboard/e-commerce`, icon: ShoppingBag, comingSoon: true },
-          { title: "Academy", url: `/dashboard/academy`, icon: BookA, comingSoon: true },
-          { title: "Logistics", url: `/dashboard/logistics`, icon: Forklift, comingSoon: true },
+          { title: "Default", url: "/dashboard/default", icon: ChartPie },
+          { title: "CRM", url: "/dashboard", icon: Grid2X2, comingSoon: true },
+          { title: "Analytics", url: "/dashboard/analytics", icon: ChartLine, comingSoon: true },
+          { title: "eCommerce", url: "/dashboard/e-commerce", icon: ShoppingBag, comingSoon: true },
+          { title: "Academy", url: "/dashboard/academy", icon: BookA, comingSoon: true },
+          { title: "Logistics", url: "/dashboard/logistics", icon: Forklift, comingSoon: true },
         ],
       },
     ],
@@ -63,6 +65,15 @@ export const sidebarItems: NavGroup[] = [
     id: 2,
     label: "Pages",
     items: [
+      {
+        title: "Authentication",
+        url: "/auth",
+        icon: Fingerprint,
+        subItems: [
+          { title: "Login v1", url: "/auth/v1/login", newTab: true },
+          { title: "Register v1", url: "/auth/v1/register", newTab: true },
+        ],
+      },
       {
         title: "Email",
         url: "/mail",
@@ -103,12 +114,6 @@ export const sidebarItems: NavGroup[] = [
         title: "Roles",
         url: "/roles",
         icon: Lock,
-        comingSoon: true,
-      },
-      {
-        title: "Auth Screens",
-        url: "/auth",
-        icon: Fingerprint,
         comingSoon: true,
       },
     ],
