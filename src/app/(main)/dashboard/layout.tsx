@@ -9,9 +9,10 @@ import { users } from "@/data/users";
 import { getSidebarVariant, getSidebarCollapsible, getContentLayout } from "@/lib/layout-preferences";
 import { cn } from "@/lib/utils";
 
-import AccountSwitcher from "./_components/sidebar/account-switcher";
-import LayoutControls from "./_components/sidebar/layout-controls";
-import ThemeSwitcher from "./_components/sidebar/theme-switcher";
+import { AccountSwitcher } from "./_components/sidebar/account-switcher";
+import { LayoutControls } from "./_components/sidebar/layout-controls";
+import { SearchDialog } from "./_components/sidebar/search-dialog";
+import { ThemeSwitcher } from "./_components/sidebar/theme-switcher";
 
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
   const cookieStore = await cookies();
@@ -37,7 +38,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
             <div className="flex items-center gap-1 lg:gap-2">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
-              <h1 className="text-base font-medium">Documents</h1>
+              <SearchDialog />
             </div>
             <div className="flex items-center gap-2">
               <LayoutControls contentLayout={contentLayout} variant={sidebarVariant} collapsible={sidebarCollapsible} />

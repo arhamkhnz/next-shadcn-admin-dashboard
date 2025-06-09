@@ -15,7 +15,7 @@ type LayoutControlsProps = {
   readonly contentLayout: ContentLayout;
 };
 
-export default function LayoutControls({ variant, collapsible, contentLayout }: LayoutControlsProps) {
+export function LayoutControls({ variant, collapsible, contentLayout }: LayoutControlsProps) {
   const handleValueChange = async (key: string, value: string) => {
     await setValueToCookie(key, value);
   };

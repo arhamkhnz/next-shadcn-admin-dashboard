@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn, getInitials } from "@/lib/utils";
 
-export default function AccountSwitcher({
+export function AccountSwitcher({
   users,
 }: {
   readonly users: ReadonlyArray<{
