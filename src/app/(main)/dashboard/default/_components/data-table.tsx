@@ -22,12 +22,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
 
-import { DataTable as DataTableNew } from "../_components/data-table/data-table";
-import { DataTablePagination } from "../_components/data-table/data-table-pagination";
-import { DataTableViewOptions } from "../_components/data-table/data-table-view-options";
-import { withDndColumn } from "../_components/data-table/table-utils";
+import { DataTable as DataTableNew } from "../../../../../components/data-table/data-table";
+import { DataTablePagination } from "../../../../../components/data-table/data-table-pagination";
+import { DataTableViewOptions } from "../../../../../components/data-table/data-table-view-options";
+import { withDndColumn } from "../../../../../components/data-table/table-utils";
 
-import { dashboardColumns } from "./_components/columns";
+import { dashboardColumns } from "./columns";
 
 export const schema = z.object({
   id: z.number(),
@@ -62,7 +62,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
 
   return (
     <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-6">
-      <div className="flex items-center justify-between px-4 lg:px-6">
+      <div className="flex items-center justify-between">
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
@@ -95,7 +95,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
           </Button>
         </div>
       </div>
-      <TabsContent value="outline" className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+      <TabsContent value="outline" className="relative flex flex-col gap-4 overflow-auto">
         <div className="overflow-hidden rounded-lg border">
           <DataTableNew
             dndEnabled={dndEnabled}
@@ -109,13 +109,13 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
         </div>
         <DataTablePagination table={table} />
       </TabsContent>
-      <TabsContent value="past-performance" className="flex flex-col px-4 lg:px-6">
+      <TabsContent value="past-performance" className="flex flex-col">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
       </TabsContent>
-      <TabsContent value="key-personnel" className="flex flex-col px-4 lg:px-6">
+      <TabsContent value="key-personnel" className="flex flex-col">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
       </TabsContent>
-      <TabsContent value="focus-documents" className="flex flex-col px-4 lg:px-6">
+      <TabsContent value="focus-documents" className="flex flex-col">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
       </TabsContent>
     </Tabs>

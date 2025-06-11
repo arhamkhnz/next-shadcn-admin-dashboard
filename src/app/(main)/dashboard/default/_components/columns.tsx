@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import { DataTableColumnHeader } from "../../_components/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "../../../../../components/data-table/data-table-column-header";
 
 import { TableCellViewer } from "./table-cell-viewer";
 
