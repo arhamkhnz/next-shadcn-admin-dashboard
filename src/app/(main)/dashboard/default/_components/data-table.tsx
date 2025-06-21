@@ -2,16 +2,6 @@
 
 import * as React from "react";
 
-import {
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type UniqueIdentifier,
-} from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
 import { z } from "zod";
 
@@ -45,19 +35,6 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
   const [data, setData] = React.useState(() => initialData);
   const columns = dndEnabled ? withDndColumn(dashboardColumns) : dashboardColumns;
   const table = useDataTableInstance({ data, columns, getRowId: (row) => row.id.toString() });
-  const sensors = useSensors(useSensor(MouseSensor, {}), useSensor(TouchSensor, {}), useSensor(KeyboardSensor, {}));
-  const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id);
-        const newIndex = dataIds.indexOf(over.id);
-        return arrayMove(data, oldIndex, newIndex);
-      });
-    }
-  }
 
   return (
     <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-6">
@@ -96,13 +73,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
       </div>
       <TabsContent value="outline" className="relative flex flex-col gap-4 overflow-auto">
         <div className="overflow-hidden rounded-lg border">
-          <DataTableNew
-            dndEnabled={dndEnabled}
-            table={table}
-            columns={columns}
-            dataIds={dataIds}
-            handleDragEnd={handleDragEnd}
-          />
+          <DataTableNew dndEnabled table={table} columns={columns as any} onReorder={setData} />
         </div>
         <DataTablePagination table={table} />
       </TabsContent>

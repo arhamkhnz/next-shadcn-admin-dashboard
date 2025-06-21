@@ -8,12 +8,11 @@ import {
   useSensors,
   DndContext,
   closestCenter,
-  type DragEndEvent,
   type UniqueIdentifier,
-  type SensorDescriptor,
+  type DragEndEvent,
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { ColumnDef, flexRender, type Table as TanStackTable } from "@tanstack/react-table";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -23,9 +22,8 @@ import { DraggableRow } from "./draggable-row";
 interface DataTableProps<TData, TValue> {
   table: TanStackTable<TData>;
   columns: ColumnDef<TData, TValue>[];
-  dataIds?: UniqueIdentifier[];
   dndEnabled?: boolean;
-  handleDragEnd?: (event: any) => void;
+  onReorder?: (newData: TData[]) => void;
 }
 
 function renderTableBody<TData, TValue>({
@@ -69,12 +67,24 @@ function renderTableBody<TData, TValue>({
 export function DataTable<TData, TValue>({
   table,
   columns,
-  dataIds = [],
   dndEnabled = false,
-  handleDragEnd,
+  onReorder,
 }: DataTableProps<TData, TValue>) {
+  const dataIds: UniqueIdentifier[] = table.getRowModel().rows.map((row) => Number(row.id) as UniqueIdentifier);
   const sortableId = React.useId();
   const sensors = useSensors(useSensor(MouseSensor, {}), useSensor(TouchSensor, {}), useSensor(KeyboardSensor, {}));
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (active && over && active.id !== over.id && onReorder) {
+      const oldIndex = dataIds.indexOf(active.id);
+      const newIndex = dataIds.indexOf(over.id);
+
+      // Call parent with new data order (parent manages state)
+      const newData = arrayMove(table.options.data, oldIndex, newIndex);
+      onReorder(newData);
+    }
+  }
 
   const tableContent = (
     <Table>
