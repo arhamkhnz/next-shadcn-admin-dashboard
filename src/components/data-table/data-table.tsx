@@ -1,4 +1,17 @@
-import { DndContext, closestCenter, type UniqueIdentifier, type SensorDescriptor } from "@dnd-kit/core";
+import * as React from "react";
+
+import {
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DndContext,
+  closestCenter,
+  type DragEndEvent,
+  type UniqueIdentifier,
+  type SensorDescriptor,
+} from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { ColumnDef, flexRender, type Table as TanStackTable } from "@tanstack/react-table";
@@ -13,8 +26,6 @@ interface DataTableProps<TData, TValue> {
   dataIds?: UniqueIdentifier[];
   dndEnabled?: boolean;
   handleDragEnd?: (event: any) => void;
-  sensors?: SensorDescriptor<any>[];
-  sortableId?: string;
 }
 
 function renderTableBody<TData, TValue>({
@@ -61,9 +72,10 @@ export function DataTable<TData, TValue>({
   dataIds = [],
   dndEnabled = false,
   handleDragEnd,
-  sensors,
-  sortableId,
 }: DataTableProps<TData, TValue>) {
+  const sortableId = React.useId();
+  const sensors = useSensors(useSensor(MouseSensor, {}), useSensor(TouchSensor, {}), useSensor(KeyboardSensor, {}));
+
   const tableContent = (
     <Table>
       <TableHeader className="bg-muted sticky top-0 z-10">

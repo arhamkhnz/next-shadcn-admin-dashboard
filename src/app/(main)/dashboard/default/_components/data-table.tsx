@@ -45,7 +45,6 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
   const [data, setData] = React.useState(() => initialData);
   const columns = dndEnabled ? withDndColumn(dashboardColumns) : dashboardColumns;
   const table = useDataTableInstance({ data, columns, getRowId: (row) => row.id.toString() });
-  const sortableId = React.useId();
   const sensors = useSensors(useSensor(MouseSensor, {}), useSensor(TouchSensor, {}), useSensor(KeyboardSensor, {}));
   const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
@@ -103,8 +102,6 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
             columns={columns}
             dataIds={dataIds}
             handleDragEnd={handleDragEnd}
-            sensors={sensors}
-            sortableId={sortableId}
           />
         </div>
         <DataTablePagination table={table} />
