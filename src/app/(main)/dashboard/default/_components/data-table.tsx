@@ -18,22 +18,11 @@ import { DataTableViewOptions } from "../../../../../components/data-table/data-
 import { withDndColumn } from "../../../../../components/data-table/table-utils";
 
 import { dashboardColumns } from "./columns";
+import { sectionSchema } from "./schema";
 
-export const schema = z.object({
-  id: z.number(),
-  header: z.string(),
-  type: z.string(),
-  status: z.string(),
-  target: z.string(),
-  limit: z.string(),
-  reviewer: z.string(),
-});
-
-export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[] }) {
-  const dndEnabled = true;
-
+export function DataTable({ data: initialData }: { data: z.infer<typeof sectionSchema>[] }) {
   const [data, setData] = React.useState(() => initialData);
-  const columns = dndEnabled ? withDndColumn(dashboardColumns) : dashboardColumns;
+  const columns = withDndColumn(dashboardColumns);
   const table = useDataTableInstance({ data, columns, getRowId: (row) => row.id.toString() });
 
   return (
@@ -73,7 +62,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
       </div>
       <TabsContent value="outline" className="relative flex flex-col gap-4 overflow-auto">
         <div className="overflow-hidden rounded-lg border">
-          <DataTableNew dndEnabled table={table} columns={columns as any} onReorder={setData} />
+          <DataTableNew dndEnabled table={table} columns={columns} onReorder={setData} />
         </div>
         <DataTablePagination table={table} />
       </TabsContent>

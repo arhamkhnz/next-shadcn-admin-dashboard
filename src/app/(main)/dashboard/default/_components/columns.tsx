@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CircleCheck, Loader, EllipsisVertical } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,9 +19,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { DataTableColumnHeader } from "../../../../../components/data-table/data-table-column-header";
 
+import { sectionSchema } from "./schema";
 import { TableCellViewer } from "./table-cell-viewer";
 
-export const dashboardColumns: ColumnDef<any>[] = [
+export const dashboardColumns: ColumnDef<z.infer<typeof sectionSchema>>[] = [
   {
     id: "select",
     header: ({ table }) => (
