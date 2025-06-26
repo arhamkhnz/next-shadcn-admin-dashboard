@@ -16,6 +16,17 @@ interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes
   title: string;
 }
 
+function getSortIcon(sort: "asc" | "desc" | false | undefined) {
+  switch (sort) {
+    case "desc":
+      return <ArrowDown />;
+    case "asc":
+      return <ArrowUp />;
+    default:
+      return <ChevronsUpDown />;
+  }
+}
+
 export function DataTableColumnHeader<TData, TValue>({
   column,
   title,
@@ -30,13 +41,7 @@ export function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm" className="data-[state=open]:bg-accent -ml-3 h-8">
             <span>{title}</span>
-            {column.getIsSorted() === "desc" ? (
-              <ArrowDown />
-            ) : column.getIsSorted() === "asc" ? (
-              <ArrowUp />
-            ) : (
-              <ChevronsUpDown />
-            )}
+            {getSortIcon(column.getIsSorted())}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

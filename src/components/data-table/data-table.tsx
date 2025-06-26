@@ -17,6 +17,44 @@ interface DataTableProps<TData, TValue> {
   sortableId?: string;
 }
 
+function renderTableBody<TData, TValue>({
+  table,
+  columns,
+  dndEnabled,
+  dataIds,
+}: {
+  table: TanStackTable<TData>;
+  columns: ColumnDef<TData, TValue>[];
+  dndEnabled: boolean;
+  dataIds: UniqueIdentifier[];
+}) {
+  if (!table.getRowModel().rows.length) {
+    return (
+      <TableRow>
+        <TableCell colSpan={columns.length} className="h-24 text-center">
+          No results.
+        </TableCell>
+      </TableRow>
+    );
+  }
+  if (dndEnabled) {
+    return (
+      <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
+        {table.getRowModel().rows.map((row) => (
+          <DraggableRow key={row.id} row={row} />
+        ))}
+      </SortableContext>
+    );
+  }
+  return table.getRowModel().rows.map((row) => (
+    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+      {row.getVisibleCells().map((cell) => (
+        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+      ))}
+    </TableRow>
+  ));
+}
+
 export function DataTable<TData, TValue>({
   table,
   columns,
@@ -42,29 +80,7 @@ export function DataTable<TData, TValue>({
         ))}
       </TableHeader>
       <TableBody className="**:data-[slot=table-cell]:first:w-8">
-        {table.getRowModel().rows.length ? (
-          dndEnabled ? (
-            <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-              {table.getRowModel().rows.map((row) => (
-                <DraggableRow key={row.id} row={row} />
-              ))}
-            </SortableContext>
-          ) : (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                ))}
-              </TableRow>
-            ))
-          )
-        ) : (
-          <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              No results.
-            </TableCell>
-          </TableRow>
-        )}
+        {renderTableBody({ table, columns, dndEnabled, dataIds })}
       </TableBody>
     </Table>
   );
