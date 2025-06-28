@@ -1,6 +1,17 @@
 import { ReactNode } from "react";
 
 import { BarChart, Clock, CreditCard, DollarSign, Plus, ShoppingCart } from "lucide-react";
+import {
+  siLaravel,
+  siFigma,
+  siVuedotjs,
+  siReact,
+  siBootstrap,
+  siSketch,
+  siVisa,
+  siMastercard,
+  siAmericanexpress,
+} from "simple-icons";
 
 export type StatType = {
   icon?: ReactNode;
@@ -151,48 +162,48 @@ export const projects = [
     desc: "eCommerce",
     percent: 54,
     color: "bg-red-500",
-    icon: "/icons/laravel.svg",
+    icon: siLaravel,
   },
   {
     name: "Figma",
     desc: "App UI Kit",
     percent: 85,
     color: "bg-violet-600",
-    icon: "/icons/figma.svg",
+    icon: siFigma,
   },
   {
     name: "VusJs",
     desc: "Calendar App",
     percent: 64,
     color: "bg-green-500",
-    icon: "/icons/vuejs.svg",
+    icon: siVuedotjs,
   },
   {
     name: "React",
     desc: "Dashboard",
     percent: 40,
     color: "bg-cyan-500",
-    icon: "/icons/react.svg",
+    icon: siReact,
   },
   {
     name: "Bootstrap",
     desc: "Website",
     percent: 17,
     color: "bg-purple-600",
-    icon: "/icons/bootstrap.svg",
+    icon: siBootstrap,
   },
   {
     name: "Sketch",
     desc: "Website Design",
     percent: 30,
     color: "bg-orange-400",
-    icon: "/icons/sketch.svg",
+    icon: siSketch,
   },
 ];
 
 export const cards = [
   {
-    card: "/cards/visa.png",
+    card: siVisa,
     number: "*4230",
     through: "Credit",
     date: "17 Mar 2025",
@@ -201,7 +212,7 @@ export const cards = [
     amount: "+$329",
   },
   {
-    card: "/cards/mc.jpg",
+    card: siMastercard,
     number: "*5578",
     through: "Credit",
     date: "12 Feb 2025",
@@ -211,7 +222,7 @@ export const cards = [
   },
 
   {
-    card: "/cards/ae.jpg",
+    card: siAmericanexpress,
     number: "*4567",
     through: "ATM",
     date: "28 Feb 2025",
@@ -220,7 +231,7 @@ export const cards = [
     amount: "+$423",
   },
   {
-    card: "/cards/visa.png",
+    card: siVisa,
     number: "*5699",
     through: "Credit",
     date: "08 Jan 2025",
@@ -229,7 +240,7 @@ export const cards = [
     amount: "+$2,345",
   },
   {
-    card: "/cards/visa.png",
+    card: siVisa,
     number: "*2451",
     through: "Credit",
     date: "19 Oct 2025",

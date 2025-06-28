@@ -2,6 +2,7 @@ import React from "react";
 
 import { EllipsisVertical, LayoutList } from "lucide-react";
 
+import SimpleIcon from "@/components/simple-icon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -54,15 +55,7 @@ function LastTransaction() {
                   <div className="flex items-center gap-3">
                     {/* Fixed width container for card image */}
                     <div className="flex w-14 flex-shrink-0 items-center justify-center rounded-md bg-gray-100 p-2">
-                      <img
-                        src={card.card}
-                        alt="card"
-                        className={`transition-transform duration-150 ${
-                          card.card.includes("mc") || card.card.includes("ae")
-                            ? "h-6 w-10 scale-125 object-cover"
-                            : "h-5 w-8 object-contain"
-                        } `}
-                      />
+                      <SimpleIcon icon={card.card} className="size-8" />
                     </div>
 
                     {/* Text content */}

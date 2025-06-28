@@ -5,6 +5,7 @@ import React from "react";
 import { ArrowDownRight, ArrowUpRight, DollarSign, EllipsisVertical } from "lucide-react";
 import { XAxis, YAxis, ResponsiveContainer, Tooltip, Area, AreaChart } from "recharts";
 
+import SimpleIcon from "@/components/simple-icon";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -197,8 +198,8 @@ export function ActiveProjects() {
       {/* <CardContent className="flex flex-col gap-4 pt-2"> */}
       <CardContent className="flex-1 p-4">
         {projects.map((project) => (
-          <div key={project.name} className="flex items-start gap-3">
-            <img src={project.icon} alt={project.name} className="mt-1 h-6 w-6" />
+          <div key={project.name} className="flex items-center gap-3">
+            <SimpleIcon icon={project.icon} className="size-8" />
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <div>
