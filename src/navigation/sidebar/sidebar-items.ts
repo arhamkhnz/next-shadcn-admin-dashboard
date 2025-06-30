@@ -53,7 +53,7 @@ export const sidebarItems: NavGroup[] = [
         subItems: [
           { title: "Default", url: "/dashboard/default", icon: ChartPie },
           { title: "CRM", url: "/dashboard", icon: Grid2X2, comingSoon: true },
-          { title: "Analytics", url: "/dashboard/analytics", icon: ChartLine, comingSoon: true },
+          { title: "Analytics", url: "/dashboard/finance", icon: ChartLine, comingSoon: false },
           { title: "eCommerce", url: "/dashboard/e-commerce", icon: ShoppingBag, comingSoon: true },
           { title: "Academy", url: "/dashboard/academy", icon: BookA, comingSoon: true },
           { title: "Logistics", url: "/dashboard/logistics", icon: Forklift, comingSoon: true },
