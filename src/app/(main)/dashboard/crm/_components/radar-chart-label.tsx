@@ -5,7 +5,15 @@ import { useState } from "react";
 import { EllipsisVertical, TrendingUp } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import {
   DropdownMenu,
@@ -41,12 +49,9 @@ export function RadarChartLabel() {
   return (
     <Card className="flex h-full flex-col">
       <CardHeader className="pb-4">
-        <div className="flex w-full items-center justify-between">
-          <div>
-            <CardTitle>Sales</CardTitle>
-            <CardDescription>Last 6 months</CardDescription>
-          </div>
-
+        <CardTitle>Sales</CardTitle>
+        <CardDescription>Last 6 months</CardDescription>
+        <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="hover:bg-muted rounded-full border-none p-1 outline-none focus:ring-0 focus:outline-none">
@@ -59,7 +64,7 @@ export function RadarChartLabel() {
               <DropdownMenuItem>Last Year</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </CardAction>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">

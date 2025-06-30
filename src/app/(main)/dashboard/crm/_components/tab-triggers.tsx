@@ -3,16 +3,16 @@
 import { useState } from "react";
 
 import { EllipsisVertical } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardAction } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { RadarChartLabel } from "./radar-chart-label";
 import { dataMap } from "./types";
@@ -48,11 +48,10 @@ export default function TabTriggers() {
         <Card className="flex h-full flex-col">
           {/* Header with title + dropdown */}
           <CardHeader className="pb-2">
-            <div className="flex w-full items-start justify-between">
-              <div>
-                <CardTitle className="text-lg text-gray-900">Earning Reports</CardTitle>
-                <p className="text-sm text-gray-400">Yearly Earnings Overview</p>
-              </div>
+            <CardTitle>Earning Reports</CardTitle>
+            <CardDescription>Yearly Earnings Overview</CardDescription>
+
+            <CardAction>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="hover:bg-muted rounded-full border-none p-1 outline-none focus:ring-0 focus:outline-none">
@@ -65,13 +64,13 @@ export default function TabTriggers() {
                   <DropdownMenuItem>Last Year</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div>
+            </CardAction>
           </CardHeader>
 
           {/* Tabs and chart should be here, outside of CardHeader */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <CardContent className="pt-0">
-              <TabsList className="scrollbar-hide flex h-auto w-full gap-2 overflow-x-auto bg-white p-2">
+              <TabsList className="scrollbar-hide bg-card flex h-auto w-full gap-2 overflow-x-auto p-2">
                 {Object.entries(dataMap).map(([key, { label, icon }]) => (
                   <TabsTrigger
                     key={key}
@@ -79,7 +78,7 @@ export default function TabTriggers() {
                     className={`group data-[state=active]:bg-muted flex h-20 w-20 flex-col items-center justify-center gap-2 overflow-hidden rounded-md border border-dotted border-gray-300 bg-white transition-all data-[state=active]:border-solid data-[state=active]:border-indigo-500 sm:h-20 sm:w-20`}
                   >
                     <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-sm bg-gray-100 transition group-data-[state=active]:border-indigo-500 group-data-[state=active]:bg-indigo-100`}
+                      className={`bg-card group-data-[state=active]:bg-card flex h-10 w-10 items-center justify-center rounded-sm transition group-data-[state=active]:border-indigo-500`}
                     >
                       <div className="text-muted-foreground group-data-[state=active]:text-indigo-500">{icon}</div>
                     </div>

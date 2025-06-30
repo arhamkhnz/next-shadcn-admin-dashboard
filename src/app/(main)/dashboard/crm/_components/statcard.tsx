@@ -2,20 +2,9 @@
 
 import React from "react";
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip,
-  CartesianGrid,
-  AreaChart,
-  Area,
-  Cell,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, AreaChart, Area, Cell } from "recharts";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 import { StatType } from "./types";
 
@@ -121,14 +110,14 @@ const StatCard: React.FC<StatType> = ({
     return (
       <Card className="flex h-full w-full flex-col justify-center">
         <CardHeader>
-          <CardTitle className="text-lg text-gray-900">{title}</CardTitle>
-          <p className="text-sm text-gray-400">{subtitle}</p>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
 
         <CardContent className="flex flex-col">
           {renderChart()}
           <div className="flex items-center justify-between">
-            <p className="text-lg font-semibold text-gray-900">{value}</p>
+            <p className="text-card-foreground text-lg font-semibold">{value}</p>
             <span
               className={`inline-block w-fit rounded py-0.5 text-sm font-medium ${
                 changeType === "positive" ? "text-green-600" : "text-red-600"
@@ -146,15 +135,15 @@ const StatCard: React.FC<StatType> = ({
     return (
       <Card className="flex h-full w-full flex-col">
         <CardHeader className="pb-0">
-          <CardTitle className="text-lg text-gray-900">{title}</CardTitle>
-          <p className="text-sm text-gray-400">{subtitle}</p>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
 
         <CardContent className="flex flex-col items-end justify-between gap-2 sm:flex-row">
           {/* Left: Textual Content */}
           <div className="flex w-full flex-col justify-end sm:w-auto">
             <div className="flex flex-col gap-1">
-              <p className="text-xl font-semibold text-gray-900">{value}</p>
+              <p className="text-card-foreground text-xl font-semibold">{value}</p>
               <span
                 className={`w-fit rounded py-0.5 text-sm font-medium ${
                   changeType === "positive" ? "bg-green-200 text-green-600" : "bg-red-200 text-red-600"
@@ -176,12 +165,7 @@ const StatCard: React.FC<StatType> = ({
 
   return (
     <Card className="flex h-full w-full flex-col">
-      <CardHeader>
-        <CardTitle />
-      </CardHeader>
-
       <CardContent className="flex flex-col items-start justify-center gap-2">
-        {/* {renderChart()} */}
         <div
           className={`mb-2 inline-flex items-center justify-center rounded-md p-2 ${
             changeType === "positive" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
@@ -189,10 +173,10 @@ const StatCard: React.FC<StatType> = ({
         >
           {icon}
         </div>
-        <p className="text-lg font-semibold text-gray-900">{title}</p>
-        <p className="text-sm text-gray-400">{subtitle}</p>
+        <p className="text-card-foreground text-lg font-semibold">{title}</p>
+        <p className="text-muted-foreground text-sm">{subtitle}</p>
         <div className="flex flex-col items-start gap-2">
-          <p className="text-md text-gray-900">{value}</p>
+          <p className="text-md text-card-foreground">{value}</p>
           <span
             className={`inline-block w-fit rounded py-0.5 text-sm font-medium ${
               changeType === "positive" ? "bg-green-200 text-green-600" : "bg-red-200 text-red-600"

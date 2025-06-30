@@ -10,10 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-import { cards, activities, ActivityContent, Activity } from "./types";
+import { cards, activities, ActivityContent } from "./types";
 
 function LastTransaction() {
   return (
