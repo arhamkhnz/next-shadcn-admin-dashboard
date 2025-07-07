@@ -12,8 +12,6 @@ type SimpleIconProps = {
 } & React.SVGProps<SVGSVGElement>;
 
 export default function SimpleIcon({ icon, className, ...props }: SimpleIconProps) {
-  if (!icon) return null;
-
   const { title, path } = icon;
 
   return (
