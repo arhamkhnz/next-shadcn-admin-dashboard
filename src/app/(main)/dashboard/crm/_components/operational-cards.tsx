@@ -3,120 +3,28 @@
 import { Clock } from "lucide-react";
 import { FunnelChart, Funnel, LabelList } from "recharts";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardAction,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { formatCurrency, cn } from "@/lib/utils";
 
-// Add this array above your component:
-const actionItems = [
-  {
-    title: "Send kickoff docs",
-    desc: "Send onboarding documents and timeline",
-    due: "Due today",
-    priority: "High",
-    priorityColor: "bg-red-100 text-red-700",
-    checked: false,
-  },
-  {
-    title: "Demo call for SaaS MVP",
-    desc: "Book Zoom call with client",
-    due: "Due tomorrow",
-    priority: "Medium",
-    priorityColor: "bg-yellow-100 text-yellow-700",
-    checked: false,
-  },
-  {
-    title: "Update case study",
-    desc: "Add latest LLM project",
-    due: "Due this week",
-    priority: "Low",
-    priorityColor: "bg-green-100 text-green-700",
-    checked: false,
-  },
-];
-const regionData = [
-  {
-    region: "North America",
-    sales: 37800,
-    percentage: 31,
-    growth: "-3.2%",
-    isPositive: false,
-  },
-  {
-    region: "Europe",
-    sales: 40100,
-    percentage: 34,
-    growth: "+9.4%",
-    isPositive: true,
-  },
-  {
-    region: "Asia Pacific",
-    sales: 30950,
-    percentage: 26,
-    growth: "+12.8%",
-    isPositive: true,
-  },
-  {
-    region: "Latin America",
-    sales: 12200,
-    percentage: 7,
-    growth: "-1.7%",
-    isPositive: false,
-  },
-  {
-    region: "Middle East & Africa",
-    sales: 2450,
-    percentage: 2,
-    growth: "+6.0%",
-    isPositive: true,
-  },
-];
+import { salesPipelineChartData, salesPipelineChartConfig, regionSalesData, actionItems } from "./crm.config";
 
-const funnelData = [
-  { stage: "Leads", value: 1126, fill: "var(--chart-1)" },
-  { stage: "Contacted", value: 760, fill: "var(--chart-2)" },
-  { stage: "Qualified", value: 480, fill: "var(--chart-3)" },
-  { stage: "Proposal Sent", value: 210, fill: "var(--chart-4)" },
-  { stage: "Negotiation", value: 120, fill: "var(--chart-5)" },
-  { stage: "Won", value: 45, fill: "var(--chart-6)" },
-];
-
-const funnelChartConfig = {
-  value: {
-    label: "Leads",
-    color: "var(--chart-1)",
-  },
-  stage: {
-    label: "Stage",
-  },
-};
-
-export function OverviewCardsV3() {
-  const totalSales = regionData.reduce((sum, region) => sum + region.sales, 0);
+export function OperationalCards() {
+  const totalSales = regionSalesData.reduce((sum, region) => sum + region.sales, 0);
   return (
-    <div className="grid grid-cols-3 gap-4 *:data-[slot=card]:min-h-52 *:data-[slot=card]:shadow-xs">
+    <div className="grid grid-cols-1 gap-4 *:data-[slot=card]:shadow-xs sm:grid-cols-2 xl:grid-cols-3">
       <Card>
         <CardHeader>
           <CardTitle>Sales Pipeline</CardTitle>
         </CardHeader>
         <CardContent className="size-full">
-          <ChartContainer config={funnelChartConfig} className="size-full">
+          <ChartContainer config={salesPipelineChartConfig} className="size-full">
             <FunnelChart margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-              <Funnel className="stroke-card stroke-2" dataKey="value" data={funnelData}>
-                <LabelList className="stroke-0" dataKey="stage" position="right" offset={10} />
-                <LabelList className="stroke-0" dataKey="value" position="left" offset={10} />
+              <Funnel className="stroke-card stroke-2" dataKey="value" data={salesPipelineChartData}>
+                <LabelList className="fill-primary stroke-0" dataKey="stage" position="right" offset={10} />
+                <LabelList className="fill-primary stroke-0" dataKey="value" position="left" offset={10} />
               </Funnel>
             </FunnelChart>
           </ChartContainer>
@@ -133,7 +41,7 @@ export function OverviewCardsV3() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2.5">
-            {regionData.map((region) => (
+            {regionSalesData.map((region) => (
               <div key={region.region} className="space-y-0.5">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{region.region}</span>
@@ -159,9 +67,9 @@ export function OverviewCardsV3() {
         </CardContent>
         <CardFooter>
           <div className="text-muted-foreground flex justify-between gap-1 text-xs">
-            <span>{regionData.length} regions tracked</span>
+            <span>{regionSalesData.length} regions tracked</span>
             <span>•</span>
-            <span>{regionData.filter((r) => r.isPositive).length} regions growing</span>
+            <span>{regionSalesData.filter((r) => r.isPositive).length} regions growing</span>
           </div>
         </CardFooter>
       </Card>

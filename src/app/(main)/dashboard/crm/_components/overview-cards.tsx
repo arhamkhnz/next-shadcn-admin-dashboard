@@ -2,80 +2,45 @@
 
 import { format, subMonths } from "date-fns";
 import { Wallet, BadgeDollarSign } from "lucide-react";
-import { Area, AreaChart, Line, LineChart, XAxis } from "recharts";
+import { Area, AreaChart, Line, LineChart, Bar, BarChart, XAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
-import { ChartBarStacked } from "./dummy-graph";
+import {
+  leadsChartData,
+  leadsChartConfig,
+  proposalsChartData,
+  proposalsChartConfig,
+  revenueChartData,
+  revenueChartConfig,
+} from "./crm.config";
 
-const now = new Date();
-const staticRevenues = [5400, 5800, 7200, 6800, 10400, 11200, 8500, 9200, 7500, 8000, 8900, 7800];
-
-const revenueGrowthData = Array.from({ length: 12 }).map((_, i) => {
-  const monthDate = subMonths(now, 11 - i);
-  return {
-    month: format(monthDate, "LLL yyyy"),
-    revenue: staticRevenues[i],
-  };
-});
-
-const data = [
-  {
-    revenue: 10400,
-    subscription: 40,
-  },
-  {
-    revenue: 14405,
-    subscription: 90,
-  },
-  {
-    revenue: 9400,
-    subscription: 200,
-  },
-  {
-    revenue: 8200,
-    subscription: 278,
-  },
-  {
-    revenue: 7000,
-    subscription: 89,
-  },
-  {
-    revenue: 9600,
-    subscription: 239,
-  },
-  {
-    revenue: 11244,
-    subscription: 78,
-  },
-  {
-    revenue: 26475,
-    subscription: 89,
-  },
-];
-
-const chartConfig = {
-  revenue: {
-    label: "Revenue",
-    color: "var(--chart-1)",
-  },
-  subscription: {
-    label: "Subscriptions",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
+const lastMonth = format(subMonths(new Date(), 1), "LLLL");
 
 export function OverviewCards() {
   return (
-    <div className="grid grid-cols-6 gap-4 *:data-[slot=card]:min-h-52 *:data-[slot=card]:shadow-xs">
+    <div className="grid grid-cols-1 gap-4 *:data-[slot=card]:shadow-xs sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
       <Card>
         <CardHeader>
-          <CardTitle>Orders</CardTitle>
+          <CardTitle>New Leads</CardTitle>
           <CardDescription>Last Month</CardDescription>
         </CardHeader>
         <CardContent className="size-full">
-          <ChartBarStacked />
+          <ChartContainer className="size-full min-h-24" config={leadsChartConfig}>
+            <BarChart accessibilityLayer data={leadsChartData} barSize={8}>
+              <XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} hide />
+              <ChartTooltip content={<ChartTooltipContent labelFormatter={(label) => `${lastMonth}: ${label}`} />} />
+              <Bar
+                background={{ fill: "var(--color-background)", radius: 4, opacity: 0.07 }}
+                dataKey="newLeads"
+                stackId="a"
+                fill="var(--color-newLeads)"
+                radius={[0, 0, 0, 0]}
+              />
+              <Bar dataKey="disqualified" stackId="a" fill="var(--color-disqualified)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ChartContainer>
         </CardContent>
         <CardFooter className="flex items-center justify-between">
           <span className="text-xl font-semibold tabular-nums">635</span>
@@ -85,25 +50,28 @@ export function OverviewCards() {
 
       <Card className="overflow-hidden pb-0">
         <CardHeader>
-          <CardTitle>Sales</CardTitle>
+          <CardTitle>Proposals Sent</CardTitle>
           <CardDescription>Last Month</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 p-0">
-          <ChartContainer className="size-full min-h-24" config={chartConfig}>
+          <ChartContainer className="size-full min-h-24" config={proposalsChartConfig}>
             <AreaChart
-              data={data}
+              data={proposalsChartData}
               margin={{
                 left: 0,
                 right: 0,
-                top: 10,
+                top: 5,
               }}
             >
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} hide />
+              <ChartTooltip
+                content={<ChartTooltipContent labelFormatter={(label) => `${lastMonth}: ${label}`} hideIndicator />}
+              />
               <Area
-                dataKey="subscription"
-                fill="var(--color-subscription)"
+                dataKey="proposalsSent"
+                fill="var(--color-proposalsSent)"
                 fillOpacity={0.05}
-                stroke="var(--color-subscription)"
+                stroke="var(--color-proposalsSent)"
                 strokeWidth={2}
                 type="monotone"
               />
@@ -120,10 +88,10 @@ export function OverviewCards() {
         </CardHeader>
         <CardContent className="flex size-full flex-col justify-between">
           <div className="space-y-1.5">
-            <CardTitle>Total Profit</CardTitle>
+            <CardTitle>Revenue</CardTitle>
             <CardDescription>Last 6 Months</CardDescription>
           </div>
-          <p className="text-2xl font-medium tabular-nums">$5400.54</p>
+          <p className="text-2xl font-medium tabular-nums">$56,050</p>
           <div className="w-fit rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-500">+22.2%</div>
         </CardContent>
       </Card>
@@ -136,25 +104,23 @@ export function OverviewCards() {
         </CardHeader>
         <CardContent className="flex size-full flex-col justify-between">
           <div className="space-y-1.5">
-            <CardTitle>Total Sales</CardTitle>
+            <CardTitle>Projects Won</CardTitle>
             <CardDescription>Last 6 Months</CardDescription>
           </div>
-          <p className="text-2xl font-medium tabular-nums">
-            23K <span className="text-muted-foreground text-sm">units</span>
-          </p>
+          <p className="text-2xl font-medium tabular-nums">136</p>
           <div className="text-destructive bg-destructive/10 w-fit rounded-md px-2 py-1 text-xs font-medium">-2.5%</div>
         </CardContent>
       </Card>
 
-      <Card className="col-span-2">
+      <Card className="col-span-1 xl:col-span-2">
         <CardHeader>
           <CardTitle>Revenue Growth</CardTitle>
           <CardDescription>Year to Date (YTD)</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-24 w-full">
+          <ChartContainer config={revenueChartConfig} className="h-24 w-full">
             <LineChart
-              data={revenueGrowthData}
+              data={revenueChartData}
               margin={{
                 top: 5,
                 right: 10,
