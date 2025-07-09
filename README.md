@@ -73,8 +73,17 @@ Pages, components, and logic are grouped by feature. Each route folder contains 
 Check out [this repo](https://github.com/arhamkhnz/next-colocation-template) for the full file structure and examples.
 
 ## Getting Started
+### You can run this dashboard locally, or deploy it instantly with Vercel.
 
-To set up and run this admin dashboard locally, follow these steps:
+#### Deploy with Vercel
+
+<a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard">
+  <img src="https://vercel.com/button" alt="Deploy with Vercel" />
+</a>  
+
+*Click the button above to deploy your own copy of this dashboard to Vercel.*
+
+#### To set up and run this project locally, follow these steps:
 
 1. **Clone the repository**
    ```bash
@@ -85,8 +94,6 @@ To set up and run this admin dashboard locally, follow these steps:
    ```bash
     npm install
    ```
-   > While installing, you may be prompted to use the `--force` or `--legacy-peer-deps` flag.  
-   > This is expected and safe — it’s due to a dependency from the Shadcn registry that references a breaking library version.
 
 3. **Start the development server**
    ```bash
