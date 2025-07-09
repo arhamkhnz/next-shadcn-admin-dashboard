@@ -49,7 +49,8 @@ The current version uses the [Tweakcn Tangerine](https://tweakcn.com/) theme for
 
 ### Dashboards
 - ✅ Default
-- 🚧 CRM
+- ✅ CRM
+- ✅ Finance
 - 🚧 Analytics
 - 🚧 eCommerce
 - 🚧 Academy
