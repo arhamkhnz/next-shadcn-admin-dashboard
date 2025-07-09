@@ -4,7 +4,7 @@ import { Command } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import { RegisterFormV1 } from "./_components/register-form";
+import { RegisterForm } from "../../_components/register-form";
 
 export default function RegisterV1() {
   return (
@@ -18,7 +18,7 @@ export default function RegisterV1() {
             </div>
           </div>
           <div className="space-y-4">
-            <RegisterFormV1 />
+            <RegisterForm />
             <Button className="w-full" variant="outline">
               Continue with Google
             </Button>

@@ -4,7 +4,7 @@ import { Command } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import { LoginFormV1 } from "./_components/login-form";
+import { LoginForm } from "../../_components/login-form";
 
 export default function LoginV1() {
   return (
@@ -30,7 +30,7 @@ export default function LoginV1() {
             </div>
           </div>
           <div className="space-y-4">
-            <LoginFormV1 />
+            <LoginForm />
             <Button className="w-full" variant="outline">
               Continue with Google
             </Button>
