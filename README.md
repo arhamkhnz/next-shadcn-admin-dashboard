@@ -68,55 +68,9 @@ The current version uses the [Tweakcn Tangerine](https://tweakcn.com/) theme for
 
 ## Colocation File System Architecture
 
-The project follows a colocation-first file structure using the App Router. Feature-specific pages live alongside their components to maintain separation of concerns and reduce cross-import complexity.
+Pages, components, and logic are grouped by feature. Each route folder contains everything it needs. Shared UI, hooks, and config live at the top level. This keeps the codebase modular and easy to navigate as your app grows.
 
-```txt
-src/
-├── app/                      # Next.js App Router entry
-│   ├── (external)/           # Public pages (e.g., marketing, feedback)
-│
-│   ├── (main)/               # Main application layout
-│   │   ├── dashboard/
-│   │   │   ├── layout.tsx    # Shared layout for dashboard routes
-│   │   │   ├── default/      # Default overview dashboard
-│   │   │   │   ├── components/
-│   │   │   │   └── page.tsx
-│   │   │   ├── ecommerce/
-│   │   │   │   ├── components/
-│   │   │   │   └── page.tsx
-│   │   │   ├── email/
-│   │   │   │   ├── components/
-│   │   │   │   └── page.tsx
-│   │   │   ├── users/
-│   │   │   │   ├── components/
-│   │   │   │   └── page.tsx
-│   │   │   ├── profile/
-│   │   │   │   ├── components/
-│   │   │   │   └── page.tsx
-│   ├── auth/                  # Auth section
-│   │   ├── layout.tsx  
-│   │   ├── login/
-│   │   │   ├── components/
-│   │   │   └── page.tsx
-│   │   ├── register/
-│   │   │   ├── components/
-│   │   │   └── page.tsx
-│   │   ├── components/        # Shared auth components (e.g., buttons)
-│
-├── components/
-│   ├── ui/                    # Reusable UI primitives (button, input, etc.)
-│   ├── common/                # Shared layout/global components used across multiple areas
-│
-├── middleware.ts              # Middleware for handling auth/redirects
-├── navigation/                # Navigation config for sidebar
-├── hooks/                     # Custom React hooks
-├── utils/                     # Utility/helper functions
-├── server/                    # Server-only functions and server actions
-├── config/                    # Project-wide configuration (e.g. theme, layout)
-├── constants/                 # Static values like roles, app-level enums, routes, dummy data
-```
-
-If you want to dive deeper into this architecture pattern, check out [this repo](https://github.com/arhamkhnz/next-colocation-template).
+Check out [this repo](https://github.com/arhamkhnz/next-colocation-template) for the full file structure and examples.
 
 ## Getting Started
 
