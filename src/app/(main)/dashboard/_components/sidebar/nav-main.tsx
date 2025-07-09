@@ -186,13 +186,34 @@ export function NavMain({ items }: NavMainProps) {
           {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
           <SidebarGroupContent className="flex flex-col gap-2">
             <SidebarMenu>
-              {group.items.map((item) =>
-                state === "collapsed" && !isMobile ? (
-                  <NavItemCollapsed key={item.title} item={item} isActive={isItemActive} />
-                ) : (
+              {group.items.map((item) => {
+                if (state === "collapsed" && !isMobile) {
+                  // If no subItems, just render the button as a link
+                  if (!item.subItems) {
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton
+                          asChild
+                          aria-disabled={item.comingSoon}
+                          tooltip={item.title}
+                          isActive={isItemActive(item.url)}
+                        >
+                          <Link href={item.url} target={item.newTab ? "_blank" : undefined}>
+                            {item.icon && <item.icon />}
+                            <span>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  }
+                  // Otherwise, render the dropdown as before
+                  return <NavItemCollapsed key={item.title} item={item} isActive={isItemActive} />;
+                }
+                // Expanded view
+                return (
                   <NavItemExpanded key={item.title} item={item} isActive={isItemActive} isSubmenuOpen={isSubmenuOpen} />
-                ),
-              )}
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
