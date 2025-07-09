@@ -11,14 +11,6 @@
 
 <br />
 
-<p align="center">
-  <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard">
-    <img src="https://vercel.com/button" alt="Deploy with Vercel" />
-  </a>
-</p>
-
-<br />
-
 <div align="center">
   <img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard.png?version=5" alt="Dashboard Screenshot" width="75%">
 </div>
@@ -112,6 +104,10 @@ Once running, the app will be available at [http://localhost:3000](http://localh
 
 Feel free to open issues, feature requests, or start a discussion if you'd like to contribute or suggest improvements.
 
-**Happy building!**
+## Credits
 
+**Design inspiration from:** [@Marcel](https://x.com/MarcelFromMimic), [@Toby](https://x.com/TobyBelhome), [@Erşad](https://x.com/ersadwork), [@Satya](https://x.com/heysatya_).
 
+<br />
+
+**Happy Vibe Coding!**
