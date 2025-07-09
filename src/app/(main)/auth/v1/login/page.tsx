@@ -2,9 +2,8 @@ import Link from "next/link";
 
 import { Command } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
 import { LoginForm } from "../../_components/login-form";
+import { GoogleButton } from "../../_components/social-auth/google-button";
 
 export default function LoginV1() {
   return (
@@ -24,19 +23,17 @@ export default function LoginV1() {
       <div className="bg-background flex w-full items-center justify-center p-8 lg:w-2/3">
         <div className="w-full max-w-md space-y-10 py-24 lg:py-32">
           <div className="space-y-4 text-center">
-            <div className="text-foreground font-medium tracking-tight">Login</div>
+            <div className="font-medium tracking-tight">Login</div>
             <div className="text-muted-foreground mx-auto max-w-xl">
               Welcome back. Enter your email and password, let&apos;s hope you remember them this time.
             </div>
           </div>
           <div className="space-y-4">
             <LoginForm />
-            <Button className="w-full" variant="outline">
-              Continue with Google
-            </Button>
-            <p className="text-muted-foreground text-center text-xs font-medium">
+            <GoogleButton className="w-full" variant="outline" />
+            <p className="text-muted-foreground text-center text-xs">
               Don&apos;t have an account?{" "}
-              <Link href="register" className="text-primary font-semibold">
+              <Link href="register" className="text-primary">
                 Register
               </Link>
             </p>

@@ -50,7 +50,7 @@ export function CurrencyExchange() {
           <div className="space-y-2 py-6 text-center tabular-nums">
             <p className="text-4xl">{formatCurrency(100.0)}</p>
             <p className="text-muted-foreground text-xs font-medium">
-              Available: <span className="text-primary">{formatCurrency(13100.06)}</span>
+              Available: <span className="text-foreground">{formatCurrency(13100.06)}</span>
             </p>
           </div>
           <div className="bg-muted border-t py-1 text-center text-xs tabular-nums">
@@ -60,15 +60,15 @@ export function CurrencyExchange() {
 
         <div className="space-y-2 text-xs">
           <div className="flex items-center justify-between">
-            <span className="text-primary">Tax (2%)</span>
+            <span>Tax (2%)</span>
             <span className="font-medium tabular-nums">{formatCurrency(2)}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-primary">Exchange Fee (1%)</span>
+            <span>Exchange Fee (1%)</span>
             <span className="font-medium tabular-nums">{formatCurrency(1)}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-primary">Total Amount</span>
+            <span>Total Amount</span>
             <span className="font-medium">{formatCurrency(82.77, "EUR")}</span>
           </div>
         </div>
