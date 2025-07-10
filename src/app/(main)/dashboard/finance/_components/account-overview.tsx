@@ -32,7 +32,7 @@ const recentPayments = [
     title: "Advance Payment",
     subtitle: "Received via PayPal for Website Project",
     type: "credit",
-    amount: 1200.0,
+    amount: 1200,
     date: "Jul 8",
   },
   {
@@ -41,7 +41,7 @@ const recentPayments = [
     title: "ChatGPT Subscription",
     subtitle: "OpenAI monthly subscription",
     type: "debit",
-    amount: 20.0,
+    amount: 20,
     date: "Jul 7",
   },
   {
@@ -158,7 +158,7 @@ export function AccountOverview() {
                               transaction.type === "debit" ? "text-destructive" : "text-green-500",
                             )}
                           >
-                            {formatCurrency(transaction.amount)}
+                            {formatCurrency(transaction.amount, { noDecimals: true })}
                           </span>
                         </div>
                       </div>

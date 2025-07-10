@@ -69,7 +69,7 @@ export function CurrencyExchange() {
           </div>
           <div className="flex items-center justify-between">
             <span>Total Amount</span>
-            <span className="font-medium">{formatCurrency(82.77, "EUR")}</span>
+            <span className="font-medium">{formatCurrency(82.77, { currency: "EUR" })}</span>
           </div>
         </div>
         <Button variant="outline" className="w-full">

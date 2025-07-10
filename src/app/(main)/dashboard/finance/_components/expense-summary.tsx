@@ -56,7 +56,7 @@ export function ExpenseSummary() {
                             y={(viewBox.cy ?? 0) - 16}
                             className="fill-foreground text-2xl font-bold tabular-nums"
                           >
-                            {formatCurrency(totalExpenses)}
+                            {formatCurrency(totalExpenses, { noDecimals: true })}
                           </tspan>
                           <tspan x={viewBox.cx} y={(viewBox.cy ?? 0) + 4} className="fill-muted-foreground">
                             Spent
@@ -99,7 +99,7 @@ export function ExpenseSummary() {
             </div>
             <div className="space-y-0.5 text-center">
               <p className="text-muted-foreground text-xs uppercase">Groceries</p>
-              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].groceries)}</p>
+              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].groceries, { noDecimals: true })}</p>
             </div>
           </div>
           <Separator orientation="vertical" className="!h-auto" />
@@ -109,7 +109,7 @@ export function ExpenseSummary() {
             </div>
             <div className="space-y-0.5 text-center">
               <p className="text-muted-foreground text-xs uppercase">Transport</p>
-              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].transport)}</p>
+              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].transport, { noDecimals: true })}</p>
             </div>
           </div>
           <Separator orientation="vertical" className="!h-auto" />
@@ -119,12 +119,12 @@ export function ExpenseSummary() {
             </div>
             <div className="space-y-0.5 text-center">
               <p className="text-muted-foreground text-xs uppercase">Other</p>
-              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].other)}</p>
+              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].other, { noDecimals: true })}</p>
             </div>
           </div>
         </div>
         <span className="text-muted-foreground text-xs tabular-nums">
-          Weekly spending is capped at {formatCurrency(2000)}
+          Weekly spending is capped at {formatCurrency(2000, { noDecimals: true })}
         </span>
       </CardContent>
     </Card>

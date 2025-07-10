@@ -63,14 +63,14 @@ export function FinancialOverview() {
       </CardHeader>
       <CardContent>
         <Separator />
-        <div className="flex flex-col items-start justify-between gap-2 py-5 md:flex-row md:gap-0">
+        <div className="flex flex-col items-start justify-between gap-2 py-5 md:flex-row md:items-stretch md:gap-0">
           <div className="flex flex-1 items-center justify-center gap-2">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
               <ArrowDownLeft className="stroke-chart-1 size-6" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Income</p>
-              <p className="font-medium tabular-nums">{formatCurrency(totalIncome)}</p>
+              <p className="font-medium tabular-nums">{formatCurrency(totalIncome, { noDecimals: true })}</p>
             </div>
           </div>
           <Separator orientation="vertical" className="!h-auto" />
@@ -80,7 +80,7 @@ export function FinancialOverview() {
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Expenses</p>
-              <p className="font-medium tabular-nums">{formatCurrency(totalExpenses)}</p>
+              <p className="font-medium tabular-nums">{formatCurrency(totalExpenses, { noDecimals: true })}</p>
             </div>
           </div>
           <Separator orientation="vertical" className="!h-auto" />
@@ -90,7 +90,7 @@ export function FinancialOverview() {
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Scheduled</p>
-              <p className="font-medium tabular-nums">{formatCurrency(totalScheduled)}</p>
+              <p className="font-medium tabular-nums">{formatCurrency(totalScheduled, { noDecimals: true })}</p>
             </div>
           </div>
         </div>

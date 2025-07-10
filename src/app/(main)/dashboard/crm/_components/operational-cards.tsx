@@ -23,8 +23,8 @@ export function OperationalCards() {
           <ChartContainer config={salesPipelineChartConfig} className="size-full">
             <FunnelChart margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
               <Funnel className="stroke-card stroke-2" dataKey="value" data={salesPipelineChartData}>
-                <LabelList className="fill-primary stroke-0" dataKey="stage" position="right" offset={10} />
-                <LabelList className="fill-primary stroke-0" dataKey="value" position="left" offset={10} />
+                <LabelList className="fill-foreground stroke-0" dataKey="stage" position="right" offset={10} />
+                <LabelList className="fill-foreground stroke-0" dataKey="value" position="left" offset={10} />
               </Funnel>
             </FunnelChart>
           </ChartContainer>
@@ -37,7 +37,9 @@ export function OperationalCards() {
       <Card>
         <CardHeader>
           <CardTitle>Sales by Region</CardTitle>
-          <CardDescription className="font-medium tabular-nums">{formatCurrency(totalSales)}</CardDescription>
+          <CardDescription className="font-medium tabular-nums">
+            {formatCurrency(totalSales, { noDecimals: true })}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2.5">
@@ -46,7 +48,9 @@ export function OperationalCards() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{region.region}</span>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-semibold tabular-nums">{formatCurrency(region.sales)}</span>
+                    <span className="text-sm font-semibold tabular-nums">
+                      {formatCurrency(region.sales, { noDecimals: true })}
+                    </span>
                     <span
                       className={cn(
                         "text-xs font-medium tabular-nums",
