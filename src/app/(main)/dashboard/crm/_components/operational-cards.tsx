@@ -84,8 +84,8 @@ export function OperationalCards() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-2.5">
-            {actionItems.map((item, i) => (
-              <li key={i} className="space-y-2 rounded-md border px-3 py-2">
+            {actionItems.map((item) => (
+              <li key={item.id} className="space-y-2 rounded-md border px-3 py-2">
                 <div className="flex items-center gap-2">
                   <Checkbox defaultChecked={item.checked} />
                   <span className="text-sm font-medium">{item.title}</span>

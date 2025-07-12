@@ -1,16 +1,31 @@
 "use client";
 
+import { useState } from "react";
+
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
+import { setValueToCookie } from "@/server/server-actions";
+import { ThemeMode } from "@/types/preferences";
 
-export function ThemeSwitcher() {
-  const { resolvedTheme, setTheme } = useTheme();
+export function ThemeSwitcher(themeMode: any) {
+  const [localThemeMode, setLocalThemeMode] = useState(themeMode);
+
+  const handleValueChange = async (key: string, value: string) => {
+    const doc = document.documentElement;
+    doc.classList.add("disable-transitions");
+    document.documentElement.classList.toggle("dark", value === "dark");
+    setLocalThemeMode(value as ThemeMode);
+    requestAnimationFrame(() => {
+      doc.classList.remove("disable-transitions");
+    });
+
+    await setValueToCookie(key, value);
+  };
 
   return (
-    <Button size="icon" onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
-      {resolvedTheme === "dark" ? <Sun /> : <Moon />}
+    <Button size="icon" onClick={() => handleValueChange("theme_mode", localThemeMode === "dark" ? "light" : "dark")}>
+      {localThemeMode === "dark" ? <Sun /> : <Moon />}
     </Button>
   );
 }

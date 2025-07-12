@@ -6,8 +6,20 @@ import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sideb
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { users } from "@/data/users";
-import { getSidebarVariant, getSidebarCollapsible, getContentLayout } from "@/lib/layout-preferences";
 import { cn } from "@/lib/utils";
+import { getPreference } from "@/server/server-actions";
+import {
+  SidebarVariant,
+  allowedSidebarVariants,
+  SidebarCollapsible,
+  allowedSidebarCollapsibles,
+  ContentLayout,
+  allowedContentLayouts,
+  ThemePreset,
+  allowedThemePresets,
+  ThemeMode,
+  allowedThemeModes,
+} from "@/types/preferences";
 
 import { AccountSwitcher } from "./_components/sidebar/account-switcher";
 import { LayoutControls } from "./_components/sidebar/layout-controls";
@@ -18,9 +30,21 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
-  const sidebarVariant = await getSidebarVariant();
-  const sidebarCollapsible = await getSidebarCollapsible();
-  const contentLayout = await getContentLayout();
+  const [sidebarVariant, sidebarCollapsible, contentLayout, themeMode, themePreset] = await Promise.all([
+    getPreference<SidebarVariant>("sidebar_variant", allowedSidebarVariants, "inset"),
+    getPreference<SidebarCollapsible>("sidebar_collapsible", allowedSidebarCollapsibles, "icon"),
+    getPreference<ContentLayout>("content_layout", allowedContentLayouts, "centered"),
+    getPreference<ThemeMode>("theme_mode", allowedThemeModes, "light"),
+    getPreference<ThemePreset>("theme_preset", allowedThemePresets, "default"),
+  ]);
+
+  const layoutPreferences = {
+    contentLayout,
+    variant: sidebarVariant,
+    collapsible: sidebarCollapsible,
+    themeMode,
+    themePreset,
+  };
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
@@ -41,8 +65,8 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
               <SearchDialog />
             </div>
             <div className="flex items-center gap-2">
-              <LayoutControls contentLayout={contentLayout} variant={sidebarVariant} collapsible={sidebarCollapsible} />
-              <ThemeSwitcher />
+              <LayoutControls {...layoutPreferences} />
+              <ThemeSwitcher themeMode={themeMode} />
               <AccountSwitcher users={users} />
             </div>
           </div>

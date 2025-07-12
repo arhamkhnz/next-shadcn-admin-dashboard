@@ -120,7 +120,7 @@ export default [
       "no-underscore-dangle": ["error", { allow: ["_id", "__dirname"] }],
 
       // Complexity
-      "complexity": ["error", { max: 10 }],
+      complexity: ["error", { max: 10 }],
       "max-lines": ["error", { max: 300, skipBlankLines: true, skipComments: true }],
       "max-depth": ["error", 4],
 
@@ -148,6 +148,9 @@ export default [
 
       // React: Prevent re-renders by ensuring context values are memoized
       "react/jsx-no-constructed-context-values": "error",
+
+      // React: Disallow array index as key in JSX
+      "react/no-array-index-key": "warn",
 
       // SonarJS: Detect commented-out code
       "sonarjs/no-commented-code": "warn",

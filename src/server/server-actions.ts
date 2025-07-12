@@ -18,3 +18,9 @@ export async function setValueToCookie(
     maxAge: options.maxAge ?? 60 * 60 * 24 * 7, // default: 7 days
   });
 }
+
+export async function getPreference<T extends string>(key: string, allowed: readonly T[], fallback: T): Promise<T> {
+  const cookieStore = await cookies();
+  const value = cookieStore.get(key)?.value;
+  return allowed.includes(value as T) ? (value as T) : fallback;
+}

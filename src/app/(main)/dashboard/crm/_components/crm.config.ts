@@ -181,6 +181,7 @@ export const regionSalesData = [
 
 export const actionItems = [
   {
+    id: 1,
     title: "Send kickoff docs",
     desc: "Send onboarding documents and timeline",
     due: "Due today",
@@ -189,6 +190,7 @@ export const actionItems = [
     checked: false,
   },
   {
+    id: 2,
     title: "Demo call for SaaS MVP",
     desc: "Book Zoom call with client",
     due: "Due tomorrow",
@@ -197,6 +199,7 @@ export const actionItems = [
     checked: true,
   },
   {
+    id: 3,
     title: "Update case study",
     desc: "Add latest LLM project",
     due: "Due this week",
