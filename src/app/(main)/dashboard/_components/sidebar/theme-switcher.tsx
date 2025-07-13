@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { setValueToCookie } from "@/server/server-actions";
 import { ThemeMode } from "@/types/preferences";
 
-export function ThemeSwitcher(themeMode: any) {
+export function ThemeSwitcher({ themeMode }: { themeMode: ThemeMode }) {
   const [localThemeMode, setLocalThemeMode] = useState(themeMode);
 
   const handleValueChange = async (key: string, value: string) => {

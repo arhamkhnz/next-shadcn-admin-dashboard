@@ -41,6 +41,11 @@ export function LayoutControls(props: LayoutControlsProps) {
       document.documentElement.setAttribute("data-theme-preset", value);
       setLocalThemePreset(value as ThemePreset);
     }
+
+    if (key === "content_layout") {
+      document.querySelector('[data-slot="sidebar-inset"]')?.setAttribute("data-content-layout", value);
+      setLocalThemePreset(value as ThemePreset);
+    }
     await setValueToCookie(key, value);
   };
 
