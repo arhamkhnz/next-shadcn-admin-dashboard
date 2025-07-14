@@ -15,10 +15,6 @@ import {
   allowedSidebarCollapsibles,
   ContentLayout,
   allowedContentLayouts,
-  ThemePreset,
-  allowedThemePresets,
-  ThemeMode,
-  allowedThemeModes,
 } from "@/types/preferences";
 
 import { AccountSwitcher } from "./_components/sidebar/account-switcher";
@@ -30,20 +26,16 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
-  const [sidebarVariant, sidebarCollapsible, contentLayout, themeMode, themePreset] = await Promise.all([
+  const [sidebarVariant, sidebarCollapsible, contentLayout] = await Promise.all([
     getPreference<SidebarVariant>("sidebar_variant", allowedSidebarVariants, "inset"),
     getPreference<SidebarCollapsible>("sidebar_collapsible", allowedSidebarCollapsibles, "icon"),
     getPreference<ContentLayout>("content_layout", allowedContentLayouts, "centered"),
-    getPreference<ThemeMode>("theme_mode", allowedThemeModes, "light"),
-    getPreference<ThemePreset>("theme_preset", allowedThemePresets, "default"),
   ]);
 
   const layoutPreferences = {
     contentLayout,
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
-    themeMode,
-    themePreset,
   };
 
   return (
@@ -67,7 +59,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
             </div>
             <div className="flex items-center gap-2">
               <LayoutControls {...layoutPreferences} />
-              <ThemeSwitcher themeMode={themeMode} />
+              <ThemeSwitcher />
               <AccountSwitcher users={users} />
             </div>
           </div>

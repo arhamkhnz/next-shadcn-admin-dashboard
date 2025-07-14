@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 import { Settings } from "lucide-react";
 
+import { usePreferencesStore } from "@/components/preferences-store-provider";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -18,25 +17,25 @@ type LayoutControlsProps = {
   readonly variant: SidebarVariant;
   readonly collapsible: SidebarCollapsible;
   readonly contentLayout: ContentLayout;
-  readonly themeMode: ThemeMode;
-  readonly themePreset: ThemePreset;
 };
 
 export function LayoutControls(props: LayoutControlsProps) {
-  const { variant, collapsible, contentLayout, themeMode, themePreset } = props;
+  const { variant, collapsible, contentLayout } = props;
 
-  const [localThemeMode, setLocalThemeMode] = useState(themeMode);
-  const [localThemePreset, setLocalThemePreset] = useState(themePreset);
+  const themeMode = usePreferencesStore((s) => s.themeMode);
+  const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
+  const themePreset = usePreferencesStore((s) => s.themePreset);
+  const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
 
   const handleValueChange = async (key: string, value: any) => {
     if (key === "theme_mode") {
       updateThemeMode(value);
-      setLocalThemeMode(value as ThemeMode);
+      setThemeMode(value as ThemeMode);
     }
 
     if (key === "theme_preset") {
       updateThemePreset(value);
-      setLocalThemePreset(value as ThemePreset);
+      setThemePreset(value as ThemePreset);
     }
 
     if (key === "content_layout") {
@@ -61,7 +60,7 @@ export function LayoutControls(props: LayoutControlsProps) {
           <div className="space-y-3">
             <div className="space-y-1">
               <Label className="text-xs font-medium">Preset</Label>
-              <Select value={localThemePreset} onValueChange={(value) => handleValueChange("theme_preset", value)}>
+              <Select value={themePreset} onValueChange={(value) => handleValueChange("theme_preset", value)}>
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Preset" />
                 </SelectTrigger>
@@ -89,7 +88,7 @@ export function LayoutControls(props: LayoutControlsProps) {
                 size="sm"
                 variant="outline"
                 type="single"
-                value={localThemeMode}
+                value={themeMode}
                 onValueChange={(value) => handleValueChange("theme_mode", value)}
               >
                 <ToggleGroupItem className="text-xs" value="light" aria-label="Toggle inset">
