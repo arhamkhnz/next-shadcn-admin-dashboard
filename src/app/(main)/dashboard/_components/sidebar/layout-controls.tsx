@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { updateContentLayout } from "@/lib/layout-utils";
+import { updateThemeMode, updateThemePreset } from "@/lib/theme-utils";
 import { setValueToCookie } from "@/server/server-actions";
 import type { SidebarVariant, SidebarCollapsible, ContentLayout, ThemePreset, ThemeMode } from "@/types/preferences";
 
@@ -26,25 +28,19 @@ export function LayoutControls(props: LayoutControlsProps) {
   const [localThemeMode, setLocalThemeMode] = useState(themeMode);
   const [localThemePreset, setLocalThemePreset] = useState(themePreset);
 
-  const handleValueChange = async (key: string, value: string) => {
+  const handleValueChange = async (key: string, value: any) => {
     if (key === "theme_mode") {
-      const doc = document.documentElement;
-      doc.classList.add("disable-transitions");
-      document.documentElement.classList.toggle("dark", value === "dark");
+      updateThemeMode(value);
       setLocalThemeMode(value as ThemeMode);
-      requestAnimationFrame(() => {
-        doc.classList.remove("disable-transitions");
-      });
     }
 
     if (key === "theme_preset") {
-      document.documentElement.setAttribute("data-theme-preset", value);
+      updateThemePreset(value);
       setLocalThemePreset(value as ThemePreset);
     }
 
     if (key === "content_layout") {
-      document.querySelector('[data-slot="sidebar-inset"]')?.setAttribute("data-content-layout", value);
-      setLocalThemePreset(value as ThemePreset);
+      updateContentLayout(value);
     }
     await setValueToCookie(key, value);
   };
