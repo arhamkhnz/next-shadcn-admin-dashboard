@@ -3,10 +3,10 @@ import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import { PreferencesStoreProvider } from "@/components/preferences-store-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_CONFIG } from "@/config/app-config";
 import { getPreference } from "@/server/server-actions";
+import { PreferencesStoreProvider } from "@/stores/preferences/preferences-provider";
 import { ThemeMode, allowedThemeModes, ThemePreset, allowedThemePresets } from "@/types/preferences";
 
 import "./globals.css";
