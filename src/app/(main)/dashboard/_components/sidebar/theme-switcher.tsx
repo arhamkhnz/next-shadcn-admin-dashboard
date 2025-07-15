@@ -8,7 +8,6 @@ import { setValueToCookie } from "@/server/server-actions";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function ThemeSwitcher() {
-  console.log("Test");
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
 
