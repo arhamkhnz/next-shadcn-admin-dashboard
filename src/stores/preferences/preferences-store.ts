@@ -1,6 +1,6 @@
 import { createStore } from "zustand/vanilla";
 
-import type { ThemeMode, ThemePreset } from "@/types/preferences";
+import type { ThemeMode, ThemePreset } from "@/types/preferences/theme";
 
 export type PreferencesState = {
   themeMode: ThemeMode;

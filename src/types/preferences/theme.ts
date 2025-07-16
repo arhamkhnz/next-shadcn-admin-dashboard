@@ -15,7 +15,7 @@ export type ThemeMode = (typeof THEME_MODE_VALUES)[number];
 
 // --- generated:themePresets:start ---
 
-// Auto-generated on 2025-07-16T15:54:58.506Z
+// Auto-generated on 2025-07-16T15:59:23.047Z
 export const THEME_PRESET_OPTIONS = [
   {
     label: "Default",
