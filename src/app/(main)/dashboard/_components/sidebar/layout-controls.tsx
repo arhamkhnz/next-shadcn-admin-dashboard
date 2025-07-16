@@ -11,7 +11,8 @@ import { updateContentLayout } from "@/lib/layout-utils";
 import { updateThemeMode, updateThemePreset } from "@/lib/theme-utils";
 import { setValueToCookie } from "@/server/server-actions";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
-import type { SidebarVariant, SidebarCollapsible, ContentLayout, ThemePreset, ThemeMode } from "@/types/preferences";
+import type { SidebarVariant, SidebarCollapsible, ContentLayout } from "@/types/preferences/layout";
+import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/types/preferences/theme";
 
 type LayoutControlsProps = {
   readonly variant: SidebarVariant;
@@ -65,18 +66,17 @@ export function LayoutControls(props: LayoutControlsProps) {
                   <SelectValue placeholder="Preset" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem className="text-xs" value="default">
-                    Default
-                  </SelectItem>
-                  <SelectItem className="text-xs" value="tangerine">
-                    Tangerine
-                  </SelectItem>
-                  <SelectItem className="text-xs" value="brutalist">
-                    Brutalist
-                  </SelectItem>
-                  <SelectItem className="text-xs" value="soft-pop">
-                    Soft Pop
-                  </SelectItem>
+                  {THEME_PRESET_OPTIONS.map((preset) => (
+                    <SelectItem key={preset.value} className="text-xs" value={preset.value}>
+                      <span
+                        className="size-2.5 rounded-full"
+                        style={{
+                          backgroundColor: themeMode === "dark" ? preset.primary.dark : preset.primary.light,
+                        }}
+                      />
+                      {preset.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

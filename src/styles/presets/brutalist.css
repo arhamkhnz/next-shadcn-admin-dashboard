@@ -1,3 +1,8 @@
+/* 
+label: Brutalist
+value: brutalist 
+*/
+
 :root[data-theme-preset="brutalist"] {
     --radius: 0px;
     --card: oklch(1.0000 0 0);

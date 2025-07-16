@@ -1,3 +1,8 @@
+/* 
+label: Tangerine
+value: tangerine  
+*/
+
 :root[data-theme-preset="tangerine"] {
     --radius: 0.625rem;
     --card: oklch(1.00 0 0);

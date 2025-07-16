@@ -1,1 +1,2 @@
+npm run generate:presets
 npx lint-staged

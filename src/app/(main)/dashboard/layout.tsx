@@ -9,13 +9,13 @@ import { users } from "@/data/users";
 import { cn } from "@/lib/utils";
 import { getPreference } from "@/server/server-actions";
 import {
-  SidebarVariant,
-  allowedSidebarVariants,
-  SidebarCollapsible,
-  allowedSidebarCollapsibles,
-  ContentLayout,
-  allowedContentLayouts,
-} from "@/types/preferences";
+  SIDEBAR_VARIANT_VALUES,
+  SIDEBAR_COLLAPSIBLE_VALUES,
+  CONTENT_LAYOUT_VALUES,
+  type SidebarVariant,
+  type SidebarCollapsible,
+  type ContentLayout,
+} from "@/types/preferences/layout";
 
 import { AccountSwitcher } from "./_components/sidebar/account-switcher";
 import { LayoutControls } from "./_components/sidebar/layout-controls";
@@ -27,9 +27,9 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   const [sidebarVariant, sidebarCollapsible, contentLayout] = await Promise.all([
-    getPreference<SidebarVariant>("sidebar_variant", allowedSidebarVariants, "inset"),
-    getPreference<SidebarCollapsible>("sidebar_collapsible", allowedSidebarCollapsibles, "icon"),
-    getPreference<ContentLayout>("content_layout", allowedContentLayouts, "centered"),
+    getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
+    getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
+    getPreference<ContentLayout>("content_layout", CONTENT_LAYOUT_VALUES, "centered"),
   ]);
 
   const layoutPreferences = {
