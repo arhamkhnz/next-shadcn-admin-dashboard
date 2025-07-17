@@ -1,7 +1,9 @@
-<div align="center">
-  <strong>Next.js Admin Template built with TypeScript & Shadcn UI</strong><br />
-  A modern admin dashboard template using Next.js 15, Tailwind CSS v4, App Router, TypeScript, and Shadcn UI.
-</div>
+<div align="center"><h1>Next.js Admin Template built with TypeScript & Shadcn UI</h1></div>
+
+
+  <p align="center">Includes multiple dashboards, authentication layouts, customizable theme presets, and more.</p>
+
+
 
 <br />
 
