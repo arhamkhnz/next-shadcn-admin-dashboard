@@ -21,7 +21,6 @@ export function SimpleIcon({ icon, className, ...props }: SimpleIconProps) {
       aria-hidden="false"
       focusable="false"
       className={cn("fill-foreground size-5", className)}
-      role="img"
       {...props}
     >
       <title>{title}</title>

@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 
-import { ChartPie, Grid2X2, ChartLine, ShoppingBag, BookA, Forklift, Search } from "lucide-react";
+import { LayoutDashboard, ChartBar, Gauge, ShoppingBag, GraduationCap, Forklift, Search } from "lucide-react";
 
 import {
   CommandDialog,
@@ -14,14 +14,16 @@ import {
 } from "@/components/ui/command";
 
 const searchItems = [
-  { group: "Dashboards", icon: ChartPie, label: "Default" },
-  { group: "Dashboards", icon: Grid2X2, label: "CRM", disabled: true },
-  { group: "Dashboards", icon: ChartLine, label: "Analytics", disabled: true },
+  { group: "Dashboards", icon: LayoutDashboard, label: "Default" },
+  { group: "Dashboards", icon: ChartBar, label: "CRM", disabled: true },
+  { group: "Dashboards", icon: Gauge, label: "Analytics", disabled: true },
   { group: "Dashboards", icon: ShoppingBag, label: "E-Commerce", disabled: true },
-  { group: "Dashboards", icon: BookA, label: "Academy", disabled: true },
+  { group: "Dashboards", icon: GraduationCap, label: "Academy", disabled: true },
   { group: "Dashboards", icon: Forklift, label: "Logistics", disabled: true },
   { group: "Authentication", label: "Login v1" },
+  { group: "Authentication", label: "Login v2" },
   { group: "Authentication", label: "Register v1" },
+  { group: "Authentication", label: "Register v2" },
 ];
 
 export function SearchDialog() {
