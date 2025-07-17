@@ -28,7 +28,14 @@ It also includes `Zod` for validation, `ESLint` and `Prettier` for linting and f
 
 This will support `React Hook Form`, `Zustand`, `TanStack Table`, and other related utilities, and will be added with upcoming screens. RBAC (Role-Based Access Control) with config-driven UI and multi-tenant UI support are also planned as part of the feature roadmap.
 
-The current version uses the [Tweakcn Tangerine](https://tweakcn.com/) theme for UI.
+The default version of the dashboard uses the **shadcn neutral** theme.  
+It also supports multiple color themes inspired by [Tweakcn](https://tweakcn.com), including:
+
+- Tangerine  
+- Neo Brutalism  
+- Soft Pop  
+
+You can add more presets by following the same structure as the existing ones in the theme configuration.
 
 > Looking for a **Next 14 + Tailwind CSS v3** version instead?  
 > Check out the [`archive/next14-tailwindv3`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/tree/archive/next14-tailwindv3) branch.  
