@@ -11,7 +11,7 @@ I’ve taken design inspiration from various sources. Feel free to open an issue
 > **View demo:** [studio admin](https://next-shadcn-admin-dashboard.vercel.app)
 
 > [!TIP]
-> I’m also working on Nuxt.js, Astro, and Svelte versions of this dashboard. They’ll be live soon.
+> I’m also working on Nuxt.js, Astro, Svelte, and React (Vite + TanStack Router) versions of this dashboard. They’ll be live soon.
 
 ## Features
 
