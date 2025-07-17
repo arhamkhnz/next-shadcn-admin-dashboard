@@ -1,27 +1,17 @@
-<div align="center"><h1>Next.js Admin Template built with TypeScript & Shadcn UI</h1></div>
+# Next.js Admin Template built with TypeScript & Shadcn UI 
 
+Includes multiple dashboards, authentication layouts, customizable theme presets, and more.
 
-  <p align="center">Includes multiple dashboards, authentication layouts, customizable theme presets, and more.</p>
+<img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard.png?version=5" alt="Dashboard Screenshot">
 
+The idea behind this dashboard aims to offer an alternative to typical admin templates. Most I came across, paid or free, felt cluttered, outdated, or too rigid in design.
 
+I’ve taken design inspiration from various sources. Feel free to open an issue or reach out for credits.
 
-<br />
+> **View demo:** [studio admin](https://next-shadcn-admin-dashboard.vercel.app)
 
-<div align="center">
-  <a href="https://next-shadcn-admin-dashboard.vercel.app">View Demo</a>
-</div>
-
-<br />
-
-<div align="center">
-  <img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard.png?version=5" alt="Dashboard Screenshot" width="75%">
-</div>
-
-## Project Vision
-
-The goal is to create an open-source admin template that includes multiple example screens, prebuilt sections, and thoughtfully designed UI patterns, all supported by a clean architecture and proper project setup.
-
-It aims to serve as a strong starting point for SaaS platforms, internal dashboards, and admin panels, with built-in support for multi-tenancy, RBAC, and feature-based scaling.
+> [!TIP]
+> I’m also working on Nuxt.js, Astro, and Svelte versions of this dashboard. They’ll be live soon.
 
 ## Overview
 
