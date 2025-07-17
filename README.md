@@ -13,25 +13,40 @@ I’ve taken design inspiration from various sources. Feel free to open an issue
 > [!TIP]
 > I’m also working on Nuxt.js, Astro, and Svelte versions of this dashboard. They’ll be live soon.
 
-## Overview
+## Features
 
-This project uses `Next.js 15 (App Router)`, `TypeScript`, `Tailwind CSS v4`, and `Shadcn UI` as the main stack.  
-It also includes `Zod` for validation, `ESLint` and `Prettier` for linting and formatting, and `Husky` for pre-commit hooks.  
+- Built with Next.js 15, TypeScript, and Shadcn UI
+- Responsive and mobile-friendly design
+- Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)
+- Multiple layout options (collapsible sidebar, content width variations)
+- Authentication layouts and screens
+- Dashboard screens for analytics, reports, and overview
+- Prebuilt dashboard screens and reusable UI components  
+- Includes 5 out of 15 planned screens
+- RBAC (Role-Based Access Control) with config-driven UI and multi-tenant support *(planned)*
 
-This will support `React Hook Form`, `Zustand`, `TanStack Table`, and other related utilities, and will be added with upcoming screens. RBAC (Role-Based Access Control) with config-driven UI and multi-tenant UI support are also planned as part of the feature roadmap.
+> [!NOTE]
+> The default version of the dashboard uses the **shadcn neutral** theme.  
+> It also supports multiple color themes inspired by [Tweakcn](https://tweakcn.com), including:
+>
+> - Tangerine  
+> - Neo Brutalism  
+> - Soft Pop  
+>
+> You can add more presets by following the same structure as the existing ones.
 
-The default version of the dashboard uses the **shadcn neutral** theme.  
-It also supports multiple color themes inspired by [Tweakcn](https://tweakcn.com), including:
-
-- Tangerine  
-- Neo Brutalism  
-- Soft Pop  
-
-You can add more presets by following the same structure as the existing ones in the theme configuration.
-
-> Looking for a **Next 14 + Tailwind CSS v3** version instead?  
+> Looking for the **Next.js 14 + Tailwind CSS v3** version?
 > Check out the [`archive/next14-tailwindv3`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/tree/archive/next14-tailwindv3) branch.  
-> This branch uses a different color theme and is not actively maintained, though I'm trying to keep it updated with the latest changes and screens.
+> It uses a different color theme and isn’t actively maintained, but I’m trying to keep it updated with the latest changes and screens.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router), TypeScript, Tailwind CSS v4  
+- **Components**: Shadcn UI  
+- **Validation**: Zod  
+- **Forms & State**: React Hook Form, Zustand  
+- **Data Table**: TanStack Table  
+- **Tooling**: ESLint, Prettier, Husky
 
 ## Screens
 
@@ -59,22 +74,21 @@ You can add more presets by following the same structure as the existing ones in
 
 ## Colocation File System Architecture
 
-Pages, components, and logic are grouped by feature. Each route folder contains everything it needs. Shared UI, hooks, and config live at the top level. This keeps the codebase modular and easy to navigate as your app grows.
+Pages, components, and logic are grouped by feature. Each route folder contains everything it needs. Shared UI, hooks, and config live at the top level, keeping the codebase modular and scalable as the app grows.
 
 Check out [this repo](https://github.com/arhamkhnz/next-colocation-template) for the full file structure and examples.
 
 ## Getting Started
-### You can run this dashboard locally, or deploy it instantly with Vercel.
 
-#### Deploy with Vercel
+You can run this project locally, or deploy it instantly with Vercel.
 
-<a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard">
-  <img src="https://vercel.com/button" alt="Deploy with Vercel" />
-</a>  
+### Deploy with Vercel
 
-*Click the button above to deploy your own copy of this dashboard to Vercel.*
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard)
 
-#### To set up and run this project locally, follow these steps:
+_Clone and deploy your own copy of this project in one click._
+
+### Run locally
 
 1. **Clone the repository**
    ```bash
@@ -93,16 +107,14 @@ Check out [this repo](https://github.com/arhamkhnz/next-colocation-template) for
 
 Once running, the app will be available at [http://localhost:3000](http://localhost:3000)
 
-
 ---
 
 > [!IMPORTANT]  
-> This project is frequently updated. If you’re working from a fork or previously cloned copy, check for the latest changes before syncing. Some updates may include breaking changes.
+> This project is frequently updated. If you’re working from a fork or a previously cloned copy, check for the latest changes before syncing. Some updates may include breaking changes.
 
 ---
 
 Feel free to open issues, feature requests, or start a discussion if you'd like to contribute or suggest improvements.
 
-<br />
 
 **Happy Vibe Coding!**
