@@ -18,6 +18,8 @@ export function SimpleIcon({ icon, className, ...props }: SimpleIconProps) {
     <svg
       viewBox="0 0 24 24"
       aria-label={title}
+      aria-hidden="false"
+      focusable="false"
       className={cn("fill-foreground size-5", className)}
       role="img"
       {...props}

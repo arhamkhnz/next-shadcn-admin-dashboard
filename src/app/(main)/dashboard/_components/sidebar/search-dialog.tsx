@@ -63,7 +63,6 @@ export function SearchDialog() {
                     <CommandItem className="!py-1.5" key={item.label} onSelect={() => setOpen(false)}>
                       {item.icon && <item.icon />}
                       <span>{item.label}</span>
-                      {/* {item.shortcut && <CommandShortcut>{item.shortcut}</CommandShortcut>} */}
                     </CommandItem>
                   ))}
               </CommandGroup>

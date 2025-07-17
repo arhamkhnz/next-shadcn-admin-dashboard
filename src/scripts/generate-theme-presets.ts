@@ -79,8 +79,11 @@ try {
   process.exit(1);
 }
 
-const defaultLightPrimaryMatch = globalContent.match(/:root\s*{[^}]*--primary:\s*([^;]+);/);
-const defaultDarkPrimaryMatch = globalContent.match(/\.dark\s*{[^}]*--primary:\s*([^;]+);/);
+const defaultLightPrimaryRegex = /:root\s*{[^}]*--primary:\s*([^;]+);/;
+const defaultDarkPrimaryRegex = /\.dark\s*{[^}]*--primary:\s*([^;]+);/;
+
+const defaultLightPrimaryMatch = defaultLightPrimaryRegex.exec(globalContent);
+const defaultDarkPrimaryMatch = defaultDarkPrimaryRegex.exec(globalContent);
 
 const defaultPrimary = {
   light: defaultLightPrimaryMatch?.[1]?.trim() ?? "",
@@ -89,11 +92,8 @@ const defaultPrimary = {
 
 presets.unshift({ label: "Default", value: "default", primary: defaultPrimary });
 
-const timestamp = new Date().toISOString();
-
 const generatedBlock = `// --- generated:themePresets:start ---
 
-// Auto-generated on ${timestamp}
 export const THEME_PRESET_OPTIONS = ${JSON.stringify(presets, null, 2)} as const;
 
 export const THEME_PRESET_VALUES = THEME_PRESET_OPTIONS.map((p) => p.value);
