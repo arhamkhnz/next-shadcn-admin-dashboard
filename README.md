@@ -70,7 +70,7 @@ I’ve taken design inspiration from various sources. Feel free to open an issue
 - 🚧 Invoice
 - 🚧 Users
 - 🚧 Roles
-- ✅ Authentication
+- ✅ Authentication (4 screens)
 
 ## Colocation File System Architecture
 
