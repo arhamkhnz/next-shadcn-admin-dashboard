@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { LayoutDashboard, ChartBar, Gauge, ShoppingBag, GraduationCap, Forklift, Search } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
   CommandEmpty,
@@ -41,8 +42,9 @@ export function SearchDialog() {
 
   return (
     <>
-      <div
-        className="text-muted-foreground flex cursor-pointer items-center gap-2 text-sm"
+      <Button
+        variant="link"
+        className="text-muted-foreground !px-0 font-normal hover:no-underline"
         onClick={() => setOpen(true)}
       >
         <Search className="size-4" />
@@ -50,7 +52,7 @@ export function SearchDialog() {
         <kbd className="bg-muted inline-flex h-5 items-center gap-1 rounded border px-1.5 text-[10px] font-medium select-none">
           <span className="text-xs">⌘</span>J
         </kbd>
-      </div>
+      </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Search dashboards, users, and more…" />
         <CommandList>
