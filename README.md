@@ -2,7 +2,7 @@
 
 Includes multiple dashboards, authentication layouts, customizable theme presets, and more.
 
-<img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard.png?version=5" alt="Dashboard Screenshot">
+<img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard.jpg?version=1" alt="Dashboard Screenshot">
 
 The idea behind this dashboard aims to offer an alternative to typical admin templates. Most I came across, paid or free, felt cluttered, outdated, or too rigid in design.
 
