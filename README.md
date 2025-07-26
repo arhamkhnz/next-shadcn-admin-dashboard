@@ -10,10 +10,6 @@ I’ve taken design inspiration from various sources. Feel free to open an issue
 
 > **View demo:** [studio admin](https://next-shadcn-admin-dashboard.vercel.app)
 
-> [!IMPORTANT]
-> Also available for other frameworks.  
-> Check out the Astro version: [astro-shadcn-admin-dashboard](https://github.com/arhamkhnz/astro-shadcn-admin-dashboard)
-
 > [!TIP]
 > I’m also working on Nuxt.js, Svelte, and React (Vite + TanStack Router) versions of this dashboard. They’ll be live soon.
 
