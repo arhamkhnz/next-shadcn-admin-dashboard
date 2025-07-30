@@ -3,7 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Home, Building2, MapPin, UsersRound, Users, CreditCard } from "lucide-react";
+import {
+  Home,
+  Building2,
+  MapPin,
+  UsersRound,
+  Users,
+  CreditCard,
+  ClipboardList,
+  Star,
+  Calendar,
+  Ticket,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -11,9 +22,13 @@ const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: Home },
   { href: "/admin/franchises", label: "Franchises", icon: Building2 },
   { href: "/admin/branches", label: "Branches", icon: MapPin },
+  { href: "/admin/services", label: "Services", icon: ClipboardList },
   { href: "/admin/washers", label: "Washers", icon: UsersRound },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
+  { href: "/admin/schedule", label: "Schedule", icon: Calendar },
+  { href: "/admin/promotions", label: "Promotions", icon: Ticket },
 ];
 
 export function NavAdmin() {
