@@ -1,23 +1,40 @@
 import { create } from "zustand";
 
+import { createClient } from "@/lib/supabase/client";
 import { Review } from "@/types/database";
+
+import { useUserStore } from "./user-store";
+
+const supabase = createClient();
 
 type ReviewState = {
   reviews: Review[];
-  deleteReview: (id: string) => void;
+  fetchReviews: () => Promise<void>;
+  deleteReview: (id: string) => Promise<void>;
 };
 
-const initialReviews: Review[] = [
-  { id: "1", userId: "1", bookingId: "1", rating: 5, comment: "Great service!" },
-  { id: "2", userId: "2", bookingId: "2", rating: 4, comment: "Good job, but a bit slow." },
-  { id: "3", userId: "3", bookingId: "3", rating: 5, comment: "My car looks brand new!" },
-  { id: "4", userId: "4", bookingId: "4", rating: 3, comment: "It was okay." },
-];
-
-export const useReviewStore = create<ReviewState>((set) => ({
-  reviews: initialReviews,
-  deleteReview: (id) =>
-    set((state) => ({
-      reviews: state.reviews.filter((review) => review.id !== id),
-    })),
+export const useReviewStore = create<ReviewState>((set, get) => ({
+  reviews: [],
+  fetchReviews: async () => {
+    const { data, error } = await supabase.from("reviews").select("*");
+    if (error) {
+      console.error("Error fetching reviews:", error);
+      return;
+    }
+    const { users } = useUserStore.getState();
+    const transformedReviews = data.map((review) => ({
+      id: review.id,
+      rating: review.rating,
+      comment: review.comment,
+      userId: review.user_id,
+      bookingId: review.booking_id,
+      userName: users.find((u) => u.id === review.user_id)?.name ?? "N/A",
+      createdAt: new Date(review.created_at),
+    }));
+    set({ reviews: transformedReviews as any[] });
+  },
+  deleteReview: async (id: string) => {
+    await supabase.from("reviews").delete().eq("id", id);
+    set((state) => ({ reviews: state.reviews.filter((r) => r.id !== id) }));
+  },
 }));

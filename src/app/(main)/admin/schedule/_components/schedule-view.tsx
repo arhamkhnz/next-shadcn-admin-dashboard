@@ -1,9 +1,7 @@
 "use client";
 
+import { ScheduleCalendar } from "./schedule-calendar";
+
 export function ScheduleView() {
-  return (
-    <div>
-      <p>Schedule view will be displayed here.</p>
-    </div>
-  );
+  return <ScheduleCalendar />;
 }

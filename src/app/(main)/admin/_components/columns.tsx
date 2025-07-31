@@ -21,6 +21,7 @@ export type Booking = {
   user: string;
   branch: string;
   service: string;
+  serviceId: string;
   status: "completed" | "pending" | "in-progress" | "scheduled";
   date: Date;
 };

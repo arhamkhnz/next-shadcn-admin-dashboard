@@ -1,5 +1,9 @@
 import { create } from "zustand";
 
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
+
 export type WasherSchedule = {
   id: string;
   washer_id: string;
@@ -10,29 +14,32 @@ export type WasherSchedule = {
 
 type ScheduleState = {
   schedules: WasherSchedule[];
+  fetchSchedulesForWasher: (washerId: string) => Promise<void>;
   getSchedulesForWasher: (washerId: string) => WasherSchedule[];
   addSchedule: (schedule: Omit<WasherSchedule, "id">) => void;
   deleteSchedule: (scheduleId: string) => void;
 };
 
-// Mock data - associating schedules with the existing washer IDs
-const initialSchedules: WasherSchedule[] = [
-  { id: "1", washer_id: "1", day_of_week: 1, start_time: "09:00", end_time: "17:00" }, // Mike, Monday
-  { id: "2", washer_id: "1", day_of_week: 2, start_time: "09:00", end_time: "17:00" }, // Mike, Tuesday
-  { id: "3", washer_id: "2", day_of_week: 1, start_time: "10:00", end_time: "18:00" }, // Sarah, Monday
-  { id: "4", washer_id: "2", day_of_week: 3, start_time: "10:00", end_time: "18:00" }, // Sarah, Wednesday
-  { id: "5", washer_id: "4", day_of_week: 5, start_time: "08:00", end_time: "16:00" }, // Jessica, Friday
-];
-
 export const useWasherScheduleStore = create<ScheduleState>((set, get) => ({
-  schedules: initialSchedules,
+  schedules: [],
+  fetchSchedulesForWasher: async (washerId: string) => {
+    const { data, error } = await supabase.from("washer_schedules").select("*").eq("washer_id", washerId);
+    if (error) {
+      console.error("Error fetching washer schedules:", error);
+      return;
+    }
+    const existingSchedules = get().schedules.filter((s) => s.washer_id !== washerId);
+    set({ schedules: [...existingSchedules, ...(data as WasherSchedule[])] });
+  },
   getSchedulesForWasher: (washerId: string) => {
     return get().schedules.filter((schedule) => schedule.washer_id === washerId);
   },
+  // TODO: implement supabase mutation
   addSchedule: (schedule) =>
     set((state) => ({
       schedules: [...state.schedules, { ...schedule, id: `${state.schedules.length + 1}` }],
     })),
+  // TODO: implement supabase mutation
   deleteSchedule: (scheduleId) =>
     set((state) => ({
       schedules: state.schedules.filter((s) => s.id !== scheduleId),

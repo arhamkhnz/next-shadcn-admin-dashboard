@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { useTheme } from "next-themes";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,12 +31,12 @@ const chartData = generateChartData();
 const chartConfig = {
   bookings: {
     label: "Bookings",
-    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
 export function BookingsChartInteractive() {
   const isMobile = useIsMobile();
+  const { theme } = useTheme();
   const [timeRange, setTimeRange] = React.useState("90d");
 
   React.useEffect(() => {
@@ -57,6 +58,17 @@ export function BookingsChartInteractive() {
     startDate.setDate(startDate.getDate() - daysToSubtract);
     return date >= startDate;
   });
+
+  const areaColors =
+    theme === "dark"
+      ? {
+          fill: "#5eead4cc", // Bright teal with opacity for dark mode
+          stroke: "#5eead4", // Bright teal for dark mode
+        }
+      : {
+          fill: "hsl(var(--chart-1))",
+          stroke: "hsl(var(--chart-1))",
+        };
 
   return (
     <Card className="@container/card">
@@ -105,8 +117,8 @@ export function BookingsChartInteractive() {
           <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillBookings" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-bookings)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-bookings)" stopOpacity={0.1} />
+                <stop offset="5%" stopColor={areaColors.fill} stopOpacity={0.8} />
+                <stop offset="95%" stopColor={areaColors.fill} stopOpacity={0.1} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
@@ -139,13 +151,7 @@ export function BookingsChartInteractive() {
                 />
               }
             />
-            <Area
-              dataKey="bookings"
-              type="natural"
-              fill="url(#fillBookings)"
-              stroke="var(--color-bookings)"
-              stackId="a"
-            />
+            <Area dataKey="bookings" type="natural" fill="url(#fillBookings)" stroke={areaColors.stroke} stackId="a" />
           </AreaChart>
         </ChartContainer>
       </CardContent>

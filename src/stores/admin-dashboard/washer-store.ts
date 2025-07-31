@@ -1,33 +1,51 @@
 import { create } from "zustand";
 
 import { Washer } from "@/app/(main)/admin/washers/_components/types";
+import { createClient } from "@/lib/supabase/client";
+
+import { useBranchStore } from "./branch-store";
+
+const supabase = createClient();
 
 type WasherState = {
   washers: Washer[];
-  addWasher: (washer: Omit<Washer, "id">) => void;
-  updateWasher: (washer: Washer) => void;
-  deleteWasher: (id: string) => void;
+  fetchWashers: () => Promise<void>;
+  addWasher: (washer: Omit<Washer, "id" | "branchName" | "createdAt">) => Promise<void>;
+  updateWasher: (washer: Washer) => Promise<void>;
+  deleteWasher: (id: string) => Promise<void>;
 };
 
-const initialWashers: Washer[] = [
-  { id: "1", name: "Mike Johnson", branch: "Downtown", status: "active", rating: 4.5 },
-  { id: "2", name: "Sarah Williams", branch: "Uptown", status: "active", rating: 4.8 },
-  { id: "3", name: "David Brown", branch: "Eastside", status: "inactive", rating: 4.2 },
-  { id: "4", name: "Jessica Miller", branch: "Westside", status: "active", rating: 4.9 },
-];
-
-export const useWasherStore = create<WasherState>((set) => ({
-  washers: initialWashers,
-  addWasher: (washer) =>
-    set((state) => ({
-      washers: [...state.washers, { ...washer, id: `${state.washers.length + 1}` }],
-    })),
-  updateWasher: (updatedWasher) =>
-    set((state) => ({
-      washers: state.washers.map((washer) => (washer.id === updatedWasher.id ? updatedWasher : washer)),
-    })),
-  deleteWasher: (id) =>
-    set((state) => ({
-      washers: state.washers.filter((washer) => washer.id !== id),
-    })),
+export const useWasherStore = create<WasherState>((set, get) => ({
+  washers: [],
+  fetchWashers: async () => {
+    const { data, error } = await supabase.from("washers").select("*");
+    if (error) {
+      console.error("Error fetching washers:", error);
+      return;
+    }
+    const { branches } = useBranchStore.getState();
+    const transformedWashers = data.map((washer) => ({
+      id: washer.id,
+      name: washer.name,
+      branch: branches.find((b) => b.id === washer.branch_id)?.name ?? "N/A",
+      status: washer.status,
+      rating: Number(washer.rating),
+    }));
+    set({ washers: transformedWashers as Washer[] });
+  },
+  addWasher: async (washer) => {
+    await supabase.from("washers").insert([{ ...washer, branch_id: washer.branchId }]);
+    await get().fetchWashers();
+  },
+  updateWasher: async (washer) => {
+    await supabase
+      .from("washers")
+      .update({ ...washer, branch_id: washer.branchId })
+      .eq("id", washer.id);
+    await get().fetchWashers();
+  },
+  deleteWasher: async (id) => {
+    await supabase.from("washers").delete().eq("id", id);
+    set((state) => ({ washers: state.washers.filter((w) => w.id !== id) }));
+  },
 }));

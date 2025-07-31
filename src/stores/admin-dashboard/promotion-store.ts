@@ -1,51 +1,39 @@
 import { create } from "zustand";
 
+import { createClient } from "@/lib/supabase/client";
 import { Promotion } from "@/types/database";
+
+const supabase = createClient();
 
 type PromotionState = {
   promotions: Promotion[];
+  fetchPromotions: () => Promise<void>;
   addPromotion: (promotion: Omit<Promotion, "id">) => void;
   updatePromotion: (promotion: Promotion) => void;
   deletePromotion: (id: string) => void;
 };
 
-const initialPromotions: Promotion[] = [
-  {
-    id: "1",
-    code: "SUMMER10",
-    discount: 10,
-    startDate: new Date("2024-06-01"),
-    endDate: new Date("2024-08-31"),
-    active: true,
-  },
-  {
-    id: "2",
-    code: "FALL20",
-    discount: 20,
-    startDate: new Date("2024-09-01"),
-    endDate: new Date("2024-11-30"),
-    active: true,
-  },
-  {
-    id: "3",
-    code: "WINTER15",
-    discount: 15,
-    startDate: new Date("2024-12-01"),
-    endDate: new Date("2025-02-28"),
-    active: false,
-  },
-];
-
 export const usePromotionStore = create<PromotionState>((set) => ({
-  promotions: initialPromotions,
+  promotions: [],
+  fetchPromotions: async () => {
+    const { data, error } = await supabase.from("promotions").select("*");
+    if (error) {
+      console.error("Error fetching promotions:", error);
+      return;
+    }
+    set({ promotions: data as Promotion[] });
+  },
+  // TODO: implement supabase mutation
   addPromotion: (promotion) =>
     set((state) => ({
       promotions: [...state.promotions, { ...promotion, id: `${state.promotions.length + 1}` }],
     })),
+  // TODO: implement supabase mutation
   updatePromotion: (updatedPromotion) =>
     set((state) => ({
       promotions: state.promotions.map((promo) => (promo.id === updatedPromotion.id ? updatedPromotion : promo)),
     })),
+  // TODO: implement supabase mutation
   deletePromotion: (id) =>
     set((state) => ({
       promotions: state.promotions.filter((promo) => promo.id !== id),

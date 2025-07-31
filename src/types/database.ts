@@ -18,8 +18,8 @@ export type Promotion = {
   id: string;
   code: string;
   discount: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   active: boolean;
 };
 

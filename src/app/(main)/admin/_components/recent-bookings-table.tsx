@@ -8,56 +8,14 @@ import { DataTableViewOptions } from "@/components/data-table/data-table-view-op
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
+import { useBookingStore } from "@/stores/admin-dashboard/booking-store";
 
 import { columns } from "./columns";
 
-// Mock data - replace with actual Supabase data
-const recentBookings = [
-  {
-    id: "BK001",
-    user: "John Doe",
-    branch: "Downtown Branch",
-    service: "Premium Wash",
-    status: "completed",
-    date: new Date(2023, 5, 15),
-  },
-  {
-    id: "BK002",
-    user: "Jane Smith",
-    branch: "North Branch",
-    service: "Basic Wash",
-    status: "pending",
-    date: new Date(2023, 5, 16),
-  },
-  {
-    id: "BK003",
-    user: "Robert Johnson",
-    branch: "East Branch",
-    service: "Deluxe Wash",
-    status: "in-progress",
-    date: new Date(2023, 5, 16),
-  },
-  {
-    id: "BK004",
-    user: "Emily Davis",
-    branch: "West Branch",
-    service: "Premium Wash",
-    status: "scheduled",
-    date: new Date(2023, 5, 17),
-  },
-  {
-    id: "BK005",
-    user: "Michael Wilson",
-    branch: "South Branch",
-    service: "Basic Wash",
-    status: "completed",
-    date: new Date(2023, 5, 14),
-  },
-];
-
 export function RecentBookingsTable() {
+  const { bookings } = useBookingStore();
   const table = useDataTableInstance({
-    data: recentBookings,
+    data: bookings,
     columns,
     getRowId: (row) => row.id,
   });

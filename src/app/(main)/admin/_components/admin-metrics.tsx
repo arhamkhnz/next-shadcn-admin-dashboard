@@ -1,80 +1,83 @@
-import { Users, Building2, MapPin, UsersRound, TrendingUp, TrendingDown } from "lucide-react";
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { Building2, Users, UsersRound } from "lucide-react";
 
-async function getMetrics() {
-  // TODO: Replace with actual Supabase queries
-  return {
-    totalUsers: { value: 1234, change: "+15.2%" },
-    totalFranchises: { value: 12, change: "+5.1%" },
-    totalBranches: { value: 45, change: "+8.3%" },
-    totalWashers: { value: 89, change: "-2.5%" },
-  };
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useBookingStore } from "@/stores/admin-dashboard/booking-store";
+import { useServiceStore } from "@/stores/admin-dashboard/service-store";
+import { useUserStore } from "@/stores/admin-dashboard/user-store";
+import { useWasherStore } from "@/stores/admin-dashboard/washer-store";
 
-export async function AdminMetrics() {
-  const metrics = await getMetrics();
+export function AdminMetrics() {
+  const { bookings } = useBookingStore();
+  const { services } = useServiceStore();
+  const { users } = useUserStore();
+  const { washers } = useWasherStore();
 
-  const cards = [
-    {
-      title: "Total Users",
-      data: metrics.totalUsers,
-      icon: Users,
-      description: "From last month",
-    },
-    {
-      title: "Franchises",
-      data: metrics.totalFranchises,
-      icon: Building2,
-      description: "From last month",
-    },
-    {
-      title: "Branches",
-      data: metrics.totalBranches,
-      icon: MapPin,
-      description: "From last month",
-    },
-    {
-      title: "Washers",
-      data: metrics.totalWashers,
-      icon: UsersRound,
-      description: "From last month",
-    },
-  ];
+  const totalRevenue = bookings
+    .filter((b) => b.status === "completed")
+    .reduce((acc, booking) => {
+      const service = services.find((s) => s.id === booking.serviceId);
+      return acc + (service?.price ?? 0);
+    }, 0);
+
+  const totalBookings = bookings.length;
+  const totalUsers = users.length;
+  const activeWashers = washers.filter((w) => w.status === "active").length;
 
   return (
     <>
-      {cards.map((card) => {
-        const isPositive = card.data.change.startsWith("+");
-        return (
-          <Card key={card.title}>
-            <CardHeader>
-              <div className={cn("w-fit rounded-lg p-2", isPositive ? "bg-green-500/10" : "bg-destructive/10")}>
-                <card.icon className={cn("size-5", isPositive ? "text-green-500" : "text-destructive")} />
-              </div>
-            </CardHeader>
-            <CardContent className="flex size-full flex-col justify-between gap-4">
-              <div className="space-y-1.5">
-                <CardTitle>{card.title}</CardTitle>
-                <p className="text-2xl font-medium tabular-nums">{card.data.value}</p>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <div
-                  className={cn(
-                    "flex w-fit items-center gap-1 rounded-md px-2 py-1 text-xs font-medium",
-                    isPositive ? "bg-green-500/10 text-green-500" : "bg-destructive/10 text-destructive",
-                  )}
-                >
-                  {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                  {card.data.change}
-                </div>
-                <CardDescription>{card.description}</CardDescription>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            className="text-muted-foreground h-4 w-4"
+          >
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+          <p className="text-muted-foreground text-xs">From all completed bookings</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
+          <Users className="text-muted-foreground h-4 w-4" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">+{totalBookings}</div>
+          <p className="text-muted-foreground text-xs">Across all branches</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+          <Building2 className="text-muted-foreground h-4 w-4" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">+{totalUsers}</div>
+          <p className="text-muted-foreground text-xs">Registered in the system</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Active Washers</CardTitle>
+          <UsersRound className="text-muted-foreground h-4 w-4" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">+{activeWashers}</div>
+          <p className="text-muted-foreground text-xs">Currently available for bookings</p>
+        </CardContent>
+      </Card>
     </>
   );
 }

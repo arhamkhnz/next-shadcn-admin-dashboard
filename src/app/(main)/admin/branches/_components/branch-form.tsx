@@ -41,6 +41,7 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: branch ?? {
       name: "",
+      franchise_id: "",
       location: "",
       services: 0,
       activeBookings: 0,
@@ -74,7 +75,7 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
         />
         <FormField
           control={form.control}
-          name="franchise"
+          name="franchise_id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Franchise</FormLabel>

@@ -1,54 +1,61 @@
 import { create } from "zustand";
 
 import { Branch } from "@/app/(main)/admin/branches/_components/types";
+import { createClient } from "@/lib/supabase/client";
+
+import { useFranchiseStore } from "./franchise-store";
+
+const supabase = createClient();
 
 type BranchState = {
   branches: Branch[];
-  addBranch: (branch: Omit<Branch, "id">) => void;
-  updateBranch: (branch: Branch) => void;
-  deleteBranch: (id: string) => void;
+  fetchBranches: () => Promise<void>;
+  addBranch: (branch: Omit<Branch, "id" | "createdAt" | "franchiseName">) => Promise<void>;
+  updateBranch: (branch: Branch) => Promise<void>;
+  deleteBranch: (id: string) => Promise<void>;
 };
 
-const initialBranches: Branch[] = [
-  {
-    id: "1",
-    name: "Downtown",
-    franchise: "Karwi Wash North",
-    location: "123 Main St",
-    services: 10,
-    activeBookings: 5,
-  },
-  { id: "2", name: "Uptown", franchise: "Karwi Wash North", location: "456 Oak Ave", services: 8, activeBookings: 3 },
-  {
-    id: "3",
-    name: "Eastside",
-    franchise: "Karwi Wash East",
-    location: "789 Pine Ln",
-    services: 12,
-    activeBookings: 7,
-  },
-  {
-    id: "4",
-    name: "Westside",
-    franchise: "Karwi Wash West",
-    location: "101 Maple Dr",
-    services: 9,
-    activeBookings: 4,
-  },
-];
+export const useBranchStore = create<BranchState>((set, get) => ({
+  branches: [],
+  fetchBranches: async () => {
+    const { data, error } = await supabase.from("branches").select("*");
+    if (error) {
+      console.error("Error fetching branches:", error);
+      return;
+    }
 
-export const useBranchStore = create<BranchState>((set) => ({
-  branches: initialBranches,
-  addBranch: (branch) =>
-    set((state) => ({
-      branches: [...state.branches, { ...branch, id: `${state.branches.length + 1}` }],
-    })),
-  updateBranch: (updatedBranch) =>
-    set((state) => ({
-      branches: state.branches.map((branch) => (branch.id === updatedBranch.id ? updatedBranch : branch)),
-    })),
-  deleteBranch: (id) =>
+    const { franchises } = useFranchiseStore.getState();
+    const transformedBranches = data.map((branch) => ({
+      id: branch.id,
+      name: branch.name,
+      location: typeof branch.location === "string" ? branch.location : JSON.stringify(branch.location),
+      // franchiseId: branch.franchise_id,
+      franchise_id: branch.franchise_id,
+      franchise: franchises.find((f) => f.id === branch.franchise_id)?.name ?? "N/A",
+      services: branch.services,
+      activeBookings: branch.active_bookings,
+      createdAt: new Date(branch.created_at),
+    }));
+
+    set({ branches: transformedBranches });
+  },
+  addBranch: async (branch) => {
+    await supabase
+      .from("branches")
+      .insert([{ name: branch.name, franchise_id: branch.franchiseId, location: branch.location }]);
+    await get().fetchBranches();
+  },
+  updateBranch: async (branch) => {
+    await supabase
+      .from("branches")
+      .update({ name: branch.name, franchise_id: branch.franchiseId, location: branch.location })
+      .eq("id", branch.id);
+    await get().fetchBranches();
+  },
+  deleteBranch: async (id) => {
+    await supabase.from("branches").delete().eq("id", id);
     set((state) => ({
       branches: state.branches.filter((branch) => branch.id !== id),
-    })),
+    }));
+  },
 }));

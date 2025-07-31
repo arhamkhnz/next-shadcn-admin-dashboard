@@ -10,7 +10,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "generate:presets": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/generate-theme-presets.ts"
+    "generate:presets": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/generate-theme-presets.ts",
+    "db:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/seed.ts"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
@@ -23,6 +24,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^3.10.0",
+    "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.53.0",
     "@tanstack/react-query": "^5.83.0",
     "@tanstack/react-table": "^8.21.3",
@@ -31,6 +33,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
+    "dotenv": "^17.2.1",
     "embla-carousel-react": "^8.6.0",
     "eslint-plugin-unicorn": "^56.0.1",
     "input-otp": "^1.4.2",
@@ -54,6 +57,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.16.0",
+    "@faker-js/faker": "^9.9.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
