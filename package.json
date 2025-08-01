@@ -23,7 +23,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^3.10.0",
-    "@tanstack/react-query": "^5.83.0",
+    "@tanstack/react-query": "^5.84.1",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
@@ -48,7 +48,7 @@
     "tailwind-merge": "^3.3.1",
     "vaul": "^1.1.2",
     "zod": "^3.25.76",
-    "zustand": "^5.0.6"
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
