@@ -1,11 +1,30 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
+
+import { enrichBookings } from "@/app/(main)/franchise/utils/bookings";
+import { useFranchiseDashboardStore } from "@/stores/franchise-dashboard/franchise-store";
+
+import { BookingHistoryDataTable } from "./booking-history-data-table";
+import { columns } from "./columns";
 
 const BookingHistory: React.FC = () => {
-  // TODO: List bookings, filters by branch/status/date using shadcn/ui
+  const { bookings, branches, washers, services, fetchBookings, fetchBranches, fetchWashers, fetchServices } =
+    useFranchiseDashboardStore();
+
+  useEffect(() => {
+    fetchBookings();
+    fetchBranches();
+    fetchWashers();
+    fetchServices();
+  }, [fetchBookings, fetchBranches, fetchWashers, fetchServices]);
+
+  const enrichedBookings = enrichBookings(bookings, branches, washers, services);
+
   return (
-    <div className="space-y-6 p-6">
-      <h2 className="text-xl font-semibold">Booking History</h2>
-      {/* Booking list, filters by branch/status/date will go here */}
+    <div className="space-y-6">
+      <h2 className="text-3xl font-bold tracking-tight">Booking History</h2>
+      <BookingHistoryDataTable columns={columns} data={enrichedBookings} />
     </div>
   );
 };

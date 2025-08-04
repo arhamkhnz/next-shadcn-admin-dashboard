@@ -70,7 +70,7 @@ export default function FranchiseHomePage() {
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+          <TabsTrigger value="bookings">Bookings</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
@@ -87,14 +87,14 @@ export default function FranchiseHomePage() {
             </div>
             <div className="col-span-1 lg:col-span-3">
               <Suspense fallback={<div className="bg-muted h-[350px] animate-pulse rounded-lg" />}>
-                <PendingBookingsTable bookings={enrichedBookingsData} />
+                <FranchiseActivity />
               </Suspense>
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="activity">
+        <TabsContent value="bookings">
           <Suspense fallback={<div className="bg-muted h-[450px] animate-pulse rounded-lg" />}>
-            <FranchiseActivity />
+            <PendingBookingsTable bookings={enrichedBookingsData} />
           </Suspense>
         </TabsContent>
         <TabsContent value="reports">
