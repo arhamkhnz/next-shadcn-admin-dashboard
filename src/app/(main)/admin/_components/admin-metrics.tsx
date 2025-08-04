@@ -1,29 +1,90 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Building2, Users, UsersRound } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useBookingStore } from "@/stores/admin-dashboard/booking-store";
-import { useServiceStore } from "@/stores/admin-dashboard/service-store";
-import { useUserStore } from "@/stores/admin-dashboard/user-store";
-import { useWasherStore } from "@/stores/admin-dashboard/washer-store";
+import { Database } from "@/types/database";
 
 export function AdminMetrics() {
-  const { bookings } = useBookingStore();
-  const { services } = useServiceStore();
-  const { users } = useUserStore();
-  const { washers } = useWasherStore();
+  const [metrics, setMetrics] = useState({
+    totalRevenue: 0,
+    totalBookings: 0,
+    totalUsers: 0,
+    activeWashers: 0,
+    loading: true,
+    error: false,
+  });
 
-  const totalRevenue = bookings
-    .filter((b) => b.status === "completed")
-    .reduce((acc, booking) => {
-      const service = services.find((s) => s.id === booking.serviceId);
-      return acc + (service?.price ?? 0);
-    }, 0);
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      const supabase = createClientComponentClient<Database>();
+      const totalRevenue = 0;
+      let totalBookings = 0;
+      let totalUsers = 0;
+      let activeWashers = 0;
+      let hasError = false;
 
-  const totalBookings = bookings.length;
-  const totalUsers = users.length;
-  const activeWashers = washers.filter((w) => w.status === "active").length;
+      try {
+        // Total Bookings
+        const { count: bookingsCount, error: bookingsError } = await supabase
+          .from("bookings")
+          .select("*", { count: "exact", head: true });
+        if (bookingsError) {
+          console.error("Error fetching total bookings:", bookingsError);
+          hasError = true;
+        } else {
+          totalBookings = bookingsCount ?? 0;
+        }
+
+        // Total Users
+        const { count: usersCount, error: usersError } = await supabase
+          .from("users")
+          .select("*", { count: "exact", head: true });
+        if (usersError) {
+          console.error("Error fetching total users:", usersError);
+          hasError = true;
+        } else {
+          totalUsers = usersCount ?? 0;
+        }
+
+        // Active Washers
+        const { count: washersCount, error: washersError } = await supabase
+          .from("washers")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "active");
+        if (washersError) {
+          console.error("Error fetching active washers:", washersError);
+          hasError = true;
+        } else {
+          activeWashers = washersCount ?? 0;
+        }
+      } catch (error) {
+        console.error("Unexpected error fetching metrics:", error);
+        hasError = true;
+      } finally {
+        setMetrics({
+          totalRevenue,
+          totalBookings,
+          totalUsers,
+          activeWashers,
+          loading: false,
+          error: hasError,
+        });
+      }
+    };
+    fetchMetrics();
+  }, []);
+
+  if (metrics.loading) {
+    return <div>Loading metrics...</div>;
+  }
+
+  if (metrics.error) {
+    return <div>Error loading metrics...</div>;
+  }
 
   return (
     <>
@@ -44,7 +105,7 @@ export function AdminMetrics() {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+          <div className="text-2xl font-bold">${metrics.totalRevenue.toFixed(2)}</div>
           <p className="text-muted-foreground text-xs">From all completed bookings</p>
         </CardContent>
       </Card>
@@ -54,7 +115,7 @@ export function AdminMetrics() {
           <Users className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">+{totalBookings}</div>
+          <div className="text-2xl font-bold">+{metrics.totalBookings}</div>
           <p className="text-muted-foreground text-xs">Across all branches</p>
         </CardContent>
       </Card>
@@ -64,7 +125,7 @@ export function AdminMetrics() {
           <Building2 className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">+{totalUsers}</div>
+          <div className="text-2xl font-bold">+{metrics.totalUsers}</div>
           <p className="text-muted-foreground text-xs">Registered in the system</p>
         </CardContent>
       </Card>
@@ -74,7 +135,7 @@ export function AdminMetrics() {
           <UsersRound className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">+{activeWashers}</div>
+          <div className="text-2xl font-bold">+{metrics.activeWashers}</div>
           <p className="text-muted-foreground text-xs">Currently available for bookings</p>
         </CardContent>
       </Card>
