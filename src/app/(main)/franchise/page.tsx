@@ -1,4 +1,5 @@
 "use client";
+
 import React, { Suspense, useEffect } from "react";
 
 import { FranchiseActivity } from "@/app/(main)/franchise/_components/franchise-activity";
@@ -8,18 +9,18 @@ import FranchiseMetrics from "@/app/(main)/franchise/_components/franchise-metri
 import { FranchiseReportsView } from "@/app/(main)/franchise/_components/franchise-reports-view";
 import PendingBookingsTable from "@/app/(main)/franchise/_components/pending-bookings-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useFranchiseBranchStore } from "@/stores/franchise-dashboard/branch-store";
 import { useFranchiseDashboardStore } from "@/stores/franchise-dashboard/franchise-store";
-import { useFranchiseServiceStore } from "@/stores/franchise-dashboard/service-store";
-import { useFranchiseUserStore } from "@/stores/franchise-dashboard/user-store";
 
-// Metrics calculation helper
-function getMetrics(branches: any[], services: any[], washers: any[]) {
-  return {
-    totalBranches: branches.length,
-    totalServices: services.length,
-    activeWashers: washers.length, // Could be filtered for active only
-  };
+// Helper to prepare data for bookings chart
+function getDailyBookings(bookings: { scheduled_at: string }[] = []) {
+  const counts: Record<string, number> = {};
+  bookings.forEach((b) => {
+    if (b.scheduled_at) {
+      const date = b.scheduled_at.slice(0, 10);
+      counts[date] = (counts[date] || 0) + 1;
+    }
+  });
+  return Object.entries(counts).map(([date, count]) => ({ date, count }));
 }
 
 // Enrich bookings with user, branch, service display fields
@@ -54,64 +55,54 @@ export default function FranchiseHomePage() {
     fetchBookings();
   }, [fetchBranches, fetchServices, fetchWashers, fetchBookings]);
 
-  // Calculate metrics from store data
-  const metrics = getMetrics(branches, services, washers);
+  const metrics = {
+    totalBranches: branches.length,
+    totalServices: services.length,
+    activeWashers: washers.length,
+  };
 
-  // Prepare bookings data for the chart
-  const bookingsData = bookings.map((booking) => ({
-    date: new Date(booking.scheduled_at).toISOString().split("T")[0],
-    count: 1, // Each booking counts as 1 for the chart
-  }));
+  const dailyBookingsData = getDailyBookings(bookings);
+  const enrichedBookingsData = enrichBookings(bookings, washers, branches, services);
+
   return (
-    <div className="flex">
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
-        <FranchiseHeader />
-        <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-            <TabsTrigger value="reports">Reports</TabsTrigger>
-            <TabsTrigger value="bookings">Bookings</TabsTrigger>
-          </TabsList>
-          <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <Suspense fallback={<div className="bg-muted h-32 animate-pulse rounded-lg" />}>
-                <FranchiseMetrics {...metrics} />
+    <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+      <FranchiseHeader />
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Suspense fallback={<div className="bg-muted h-32 animate-pulse rounded-lg" />}>
+              <FranchiseMetrics {...metrics} />
+            </Suspense>
+          </div>
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-7">
+            <div className="col-span-1 lg:col-span-4">
+              <Suspense fallback={<div className="bg-muted h-[350px] animate-pulse rounded-lg" />}>
+                <FranchiseBookingsChart data={dailyBookingsData} />
               </Suspense>
             </div>
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-              <div className="col-span-1 lg:col-span-2">
-                <Suspense fallback={<div className="bg-muted h-[350px] animate-pulse rounded-lg" />}>
-                  <FranchiseBookingsChart data={bookingsData} />
-                </Suspense>
-              </div>
-              <div className="col-span-1">{/* Add more widgets or quick stats here if needed */}</div>
+            <div className="col-span-1 lg:col-span-3">
+              <Suspense fallback={<div className="bg-muted h-[350px] animate-pulse rounded-lg" />}>
+                <PendingBookingsTable bookings={enrichedBookingsData} />
+              </Suspense>
             </div>
-          </TabsContent>
-          <TabsContent value="analytics" className="space-y-4">
-            <div className="bg-background rounded-lg p-4">
-              <h2 className="mb-2 text-lg font-semibold">Analytics</h2>
-              <p className="text-muted-foreground">Analytics for your franchise will appear here.</p>
-            </div>
-          </TabsContent>
-          <TabsContent value="activity" className="space-y-4">
-            <Suspense fallback={<div className="bg-muted h-[350px] animate-pulse rounded-lg" />}>
-              <FranchiseActivity />
-            </Suspense>
-          </TabsContent>
-          <TabsContent value="reports" className="space-y-4">
-            <Suspense fallback={<div className="bg-muted h-[350px] animate-pulse rounded-lg" />}>
-              <FranchiseReportsView />
-            </Suspense>
-          </TabsContent>
-          <TabsContent value="bookings">
-            <Suspense fallback={<div className="bg-muted h-[450px] animate-pulse rounded-lg" />}>
-              <PendingBookingsTable bookings={enrichBookings(bookings, washers, branches, services)} />
-            </Suspense>
-          </TabsContent>
-        </Tabs>
-      </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="activity">
+          <Suspense fallback={<div className="bg-muted h-[450px] animate-pulse rounded-lg" />}>
+            <FranchiseActivity />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="reports">
+          <Suspense fallback={<div className="bg-muted h-[450px] animate-pulse rounded-lg" />}>
+            <FranchiseReportsView />
+          </Suspense>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

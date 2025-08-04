@@ -22,3 +22,8 @@ This is a Next.js 14+ application using the App Router. The primary focus is on 
 - All components should be functional components using hooks.
 - Ensure all code is properly typed with TypeScript.
 - For any new feature, check the existing `_components` directory pattern. Create a `_components` directory for page-specific components.
+
+## Linting and Formatting
+
+After any code modifications, run `npm run lint` to ensure the changes adhere to the project's linting rules. Address any errors or warnings before committing.
+

@@ -1,16 +1,54 @@
 import { ReactNode } from "react";
 
+import { cookies } from "next/headers";
+
+import { AccountSwitcher } from "@/app/(main)/dashboard/_components/sidebar/account-switcher";
+import { LayoutControls } from "@/app/(main)/dashboard/_components/sidebar/layout-controls";
+import { SearchDialog } from "@/app/(main)/dashboard/_components/sidebar/search-dialog";
+import { ThemeSwitcher } from "@/app/(main)/dashboard/_components/sidebar/theme-switcher";
 import { FranchiseSidebar } from "@/app/(main)/franchise/_components/franchise-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { users } from "@/data/users";
 import { cn } from "@/lib/utils";
+import { getPreference } from "@/server/server-actions";
+import {
+  CONTENT_LAYOUT_VALUES,
+  SIDEBAR_COLLAPSIBLE_VALUES,
+  SIDEBAR_VARIANT_VALUES,
+  type ContentLayout,
+  type SidebarCollapsible,
+  type SidebarVariant,
+} from "@/types/preferences/layout";
 
-export default function FranchiseLayout({ children }: { children: ReactNode }) {
-  // Use default values for sidebar state and preferences
-  const defaultOpen = true;
-  const sidebarVariant = "inset";
-  const sidebarCollapsible = "icon";
-  const contentLayout = "centered";
+export default async function FranchiseLayout({ children }: Readonly<{ children: ReactNode }>) {
+  // Set default values in case the preferences can't be loaded
+  let sidebarVariant: SidebarVariant = "inset";
+  let sidebarCollapsible: SidebarCollapsible = "icon";
+  let contentLayout: ContentLayout = "centered";
+  let defaultOpen = false;
+
+  try {
+    const cookieStore = cookies();
+    defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
+    const preferences = await Promise.all([
+      getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
+      getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
+      getPreference<ContentLayout>("content_layout", CONTENT_LAYOUT_VALUES, "centered"),
+    ]);
+
+    [sidebarVariant, sidebarCollapsible, contentLayout] = preferences;
+  } catch (error) {
+    console.error("Error loading preferences:", error);
+    // Use default values defined above
+  }
+
+  const layoutPreferences = {
+    contentLayout,
+    variant: sidebarVariant,
+    collapsible: sidebarCollapsible,
+  };
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
@@ -27,14 +65,16 @@ export default function FranchiseLayout({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-1 lg:gap-2">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
-              {/* You can add a franchise-specific search or controls here */}
+              <SearchDialog />
             </div>
             <div className="flex items-center gap-2">
-              {/* Add franchise-specific layout controls, theme switcher, or account switcher here if needed */}
+              <LayoutControls {...layoutPreferences} />
+              <ThemeSwitcher />
+              <AccountSwitcher users={users} />
             </div>
           </div>
         </header>
-        <div className="h-full p-4 md:p-6">{children}</div>
+        <main className="h-full p-4 md:p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

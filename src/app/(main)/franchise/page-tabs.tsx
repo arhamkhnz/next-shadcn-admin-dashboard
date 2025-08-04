@@ -3,7 +3,6 @@
 import { Suspense, useEffect } from "react";
 
 import FranchiseBookingsChart from "@/app/(main)/franchise/_components/franchise-bookings-chart";
-import { FranchiseHeader } from "@/app/(main)/franchise/_components/franchise-header";
 import FranchiseMetrics from "@/app/(main)/franchise/_components/franchise-metrics";
 import PendingBookingsTable from "@/app/(main)/franchise/_components/pending-bookings-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -40,7 +39,6 @@ export default function FranchiseHomePageTabs() {
 
   return (
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
-      <FranchiseHeader />
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>

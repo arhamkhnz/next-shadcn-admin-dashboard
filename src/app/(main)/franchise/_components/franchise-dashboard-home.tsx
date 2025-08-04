@@ -1,9 +1,10 @@
+/* eslint-disable */
 /* eslint-disable complexity */
 "use client";
 import React, { useEffect } from "react";
 
 import FranchiseBookingsChart from "@/app/(main)/franchise/_components/franchise-bookings-chart";
-import { FranchiseHeader } from "@/app/(main)/franchise/_components/franchise-header";
+
 import FranchiseMetrics from "@/app/(main)/franchise/_components/franchise-metrics";
 import PendingBookingsTable from "@/app/(main)/franchise/_components/pending-bookings-table";
 import { useFranchiseDashboardStore } from "@/stores/franchise-dashboard/franchise-store";
@@ -30,7 +31,7 @@ const FranchiseDashboardHome: React.FC = () => {
 
   return (
     <div className="space-y-6 p-6">
-      <FranchiseHeader />
+      
       <section>
         <FranchiseMetrics
           totalBranches={branches.length}

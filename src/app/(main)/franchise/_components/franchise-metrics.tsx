@@ -1,6 +1,8 @@
 import React from "react";
 
-import { Card } from "@/components/ui/card";
+import { Building2, Wrench, UsersRound } from "lucide-react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface FranchiseMetricsProps {
   totalBranches: number;
@@ -10,20 +12,38 @@ interface FranchiseMetricsProps {
 
 const FranchiseMetrics: React.FC<FranchiseMetricsProps> = ({ totalBranches, totalServices, activeWashers }) => {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <Card className="flex flex-col items-center p-4">
-        <span className="text-lg font-semibold">Branches</span>
-        <span className="text-primary text-2xl font-bold">{totalBranches}</span>
+    <>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Branches</CardTitle>
+          <Building2 className="text-muted-foreground h-4 w-4" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{totalBranches}</div>
+          <p className="text-muted-foreground text-xs">Managed by this franchise</p>
+        </CardContent>
       </Card>
-      <Card className="flex flex-col items-center p-4">
-        <span className="text-lg font-semibold">Services</span>
-        <span className="text-primary text-2xl font-bold">{totalServices}</span>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Services</CardTitle>
+          <Wrench className="text-muted-foreground h-4 w-4" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{totalServices}</div>
+          <p className="text-muted-foreground text-xs">Offered across all branches</p>
+        </CardContent>
       </Card>
-      <Card className="flex flex-col items-center p-4">
-        <span className="text-lg font-semibold">Active Washers</span>
-        <span className="text-primary text-2xl font-bold">{activeWashers}</span>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Active Washers</CardTitle>
+          <UsersRound className="text-muted-foreground h-4 w-4" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{activeWashers}</div>
+          <p className="text-muted-foreground text-xs">Currently available for bookings</p>
+        </CardContent>
       </Card>
-    </div>
+    </>
   );
 };
 
