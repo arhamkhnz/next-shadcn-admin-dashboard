@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
+import { Badge } from "@/components/ui/badge";
 import { Branch } from "@/stores/franchise-dashboard/branch-store";
 
 import { BranchActions } from "./branch-actions";
@@ -20,7 +21,18 @@ export const columns: ColumnDef<Branch>[] = [
     header: "Services",
     cell: ({ row }) => {
       const services = row.original.services ?? [];
-      return <span>{services.length}</span>;
+      if (services.length === 0) {
+        return <span className="text-muted-foreground">No services</span>;
+      }
+      return (
+        <div className="flex max-w-xs flex-wrap gap-1">
+          {services.map((service) => (
+            <Badge key={service.id} variant="secondary" className="font-normal">
+              {service.name}
+            </Badge>
+          ))}
+        </div>
+      );
     },
   },
   {

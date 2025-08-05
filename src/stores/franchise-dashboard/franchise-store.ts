@@ -1,46 +1,57 @@
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { create } from "zustand";
 
-import { createClient } from "@/lib/supabase/client";
-import { Franchise, Branch, Washer, Booking, Service } from "@/types/franchise";
+import { Database } from "@/types/database";
+import { Branch, Service, Washer, Booking } from "@/types/franchise";
 
-const supabase = createClient();
-
-export type FranchiseDashboardState = {
+type FranchiseDashboardState = {
   branches: Branch[];
+  services: Service[];
   washers: Washer[];
   bookings: Booking[];
-  services: Service[];
-  loading: boolean;
   fetchBranches: () => Promise<void>;
+  fetchServices: () => Promise<void>;
   fetchWashers: () => Promise<void>;
   fetchBookings: () => Promise<void>;
-  fetchServices: () => Promise<void>;
 };
 
-export const useFranchiseDashboardStore = create<FranchiseDashboardState>((set, get) => ({
+const supabase = createClientComponentClient<Database>();
+
+export const useFranchiseDashboardStore = create<FranchiseDashboardState>((set) => ({
   branches: [],
+  services: [],
   washers: [],
   bookings: [],
-  services: [],
-  loading: false,
   fetchBranches: async () => {
-    set({ loading: true });
     const { data, error } = await supabase.from("branches").select("*");
-    set({ branches: data ?? [], loading: false });
-  },
-  fetchWashers: async () => {
-    set({ loading: true });
-    const { data, error } = await supabase.from("washers").select("*");
-    set({ washers: data ?? [], loading: false });
-  },
-  fetchBookings: async () => {
-    set({ loading: true });
-    const { data, error } = await supabase.from("bookings").select("*");
-    set({ bookings: data ?? [], loading: false });
+    if (error) {
+      console.error("Error fetching branches:", error);
+      return;
+    }
+    set({ branches: data as Branch[] });
   },
   fetchServices: async () => {
-    set({ loading: true });
     const { data, error } = await supabase.from("services").select("*");
-    set({ services: data ?? [], loading: false });
+    if (error) {
+      console.error("Error fetching services:", error);
+      return;
+    }
+    set({ services: data as Service[] });
+  },
+  fetchWashers: async () => {
+    const { data, error } = await supabase.from("washers").select("*");
+    if (error) {
+      console.error("Error fetching washers:", error);
+      return;
+    }
+    set({ washers: data as Washer[] });
+  },
+  fetchBookings: async () => {
+    const { data, error } = await supabase.from("bookings").select("*");
+    if (error) {
+      console.error("Error fetching bookings:", error);
+      return;
+    }
+    set({ bookings: data as Booking[] });
   },
 }));

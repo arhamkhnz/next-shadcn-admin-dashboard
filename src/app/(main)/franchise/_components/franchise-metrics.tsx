@@ -11,39 +11,42 @@ interface FranchiseMetricsProps {
 }
 
 const FranchiseMetrics: React.FC<FranchiseMetricsProps> = ({ totalBranches, totalServices, activeWashers }) => {
+  const metrics = [
+    {
+      title: "Total Branches",
+      value: totalBranches,
+      icon: Building2,
+      description: "Managed by this franchise",
+    },
+    {
+      title: "Total Services",
+      value: totalServices,
+      icon: Wrench,
+      description: "Offered across all branches",
+    },
+    {
+      title: "Active Washers",
+      value: activeWashers,
+      icon: UsersRound,
+      description: "Currently available for bookings",
+    },
+  ];
+
   return (
-    <>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Branches</CardTitle>
-          <Building2 className="text-muted-foreground h-4 w-4" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{totalBranches}</div>
-          <p className="text-muted-foreground text-xs">Managed by this franchise</p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Services</CardTitle>
-          <Wrench className="text-muted-foreground h-4 w-4" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{totalServices}</div>
-          <p className="text-muted-foreground text-xs">Offered across all branches</p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Active Washers</CardTitle>
-          <UsersRound className="text-muted-foreground h-4 w-4" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{activeWashers}</div>
-          <p className="text-muted-foreground text-xs">Currently available for bookings</p>
-        </CardContent>
-      </Card>
-    </>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {metrics.map((metric) => (
+        <Card key={metric.title}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
+            <metric.icon className="text-muted-foreground h-4 w-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{metric.value}</div>
+            <p className="text-muted-foreground text-xs">{metric.description}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 };
 

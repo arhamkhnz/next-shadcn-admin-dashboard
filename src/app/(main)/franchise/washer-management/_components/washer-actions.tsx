@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { MoreHorizontal } from "lucide-react";
 
 import {
@@ -32,10 +34,11 @@ interface WasherActionsProps {
 
 export function WasherActions({ washer }: WasherActionsProps) {
   const { deleteWasher } = useFranchiseUserStore();
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   return (
     <AlertDialog>
-      <DropdownMenu>
+      <DropdownMenu open={isMenuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
@@ -46,7 +49,7 @@ export function WasherActions({ washer }: WasherActionsProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => navigator.clipboard.writeText(washer.id)}>Copy ID</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <WasherDialog washer={washer}>
+          <WasherDialog washer={washer} onDialogClose={() => setMenuOpen(false)}>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Edit Washer</DropdownMenuItem>
           </WasherDialog>
           <AlertDialogTrigger asChild>

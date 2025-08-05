@@ -17,22 +17,30 @@ import { WasherForm } from "./washer-form";
 interface WasherDialogProps {
   washer?: Washer;
   children: React.ReactNode;
+  onDialogClose?: () => void;
 }
 
-export function WasherDialog({ washer, children }: WasherDialogProps) {
+export function WasherDialog({ washer, children, onDialogClose }: WasherDialogProps) {
   const [open, setOpen] = useState(false);
 
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen && onDialogClose) {
+      onDialogClose();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{washer ? "Edit" : "Add"} Washer</DialogTitle>
           <DialogDescription>
-            {washer ? "Update the details of the washer." : "Add a new washer to your system."}
+            {washer ? "Update the details of this washer." : "Add a new washer to your system."}
           </DialogDescription>
         </DialogHeader>
-        <WasherForm washer={washer} onSuccess={() => setOpen(false)} />
+        <WasherForm washer={washer} onSuccess={() => handleOpenChange(false)} />
       </DialogContent>
     </Dialog>
   );

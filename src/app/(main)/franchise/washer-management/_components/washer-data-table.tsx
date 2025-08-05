@@ -10,12 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
 import { useFranchiseBranchStore } from "@/stores/franchise-dashboard/branch-store";
-import { Washer } from "@/stores/franchise-dashboard/user-store";
+import { WasherWithBranch } from "@/stores/franchise-dashboard/user-store";
 
 import { columns } from "./columns";
 
 interface WasherDataTableProps {
-  data: Washer[];
+  data: WasherWithBranch[];
 }
 
 export function WasherDataTable({ data }: WasherDataTableProps) {

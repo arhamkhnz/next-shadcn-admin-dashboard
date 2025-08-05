@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { MoreHorizontal } from "lucide-react";
 
 import {
@@ -32,10 +34,11 @@ interface BranchActionsProps {
 
 export function BranchActions({ branch }: BranchActionsProps) {
   const { deleteBranch } = useFranchiseBranchStore();
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   return (
     <AlertDialog>
-      <DropdownMenu>
+      <DropdownMenu open={isMenuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
@@ -46,7 +49,7 @@ export function BranchActions({ branch }: BranchActionsProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => navigator.clipboard.writeText(branch.id)}>Copy ID</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <BranchDialog branch={branch}>
+          <BranchDialog branch={branch} onDialogClose={() => setMenuOpen(false)}>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Edit Branch</DropdownMenuItem>
           </BranchDialog>
           <AlertDialogTrigger asChild>

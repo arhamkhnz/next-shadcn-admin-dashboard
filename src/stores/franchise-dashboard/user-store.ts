@@ -1,45 +1,70 @@
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { create } from "zustand";
 
-export type Washer = {
-  id: string;
-  name: string;
-  branch: string;
-  status: "active" | "inactive";
-  rating: number;
+import { Database } from "@/types/database";
+
+// Define a more specific type for the washer that includes the nested branch name
+export type WasherWithBranch = Database["public"]["Tables"]["washers"]["Row"] & {
+  branches: {
+    id: string;
+    name: string;
+  } | null;
 };
 
 type UserState = {
-  washers: Washer[];
-  fetchWashers: () => void;
-  addWasher: (washer: Omit<Washer, "id">) => void;
-  updateWasher: (washer: Washer) => void;
-  deleteWasher: (id: string) => void;
+  washers: WasherWithBranch[];
+  fetchWashers: () => Promise<void>;
+  addWasher: (washer: Omit<Database["public"]["Tables"]["washers"]["Row"], "id" | "created_at">) => Promise<void>;
+  // Correct the type definition to accept the object the form provides
+  updateWasher: (washer: WasherWithBranch) => Promise<void>;
+  deleteWasher: (id: string) => Promise<void>;
 };
 
-// Mock data for washers
-const mockWashers: Washer[] = [
-  { id: "w1", name: "John Doe", branch: "Downtown", status: "active", rating: 4.5 },
-  { id: "w2", name: "Jane Smith", branch: "Uptown", status: "inactive", rating: 4.2 },
-  { id: "w3", name: "Mike Johnson", branch: "Downtown", status: "active", rating: 4.8 },
-  { id: "w4", name: "Emily White", branch: "Suburb", status: "active", rating: 4.9 },
-];
+const supabase = createClientComponentClient<Database>();
 
-export const useFranchiseUserStore = create<UserState>((set) => ({
+export const useFranchiseUserStore = create<UserState>((set, get) => ({
   washers: [],
-  fetchWashers: () => {
-    // In a real app, you'd fetch this from an API
-    set({ washers: mockWashers });
+  fetchWashers: async () => {
+    const { data, error } = await supabase.from("washers").select("*, branches(id, name)");
+
+    if (error) {
+      console.error("Error fetching washers:", error);
+      throw error;
+    }
+    set({ washers: data });
   },
-  addWasher: (washer) =>
+  addWasher: async (washer) => {
+    const washerData = {
+      ...washer,
+      id: crypto.randomUUID(),
+    };
+    const { error } = await supabase.from("washers").insert(washerData);
+    if (error) {
+      console.error("Error adding washer:", error);
+      throw error;
+    }
+    await get().fetchWashers();
+  },
+  updateWasher: async (washer) => {
+    // Exclude the nested 'branches' object before sending the update
+    const { ...updateData } = washer;
+
+    const { error } = await supabase.from("washers").update(updateData).eq("id", washer.id);
+
+    if (error) {
+      console.error("Error updating washer:", error);
+      throw error;
+    }
+    await get().fetchWashers();
+  },
+  deleteWasher: async (id) => {
+    const { error } = await supabase.from("washers").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting washer:", error);
+      throw error;
+    }
     set((state) => ({
-      washers: [...state.washers, { ...washer, id: `w${Date.now()}` }],
-    })),
-  updateWasher: (updatedWasher) =>
-    set((state) => ({
-      washers: state.washers.map((washer) => (washer.id === updatedWasher.id ? updatedWasher : washer)),
-    })),
-  deleteWasher: (id) =>
-    set((state) => ({
-      washers: state.washers.filter((washer) => washer.id !== id),
-    })),
+      washers: state.washers.filter((w) => w.id !== id),
+    }));
+  },
 }));

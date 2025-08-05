@@ -47,11 +47,9 @@ export default function FranchiseHomePageTabs() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Suspense fallback={<div className="bg-muted h-32 animate-pulse rounded-lg" />}>
-              <FranchiseMetrics {...getMetrics(branches, services, washers)} />
-            </Suspense>
-          </div>
+          <Suspense fallback={<div className="bg-muted h-32 animate-pulse rounded-lg" />}>
+            <FranchiseMetrics {...getMetrics(branches, services, washers)} />
+          </Suspense>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-7">
             <div className="col-span-1 lg:col-span-4">
