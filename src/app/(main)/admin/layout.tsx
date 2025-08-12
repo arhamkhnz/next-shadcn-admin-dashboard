@@ -10,6 +10,7 @@ import { ThemeSwitcher } from "@/app/(main)/dashboard/_components/sidebar/theme-
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { users } from "@/data/users";
+import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { getPreference } from "@/server/server-actions";
 import {
@@ -22,19 +23,51 @@ import {
 } from "@/types/preferences/layout";
 
 export default async function AdminLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
-  const [sidebarVariant, sidebarCollapsible, contentLayout] = await Promise.all([
-    getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
-    getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
-    getPreference<ContentLayout>("content_layout", CONTENT_LAYOUT_VALUES, "centered"),
-  ]);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Set default values in case the preferences can't be loaded
+  let sidebarVariant: SidebarVariant = "inset";
+  let sidebarCollapsible: SidebarCollapsible = "icon";
+  let contentLayout: ContentLayout = "centered";
+  let defaultOpen = false;
+
+  try {
+    defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
+    const preferences = await Promise.all([
+      getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
+      getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
+      getPreference<ContentLayout>("content_layout", CONTENT_LAYOUT_VALUES, "centered"),
+    ]);
+
+    [sidebarVariant, sidebarCollapsible, contentLayout] = preferences;
+  } catch (error) {
+    console.error("Error loading preferences:", error);
+    // Use default values defined above
+  }
 
   const layoutPreferences = {
     contentLayout,
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
+  };
+
+  if (!user) {
+    // This should not happen due to middleware, but as a safeguard:
+    return null;
+  }
+
+  const currentUser = {
+    id: user.id,
+    name: user.email ?? "Admin", // Or fetch from a 'profiles' table
+    email: user.email ?? "",
+    avatar: "", // Add a default avatar or fetch from profile
+    role: "admin",
   };
 
   return (
@@ -57,7 +90,7 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
             <div className="flex items-center gap-2">
               <LayoutControls {...layoutPreferences} />
               <ThemeSwitcher />
-              <AccountSwitcher users={users} />
+              <AccountSwitcher user={currentUser} />
             </div>
           </div>
         </header>

@@ -9,7 +9,7 @@ import { ThemeSwitcher } from "@/app/(main)/dashboard/_components/sidebar/theme-
 import { FranchiseSidebar } from "@/app/(main)/franchise/_components/franchise-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { users } from "@/data/users";
+import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { getPreference } from "@/server/server-actions";
 import {
@@ -22,6 +22,13 @@ import {
 } from "@/types/preferences/layout";
 
 export default async function FranchiseLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   // Set default values in case the preferences can't be loaded
   let sidebarVariant: SidebarVariant = "inset";
   let sidebarCollapsible: SidebarCollapsible = "icon";
@@ -29,7 +36,6 @@ export default async function FranchiseLayout({ children }: Readonly<{ children:
   let defaultOpen = false;
 
   try {
-    const cookieStore = cookies();
     defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
     const preferences = await Promise.all([
@@ -48,6 +54,19 @@ export default async function FranchiseLayout({ children }: Readonly<{ children:
     contentLayout,
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
+  };
+
+  if (!user) {
+    // This should not happen due to middleware, but as a safeguard:
+    return null;
+  }
+
+  const currentUser = {
+    id: user.id,
+    name: user.email ?? "Franchise User", // Or fetch from a 'profiles' table
+    email: user.email ?? "",
+    avatar: "", // Add a default avatar or fetch from profile
+    role: "franchise",
   };
 
   return (
@@ -70,7 +89,7 @@ export default async function FranchiseLayout({ children }: Readonly<{ children:
             <div className="flex items-center gap-2">
               <LayoutControls {...layoutPreferences} />
               <ThemeSwitcher />
-              <AccountSwitcher users={users} />
+              <AccountSwitcher user={currentUser} />
             </div>
           </div>
         </header>

@@ -14,7 +14,11 @@ type BranchUpdatePayload = Omit<Branch, "created_at" | "services"> & {
 type BranchState = {
   branches: Branch[];
   fetchBranches: () => Promise<void>;
-  addBranch: (branch: Omit<Branch, "id" | "created_at" | "services">) => Promise<void>;
+  addBranch: (
+    branch: Omit<Branch, "id" | "created_at" | "services" | "location" | "active_bookings" | "services"> & {
+      location: string;
+    },
+  ) => Promise<void>;
   updateBranch: (branch: BranchUpdatePayload) => Promise<void>;
   deleteBranch: (id: string) => Promise<void>;
 };

@@ -33,7 +33,7 @@ export function BranchDialog({ branch, children, onDialogClose }: BranchDialogPr
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>{branch ? "Edit" : "Add"} Branch</DialogTitle>
           <DialogDescription>

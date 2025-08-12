@@ -9,7 +9,6 @@ import { useFranchiseBranchStore } from "@/stores/franchise-dashboard/branch-sto
 
 import { BranchDataTable } from "./branch-data-table";
 import { BranchDialog } from "./branch-dialog";
-import { columns } from "./columns";
 
 const BranchManagement: React.FC = () => {
   const { branches, fetchBranches } = useFranchiseBranchStore();
@@ -29,7 +28,7 @@ const BranchManagement: React.FC = () => {
           </Button>
         </BranchDialog>
       </div>
-      <BranchDataTable columns={columns} data={branches || []} />
+      <BranchDataTable data={branches || []} />
     </div>
   );
 };
