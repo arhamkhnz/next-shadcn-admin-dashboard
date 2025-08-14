@@ -6,7 +6,7 @@ import { Home, History, MapPin, UsersRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const franchiseNavItems = [
-  { href: "/franchise", label: "Dashboard", icon: Home },
+  { href: "/franchise", label: "Franchise Dashboard", icon: Home },
   { href: "/franchise/booking-history", label: "Booking History", icon: History },
   { href: "/franchise/branch-management", label: "Branch Management", icon: MapPin },
   { href: "/franchise/washer-management", label: "Washer Management", icon: UsersRound },

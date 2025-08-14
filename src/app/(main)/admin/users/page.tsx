@@ -13,7 +13,7 @@ export default function UsersPage() {
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Users</h2>
-          <p className="text-muted-foreground">Manage your users and their booking history.</p>
+          <p className="text-muted-foreground">Manage all Karwi users and their booking history.</p>
         </div>
       </div>
       <UserDataTable columns={columns} data={users} />

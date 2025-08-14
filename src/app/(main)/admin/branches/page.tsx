@@ -17,7 +17,7 @@ export default function BranchesPage() {
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Branches</h2>
-          <p className="text-muted-foreground">Manage your branches and their services.</p>
+          <p className="text-muted-foreground">Manage all Karwi branches and their services.</p>
         </div>
         <div className="flex items-center space-x-2">
           <BranchDialog>

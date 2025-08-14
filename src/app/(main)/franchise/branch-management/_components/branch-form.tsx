@@ -178,7 +178,7 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
                       <FormControl>
                         <div className="relative">
                           <Building2 className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                          <Input placeholder="e.g., Downtown Branch" {...field} className="pl-10" />
+                          <Input placeholder="e.g., Karwi Residential Compound" {...field} className="pl-10" />
                         </div>
                       </FormControl>
                       <FormMessage />

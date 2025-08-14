@@ -16,7 +16,7 @@ const FranchiseMetrics: React.FC<FranchiseMetricsProps> = ({ totalBranches, tota
       title: "Total Branches",
       value: totalBranches,
       icon: Building2,
-      description: "Managed by this franchise",
+      description: "Managed by your franchise",
     },
     {
       title: "Total Services",

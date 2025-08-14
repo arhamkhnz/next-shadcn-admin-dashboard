@@ -17,7 +17,7 @@ export default function FranchisesPage() {
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Franchises</h2>
-          <p className="text-muted-foreground">Manage your franchises and their branches.</p>
+          <p className="text-muted-foreground">Manage all Karwi franchises and their branches.</p>
         </div>
         <div className="flex items-center space-x-2">
           <FranchiseDialog>

@@ -59,7 +59,7 @@ export function FranchiseForm({ franchise, onSuccess }: FranchiseFormProps) {
             <FormItem>
               <FormLabel>Franchise Name</FormLabel>
               <FormControl>
-                <Input placeholder="Karwi Wash..." {...field} />
+                <Input placeholder="e.g., Karwi Erbil" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

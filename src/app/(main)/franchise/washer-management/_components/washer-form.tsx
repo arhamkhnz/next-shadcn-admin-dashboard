@@ -93,7 +93,7 @@ export function WasherForm({ washer, onSuccess }: WasherFormProps) {
                 <FormControl>
                   <div className="relative">
                     <User className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                    <Input placeholder="e.g., John Doe" {...field} className="pl-10" />
+                    <Input placeholder="e.g., Mohammed Ahmed" {...field} className="pl-10" />
                   </div>
                 </FormControl>
                 <FormMessage />

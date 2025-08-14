@@ -62,7 +62,7 @@ export function WasherForm({ washer, onSuccess }: WasherFormProps) {
             <FormItem>
               <FormLabel>Washer Name</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe..." {...field} />
+                <Input placeholder="e.g., Mohammed Ahmed" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

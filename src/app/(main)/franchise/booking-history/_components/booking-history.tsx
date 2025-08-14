@@ -23,7 +23,7 @@ const BookingHistory: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold tracking-tight">Booking History</h2>
+      <h2 className="text-3xl font-bold tracking-tight">Karwi Booking History</h2>
       <BookingHistoryDataTable columns={columns} data={enrichedBookings} />
     </div>
   );

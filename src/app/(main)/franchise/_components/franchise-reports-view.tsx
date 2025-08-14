@@ -56,7 +56,7 @@ export function FranchiseReportsView() {
     <Card>
       <CardHeader>
         <CardTitle>Reports</CardTitle>
-        <CardDescription>View and download generated reports for your franchise.</CardDescription>
+        <CardDescription>View and download reports for your Karwi franchise.</CardDescription>
       </CardHeader>
       <CardContent>
         <DataTable table={table} columns={columns} />
