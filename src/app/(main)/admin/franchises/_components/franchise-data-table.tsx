@@ -1,13 +1,10 @@
 "use client";
 
-import { Download } from "lucide-react";
-
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
+
+import { DataTableToolbar } from "../../_components/data-table-toolbar";
 
 import { columns, Franchise } from "./columns";
 
@@ -24,21 +21,20 @@ export function FranchiseDataTable({ data }: FranchiseDataTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Input
-          placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) || ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
-          className="max-w-sm"
-        />
-        <div className="flex items-center gap-2">
-          <DataTableViewOptions table={table} />
-          <Button variant="outline" size="sm">
-            <Download className="mr-2 h-4 w-4" />
-            <span className="hidden lg:inline">Export</span>
-          </Button>
-        </div>
-      </div>
+      <DataTableToolbar
+        table={table}
+        filterColumn="name"
+        facetedFilters={[
+          {
+            columnId: "status",
+            title: "Status",
+            options: [
+              { label: "Active", value: "active" },
+              { label: "Inactive", value: "inactive" },
+            ],
+          },
+        ]}
+      />
       <div className="overflow-hidden rounded-md border">
         <DataTable table={table} columns={columns} />
       </div>

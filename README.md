@@ -8,7 +8,7 @@ The idea behind this dashboard aims to offer an alternative to typical admin tem
 
 I’ve taken design inspiration from various sources. Feel free to open an issue or reach out for credits.
 
-> **View demo:** [studio admin](https://next-shadcn-admin-dashboard.vercel.app)
+> **View demo:** [Karwi admin](https://next-shadcn-admin-dashboard.vercel.app)
 
 > [!IMPORTANT]
 > Also available for other frameworks.  

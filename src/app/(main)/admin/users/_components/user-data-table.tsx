@@ -8,6 +8,7 @@ import { DataTableViewOptions } from "@/components/data-table/data-table-view-op
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
+import { exportToCSV } from "@/lib/export-utils";
 
 import { columns, User } from "./columns";
 
@@ -41,7 +42,7 @@ export function UserDataTable({ data }: UserDataTableProps) {
         </div>
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => exportToCSV(table, "users.csv")}>
             <Download className="mr-2 h-4 w-4" />
             <span className="hidden lg:inline">Export</span>
           </Button>

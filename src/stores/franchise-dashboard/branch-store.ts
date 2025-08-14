@@ -28,7 +28,7 @@ const supabase = createClientComponentClient<Database>();
 export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
   branches: [],
   fetchBranches: async () => {
-    const { data, error } = await supabase.from("branches").select("*, services(*)");
+    const { data, error } = await supabase.from("branches").select("*, services(*), location_text:location::text");
     if (error) {
       console.error("Error fetching branches:", error);
       return;

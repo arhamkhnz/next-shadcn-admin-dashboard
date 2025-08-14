@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { useTheme } from "next-themes";
+import { Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
@@ -11,6 +12,19 @@ interface FranchiseBookingsChartProps {
 }
 
 const FranchiseBookingsChart: React.FC<FranchiseBookingsChartProps> = ({ data }) => {
+  const { theme } = useTheme();
+
+  const areaColors =
+    theme === "dark"
+      ? {
+          fill: "#5eead4cc", // Bright teal with opacity for dark mode
+          stroke: "#5eead4", // Bright teal for dark mode
+        }
+      : {
+          fill: "hsl(var(--chart-1))",
+          stroke: "hsl(var(--chart-1))",
+        };
+
   return (
     <Card>
       <CardHeader>
@@ -22,12 +36,18 @@ const FranchiseBookingsChart: React.FC<FranchiseBookingsChartProps> = ({ data })
           config={{
             count: {
               label: "Bookings",
-              color: "hsl(var(--chart-1))",
+              color: areaColors.fill,
             },
           }}
           className="h-[250px] w-full"
         >
-          <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+            <defs>
+              <linearGradient id="fillChart" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={areaColors.fill} stopOpacity={0.8} />
+                <stop offset="95%" stopColor={areaColors.fill} stopOpacity={0.1} />
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} />
             <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
             <YAxis tickLine={false} axisLine={false} tickMargin={8} allowDecimals={false} />
@@ -45,8 +65,15 @@ const FranchiseBookingsChart: React.FC<FranchiseBookingsChartProps> = ({ data })
                 />
               }
             />
-            <Line type="monotone" dataKey="count" stroke="hsl(var(--chart-1))" strokeWidth={2} dot={false} />
-          </LineChart>
+            <Area
+              type="monotone"
+              dataKey="count"
+              stroke={areaColors.stroke}
+              fill="url(#fillChart)"
+              strokeWidth={2}
+              dot={false}
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>

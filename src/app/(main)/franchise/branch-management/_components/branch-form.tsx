@@ -56,9 +56,19 @@ interface BranchFormProps {
 // Helper to parse location string
 const parseLocation = (locationStr: string | null | undefined): { lat: number; lng: number } | undefined => {
   if (!locationStr) return undefined;
+  // Check for WKT format
   const match = locationStr.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
   if (match && match.length === 3) {
     return { lng: parseFloat(match[1]), lat: parseFloat(match[2]) };
+  }
+  // Check for GeoJSON format (from location picker)
+  try {
+    const parsed = JSON.parse(locationStr);
+    if (parsed && typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+      return parsed;
+    }
+  } catch (e) {
+    // Not a JSON string, ignore
   }
   return undefined;
 };
@@ -109,7 +119,7 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: branch?.name ?? "",
-      location: parseLocation(branch?.location),
+      location: parseLocation((branch as any)?.location_text),
     },
   });
 

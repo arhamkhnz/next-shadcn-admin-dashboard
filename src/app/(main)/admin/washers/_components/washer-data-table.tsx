@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
+import { exportToCSV } from "@/lib/export-utils";
 import { useBranchStore } from "@/stores/admin-dashboard/branch-store";
 
 import { columns, Washer } from "./columns";
@@ -55,7 +56,7 @@ export function WasherDataTable({ data }: WasherDataTableProps) {
         </div>
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => exportToCSV(table, "washers.csv")}>
             <Download className="mr-2 h-4 w-4" />
             <span className="hidden lg:inline">Export</span>
           </Button>

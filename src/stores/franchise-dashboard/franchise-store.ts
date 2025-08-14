@@ -13,6 +13,7 @@ type FranchiseDashboardState = {
   fetchServices: () => Promise<void>;
   fetchWashers: () => Promise<void>;
   fetchBookings: () => Promise<void>;
+  updateBooking: (updatedBooking: Booking) => void;
 };
 
 const supabase = createClientComponentClient<Database>();
@@ -53,5 +54,12 @@ export const useFranchiseDashboardStore = create<FranchiseDashboardState>((set) 
       return;
     }
     set({ bookings: data as Booking[] });
+  },
+  updateBooking: (updatedBooking: Booking) => {
+    set((state) => ({
+      bookings: state.bookings.map((booking) =>
+        booking.id === updatedBooking.id ? { ...booking, ...updatedBooking } : booking,
+      ),
+    }));
   },
 }));

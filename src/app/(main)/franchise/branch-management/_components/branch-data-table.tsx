@@ -8,6 +8,7 @@ import { DataTableViewOptions } from "@/components/data-table/data-table-view-op
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
+import { exportToCSV } from "@/lib/export-utils";
 import { Branch } from "@/stores/franchise-dashboard/branch-store";
 
 import { columns } from "./columns";
@@ -34,7 +35,7 @@ export function BranchDataTable({ data }: BranchDataTableProps) {
         />
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => exportToCSV(table, "branches.csv")}>
             <Download className="mr-2 h-4 w-4" />
             <span className="hidden lg:inline">Export</span>
           </Button>
