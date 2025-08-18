@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+
 import { PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +12,18 @@ import { BranchDialog } from "./_components/branch-dialog";
 import { columns } from "./_components/columns";
 
 export default function BranchesPage() {
-  const { branches } = useBranchStore();
+  const { branches, fetchBranches } = useBranchStore();
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      await fetchBranches();
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [fetchBranches]);
 
   return (
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
@@ -28,7 +41,7 @@ export default function BranchesPage() {
           </BranchDialog>
         </div>
       </div>
-      <BranchDataTable columns={columns} data={branches} />
+      {isLoading ? <div>Loading branches...</div> : <BranchDataTable data={branches} />}
     </div>
   );
 }

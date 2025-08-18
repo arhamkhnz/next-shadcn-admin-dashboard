@@ -2,8 +2,6 @@
 
 import * as React from "react";
 
-import { DateRange } from "react-day-picker";
-
 export function AdminHeader() {
   return (
     <div className="flex items-center justify-between space-y-2">

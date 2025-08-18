@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Building2, Users, UsersRound } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Database } from "@/types/database";
+import { useBookingStore } from "@/stores/admin-dashboard/booking-store";
+import { usePaymentStore } from "@/stores/admin-dashboard/payment-store";
+import { useUserStore } from "@/stores/admin-dashboard/user-store";
+import { useWasherStore } from "@/stores/admin-dashboard/washer-store";
 
 export function AdminMetrics() {
   const [metrics, setMetrics] = useState({
@@ -18,65 +20,43 @@ export function AdminMetrics() {
     error: false,
   });
 
+  const { bookings } = useBookingStore();
+  const { payments } = usePaymentStore();
+  const { users } = useUserStore();
+  const { washers } = useWasherStore();
+
   useEffect(() => {
-    const fetchMetrics = async () => {
-      const supabase = createClientComponentClient<Database>();
-      const totalRevenue = 0;
-      let totalBookings = 0;
-      let totalUsers = 0;
-      let activeWashers = 0;
-      let hasError = false;
-
+    const calculateMetrics = () => {
       try {
-        // Total Bookings
-        const { count: bookingsCount, error: bookingsError } = await supabase
-          .from("bookings")
-          .select("*", { count: "exact", head: true });
-        if (bookingsError) {
-          console.error("Error fetching total bookings:", bookingsError);
-          hasError = true;
-        } else {
-          totalBookings = bookingsCount ?? 0;
-        }
+        // Calculate total revenue from successful payments
+        const totalRevenue = payments
+          .filter((payment) => payment.status === "succeeded")
+          .reduce((sum, payment) => sum + payment.amount, 0);
 
-        // Total Users
-        const { count: usersCount, error: usersError } = await supabase
-          .from("users")
-          .select("*", { count: "exact", head: true });
-        if (usersError) {
-          console.error("Error fetching total users:", usersError);
-          hasError = true;
-        } else {
-          totalUsers = usersCount ?? 0;
-        }
+        // Get counts
+        const totalBookings = bookings.length;
+        const totalUsers = users.length;
+        const activeWashers = washers.filter((washer) => washer.status === "active").length;
 
-        // Active Washers
-        const { count: washersCount, error: washersError } = await supabase
-          .from("washers")
-          .select("*", { count: "exact", head: true })
-          .eq("status", "active");
-        if (washersError) {
-          console.error("Error fetching active washers:", washersError);
-          hasError = true;
-        } else {
-          activeWashers = washersCount ?? 0;
-        }
-      } catch (error) {
-        console.error("Unexpected error fetching metrics:", error);
-        hasError = true;
-      } finally {
         setMetrics({
           totalRevenue,
           totalBookings,
           totalUsers,
           activeWashers,
           loading: false,
-          error: hasError,
+          error: false,
         });
+      } catch (error) {
+        console.error("Error calculating metrics:", error);
+        setMetrics((prev) => ({ ...prev, loading: false, error: true }));
       }
     };
-    fetchMetrics();
-  }, []);
+
+    // Only calculate when we have data
+    if (bookings.length > 0 || payments.length > 0 || users.length > 0 || washers.length > 0) {
+      calculateMetrics();
+    }
+  }, [bookings, payments, users, washers]);
 
   if (metrics.loading) {
     return <div>Loading metrics...</div>;

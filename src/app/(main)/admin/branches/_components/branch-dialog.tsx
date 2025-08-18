@@ -17,22 +17,30 @@ import { Branch } from "./types";
 interface BranchDialogProps {
   branch?: Branch;
   children: React.ReactNode;
+  onDialogClose?: () => void;
 }
 
-export function BranchDialog({ branch, children }: BranchDialogProps) {
+export function BranchDialog({ branch, children, onDialogClose }: BranchDialogProps) {
   const [open, setOpen] = useState(false);
 
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen && onDialogClose) {
+      onDialogClose();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>{branch ? "Edit" : "Add"} Branch</DialogTitle>
           <DialogDescription>
             {branch ? "Update the details of the branch." : "Add a new branch to your system."}
           </DialogDescription>
         </DialogHeader>
-        <BranchForm branch={branch} onSuccess={() => setOpen(false)} />
+        <BranchForm branch={branch} onSuccess={() => handleOpenChange(false)} />
       </DialogContent>
     </Dialog>
   );

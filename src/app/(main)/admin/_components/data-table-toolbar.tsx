@@ -1,7 +1,6 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
-import { Cross2Icon } from "lucide-react";
 
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,7 @@ export function DataTableToolbar<TData>({
         {isFiltered && (
           <Button variant="ghost" onClick={() => table.resetColumnFilters()} className="h-8 px-2 lg:px-3">
             Reset
-            <Cross2Icon className="ml-2 h-4 w-4" />
+            <span className="ml-2 text-xs font-semibold select-none">X</span>
           </Button>
         )}
       </div>

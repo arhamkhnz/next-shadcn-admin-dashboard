@@ -1,10 +1,13 @@
+import { Service } from "@/types/database";
+
 export type Branch = {
   id: string;
   name: string;
   location: string; // The geography type is a string in PostGIS
+  location_text?: string;
   franchise_id: string;
   franchise: string; // Franchise name for display/filter
-  services: number;
+  services: Service[];
   activeBookings: number;
   createdAt: Date;
 };

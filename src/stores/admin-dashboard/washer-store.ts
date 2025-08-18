@@ -10,7 +10,7 @@ const supabase = createClient();
 type WasherState = {
   washers: Washer[];
   fetchWashers: () => Promise<void>;
-  addWasher: (washer: Omit<Washer, "id" | "branchName" | "createdAt">) => Promise<void>;
+  addWasher: (washer: Omit<Washer, "id">) => Promise<void>;
   updateWasher: (washer: Washer) => Promise<void>;
   deleteWasher: (id: string) => Promise<void>;
 };
@@ -34,18 +34,38 @@ export const useWasherStore = create<WasherState>((set, get) => ({
     set({ washers: transformedWashers as Washer[] });
   },
   addWasher: async (washer) => {
-    await supabase.from("washers").insert([{ ...washer, branch_id: washer.branchId }]);
+    const { data, error } = await supabase
+      .from("washers")
+      .insert([{ name: washer.name, branch_id: washer.branch, status: washer.status, rating: washer.rating }])
+      .select();
+
+    if (error) {
+      console.error("Error adding washer:", error);
+      throw error;
+    }
+
     await get().fetchWashers();
+    return data?.[0] ? { id: data[0].id, ...washer } : null;
   },
   updateWasher: async (washer) => {
-    await supabase
+    const { error } = await supabase
       .from("washers")
-      .update({ ...washer, branch_id: washer.branchId })
+      .update({ name: washer.name, branch_id: washer.branch, status: washer.status, rating: washer.rating })
       .eq("id", washer.id);
+
+    if (error) {
+      console.error("Error updating washer:", error);
+      return;
+    }
+
     await get().fetchWashers();
   },
   deleteWasher: async (id) => {
-    await supabase.from("washers").delete().eq("id", id);
+    const { error } = await supabase.from("washers").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting washer:", error);
+      return;
+    }
     set((state) => ({ washers: state.washers.filter((w) => w.id !== id) }));
   },
 }));

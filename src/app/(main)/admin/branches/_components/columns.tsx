@@ -1,90 +1,159 @@
+/* eslint-disable complexity */
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { MapPin } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { BranchActions } from "./branch-actions";
 import { Branch } from "./types";
 
+// Helper to parse location string
+const parseLocation = (locationStr: string | null | undefined): { lat: number; lng: number } | undefined => {
+  if (!locationStr) return undefined;
+
+  // Handle stringified JSON format
+  if (typeof locationStr === "string" && locationStr.startsWith("{")) {
+    try {
+      const parsed = JSON.parse(locationStr);
+      if (parsed && typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+        return { lat: parsed.lat, lng: parsed.lng };
+      }
+    } catch (e) {
+      // Not a JSON string, continue to other formats
+    }
+  }
+
+  // Check for WKT format (POINT(lng lat))
+  const match = locationStr.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
+  if (match && match.length === 3) {
+    return { lng: parseFloat(match[1]), lat: parseFloat(match[2]) };
+  }
+
+  // Handle GeoJSON format if stored as string
+  if (typeof locationStr === "string" && locationStr.includes('"type":"Point"')) {
+    try {
+      const parsed = JSON.parse(locationStr);
+      if (parsed.type === "Point" && Array.isArray(parsed.coordinates) && parsed.coordinates.length === 2) {
+        return { lng: parsed.coordinates[0], lat: parsed.coordinates[1] };
+      }
+    } catch (e) {
+      // Not a valid GeoJSON string
+    }
+  }
+
+  return undefined;
+};
+
 export const columns: ColumnDef<Branch>[] = [
-  { accessorKey: "name", header: "Name" },
-  { accessorKey: "franchise", header: "Franchise" },
+  {
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "franchise",
+    header: "Franchise",
+  },
   {
     accessorKey: "location",
     header: "Location",
     cell: ({ row }) => {
-      const location = row.original.location;
-      // Helper to decode WKB hex to coordinates
-      // Decodes PostGIS WKB hex (Point, 4326) to {lng, lat}
-      function decodeWKBHexToLngLat(hex: string): { lng: number; lat: number } | null {
-        // Typical WKB hex for Point: 0101000020E6100000 + 16 bytes (8 for lng, 8 for lat)
-        if (!/^0101000020E6100000[a-fA-F0-9]{32}$/.test(hex)) return null;
-        try {
-          // Extract 8 bytes for lng, then 8 bytes for lat (little-endian)
-          function hexLEToFloat64(h: string) {
-            const bytes = new Uint8Array(h.match(/../g)!.map((b) => parseInt(b, 16)));
-            bytes.reverse();
-            return new DataView(bytes.buffer).getFloat64(0, true);
-          }
-          const lng = hexLEToFloat64(hex.slice(18, 34));
-          const lat = hexLEToFloat64(hex.slice(34, 50));
-          if (isNaN(lng) || isNaN(lat)) return null;
-          return { lng, lat };
-        } catch {
-          return null;
-        }
+      const branch = row.original;
+      const locationStr = branch.location;
+      const location = parseLocation(locationStr);
+
+      // Debugging: log the location data to understand the format
+      // console.log("Location data:", { locationStr, location });
+
+      if (!location) {
+        // Show raw location data for debugging
+        return (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="text-muted-foreground cursor-help">Not set</span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Raw location data: {locationStr || "null"}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        );
       }
-      // Try to decode as WKB, else fallback
-      const wkbCoords = decodeWKBHexToLngLat(location);
-      const parts = location ? location.split(",") : [];
-      let display, mapLink;
-      if (wkbCoords) {
-        display = `Lat: ${wkbCoords.lat.toFixed(6)}, Lng: ${wkbCoords.lng.toFixed(6)}`;
-        // Use the recommended Google Maps search URL for coordinates
-        mapLink = `https://www.google.com/maps/search/?api=1&query=${wkbCoords.lat},${wkbCoords.lng}`;
-      } else if (location) {
-        display =
-          parts.length > 1
-            ? parts.map((p, i) => (
-                <span key={i}>
-                  {p.trim()}
-                  {i !== parts.length - 1 && <br />}
-                </span>
-              ))
-            : location;
-        // Use the recommended Google Maps search URL for address
-        mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
-      }
+
+      const { lat, lng } = location;
+      const mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+      const coordinateText = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
       return (
-        <div style={{ display: "flex", alignItems: "start", gap: 6 }}>
-          <span style={{ marginTop: 2, color: "#888" }}>
-            {/* Use a simple SVG pin icon inline for portability */}
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-              <path
-                fill="#888"
-                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"
-              />
-            </svg>
-          </span>
-          <span style={{ whiteSpace: "pre-line", fontSize: 14 }}>
-            {mapLink ? (
-              <a
-                href={mapLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: "underline", color: "#1976d2" }}
-              >
-                {display}
-              </a>
-            ) : (
-              display
-            )}
-          </span>
+        <div className="flex items-center gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="cursor-pointer font-mono text-sm">{coordinateText}</span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Click to view on map</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <a href={mapUrl} target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" size="sm" className="h-8 px-2">
+              <MapPin className="h-4 w-4" />
+            </Button>
+          </a>
         </div>
       );
     },
   },
-  { accessorKey: "services", header: "Services" },
-  { accessorKey: "activeBookings", header: "Active Bookings" },
+  {
+    accessorKey: "services",
+    header: "Services",
+    cell: ({ row }) => {
+      const services = row.original.services ?? [];
+      if (services.length === 0) {
+        return <span className="text-muted-foreground">No services</span>;
+      }
+      return (
+        <div className="flex max-w-xs flex-wrap gap-1">
+          {services.map((service) => (
+            <Badge key={service.id} variant="secondary" className="font-normal">
+              {service.name}
+            </Badge>
+          ))}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "serviceCount",
+    header: "Service Count",
+    cell: ({ row }) => {
+      const serviceCount = row.original.services?.length || 0;
+      return <span>{serviceCount}</span>;
+    },
+    filterFn: (row, columnId, filterValue: string[]) => {
+      const serviceCount = row.original.services?.length || 0;
+      const serviceCountStr = serviceCount.toString();
+
+      // If no filter selected, show all
+      if (!filterValue || filterValue.length === 0) return true;
+
+      // Check if the service count matches any of the selected filters
+      return filterValue.some((filter) => {
+        if (filter === "0") return serviceCount === 0;
+        if (filter === "1-2") return serviceCount >= 1 && serviceCount <= 2;
+        if (filter === "3-5") return serviceCount >= 3 && serviceCount <= 5;
+        if (filter === "6-10") return serviceCount >= 6 && serviceCount <= 10;
+        if (filter === "10+") return serviceCount > 10;
+        // For exact matches (when we show individual counts)
+        return filter === serviceCountStr;
+      });
+    },
+  },
   {
     id: "actions",
     cell: ({ row }) => {

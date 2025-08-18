@@ -18,13 +18,19 @@ type FranchiseState = {
 export const useFranchiseStore = create<FranchiseState>((set, get) => ({
   franchises: [],
   fetchFranchises: async () => {
+    // Only fetch admins if we don't have them yet
+    const { admins } = useAdminStore.getState();
+    if (admins.length === 0) {
+      await useAdminStore.getState().fetchAdmins();
+    }
+
     const { data, error } = await supabase.from("franchises").select("*");
     if (error) {
       console.error("Error fetching franchises:", error);
       return;
     }
 
-    const { admins } = useAdminStore.getState();
+    const { admins: updatedAdmins } = useAdminStore.getState();
     const transformedFranchises = data.map((franchise) => ({
       id: franchise.id,
       admin_id: franchise.admin_id,
@@ -33,7 +39,7 @@ export const useFranchiseStore = create<FranchiseState>((set, get) => ({
       branches: franchise.branches,
       washers: franchise.washers,
       createdAt: new Date(franchise.created_at),
-      adminName: admins.find((a) => a.id === franchise.admin_id)?.name ?? "N/A",
+      adminName: updatedAdmins.find((a) => a.id === franchise.admin_id)?.name ?? "N/A",
     }));
 
     set({ franchises: transformedFranchises });

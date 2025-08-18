@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useMemo } from "react";
 
 import {
   ColumnFiltersState,
@@ -11,26 +12,45 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { Download } from "lucide-react";
 
+import { DataTableToolbar } from "@/app/(main)/admin/_components/data-table-toolbar";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
+import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { exportToCSV } from "@/lib/export-utils";
+import { useBranchStore } from "@/stores/admin-dashboard/branch-store";
 import { useServiceStore } from "@/stores/admin-dashboard/service-store";
 
 import { useServiceColumns } from "./columns";
 import { ServiceForm } from "./service-form";
 
+// Define a type that extends Service with branchName
+type ServiceWithBranchName = ReturnType<typeof useServiceStore>["services"][0] & { branchName?: string };
+
 export function ServiceList() {
   const services = useServiceStore((state) => state.services);
+  const { branches } = useBranchStore();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [isCreateModalOpen, setCreateModalOpen] = React.useState(false);
   const columns = useServiceColumns();
 
+  // Memoize servicesWithBranchNames to prevent infinite re-renders
+  const servicesWithBranchNames = useMemo(() => {
+    return services.map((service) => {
+      const branch = branches.find((b) => b.id === service.branchId);
+      return {
+        ...service,
+        branchName: branch ? branch.name : `Unknown (${service.branchId})`,
+      };
+    });
+  }, [services, branches]);
+
   const table = useReactTable({
-    data: services,
+    data: servicesWithBranchNames,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -44,26 +64,44 @@ export function ServiceList() {
     },
   });
 
+  // Memoize branchNames to prevent infinite re-renders
+  const branchNames = useMemo(() => {
+    return Array.from(new Set(branches.map((branch) => branch.name)));
+  }, [branches]);
+
+  const facetedFilters = useMemo(
+    () => [
+      {
+        columnId: "branchName",
+        title: "Branch",
+        options: branchNames.map((name) => ({ label: name, value: name })),
+      },
+    ],
+    [branchNames],
+  );
+
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <Input
-          placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
-          className="max-w-sm"
-        />
-        <Dialog open={isCreateModalOpen} onOpenChange={setCreateModalOpen}>
-          <DialogTrigger asChild>
-            <Button>Create Service</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create Service</DialogTitle>
-            </DialogHeader>
-            <ServiceForm onClose={() => setCreateModalOpen(false)} />
-          </DialogContent>
-        </Dialog>
+      <div className="flex items-center justify-between">
+        <DataTableToolbar table={table} filterColumn="name" facetedFilters={facetedFilters} />
+        <div className="flex items-center gap-2">
+          <Dialog open={isCreateModalOpen} onOpenChange={setCreateModalOpen}>
+            <DialogTrigger asChild>
+              <Button>Create Service</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create Service</DialogTitle>
+              </DialogHeader>
+              <ServiceForm onClose={() => setCreateModalOpen(false)} />
+            </DialogContent>
+          </Dialog>
+          <DataTableViewOptions table={table} />
+          <Button variant="outline" size="sm" onClick={() => exportToCSV(table, "services.csv")}>
+            <Download className="mr-2 h-4 w-4" />
+            <span className="hidden lg:inline">Export</span>
+          </Button>
+        </div>
       </div>
       <div className="rounded-md border">
         <DataTable table={table} columns={columns} />

@@ -27,7 +27,7 @@ import { WashersActivityTable } from "./_components/washers-activity-table";
 export default function AdminHomePage() {
   const { fetchBranches } = useBranchStore();
   const { fetchFranchises } = useFranchiseStore();
-  // const { fetchPayments } = usePaymentStore();
+  const { fetchPayments } = usePaymentStore();
   const { fetchReviews } = useReviewStore();
   const { fetchServices } = useServiceStore();
   const { fetchUsers } = useUserStore();

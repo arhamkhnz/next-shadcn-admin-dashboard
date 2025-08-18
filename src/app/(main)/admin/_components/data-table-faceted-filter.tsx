@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Column } from "@tanstack/react-table";
-import { CheckIcon, PlusCircledIcon } from "lucide-react";
+import { CheckIcon, CirclePlus } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,14 +18,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
+export interface FacetedFilterOption {
+  label: string;
+  value: string;
+  icon?: React.ComponentType<{ className?: string }>;
+}
+
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
-  options: {
-    label: string;
-    value: string;
-    icon?: React.ComponentType<{ className?: string }>;
-  }[];
+  options: FacetedFilterOption[];
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
@@ -40,7 +42,7 @@ export function DataTableFacetedFilter<TData, TValue>({
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="h-8 border-dashed">
-          <PlusCircledIcon className="mr-2 h-4 w-4" />
+          <CirclePlus className="mr-2 h-4 w-4" />
           {title}
           {selectedValues?.size > 0 && (
             <>
@@ -96,7 +98,9 @@ export function DataTableFacetedFilter<TData, TValue>({
                     >
                       <CheckIcon className={cn("h-4 w-4")} />
                     </div>
-                    {option.icon && <option.icon className="text-muted-foreground mr-2 h-4 w-4" />}
+                    {option.icon && typeof option.icon !== "undefined" && (
+                      <option.icon className="text-muted-foreground mr-2 h-4 w-4" />
+                    )}
                     <span>{option.label}</span>
                     {facets?.get(option.value) && (
                       <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">

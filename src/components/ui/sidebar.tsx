@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Slot as SlotPrimitive } from "radix-ui"
+import * as SlotPrimitive from "@radix-ui/react-slot"
 import { cva, VariantProps } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
 

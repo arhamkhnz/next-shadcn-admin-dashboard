@@ -16,9 +16,14 @@ type AdminState = {
   fetchAdmins: () => Promise<void>;
 };
 
-export const useAdminStore = create<AdminState>((set) => ({
+export const useAdminStore = create<AdminState>((set, get) => ({
   admins: [],
   fetchAdmins: async () => {
+    // Prevent unnecessary fetches if we already have admins
+    if (get().admins.length > 0) {
+      return;
+    }
+
     const { data, error } = await supabase.from("admins").select("*");
     if (error) {
       console.error("Error fetching admins:", error);

@@ -10,23 +10,37 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useBookingStore } from "@/stores/admin-dashboard/booking-store";
 
-// Generate mock data for the last 90 days
-const generateChartData = () => {
+// Generate chart data from bookings
+const generateChartDataFromBookings = (bookings: { date: Date }[]) => {
+  // Group bookings by date
+  const bookingsByDate: Record<string, number> = {};
+
+  bookings.forEach((booking) => {
+    if (booking.date) {
+      const dateStr = new Date(booking.date).toISOString().split("T")[0];
+      bookingsByDate[dateStr] = (bookingsByDate[dateStr] ?? 0) + 1;
+    }
+  });
+
+  // Generate data for the last 90 days
   const data = [];
-  const today = new Date("2024-06-30");
-  for (let i = 90; i > 0; i--) {
+  const today = new Date();
+
+  for (let i = 89; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0];
+
     data.push({
-      date: date.toISOString().split("T")[0],
-      bookings: Math.floor(Math.random() * (300 - 50 + 1)) + 50,
+      date: dateStr,
+      bookings: bookingsByDate[dateStr] ?? 0,
     });
   }
+
   return data;
 };
-
-const chartData = generateChartData();
 
 const chartConfig = {
   bookings: {
@@ -38,6 +52,8 @@ export function BookingsChartInteractive() {
   const isMobile = useIsMobile();
   const { theme } = useTheme();
   const [timeRange, setTimeRange] = React.useState("90d");
+  const { bookings } = useBookingStore();
+  const [chartData, setChartData] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     if (isMobile) {
@@ -45,9 +61,15 @@ export function BookingsChartInteractive() {
     }
   }, [isMobile]);
 
+  React.useEffect(() => {
+    // Generate chart data when bookings change
+    const data = generateChartDataFromBookings(bookings);
+    setChartData(data);
+  }, [bookings]);
+
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
+    const referenceDate = new Date();
     let daysToSubtract = 90;
     if (timeRange === "30d") {
       daysToSubtract = 30;

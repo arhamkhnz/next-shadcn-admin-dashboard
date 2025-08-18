@@ -15,7 +15,9 @@ export function RecentActivity() {
     ...payments.map((p) => ({ ...p, type: "payment", date: new Date(p.created_at) })),
     ...reviews.map((r) => {
       const user = users.find((u) => u.id === r.userId);
-      return { ...r, type: "review", date: new Date(), user }; // Mocking date for reviews
+      // Use the created_at date from the review, or current date if not available
+      const date = r.created_at ? new Date(r.created_at) : new Date();
+      return { ...r, type: "review", date, user };
     }),
   ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
