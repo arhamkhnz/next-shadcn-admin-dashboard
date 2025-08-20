@@ -65,23 +65,8 @@ export const columns: ColumnDef<Branch>[] = [
       const locationStr = branch.location;
       const location = parseLocation(locationStr);
 
-      // Debugging: log the location data to understand the format
-      // console.log("Location data:", { locationStr, location });
-
       if (!location) {
-        // Show raw location data for debugging
-        return (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="text-muted-foreground cursor-help">Not set</span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Raw location data: {locationStr || "null"}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        );
+        return <span className="text-muted-foreground">{locationStr ? "Invalid format" : "Not set"}</span>;
       }
 
       const { lat, lng } = location;
@@ -113,7 +98,14 @@ export const columns: ColumnDef<Branch>[] = [
     accessorKey: "services",
     header: "Services",
     cell: ({ row }) => {
-      const services = row.original.services ?? [];
+      const branch = row.original;
+
+      // Show loading state if services haven't loaded yet
+      if (branch.services === undefined) {
+        return <span className="text-muted-foreground">Loading...</span>;
+      }
+
+      const services = branch.services ?? [];
       if (services.length === 0) {
         return <span className="text-muted-foreground">No services</span>;
       }
@@ -132,11 +124,23 @@ export const columns: ColumnDef<Branch>[] = [
     accessorKey: "serviceCount",
     header: "Service Count",
     cell: ({ row }) => {
-      const serviceCount = row.original.services?.length || 0;
+      const branch = row.original;
+
+      // Show loading state if services haven't loaded yet
+      if (branch.services === undefined) {
+        return <span className="text-muted-foreground">Loading...</span>;
+      }
+
+      const serviceCount = branch.services?.length || 0;
       return <span>{serviceCount}</span>;
     },
     filterFn: (row, columnId, filterValue: string[]) => {
-      const serviceCount = row.original.services?.length || 0;
+      const branch = row.original;
+
+      // If services haven't loaded yet, don't filter
+      if (branch.services === undefined) return true;
+
+      const serviceCount = branch.services?.length || 0;
       const serviceCountStr = serviceCount.toString();
 
       // If no filter selected, show all

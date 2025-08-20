@@ -42,7 +42,7 @@ export function BookingHistoryDataTable({ data }: BookingHistoryDataTableProps) 
         </div>
       </div>
       <div className="overflow-hidden rounded-md border">
-        <DataTable table={table} />
+        <DataTable table={table} columns={columns} />
       </div>
       <DataTablePagination table={table} />
     </div>

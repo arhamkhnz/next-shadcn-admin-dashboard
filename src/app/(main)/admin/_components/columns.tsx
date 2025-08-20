@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
@@ -16,17 +18,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { Booking } from "./columns";
+
 export type Booking = {
   id: string;
   user: string;
   branch: string;
   service: string;
   serviceId: string;
-  status: "completed" | "pending" | "in-progress" | "scheduled";
+  status: "completed" | "pending" | "in-progress" | "scheduled" | "cancelled";
   date: Date;
 };
 
-export const columns: ColumnDef<Booking>[] = [
+type ExtendedColumnDef<T> = ColumnDef<T> & {
+  cell?: (props: any) => any;
+};
+
+export const columns: ExtendedColumnDef<Booking>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Booking ID" />,
@@ -47,7 +55,7 @@ export const columns: ColumnDef<Booking>[] = [
     accessorKey: "status",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => {
-      const status = row.getValue("status");
+      const status = row.getValue("status") as Booking["status"];
       return (
         <Badge
           variant={
@@ -57,7 +65,9 @@ export const columns: ColumnDef<Booking>[] = [
                 ? "secondary"
                 : status === "in-progress"
                   ? "default"
-                  : "outline"
+                  : status === "cancelled"
+                    ? "destructive"
+                    : "outline"
           }
           className={
             status === "completed"
@@ -66,7 +76,9 @@ export const columns: ColumnDef<Booking>[] = [
                 ? "bg-yellow-500"
                 : status === "in-progress"
                   ? "bg-blue-500"
-                  : "bg-gray-500"
+                  : status === "cancelled"
+                    ? "bg-red-500"
+                    : "bg-gray-500"
           }
         >
           {status}
@@ -83,6 +95,12 @@ export const columns: ColumnDef<Booking>[] = [
     id: "actions",
     cell: ({ row }) => {
       const booking = row.original;
+
+      // These handlers will be overridden by the table component
+      const handleViewDetails = () => {};
+      const handleUpdateStatus = () => {};
+      const handleCancelBooking = () => {};
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -95,9 +113,15 @@ export const columns: ColumnDef<Booking>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(booking.id)}>Copy ID</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-            <DropdownMenuItem>Update Status</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">Cancel Booking</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleViewDetails()}>View Details</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleUpdateStatus()}>Update Status</DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-red-600"
+              onClick={() => handleCancelBooking()}
+              disabled={booking.status === "cancelled"}
+            >
+              Cancel Booking
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

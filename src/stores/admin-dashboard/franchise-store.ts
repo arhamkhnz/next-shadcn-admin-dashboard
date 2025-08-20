@@ -7,10 +7,16 @@ import { useAdminStore } from "./admin-store";
 
 const supabase = createClient();
 
+// Updated type for addFranchise parameter
+type NewFranchise = Omit<Franchise, "id" | "admin_id" | "createdAt" | "adminName"> & {
+  adminEmail: string;
+  adminPassword: string;
+};
+
 type FranchiseState = {
   franchises: Franchise[];
   fetchFranchises: () => Promise<void>;
-  addFranchise: (franchise: Omit<Franchise, "id" | "createdAt" | "adminName">) => Promise<void>;
+  addFranchise: (franchise: NewFranchise) => Promise<void>;
   updateFranchise: (franchise: Franchise) => Promise<void>;
   deleteFranchise: (id: string) => Promise<void>;
 };
@@ -45,21 +51,78 @@ export const useFranchiseStore = create<FranchiseState>((set, get) => ({
     set({ franchises: transformedFranchises });
   },
   addFranchise: async (franchise) => {
-    const { data, error } = await supabase
-      .from("franchises")
-      .insert([{ name: franchise.name, admin_id: franchise.adminId }])
-      .select();
+    try {
+      // First, create the admin user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: franchise.adminEmail,
+        password: franchise.adminPassword,
+        options: {
+          data: {
+            name: franchise.name, // Using franchise name as admin name
+          },
+        },
+      });
 
-    if (error) {
-      console.error("Error adding franchise:", error);
-      return;
+      if (authError) {
+        console.error("Error creating admin user:", authError);
+        throw authError;
+      }
+
+      if (!authData.user) {
+        throw new Error("Failed to create admin user");
+      }
+
+      // Then, create the admin record in the admins table
+      const { data: adminData, error: adminError } = await supabase
+        .from("admins")
+        .insert([
+          {
+            id: authData.user.id,
+            name: franchise.name,
+            email: franchise.adminEmail,
+          },
+        ])
+        .select();
+
+      if (adminError) {
+        console.error("Error creating admin record:", adminError);
+        throw adminError;
+      }
+
+      // Finally, create the franchise record
+      const { data: franchiseData, error: franchiseError } = await supabase
+        .from("franchises")
+        .insert([
+          {
+            name: franchise.name,
+            status: franchise.status,
+            branches: franchise.branches,
+            washers: franchise.washers,
+            admin_id: authData.user.id,
+          },
+        ])
+        .select();
+
+      if (franchiseError) {
+        console.error("Error adding franchise:", franchiseError);
+        throw franchiseError;
+      }
+
+      await get().fetchFranchises(); // Refetch to get the transformed data
+    } catch (error) {
+      console.error("Error in addFranchise:", error);
+      throw error;
     }
-    await get().fetchFranchises(); // Refetch to get the transformed data
   },
   updateFranchise: async (franchise) => {
     const { data, error } = await supabase
       .from("franchises")
-      .update({ name: franchise.name, admin_id: franchise.adminId })
+      .update({
+        name: franchise.name,
+        status: franchise.status,
+        branches: franchise.branches,
+        washers: franchise.washers,
+      })
       .eq("id", franchise.id)
       .select();
 

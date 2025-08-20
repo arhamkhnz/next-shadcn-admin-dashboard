@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 "use client";
 
 import { Download } from "lucide-react";
@@ -32,30 +33,42 @@ export function BranchDataTable({ data }: BranchDataTableProps) {
   }));
 
   // Get service count ranges for faceted filter
-  const serviceCounts = data.map((branch) => branch.services?.length ?? 0);
-  const maxServices = Math.max(...serviceCounts, 0);
+  // Filter out branches where services haven't loaded yet
+  const loadedBranches = data.filter((branch) => branch.services !== undefined);
+  const serviceCounts = loadedBranches.map((branch) => branch.services?.length ?? 0);
+  const maxServices = serviceCounts.length > 0 ? Math.max(...serviceCounts, 0) : 0;
 
   // Create service count ranges
   const serviceRanges = [];
-  if (maxServices > 0) {
-    if (maxServices <= 5) {
-      // If max is small, just show individual counts
-      for (let i = 0; i <= maxServices; i++) {
-        serviceRanges.push({
-          label: `${i} service${i !== 1 ? "s" : ""}`,
-          value: i.toString(),
-        });
-      }
-    } else {
-      // Otherwise create ranges
-      serviceRanges.push({ label: "No services", value: "0" });
-      serviceRanges.push({ label: "1-2 services", value: "1-2" });
-      serviceRanges.push({ label: "3-5 services", value: "3-5" });
-      if (maxServices > 5) {
-        serviceRanges.push({ label: "6-10 services", value: "6-10" });
-      }
-      if (maxServices > 10) {
-        serviceRanges.push({ label: "10+ services", value: "10+" });
+
+  // Only create service ranges if we have loaded data
+  if (loadedBranches.length > 0 && maxServices >= 0) {
+    // Always include "No services" option
+    serviceRanges.push({ label: "No services", value: "0" });
+
+    if (maxServices > 0) {
+      if (maxServices <= 5) {
+        // If max is small, show individual counts (1-maxServices)
+        for (let i = 1; i <= maxServices; i++) {
+          serviceRanges.push({
+            label: `${i} service${i !== 1 ? "s" : ""}`,
+            value: i.toString(),
+          });
+        }
+      } else {
+        // Otherwise create ranges
+        if (maxServices >= 1) {
+          serviceRanges.push({ label: "1-2 services", value: "1-2" });
+        }
+        if (maxServices >= 3) {
+          serviceRanges.push({ label: "3-5 services", value: "3-5" });
+        }
+        if (maxServices >= 6) {
+          serviceRanges.push({ label: "6-10 services", value: "6-10" });
+        }
+        if (maxServices > 10) {
+          serviceRanges.push({ label: "10+ services", value: "10+" });
+        }
       }
     }
   }

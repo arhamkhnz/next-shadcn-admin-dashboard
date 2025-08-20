@@ -2,6 +2,7 @@
 
 import React, { Suspense, useEffect } from "react";
 
+import { DebugData } from "@/app/(main)/franchise/_components/debug-data";
 import { FranchiseActivity } from "@/app/(main)/franchise/_components/franchise-activity";
 import FranchiseBookingsChart from "@/app/(main)/franchise/_components/franchise-bookings-chart";
 import { FranchiseHeader } from "@/app/(main)/franchise/_components/franchise-header";
@@ -67,6 +68,8 @@ export default function FranchiseHomePage() {
   return (
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
       <FranchiseHeader />
+      {/* Debug component - can be removed later */}
+      <DebugData />
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>

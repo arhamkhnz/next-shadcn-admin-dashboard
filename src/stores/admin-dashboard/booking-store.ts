@@ -12,9 +12,11 @@ const supabase = createClient();
 type BookingState = {
   bookings: Booking[];
   fetchBookings: () => Promise<void>;
+  updateBookingStatus: (bookingId: string, status: Booking["status"]) => Promise<void>;
+  cancelBooking: (bookingId: string) => Promise<void>;
 };
 
-export const useBookingStore = create<BookingState>((set) => ({
+export const useBookingStore = create<BookingState>((set, get) => ({
   bookings: [],
   fetchBookings: async () => {
     const { data, error } = await supabase.from("bookings").select("*");
@@ -45,5 +47,33 @@ export const useBookingStore = create<BookingState>((set) => ({
     });
 
     set({ bookings: transformedBookings as Booking[] });
+  },
+  updateBookingStatus: async (bookingId: string, status: Booking["status"]) => {
+    const { error } = await supabase.from("bookings").update({ status }).eq("id", bookingId);
+
+    if (error) {
+      console.error("Error updating booking status:", error);
+      return;
+    }
+
+    // Update the booking in the local state
+    set((state) => ({
+      bookings: state.bookings.map((booking) => (booking.id === bookingId ? { ...booking, status } : booking)),
+    }));
+  },
+  cancelBooking: async (bookingId: string) => {
+    const { error } = await supabase.from("bookings").update({ status: "cancelled" }).eq("id", bookingId);
+
+    if (error) {
+      console.error("Error cancelling booking:", error);
+      return;
+    }
+
+    // Update the booking in the local state
+    set((state) => ({
+      bookings: state.bookings.map((booking) =>
+        booking.id === bookingId ? { ...booking, status: "cancelled" } : booking,
+      ),
+    }));
   },
 }));

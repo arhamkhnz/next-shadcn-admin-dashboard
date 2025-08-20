@@ -27,24 +27,24 @@ This is a standard Node.js/Next.js project. The main commands are defined in `pa
 - **Language:** TypeScript. Ensure all code is properly typed.
 - **Styling:** Tailwind CSS and shadnc/ui components (`src/components/ui`).
 - **Component Architecture:**
-    - Follow the existing file structure and naming conventions.
-    - Use absolute imports relative to the `src` directory (e.g., `@/components/ui/button`).
-    - Components should be functional components using hooks.
-    - For any new feature, check the existing `_components` directory pattern. Create a `_components` directory within the relevant route folder for page-specific components.
+  - Follow the existing file structure and naming conventions.
+  - Use absolute imports relative to the `src` directory (e.g., `@/components/ui/button`).
+  - Components should be functional components using hooks.
+  - For any new feature, check the existing `_components` directory pattern. Create a `_components` directory within the relevant route folder for page-specific components.
 - **State Management:**
-    - **Client State:** Zustand is the primary solution (see `src/stores`).
-    - **Server State:** Handled through Next.js Server Actions (see `src/server/server-actions.ts`).
+  - **Client State:** Zustand is the primary solution (see `src/stores`).
+  - **Server State:** Handled through Next.js Server Actions (see `src/server/server-actions.ts`).
 - **Key Libraries & Patterns:**
-    - **Data Tables:** TanStack Table (`@tanstack/react-table`) for data grids (see `src/components/data-table`).
-    - **Forms:** React Hook Form (`react-hook-form`) with Zod (`zod`) for validation.
-    - **Drag & Drop:** `@dnd-kit`.
-    - **Charts:** `recharts`.
-    - **Icons:** `lucide-react`.
+  - **Data Tables:** TanStack Table (`@tanstack/react-table`) for data grids (see `src/components/data-table`).
+  - **Forms:** React Hook Form (`react-hook-form`) with Zod (`zod`) for validation.
+  - **Drag & Drop:** `@dnd-kit`.
+  - **Charts:** `recharts`.
+  - **Icons:** `lucide-react`.
 - **Database & Authentication:**
-    - Database schema is in `src/sql/schema.sql`.
-    - Generated Supabase types are in `src/types/supabase.ts`.
-    - Authentication uses Supabase Auth, implemented via Next.js middleware (`src/middleware/auth-middleware.ts`).
+  - Database schema is in `src/sql/schema.sql`.
+  - Generated Supabase types are in `src/types/supabase.ts`.
+  - Authentication uses Supabase Auth, implemented via Next.js middleware (`src/middleware/auth-middleware.ts`).
 - **Tooling:** ESLint and Prettier are configured for code quality and formatting.
-    - Run `npm run lint` and `npm run format` after modifications to ensure adherence to project standards.
+  - Run `npm run lint` and `npm run format` after modifications to ensure adherence to project standards.
 - **Reusable Components:** Always reuse existing components from `src/components/ui` or local `_components` folders before creating new ones.
 - **Theme Customization:** Themes are defined in CSS files within `src/styles/presets`. The `generate:presets` script parses these files to dynamically update the available theme options in `src/types/preferences/theme.ts`.

@@ -22,8 +22,8 @@ import {
 } from "@/types/preferences/layout";
 
 export default async function FranchiseLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const cookieStore = await cookies();
+  const supabase = await createClient();
 
   const {
     data: { user },

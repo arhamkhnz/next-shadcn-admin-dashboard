@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
-export async function login(prevState: any, formData: FormData) {
+export async function adminLogin(prevState: any, formData: FormData) {
   try {
     const supabase = await createClient();
 
@@ -50,21 +50,20 @@ export async function login(prevState: any, formData: FormData) {
     const { data: adminProfile, error: adminError } = await supabase
       .from("admins")
       .select("id")
-      .eq("email", user.email)
+      .eq("id", user.id) // Using user.id instead of email for more reliable matching
       .single();
 
     if (adminError) {
       console.error("Admin check error:", adminError);
-      await supabase.auth.signOut();
+      // Don't sign out here as it might cause issues with the session
       return {
-        message: "Authentication error. Please try again.",
+        message: "You are not authorized to access the admin dashboard.",
       };
     }
 
     if (!adminProfile) {
-      await supabase.auth.signOut();
       return {
-        message: "You are not authorized to access this application.",
+        message: "You are not authorized to access the admin dashboard.",
       };
     }
 
@@ -76,27 +75,31 @@ export async function login(prevState: any, formData: FormData) {
       .limit(1)
       .single();
 
-    // Handle the case where no franchise is found
+    // Handle the case where no franchise is found (which is expected for general admins)
     if (franchiseError && franchiseError.code !== "PGRST116") {
       // PGRST116 is "no rows found"
       console.error("Franchise check error:", franchiseError);
-      await supabase.auth.signOut();
       return {
         message: "System error. Please try again later.",
       };
     }
 
+    // Redirect to appropriate dashboard
+    revalidatePath("/", "layout");
     if (franchise) {
-      // This admin manages a franchise, redirect to franchise dashboard
-      revalidatePath("/", "layout");
+      // This is a franchise admin, redirect to franchise dashboard
       redirect("/franchise");
     } else {
       // This is a general admin, redirect to the main admin dashboard
-      revalidatePath("/", "layout");
       redirect("/admin");
     }
   } catch (error) {
-    console.error("Unexpected error in login:", error);
+    console.error("Unexpected error in adminLogin:", error);
+    // Check if it's a redirect error (which is expected)
+    if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+      // This is expected when redirect is called, re-throw it
+      throw error;
+    }
     return {
       message: "An unexpected error occurred. Please try again.",
     };

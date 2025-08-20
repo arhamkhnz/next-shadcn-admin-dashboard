@@ -56,6 +56,7 @@ CREATE TABLE public.cars (
   color text,
   plate_no text,
   created_at timestamp with time zone DEFAULT now(),
+  type text,
   CONSTRAINT cars_pkey PRIMARY KEY (id),
   CONSTRAINT cars_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
 );
@@ -107,6 +108,9 @@ CREATE TABLE public.services (
   price numeric,
   duration_min integer,
   created_at timestamp with time zone DEFAULT now(),
+  description text,
+  todos ARRAY DEFAULT '{}'::text[],
+  include ARRAY DEFAULT '{}'::text[],
   CONSTRAINT services_pkey PRIMARY KEY (id),
   CONSTRAINT services_branch_id_fkey FOREIGN KEY (branch_id) REFERENCES public.branches(id)
 );
@@ -128,7 +132,8 @@ CREATE TABLE public.users (
   bookings integer DEFAULT 0,
   total_washes integer DEFAULT 0,
   created_at timestamp with time zone DEFAULT now(),
-  CONSTRAINT users_pkey PRIMARY KEY (id)
+  CONSTRAINT users_pkey PRIMARY KEY (id),
+  CONSTRAINT users_id_fk_auth FOREIGN KEY (id) REFERENCES auth.users(id)
 );
 CREATE TABLE public.washer_schedules (
   id uuid NOT NULL DEFAULT gen_random_uuid(),

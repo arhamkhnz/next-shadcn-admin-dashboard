@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { AdminSidebar } from "@/app/(main)/admin/_components/admin-sidebar";
 import { AccountSwitcher } from "@/app/(main)/dashboard/_components/sidebar/account-switcher";
@@ -10,6 +11,7 @@ import { ThemeSwitcher } from "@/app/(main)/dashboard/_components/sidebar/theme-
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { users } from "@/data/users";
+import { isAdmin } from "@/lib/auth/admin-auth";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { getPreference } from "@/server/server-actions";
@@ -23,12 +25,23 @@ import {
 } from "@/types/preferences/layout";
 
 export default async function AdminLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const cookieStore = await cookies();
+  const supabase = await createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  // Verify admin role - redirect to user dashboard if not admin
+  const isAdminUser = await isAdmin(user.id);
+  if (!isAdminUser) {
+    redirect("/dashboard");
+  }
 
   // Set default values in case the preferences can't be loaded
   let sidebarVariant: SidebarVariant = "inset";
@@ -56,11 +69,6 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
   };
-
-  if (!user) {
-    // This should not happen due to middleware, but as a safeguard:
-    return null;
-  }
 
   const currentUser = {
     id: user.id,

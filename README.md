@@ -104,7 +104,15 @@ _Clone and deploy your own copy of this project in one click._
     npm install
    ```
 
-3. **Start the development server**
+3. **Set up environment variables**
+   Create a `.env.local` file in the root directory with your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   ```
+
+4. **Start the development server**
    ```bash
    npm run dev
    ```

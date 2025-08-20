@@ -1,6 +1,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { create } from "zustand";
 
+import { getCurrentUserFranchiseId } from "@/server/server-actions";
 import { Database } from "@/types/database";
 
 export type Branch = Database["public"]["Tables"]["branches"]["Row"] & {
@@ -28,7 +29,17 @@ const supabase = createClientComponentClient<Database>();
 export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
   branches: [],
   fetchBranches: async () => {
-    const { data, error } = await supabase.from("branches").select("*, services(*), location_text:location::text");
+    const franchiseId = await getCurrentUserFranchiseId();
+    if (!franchiseId) {
+      console.error("Franchise ID not found for current user");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("branches")
+      .select("*, services(*), location_text:location::text")
+      .eq("franchise_id", franchiseId);
+
     if (error) {
       console.error("Error fetching branches:", error);
       return;
@@ -36,7 +47,17 @@ export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
     set({ branches: data as any[] });
   },
   addBranch: async (branch) => {
-    const { data, error } = await supabase.from("branches").insert(branch).select().single();
+    const franchiseId = await getCurrentUserFranchiseId();
+    if (!franchiseId) {
+      throw new Error("Franchise ID not found for current user");
+    }
+
+    const { data, error } = await supabase
+      .from("branches")
+      .insert({ ...branch, franchise_id: franchiseId })
+      .select()
+      .single();
+
     if (error) {
       console.error("Error adding branch:", error);
       throw error;
@@ -44,10 +65,16 @@ export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
     await get().fetchBranches();
   },
   updateBranch: async (branch) => {
+    const franchiseId = await getCurrentUserFranchiseId();
+    if (!franchiseId) {
+      throw new Error("Franchise ID not found for current user");
+    }
+
     const { error } = await supabase
       .from("branches")
       .update({ name: branch.name, location: branch.location })
-      .eq("id", branch.id);
+      .eq("id", branch.id)
+      .eq("franchise_id", franchiseId); // Ensure franchise ID match for security
 
     if (error) {
       console.error("Error updating branch:", error);
@@ -59,6 +86,7 @@ export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
       .from("branches")
       .select("*, services(*)")
       .eq("id", branch.id)
+      .eq("franchise_id", franchiseId) // Ensure franchise ID match for security
       .single();
 
     if (fetchError) {
@@ -75,7 +103,14 @@ export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
     }));
   },
   deleteBranch: async (id) => {
-    const { error } = await supabase.from("branches").delete().eq("id", id);
+    const franchiseId = await getCurrentUserFranchiseId();
+    if (!franchiseId) {
+      console.error("Franchise ID not found for current user");
+      return;
+    }
+
+    const { error } = await supabase.from("branches").delete().eq("id", id).eq("franchise_id", franchiseId); // Ensure franchise ID match for security
+
     if (error) {
       console.error("Error deleting branch:", error);
       return;

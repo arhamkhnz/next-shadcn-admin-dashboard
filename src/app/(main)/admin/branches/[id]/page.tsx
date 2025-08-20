@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 "use client";
 
 import { MapPin } from "lucide-react";
@@ -16,11 +17,37 @@ export default function BranchDetailPage({ params }: { params: { id: string } })
   // Parse location for map link
   const parseLocation = (locationStr: string | null | undefined): { lat: number; lng: number } | undefined => {
     if (!locationStr) return undefined;
-    // Check for WKT format
+
+    // Handle stringified JSON format
+    if (typeof locationStr === "string" && locationStr.startsWith("{")) {
+      try {
+        const parsed = JSON.parse(locationStr);
+        if (parsed && typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+          return { lat: parsed.lat, lng: parsed.lng };
+        }
+      } catch (e) {
+        // Not a JSON string, continue to other formats
+      }
+    }
+
+    // Check for WKT format (POINT(lng lat))
     const match = locationStr.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
     if (match && match.length === 3) {
       return { lng: parseFloat(match[1]), lat: parseFloat(match[2]) };
     }
+
+    // Handle GeoJSON format if stored as string
+    if (typeof locationStr === "string" && locationStr.includes('"type":"Point"')) {
+      try {
+        const parsed = JSON.parse(locationStr);
+        if (parsed.type === "Point" && Array.isArray(parsed.coordinates) && parsed.coordinates.length === 2) {
+          return { lng: parsed.coordinates[0], lat: parsed.coordinates[1] };
+        }
+      } catch (e) {
+        // Not a valid GeoJSON string
+      }
+    }
+
     return undefined;
   };
 
@@ -37,7 +64,7 @@ export default function BranchDetailPage({ params }: { params: { id: string } })
         <CardContent className="grid gap-4 md:grid-cols-2">
           <div className="space-y-1">
             <p className="text-muted-foreground text-sm font-medium">Location</p>
-            {mapUrl ? (
+            {location ? (
               <a
                 href={mapUrl}
                 target="_blank"
@@ -53,7 +80,11 @@ export default function BranchDetailPage({ params }: { params: { id: string } })
           </div>
           <div className="space-y-1">
             <p className="text-muted-foreground text-sm font-medium">Services Offered</p>
-            <p className="text-lg font-semibold">{branch.services?.length || 0}</p>
+            {branch.services ? (
+              <p className="text-lg font-semibold">{branch.services.length}</p>
+            ) : (
+              <p className="text-muted-foreground">Loading...</p>
+            )}
           </div>
           <div className="space-y-1">
             <p className="text-muted-foreground text-sm font-medium">Active Bookings</p>
@@ -68,7 +99,9 @@ export default function BranchDetailPage({ params }: { params: { id: string } })
           <CardTitle>Services</CardTitle>
         </CardHeader>
         <CardContent>
-          {branch.services && branch.services.length > 0 ? (
+          {branch.services === undefined ? (
+            <p className="text-muted-foreground">Loading services...</p>
+          ) : branch.services.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {branch.services.map((service) => (
                 <div key={service.id} className="rounded-lg border p-4">

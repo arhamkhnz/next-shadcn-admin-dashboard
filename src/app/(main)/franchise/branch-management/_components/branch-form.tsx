@@ -1,11 +1,10 @@
 /* eslint-disable complexity */
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import dynamic from "next/dynamic";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Building2, Loader2, PlusCircle, Trash2, Edit } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -30,7 +29,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useFranchiseBranchStore, Branch } from "@/stores/franchise-dashboard/branch-store";
 import { useFranchiseServiceStore } from "@/stores/franchise-dashboard/service-store";
-import { Database } from "@/types/database";
 
 import { ServiceDialog } from "./service-dialog";
 
@@ -76,8 +74,6 @@ const parseLocation = (locationStr: string | null | undefined): { lat: number; l
 export function BranchForm({ branch, onSuccess }: BranchFormProps) {
   const { addBranch, updateBranch, fetchBranches } = useFranchiseBranchStore();
   const { deleteService } = useFranchiseServiceStore();
-  const [franchiseId, setFranchiseId] = useState<string | null>(null);
-  const supabase = createClientComponentClient<Database>();
 
   const LocationPicker = useMemo(
     () =>
@@ -87,31 +83,6 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
       }),
     [],
   );
-
-  useEffect(() => {
-    const getFranchiseId = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session) {
-        console.log("Session found, fetching franchise ID for user:", session.user.id);
-        const { data, error } = await supabase.from("franchises").select("id").eq("admin_id", session.user.id).single();
-        if (error) {
-          toast.error("Could not fetch franchise information.");
-          console.error("Error fetching franchise ID:", error);
-        } else if (data) {
-          console.log("Franchise ID fetched successfully:", data.id);
-          setFranchiseId(data.id);
-        } else {
-          console.log("No franchise found for this user.");
-          toast.error("No franchise found for this user.");
-        }
-      } else {
-        console.log("No active session found.");
-      }
-    };
-    getFranchiseId();
-  }, [supabase]);
 
   const isEditMode = !!branch;
 
@@ -128,11 +99,6 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
   } = form;
 
   const onSubmit = async (data: BranchFormValues) => {
-    if (!isEditMode && !franchiseId) {
-      toast.error("Franchise ID is not available. Cannot create branch.");
-      return;
-    }
-
     const locationString = `POINT(${data.location.lng} ${data.location.lat})`;
 
     try {
@@ -142,7 +108,6 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
       } else {
         await addBranch({
           name: data.name,
-          franchise_id: franchiseId!,
           location: locationString,
         });
         toast.success("Branch created successfully!");
@@ -215,7 +180,7 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
               </CardContent>
             </Card>
             <div className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting || (!isEditMode && !franchiseId)}>
+              <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isEditMode ? "Update Branch Details" : "Add Branch"}
               </Button>

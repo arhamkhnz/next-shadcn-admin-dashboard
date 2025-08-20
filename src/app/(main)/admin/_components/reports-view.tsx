@@ -19,7 +19,7 @@ type Report = {
 };
 
 // Generate reports based on actual data
-const generateReports = (bookings: { date: Date }[], payments: { created_at: string }[], users: unknown[]) => {
+const generateReports = (bookings: { date: Date }[], payments: { created_at: string }[]) => {
   // Get the date range from the data
   const bookingDates = bookings.map((b) => new Date(b.date));
   const paymentDates = payments.map((p) => new Date(p.created_at));
