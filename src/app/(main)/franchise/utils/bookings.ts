@@ -17,7 +17,7 @@ export const enrichBookings = (
 
   return bookings.map((booking) => ({
     ...booking,
-    user: washers.find((w) => w.id === booking.user_id)?.name ?? booking.user_id,
+    user: `User ${booking.user_id.slice(0, 8)}`, // Simplified user representation
     branch: branches.find((b) => b.id === booking.branch_id)?.name ?? booking.branch_id,
     service: services.find((s) => s.id === booking.service_id)?.name ?? booking.service_id,
     date: booking.scheduled_at,
@@ -30,7 +30,7 @@ export const getDailyBookings = (bookings: { scheduled_at: string }[] = []) => {
   for (const booking of bookings) {
     if (!booking?.scheduled_at) continue;
     const date = booking.scheduled_at.slice(0, 10);
-    counts[date] = (counts[date] || 0) + 1;
+    counts[date] = (counts[date] ?? 0) + 1;
   }
 
   return Object.entries(counts).map(([date, count]) => ({ date, count }));

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Building2, Wrench, UsersRound } from "lucide-react";
+import { Building2, Wrench, UsersRound, Calendar } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -8,9 +8,15 @@ interface FranchiseMetricsProps {
   totalBranches: number;
   totalServices: number;
   activeWashers: number;
+  totalBookings?: number;
 }
 
-const FranchiseMetrics: React.FC<FranchiseMetricsProps> = ({ totalBranches, totalServices, activeWashers }) => {
+const FranchiseMetrics: React.FC<FranchiseMetricsProps> = ({
+  totalBranches,
+  totalServices,
+  activeWashers,
+  totalBookings = 0,
+}) => {
   const metrics = [
     {
       title: "Total Branches",
@@ -30,10 +36,16 @@ const FranchiseMetrics: React.FC<FranchiseMetricsProps> = ({ totalBranches, tota
       icon: UsersRound,
       description: "Currently available for bookings",
     },
+    {
+      title: "Total Bookings",
+      value: totalBookings,
+      icon: Calendar,
+      description: "All bookings across branches",
+    },
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
       {metrics.map((metric) => (
         <Card key={metric.title}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

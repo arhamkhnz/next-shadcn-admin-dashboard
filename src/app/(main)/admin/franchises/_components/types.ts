@@ -5,4 +5,6 @@ export type Franchise = {
   status: string;
   branches: number;
   washers: number;
+  createdAt: Date;
+  adminName: string;
 };

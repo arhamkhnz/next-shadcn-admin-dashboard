@@ -46,8 +46,8 @@ export function RecentActivity() {
     ...payments.map((p) => ({ ...p, type: "payment", date: new Date(p.created_at) })),
     ...reviews.map((r) => {
       const user = users.find((u) => u.id === r.userId);
-      // Use the created_at date from the review, or current date if not available
-      const date = r.created_at ? new Date(r.created_at) : new Date();
+      // Use the current date for reviews since there's no created_at field
+      const date = new Date();
       return { ...r, type: "review", date, user };
     }),
     ...recentBookings,
@@ -95,12 +95,17 @@ export function RecentActivity() {
       </CardHeader>
       <CardContent className="space-y-8">
         {combinedActivity.slice(0, 5).map((activity, index) => (
-          <div key={`${activity.type}-${activity.id || index}`} className="flex items-center">
+          <div key={`${activity.type}-${activity.id ?? index}`} className="flex items-center">
             <Avatar className="h-9 w-9">
-              {activity.type === "review" && activity.user && (
+              {activity.type === "review" && "user" in activity && activity.user && (
                 <>
-                  <AvatarImage src={`/avatars/${activity.user.name.toLowerCase().replace(" ", "")}.png`} alt="Avatar" />
-                  <AvatarFallback>{activity.user.name[0]}</AvatarFallback>
+                  <AvatarImage
+                    src={`/avatars/${("user" in activity && activity.user ? (activity.user as any).name : "unknown").toLowerCase().replace(" ", "")}.png`}
+                    alt="Avatar"
+                  />
+                  <AvatarFallback>
+                    {"user" in activity && activity.user ? (activity.user as any).name[0] : "U"}
+                  </AvatarFallback>
                 </>
               )}
               {activity.type === "payment" && (
@@ -112,22 +117,26 @@ export function RecentActivity() {
             </Avatar>
             <div className="ml-4 flex-1 space-y-1">
               {activity.type === "review" && (
-                <p className="text-sm leading-none font-medium">New review from {activity.user?.name}</p>
-              )}
-              {activity.type === "payment" && (
                 <p className="text-sm leading-none font-medium">
-                  Payment of ${activity.amount.toFixed(2)} {activity.status}
+                  New review from {"user" in activity && activity.user ? (activity.user as any).name : "Unknown User"}
+                </p>
+              )}
+              {activity.type === "payment" && "amount" in activity && (
+                <p className="text-sm leading-none font-medium">
+                  Payment of ${(activity as any).amount.toFixed(2)} {(activity as any).status}
                 </p>
               )}
               {activity.type === "booking" && (
                 <p className="text-sm leading-none font-medium">
-                  New booking for {activity.service} at {activity.branch}
+                  New booking for {(activity as any).service} at {(activity as any).branch}
                 </p>
               )}
               <p className="text-muted-foreground text-sm">
-                {activity.type === "review" && activity.comment}
-                {activity.type === "payment" && `Booking ID: ${activity.booking_id}`}
-                {activity.type === "booking" && `User: ${activity.user}`}
+                {activity.type === "review" && "comment" in activity && (activity as any).comment}
+                {activity.type === "payment" &&
+                  "booking_id" in activity &&
+                  `Booking ID: ${(activity as any).booking_id}`}
+                {activity.type === "booking" && "user" in activity && `User: ${(activity as any).user}`}
               </p>
             </div>
             <div className="flex flex-col items-end">

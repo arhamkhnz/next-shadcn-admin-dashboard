@@ -2,10 +2,10 @@ import { ReactNode } from "react";
 
 import { cookies } from "next/headers";
 
-import { AccountSwitcher } from "@/app/(main)/dashboard/_components/sidebar/account-switcher";
 import { LayoutControls } from "@/app/(main)/dashboard/_components/sidebar/layout-controls";
 import { SearchDialog } from "@/app/(main)/dashboard/_components/sidebar/search-dialog";
 import { ThemeSwitcher } from "@/app/(main)/dashboard/_components/sidebar/theme-switcher";
+import { FranchiseAccountSwitcher } from "@/app/(main)/franchise/_components/franchise-account-switcher";
 import { FranchiseSidebar } from "@/app/(main)/franchise/_components/franchise-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -89,7 +89,7 @@ export default async function FranchiseLayout({ children }: Readonly<{ children:
             <div className="flex items-center gap-2">
               <LayoutControls {...layoutPreferences} />
               <ThemeSwitcher />
-              <AccountSwitcher user={currentUser} />
+              <FranchiseAccountSwitcher user={currentUser} />
             </div>
           </div>
         </header>

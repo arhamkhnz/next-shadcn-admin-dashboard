@@ -14,7 +14,7 @@ function convertToCSV<TData>(data: TData[], columns: (keyof TData)[]): string {
       .map((col) => {
         const value = String(row[col] ?? "");
         // Escape commas and quotes
-        if (value.includes(",") || value.includes('"')) {
+        if (value.includes(",") ?? value.includes('"')) {
           return `"${value.replace(/"/g, '""')}"`;
         }
         return value;

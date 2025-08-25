@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
 import { exportToCSV } from "@/lib/export-utils";
 
-import { columns, User } from "./columns";
+import { columns } from "./columns";
+import { User } from "./types";
 
 interface UserDataTableProps {
   data: User[];

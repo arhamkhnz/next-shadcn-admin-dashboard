@@ -2,7 +2,6 @@
 
 import { useUserStore } from "@/stores/admin-dashboard/user-store";
 
-import { columns } from "./_components/columns";
 import { UserDataTable } from "./_components/user-data-table";
 
 export default function UsersPage() {
@@ -16,7 +15,7 @@ export default function UsersPage() {
           <p className="text-muted-foreground">Manage all Karwi users and their booking history.</p>
         </div>
       </div>
-      <UserDataTable columns={columns} data={users} />
+      <UserDataTable data={users} />
     </div>
   );
 }

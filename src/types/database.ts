@@ -4,6 +4,12 @@ export type Service = {
   name: string;
   price: number;
   duration_min: number;
+  description?: string;
+  todos?: string[];
+  include?: string[];
+  is_global?: boolean;
+  created_at?: string;
+  pictures?: string[];
 };
 
 export type Review = {
@@ -21,6 +27,13 @@ export type Promotion = {
   startDate: string;
   endDate: string;
   active: boolean;
+};
+
+export type ServicePromotion = {
+  id: string;
+  serviceId: string;
+  promotionId: string;
+  createdAt: Date;
 };
 
 export type Payment = {
@@ -45,4 +58,14 @@ export type WasherSchedule = {
   branchId: string;
   startTime: Date;
   endTime: Date;
+};
+
+export type ServiceAvailability = {
+  id: string;
+  serviceId: string;
+  dayOfWeek: number; // 0 = Sunday, 6 = Saturday
+  startTime: string; // "HH:MM"
+  endTime: string; // "HH:MM"
+  isActive: boolean;
+  createdAt: Date;
 };

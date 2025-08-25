@@ -11,7 +11,7 @@ import { Service } from "@/types/database";
 import { ServiceActions } from "./service-actions";
 
 // Define a type that extends Service with branchName
-type ServiceWithBranchName = Service & { branchName?: string };
+type ServiceWithBranchName = Service & { branchName?: string; description?: string };
 
 export const useServiceColumns = (): ColumnDef<ServiceWithBranchName>[] => {
   const isMobile = useIsMobile();
@@ -23,8 +23,30 @@ export const useServiceColumns = (): ColumnDef<ServiceWithBranchName>[] => {
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
       },
       {
+        accessorKey: "description",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
+        cell: ({ row }) => {
+          const description = row.original.description;
+          return description ? (
+            <div className="max-w-xs truncate" title={description}>
+              {description}
+            </div>
+          ) : (
+            <span className="text-muted-foreground">No description</span>
+          );
+        },
+      },
+      {
         accessorKey: "branchName",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Branch" />,
+        cell: ({ row }) => {
+          const service = row.original;
+          return (
+            <div className="flex items-center gap-2">
+              <span>{service.branchName}</span>
+            </div>
+          );
+        },
       },
       {
         accessorKey: "price",
@@ -44,7 +66,14 @@ export const useServiceColumns = (): ColumnDef<ServiceWithBranchName>[] => {
     ];
 
     if (isMobile) {
-      return baseColumns.filter((col) => col.accessorKey !== "branchName" && col.accessorKey !== "duration_min");
+      return baseColumns.filter(
+        (col) =>
+          ("accessorKey" in col &&
+            col.accessorKey !== "branchName" &&
+            col.accessorKey !== "duration_min" &&
+            col.accessorKey !== "description") ||
+          ("id" in col && col.id === "actions"),
+      );
     }
 
     return baseColumns;

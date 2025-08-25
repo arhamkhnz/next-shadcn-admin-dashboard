@@ -1,4 +1,7 @@
 /* eslint-disable complexity */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint no-constant-condition: ["error", { "checkLoops": false }] */
+
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -39,7 +42,7 @@ export async function adminLogin(prevState: any, formData: FormData) {
       error: userError,
     } = await supabase.auth.getUser();
 
-    if (userError || !user) {
+    if (userError ?? !user) {
       console.error("Get user error:", userError);
       return {
         message: "Authentication failed. Please try again.",

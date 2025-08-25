@@ -35,6 +35,11 @@ export function FranchiseDialog({ franchise, children }: FranchiseDialogProps) {
             {franchise ? "Update the details of the franchise." : "Add a new franchise to your system."}
           </DialogDescription>
         </DialogHeader>
+        {!franchise && (
+          <p className="text-muted-foreground text-sm">
+            Note: The franchise admin will need to confirm their email address after creation.
+          </p>
+        )}
         <FranchiseForm franchise={franchise} onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>

@@ -16,9 +16,13 @@ export type Branch = {
 export type Service = {
   id: string;
   name: string;
-  branch_id: string;
+  branch_id: string | null;
   price: number;
-  duration: number;
+  duration_min: number;
+  description: string | null;
+  todos: string[] | null;
+  include: string[] | null;
+  is_global: boolean;
   created_at: string;
 };
 
@@ -57,5 +61,15 @@ export type Booking = {
   washer_id: string;
   status: "scheduled" | "in-progress" | "completed" | "cancelled";
   booking_time: string;
+  created_at: string;
+};
+
+export type ServiceAvailability = {
+  id: string;
+  service_id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  is_active: boolean;
   created_at: string;
 };

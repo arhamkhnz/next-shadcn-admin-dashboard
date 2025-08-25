@@ -28,7 +28,7 @@ export default function WashersPage() {
           </WasherDialog>
         </div>
       </div>
-      <WasherDataTable columns={columns} data={washers} />
+      <WasherDataTable data={washers} />
     </div>
   );
 }

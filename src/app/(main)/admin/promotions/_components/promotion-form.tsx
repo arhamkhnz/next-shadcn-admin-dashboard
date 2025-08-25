@@ -44,7 +44,7 @@ export function PromotionForm({ promotion, onClose }: PromotionFormProps) {
     if (promotion) {
       updatePromotion({ ...promotion, ...data });
     } else {
-      addPromotion({ ...data, id: Date.now() });
+      addPromotion(data);
     }
     onClose();
   };

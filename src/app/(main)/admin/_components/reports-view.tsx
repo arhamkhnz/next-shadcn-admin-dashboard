@@ -86,7 +86,7 @@ export function ReportsView() {
   const { payments } = usePaymentStore();
   const { users } = useUserStore();
 
-  const reports = generateReports(bookings, payments, users);
+  const reports = generateReports(bookings, payments);
   const table = useDataTableInstance({
     data: reports,
     columns,

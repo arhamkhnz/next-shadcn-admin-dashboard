@@ -30,6 +30,7 @@ export type Booking = {
   user_id: string;
   branch_id: string;
   service_id: string;
+  washer_id: string;
   status: string;
   scheduled_at: string;
   created_at: string;
@@ -37,8 +38,13 @@ export type Booking = {
 
 export type Service = {
   id: string;
-  branch_id: string;
+  branch_id: string | null;
   name: string;
   price: number;
   duration_min: number;
+  description?: string;
+  todos?: string[];
+  include?: string[];
+  is_global?: boolean;
+  created_at?: string;
 };

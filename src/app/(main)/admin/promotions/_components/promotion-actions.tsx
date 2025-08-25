@@ -30,7 +30,7 @@ import { Promotion } from "@/types/database";
 import { PromotionForm } from "./promotion-form";
 
 export function PromotionActions({ promotion }: { promotion: Promotion }) {
-  const removePromotion = usePromotionStore((state) => state.removePromotion);
+  const deletePromotion = usePromotionStore((state) => state.deletePromotion);
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);
 
   return (
@@ -62,7 +62,7 @@ export function PromotionActions({ promotion }: { promotion: Promotion }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => removePromotion(promotion.id)}>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={() => deletePromotion(promotion.id)}>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

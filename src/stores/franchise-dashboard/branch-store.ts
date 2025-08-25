@@ -2,10 +2,23 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { create } from "zustand";
 
 import { getCurrentUserFranchiseId } from "@/server/server-actions";
-import { Database } from "@/types/database";
 
-export type Branch = Database["public"]["Tables"]["branches"]["Row"] & {
+export type Branch = {
+  id: string;
+  name: string;
+  location: string;
+  franchise_id: string;
   services: { id: string; name: string }[];
+  active_bookings: number;
+  created_at: string;
+  location_text?: string;
+  address?: string;
+  city?: string;
+  phone_number?: string;
+  ratings?: number;
+  pictures?: string[];
+  latitude?: number;
+  longitude?: number;
 };
 
 type BranchUpdatePayload = Omit<Branch, "created_at" | "services"> & {
@@ -16,7 +29,7 @@ type BranchState = {
   branches: Branch[];
   fetchBranches: () => Promise<void>;
   addBranch: (
-    branch: Omit<Branch, "id" | "created_at" | "services" | "location" | "active_bookings" | "services"> & {
+    branch: Omit<Branch, "id" | "created_at" | "services" | "location" | "active_bookings" | "franchise_id"> & {
       location: string;
     },
   ) => Promise<void>;
@@ -24,7 +37,7 @@ type BranchState = {
   deleteBranch: (id: string) => Promise<void>;
 };
 
-const supabase = createClientComponentClient<Database>();
+const supabase = createClientComponentClient();
 
 export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
   branches: [],
@@ -44,7 +57,7 @@ export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
       console.error("Error fetching branches:", error);
       return;
     }
-    set({ branches: data as any[] });
+    set({ branches: data });
   },
   addBranch: async (branch) => {
     const franchiseId = await getCurrentUserFranchiseId();
@@ -84,7 +97,7 @@ export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
     // After updating, refetch the specific branch to get its latest state
     const { data: updatedBranch, error: fetchError } = await supabase
       .from("branches")
-      .select("*, services(*)")
+      .select("*, services(*), location_text:location::text")
       .eq("id", branch.id)
       .eq("franchise_id", franchiseId) // Ensure franchise ID match for security
       .single();
@@ -99,7 +112,7 @@ export const useFranchiseBranchStore = create<BranchState>((set, get) => ({
     }
 
     set((state) => ({
-      branches: state.branches.map((b) => (b.id === updatedBranch.id ? (updatedBranch as any) : b)),
+      branches: state.branches.map((b) => (b.id === updatedBranch.id ? updatedBranch : b)),
     }));
   },
   deleteBranch: async (id) => {

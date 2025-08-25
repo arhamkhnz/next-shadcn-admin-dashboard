@@ -57,7 +57,7 @@ export const columns: ColumnDef<Branch>[] = [
       }
       return (
         <div className="flex max-w-xs flex-wrap gap-1">
-          {services.map((service) => (
+          {services.map((service: any) => (
             <Badge key={service.id} variant="secondary" className="font-normal">
               {service.name}
             </Badge>

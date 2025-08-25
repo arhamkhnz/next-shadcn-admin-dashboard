@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, PlusCircle, Trash2 } from "lucide-react";
+import { Edit, PlusCircle, Trash2, Globe } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -21,6 +22,7 @@ import { useFranchiseBranchStore, Branch } from "@/stores/franchise-dashboard/br
 import { useFranchiseServiceStore } from "@/stores/franchise-dashboard/service-store";
 
 import { ServiceDialog } from "./service-dialog";
+import { ServicePriceForm } from "./service-price-form";
 
 interface ServiceManagementProps {
   branch: Branch;
@@ -45,60 +47,16 @@ export function ServiceManagement({ branch }: ServiceManagementProps) {
       <CardHeader className="flex-row items-center justify-between">
         <div className="space-y-1.5">
           <CardTitle>Manage Services</CardTitle>
-          <CardDescription>Add, edit, or remove services for this branch.</CardDescription>
+          <CardDescription>Edit or remove services for this branch.</CardDescription>
         </div>
-        <ServiceDialog branchId={branch.id}>
-          <Button variant="outline" size="sm">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Service
-          </Button>
-        </ServiceDialog>
+        {/* ADD FEATURE: Hidden as per requirements */}
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-96 w-full rounded-md border lg:h-[450px]">
           <div className="space-y-4 p-4">
             {branch.services && branch.services.length > 0 ? (
-              branch.services.map((service) => (
-                <div
-                  key={service.id}
-                  className="flex flex-wrap items-center justify-between gap-4 rounded-md border p-4"
-                >
-                  <div>
-                    <p className="font-medium">{service.name}</p>
-                    <p className="text-muted-foreground text-sm">
-                      ${service.price} &middot; {service.duration_min} mins
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <ServiceDialog branchId={branch.id} service={service}>
-                      <Button variant="ghost" size="icon">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </ServiceDialog>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will permanently delete the &quot;{service.name}&quot; service. This action cannot be
-                            undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteService(service.id)}>
-                            Continue
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                </div>
+              branch.services.map((service: any) => (
+                <ServicePriceForm key={service.id} service={service} branchId={branch.id} />
               ))
             ) : (
               <div className="text-muted-foreground flex h-[200px] items-center justify-center text-center">

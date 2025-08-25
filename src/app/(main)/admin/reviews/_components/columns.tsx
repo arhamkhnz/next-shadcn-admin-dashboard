@@ -37,7 +37,11 @@ export const useReviewColumns = (): ColumnDef<Review>[] => {
   ];
 
   if (isMobile) {
-    return columns.filter((col) => col.accessorKey !== "bookingId" && col.accessorKey !== "userId");
+    return columns.filter(
+      (col) =>
+        ("accessorKey" in col && col.accessorKey !== "bookingId" && col.accessorKey !== "userId") ||
+        ("id" in col && col.id === "actions"),
+    );
   }
 
   return columns;

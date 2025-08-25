@@ -29,7 +29,7 @@ interface WasherFormProps {
   onSuccess: () => void;
 }
 
-// Helper function to handle the submission logic
+// Helper function to handle the submission logic for both add and edit operations
 async function handleSubmission(
   data: WasherFormValues,
   washer: WasherWithBranch | undefined,
@@ -39,9 +39,11 @@ async function handleSubmission(
 ) {
   try {
     if (washer) {
+      // EDIT FEATURE: Update existing washer with new data
       await updateWasher({ ...washer, ...data });
       toast.success("Washer updated successfully!");
     } else {
+      // ADD FEATURE: Create new washer with provided data
       await addWasher(data);
       toast.success("Washer created successfully!");
     }
@@ -77,7 +79,7 @@ export function WasherForm({ washer, onSuccess }: WasherFormProps) {
     formState: { isSubmitting },
   } = form;
 
-  // Simplified onSubmit handler
+  // Simplified onSubmit handler that delegates to handleSubmission
   const onSubmit = (data: WasherFormValues) => handleSubmission(data, washer, addWasher, updateWasher, onSuccess);
 
   return (

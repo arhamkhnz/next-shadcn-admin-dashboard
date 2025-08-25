@@ -101,7 +101,7 @@ _Clone and deploy your own copy of this project in one click._
    
 2. **Install dependencies**
    ```bash
-    npm install
+    pnpm install
    ```
 
 3. **Set up environment variables**
@@ -114,7 +114,7 @@ _Clone and deploy your own copy of this project in one click._
 
 4. **Start the development server**
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 Once running, the app will be available at [http://localhost:3000](http://localhost:3000)

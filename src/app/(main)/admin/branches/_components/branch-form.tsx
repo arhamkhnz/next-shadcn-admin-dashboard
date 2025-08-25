@@ -1,47 +1,34 @@
 /* eslint-disable complexity */
+/* eslint-disable max-lines */
+
 "use client";
-import { useEffect, useMemo, useState } from "react";
+
+import { useMemo, useRef } from "react";
 
 import dynamic from "next/dynamic";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Building2, Loader2, PlusCircle, Trash2, Edit } from "lucide-react";
+import { Building2, Loader2, MapPin, Phone, Star, Hash, FileText, Clock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { useBranchStore } from "@/stores/admin-dashboard/branch-store";
 import { useFranchiseStore } from "@/stores/admin-dashboard/franchise-store";
-import { useServiceStore } from "@/stores/admin-dashboard/service-store";
-import { Database } from "@/types/database";
 
-import { ServiceDialog } from "./service-dialog";
+import { BranchPicturesField } from "./branch-pictures-field";
+import { BranchTimeSlots } from "./branch-time-slots";
 import { Branch } from "./types";
-
-// Define the type for the onServiceAdd prop
-type ServiceDialogProps = React.ComponentProps<typeof ServiceDialog>;
 
 const formSchema = z.object({
   name: z.string().min(2, "Branch name must be at least 2 characters."),
-  franchise_id: z.string().min(1, "Please select a franchise."),
+  franchise_id: z.string().uuid({ message: "Please select a franchise." }),
   location: z
     .object({
       lat: z.number(),
@@ -50,6 +37,13 @@ const formSchema = z.object({
     .refine((data) => data.lat && data.lng, {
       message: "Please select a location on the map.",
     }),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  phone_number: z.string().optional(),
+  ratings: z.coerce.number().min(0).max(5).optional(),
+  pictures: z.union([z.array(z.string()), z.string()]).optional(),
+  latitude: z.coerce.number().optional(),
+  longitude: z.coerce.number().optional(),
 });
 
 type BranchFormValues = z.infer<typeof formSchema>;
@@ -81,20 +75,19 @@ const parseLocation = (locationStr: string | null | undefined): { lat: number; l
 
 export function BranchForm({ branch, onSuccess }: BranchFormProps) {
   const { addBranch, updateBranch, fetchBranches } = useBranchStore();
-  const { deleteService, addService } = useServiceStore();
   const { franchises } = useFranchiseStore();
 
   const LocationPicker = useMemo(
     () =>
       dynamic(() => import("./location-picker").then((mod) => mod.LocationPicker), {
         ssr: false,
-        loading: () => <p>Loading map...</p>,
+        loading: () => <p className="text-muted-foreground text-sm">Loading map...</p>,
       }),
     [],
   );
 
   const isEditMode = !!branch;
-  const [newServices, setNewServices] = useState<any[]>([]);
+  const timeSlotsFormRef = useRef<{ handleSaveAll:() => Promise<boolean> }>(null);
 
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(formSchema),
@@ -102,6 +95,13 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
       name: branch?.name ?? "",
       franchise_id: branch?.franchise_id ?? "",
       location: parseLocation((branch as any)?.location),
+      address: branch?.address ?? "",
+      city: branch?.city ?? "",
+      phone_number: branch?.phone_number ?? "",
+      ratings: branch?.ratings ?? 0,
+      pictures: branch?.pictures ?? [],
+      latitude: branch?.latitude ?? 0,
+      longitude: branch?.longitude ?? 0,
     },
   });
 
@@ -110,6 +110,16 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
   } = form;
 
   const onSubmit = async (data: BranchFormValues) => {
+    // Process the pictures field
+    const processedData = {
+      ...data,
+      pictures: Array.isArray(data.pictures)
+        ? data.pictures
+        : data.pictures
+          ? data.pictures.split(",").map((item) => item.trim())
+          : [],
+    };
+
     const locationString = `POINT(${data.location.lng} ${data.location.lat})`;
 
     try {
@@ -119,261 +129,547 @@ export function BranchForm({ branch, onSuccess }: BranchFormProps) {
           name: data.name,
           franchise_id: data.franchise_id,
           location: locationString,
+          address: processedData.address,
+          city: processedData.city,
+          phone_number: processedData.phone_number,
+          ratings: processedData.ratings,
+          pictures: processedData.pictures,
+          latitude: processedData.latitude,
+          longitude: processedData.longitude,
         });
+
+        // Save time slots if there are any unsaved changes
+        if (timeSlotsFormRef.current) {
+          const saveSuccess = await timeSlotsFormRef.current.handleSaveAll();
+          if (!saveSuccess) {
+            toast.error("Branch updated but failed to save operating hours.");
+            return;
+          }
+        }
+
         toast.success("Branch details updated successfully!");
       } else {
         // Create the branch first
-        const newBranch = await addBranch({
+        await addBranch({
           name: data.name,
           franchise_id: data.franchise_id,
           location: locationString,
+          franchise: franchises.find((f) => f.id === data.franchise_id)?.name ?? "",
+          services: [],
+          activeBookings: 0,
+          address: processedData.address,
+          city: processedData.city,
+          phone_number: processedData.phone_number,
+          ratings: processedData.ratings,
+          pictures: processedData.pictures,
+          latitude: processedData.latitude,
+          longitude: processedData.longitude,
         });
 
-        // If branch creation was successful and we have new services, add them
-        if (newBranch && newServices.length > 0) {
-          const servicePromises = newServices.map((service) =>
-            addService({
-              ...service,
-              branch_id: newBranch.id,
-            }),
-          );
-          await Promise.all(servicePromises);
-          toast.success("Branch and services created successfully!");
-        } else {
-          toast.success("Branch created successfully!");
-        }
+        toast.success("Branch created successfully!");
       }
+      await fetchBranches();
       onSuccess();
     } catch (error) {
       toast.error(`Failed to ${isEditMode ? "update" : "create"} branch.`);
     }
   };
 
-  const handleDeleteService = async (serviceId: string) => {
-    try {
-      await deleteService(serviceId);
-      await fetchBranches(); // Refetch to update the service list
-      toast.success("Service deleted successfully!");
-    } catch (error) {
-      toast.error("Failed to delete service.");
-    }
-  };
-
-  const handleAddService = (service: any) => {
-    if (isEditMode && branch) {
-      // For existing branches, we would use the ServiceDialog which handles this
-      // This is just for the new branch case
-    } else {
-      // For new branches, add to local state
-      setNewServices((prev) => [...prev, service]);
-    }
-  };
-
-  const handleRemoveNewService = (index: number) => {
-    setNewServices((prev) => prev.filter((_, i) => i !== index));
-  };
-
   return (
-    <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2">
-      {/* Branch Details Form */}
-      <div className="lg:col-span-1">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Branch Details</CardTitle>
-                <CardDescription>
-                  {isEditMode
-                    ? "Update the name and location for this branch."
-                    : "Enter the details for the new branch."}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Branch Name</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Building2 className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                          <Input placeholder="e.g., Karwi Downtown Branch" {...field} className="pl-10" />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="franchise_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Franchise</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+    <div className="flex h-full flex-col space-y-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {isEditMode ? (
+            <>
+              <Tabs defaultValue="basic" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="basic" className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4" />
+                    Basic Info
+                  </TabsTrigger>
+                  <TabsTrigger value="location" className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Location
+                  </TabsTrigger>
+                  <TabsTrigger value="hours" className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Operating Hours
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="basic" className="mt-4 space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Branch Name</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a franchise" />
-                          </SelectTrigger>
+                          <div className="relative">
+                            <Building2 className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                            <Input placeholder="e.g., Karwi Downtown Branch" {...field} className="h-12 pl-10" />
+                          </div>
                         </FormControl>
-                        <SelectContent>
-                          {franchises.map((franchise) => (
-                            <SelectItem key={franchise.id} value={franchise.id}>
-                              {franchise.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Location</FormLabel>
-                      <FormControl>
-                        <LocationPicker
-                          onLocationSelect={field.onChange}
-                          initialPosition={field.value}
-                          className="h-[300px] w-full md:h-[400px]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-            <div className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isEditMode ? "Update Branch Details" : "Add Branch"}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </div>
-
-      {/* Service Management Section */}
-      <div className="lg:col-span-1">
-        <Card className="h-full">
-          <CardHeader className="flex-row flex-wrap items-center justify-between gap-4">
-            <div className="space-y-1.5">
-              <CardTitle>Manage Services</CardTitle>
-              <CardDescription>
-                {isEditMode ? "Add, edit, or remove services for this branch." : "Add services for this new branch."}
-              </CardDescription>
-            </div>
-            {!isEditMode && (
-              <ServiceDialog branchId="" onServiceAdd={handleAddService}>
-                <Button variant="outline" size="sm">
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Add Service
-                </Button>
-              </ServiceDialog>
-            )}
-            {isEditMode && branch && (
-              <ServiceDialog branchId={branch.id}>
-                <Button variant="outline" size="sm">
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Add Service
-                </Button>
-              </ServiceDialog>
-            )}
-          </CardHeader>
-          <CardContent className="h-[calc(100%-80px)]">
-            <ScrollArea className="h-full w-full rounded-md border">
-              <div className="space-y-4 p-4">
-                {isEditMode ? (
-                  // Existing branch services
-                  branch.services && branch.services.length > 0 ? (
-                    branch.services.map((service) => (
-                      <div
-                        key={service.id}
-                        className="flex flex-wrap items-center justify-between gap-4 rounded-md border p-4"
-                      >
-                        <div>
-                          <p className="font-medium">{service.name}</p>
-                          <p className="text-muted-foreground text-sm">
-                            ${service.price} &middot; {service.duration_min} mins
-                          </p>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-2">
-                          <ServiceDialog branchId={branch.id} service={service}>
-                            <Button variant="ghost" size="icon">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </ServiceDialog>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600">
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This will permanently delete the &quot;{service.name}&quot; service. This action
-                                  cannot be undone.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDeleteService(service.id)}>
-                                  Continue
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
-                      </div>
-                      // eslint-disable-next-line max-lines
-                    ))
-                  ) : (
-                    <div className="text-muted-foreground flex h-[200px] items-center justify-center text-center">
-                      No services have been added to this branch yet.
-                    </div>
-                  )
-                ) : // New branch services (from local state)
-                newServices.length > 0 ? (
-                  newServices.map((service, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-wrap items-center justify-between gap-4 rounded-md border p-4"
-                    >
-                      <div>
-                        <p className="font-medium">{service.name}</p>
-                        <p className="text-muted-foreground text-sm">
-                          ${service.price} &middot; {service.duration_min} mins
-                        </p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-red-500 hover:text-red-600"
-                        onClick={() => handleRemoveNewService(index)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-muted-foreground flex h-[200px] items-center justify-center text-center">
-                    No services have been added to this branch yet.
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="franchise_id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Franchise</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-12">
+                              <SelectValue placeholder="Select a franchise" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {franchises.map((franchise) => (
+                              <SelectItem key={franchise.id} value={franchise.id}>
+                                {franchise.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="phone_number"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone Number</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Phone className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input placeholder="Contact phone number" {...field} className="pl-10" />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="ratings"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ratings</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Star className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="5"
+                                placeholder="Branch rating (0-5)"
+                                {...field}
+                                className="pl-10"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
-                )}
+                  <FormField
+                    control={form.control}
+                    name="pictures"
+                    render={() => (
+                      <FormItem>
+                        <BranchPicturesField
+                          form={form}
+                          name="pictures"
+                          label="Pictures"
+                          placeholder="Comma-separated URLs of branch pictures"
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+                <TabsContent value="location" className="mt-4 space-y-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <MapPin className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input placeholder="Branch address" {...field} className="pl-10" />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>City</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Branch city" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="latitude"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Latitude</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Hash className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input
+                                type="number"
+                                step="any"
+                                placeholder="Geographic latitude"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => {
+                                  const value = e.target.value === "" ? null : parseFloat(e.target.value);
+                                  field.onChange(value);
+                                }}
+                                className="pl-10"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="longitude"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Longitude</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Hash className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input
+                                type="number"
+                                step="any"
+                                placeholder="Geographic longitude"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => {
+                                  const value = e.target.value === "" ? null : parseFloat(e.target.value);
+                                  field.onChange(value);
+                                }}
+                                className="pl-10"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem className="flex-grow">
+                        <FormLabel>Map Location</FormLabel>
+                        <FormControl>
+                          <LocationPicker
+                            onLocationSelect={(location) => {
+                              field.onChange(location);
+                              // Update latitude and longitude fields when map location changes
+                              form.setValue("latitude", location.lat);
+                              form.setValue("longitude", location.lng);
+                              // Update address and city if provided by geocoding
+                              if (location.address) {
+                                form.setValue("address", location.address);
+                              }
+                              if (location.city) {
+                                form.setValue("city", location.city);
+                              }
+                            }}
+                            initialPosition={field.value}
+                            className="h-[250px] w-full overflow-hidden rounded-lg md:h-[300px] lg:h-[350px]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+                <TabsContent value="hours" className="mt-4">
+                  <BranchTimeSlots
+                    ref={timeSlotsFormRef}
+                    branchId={branch.id}
+                    className="h-full"
+                    showSaveButton={false}
+                  />
+                </TabsContent>
+              </Tabs>
+              <div className="flex justify-end">
+                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Update Branch
+                </Button>
               </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </div>
+            </>
+          ) : (
+            <>
+              <Tabs defaultValue="basic" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="basic" className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4" />
+                    Basic Info
+                  </TabsTrigger>
+                  <TabsTrigger value="location" className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Location
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="basic" className="mt-4 space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Branch Name</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Building2 className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                            <Input placeholder="e.g., Karwi Downtown Branch" {...field} className="h-12 pl-10" />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="franchise_id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Franchise</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-12">
+                              <SelectValue placeholder="Select a franchise" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {franchises.map((franchise) => (
+                              <SelectItem key={franchise.id} value={franchise.id}>
+                                {franchise.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="phone_number"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone Number</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Phone className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input placeholder="Contact phone number" {...field} className="pl-10" />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="ratings"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ratings</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Star className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="5"
+                                placeholder="Branch rating (0-5)"
+                                {...field}
+                                className="pl-10"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={form.control}
+                    name="pictures"
+                    render={() => (
+                      <FormItem>
+                        <BranchPicturesField
+                          form={form}
+                          name="pictures"
+                          label="Pictures"
+                          placeholder="Comma-separated URLs of branch pictures"
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+                <TabsContent value="location" className="mt-4 space-y-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <MapPin className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input placeholder="Branch address" {...field} className="pl-10" />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>City</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Branch city" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="latitude"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Latitude</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Hash className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input
+                                type="number"
+                                step="any"
+                                placeholder="Geographic latitude"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => {
+                                  const value = e.target.value === "" ? null : parseFloat(e.target.value);
+                                  field.onChange(value);
+                                }}
+                                className="pl-10"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="longitude"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Longitude</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Hash className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                              <Input
+                                type="number"
+                                step="any"
+                                placeholder="Geographic longitude"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => {
+                                  const value = e.target.value === "" ? null : parseFloat(e.target.value);
+                                  field.onChange(value);
+                                }}
+                                className="pl-10"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem className="flex-grow">
+                        <FormLabel>Map Location</FormLabel>
+                        <FormControl>
+                          <LocationPicker
+                            onLocationSelect={(location) => {
+                              field.onChange(location);
+                              // Update latitude and longitude fields when map location changes
+                              form.setValue("latitude", location.lat);
+                              form.setValue("longitude", location.lng);
+                              // Update address and city if provided by geocoding
+                              if (location.address) {
+                                form.setValue("address", location.address);
+                              }
+                              if (location.city) {
+                                form.setValue("city", location.city);
+                              }
+                            }}
+                            initialPosition={field.value}
+                            className="h-[250px] w-full overflow-hidden rounded-lg md:h-[300px] lg:h-[350px]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+              </Tabs>
+              <div className="flex justify-end">
+                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Create Branch
+                </Button>
+              </div>
+            </>
+          )}
+        </form>
+      </Form>
     </div>
   );
 }

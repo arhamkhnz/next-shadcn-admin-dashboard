@@ -13,7 +13,8 @@ import { exportToCSV } from "@/lib/export-utils";
 
 import { DataTableFacetedFilter } from "../../_components/data-table-faceted-filter";
 
-import { columns, Branch } from "./columns";
+import { columns } from "./columns";
+import { Branch } from "./types";
 
 interface BranchDataTableProps {
   data: Branch[];
@@ -27,10 +28,20 @@ export function BranchDataTable({ data }: BranchDataTableProps) {
   });
 
   // Get unique franchises for faceted filter
-  const franchises = Array.from(new Set(data.map((branch) => branch.franchise))).map((franchise) => ({
-    label: franchise,
-    value: franchise,
-  }));
+  const franchises = Array.from(new Set(data.map((branch) => branch.franchise)))
+    .filter((franchise): franchise is string => Boolean(franchise))
+    .map((franchise) => ({
+      label: franchise,
+      value: franchise,
+    }));
+
+  // Get unique cities for faceted filter
+  const cities = Array.from(new Set(data.map((branch) => branch.city)))
+    .filter((city): city is string => Boolean(city))
+    .map((city) => ({
+      label: city,
+      value: city,
+    }));
 
   // Get service count ranges for faceted filter
   // Filter out branches where services haven't loaded yet
@@ -73,6 +84,15 @@ export function BranchDataTable({ data }: BranchDataTableProps) {
     }
   }
 
+  // Get rating ranges for faceted filter
+  const ratings = [
+    { label: "5 stars", value: "5" },
+    { label: "4+ stars", value: "4+" },
+    { label: "3+ stars", value: "3+" },
+    { label: "Below 3 stars", value: "<3" },
+    { label: "Not rated", value: "0" },
+  ];
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -84,6 +104,10 @@ export function BranchDataTable({ data }: BranchDataTableProps) {
             className="h-8 w-[150px] lg:w-[250px]"
           />
           <DataTableFacetedFilter column={table.getColumn("franchise")} title="Franchise" options={franchises} />
+          {cities.length > 0 && (
+            <DataTableFacetedFilter column={table.getColumn("city")} title="City" options={cities} />
+          )}
+          <DataTableFacetedFilter column={table.getColumn("ratings")} title="Rating" options={ratings} />
           {serviceRanges.length > 0 && (
             <DataTableFacetedFilter column={table.getColumn("serviceCount")} title="Services" options={serviceRanges} />
           )}

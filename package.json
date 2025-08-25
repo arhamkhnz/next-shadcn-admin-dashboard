@@ -2,6 +2,9 @@
   "name": "studio-admin",
   "version": "2.0.0",
   "private": true,
+  "engines": {
+    "pnpm": ">=10.11.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

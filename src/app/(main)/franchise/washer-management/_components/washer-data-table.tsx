@@ -33,7 +33,7 @@ export function WasherDataTable({ data }: WasherDataTableProps) {
         <div className="flex items-center space-x-4">
           <Input
             placeholder="Filter by name..."
-            value={(table.getColumn("name")?.getFilterValue() as string) || ""}
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
             className="max-w-sm"
           />

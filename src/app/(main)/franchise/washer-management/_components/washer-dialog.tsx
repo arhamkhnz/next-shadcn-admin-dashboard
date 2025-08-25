@@ -10,12 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Washer } from "@/stores/franchise-dashboard/user-store";
+import { WasherWithBranch } from "@/stores/franchise-dashboard/user-store";
 
 import { WasherForm } from "./washer-form";
 
 interface WasherDialogProps {
-  washer?: Washer;
+  washer?: WasherWithBranch;
   children: React.ReactNode;
   onDialogClose?: () => void;
 }

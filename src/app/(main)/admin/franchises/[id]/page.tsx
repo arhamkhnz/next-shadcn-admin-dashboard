@@ -1,12 +1,22 @@
 "use client";
 
+import React, { useEffect } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFranchiseStore } from "@/stores/admin-dashboard/franchise-store";
 
-export default function FranchiseDetailPage({ params }: { params: { id: string } }) {
-  const { franchises } = useFranchiseStore();
-  const franchise = franchises.find((f) => f.id === params.id);
+export default function FranchiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { franchises, fetchFranchises } = useFranchiseStore();
+  // Resolve the params promise to get the actual id value
+  const resolvedParams = React.use(params);
+  const franchise = franchises.find((f) => f.id === resolvedParams.id);
+
+  useEffect(() => {
+    if (franchises.length === 0) {
+      fetchFranchises();
+    }
+  }, [fetchFranchises, franchises.length]);
 
   if (!franchise) {
     return <div>Franchise not found</div>;

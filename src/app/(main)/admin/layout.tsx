@@ -3,14 +3,13 @@ import { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { AdminAccountSwitcher } from "@/app/(main)/admin/_components/admin-account-switcher";
 import { AdminSidebar } from "@/app/(main)/admin/_components/admin-sidebar";
-import { AccountSwitcher } from "@/app/(main)/dashboard/_components/sidebar/account-switcher";
 import { LayoutControls } from "@/app/(main)/dashboard/_components/sidebar/layout-controls";
 import { SearchDialog } from "@/app/(main)/dashboard/_components/sidebar/search-dialog";
 import { ThemeSwitcher } from "@/app/(main)/dashboard/_components/sidebar/theme-switcher";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { users } from "@/data/users";
 import { isAdmin } from "@/lib/auth/admin-auth";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -98,7 +97,7 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
             <div className="flex items-center gap-2">
               <LayoutControls {...layoutPreferences} />
               <ThemeSwitcher />
-              <AccountSwitcher user={currentUser} />
+              <AdminAccountSwitcher user={currentUser} />
             </div>
           </div>
         </header>

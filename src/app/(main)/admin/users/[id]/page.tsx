@@ -1,12 +1,23 @@
 "use client";
 
+import React from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUserStore } from "@/stores/admin-dashboard/user-store";
 
-export default function UserDetailPage({ params }: { params: { id: string } }) {
-  const { users } = useUserStore();
-  const user = users.find((u) => u.id === params.id);
+export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { users, fetchUsers } = useUserStore();
+  // Resolve the params promise to get the actual id value
+  const resolvedParams = React.use(params);
+
+  React.useEffect(() => {
+    if (users.length === 0) {
+      fetchUsers();
+    }
+  }, [fetchUsers, users.length]);
+
+  const user = users.find((u) => u.id === resolvedParams.id);
 
   if (!user) {
     return <div>User not found</div>;

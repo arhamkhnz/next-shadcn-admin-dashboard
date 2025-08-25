@@ -2,10 +2,15 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { create } from "zustand";
 
 import { getCurrentUserFranchiseId } from "@/server/server-actions";
-import { Database } from "@/types/database";
 
 // Define a more specific type for the washer that includes the nested branch name
-export type WasherWithBranch = Database["public"]["Tables"]["washers"]["Row"] & {
+export type WasherWithBranch = {
+  id: string;
+  name: string;
+  branch_id: string;
+  status: "active" | "inactive";
+  rating: number;
+  created_at: string;
   branches: {
     id: string;
     name: string;
@@ -15,13 +20,13 @@ export type WasherWithBranch = Database["public"]["Tables"]["washers"]["Row"] & 
 type UserState = {
   washers: WasherWithBranch[];
   fetchWashers: () => Promise<void>;
-  addWasher: (washer: Omit<Database["public"]["Tables"]["washers"]["Row"], "id" | "created_at">) => Promise<void>;
+  addWasher: (washer: Omit<WasherWithBranch, "id" | "created_at" | "branches">) => Promise<void>;
   // Correct the type definition to accept the object the form provides
   updateWasher: (washer: WasherWithBranch) => Promise<void>;
   deleteWasher: (id: string) => Promise<void>;
 };
 
-const supabase = createClientComponentClient<Database>();
+const supabase = createClientComponentClient();
 
 export const useFranchiseUserStore = create<UserState>((set, get) => ({
   washers: [],
@@ -37,24 +42,21 @@ export const useFranchiseUserStore = create<UserState>((set, get) => ({
       .from("branches")
       .select("id")
       .eq("franchise_id", franchiseId);
-      
+
     if (branchesError) {
       console.error("Error fetching branches for washers:", branchesError);
       throw branchesError;
     }
 
-    const branchIds = branches.map(branch => branch.id);
-    
+    const branchIds = branches.map((branch) => branch.id);
+
     if (branchIds.length === 0) {
       set({ washers: [] });
       return;
     }
 
     // Then get washers for those branches
-    const { data, error } = await supabase
-      .from("washers")
-      .select("*, branches(id, name)")
-      .in("branch_id", branchIds);
+    const { data, error } = await supabase.from("washers").select("*, branches(id, name)").in("branch_id", branchIds);
 
     if (error) {
       console.error("Error fetching washers:", error);
@@ -75,8 +77,8 @@ export const useFranchiseUserStore = create<UserState>((set, get) => ({
       .eq("id", washer.branch_id)
       .eq("franchise_id", franchiseId)
       .single();
-      
-    if (branchError || !branch) {
+
+    if (branchError ?? !branch) {
       throw new Error("Branch does not belong to this franchise");
     }
 
@@ -103,8 +105,8 @@ export const useFranchiseUserStore = create<UserState>((set, get) => ({
       .select("branch_id")
       .eq("id", washer.id)
       .single();
-      
-    if (branchError || !washerBranch) {
+
+    if (branchError ?? !washerBranch) {
       throw new Error("Washer not found");
     }
 
@@ -114,8 +116,8 @@ export const useFranchiseUserStore = create<UserState>((set, get) => ({
       .eq("id", washerBranch.branch_id)
       .eq("franchise_id", franchiseId)
       .single();
-      
-    if (franchiseError || !branch) {
+
+    if (franchiseError ?? !branch) {
       throw new Error("Washer does not belong to this franchise");
     }
 
@@ -142,8 +144,8 @@ export const useFranchiseUserStore = create<UserState>((set, get) => ({
       .select("branch_id")
       .eq("id", id)
       .single();
-      
-    if (branchError || !washerBranch) {
+
+    if (branchError ?? !washerBranch) {
       throw new Error("Washer not found");
     }
 
@@ -153,8 +155,8 @@ export const useFranchiseUserStore = create<UserState>((set, get) => ({
       .eq("id", washerBranch.branch_id)
       .eq("franchise_id", franchiseId)
       .single();
-      
-    if (franchiseError || !branch) {
+
+    if (franchiseError ?? !branch) {
       throw new Error("Washer does not belong to this franchise");
     }
 

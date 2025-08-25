@@ -10,4 +10,11 @@ export type Branch = {
   services: Service[];
   activeBookings: number;
   createdAt: Date;
+  address?: string;
+  city?: string;
+  phone_number?: string;
+  ratings?: number;
+  pictures?: string[];
+  latitude?: number;
+  longitude?: number;
 };

@@ -26,7 +26,7 @@ export const useBranchStore = create<BranchState>((set, get) => ({
     // Fetch services to ensure we have the latest data
     await useServiceStore.getState().fetchServices();
 
-    const { data, error } = await supabase.from("branches").select("*, location_text:location::text");
+    const { data, error } = await supabase.from("branches").select("*");
     if (error) {
       console.error("Error fetching branches:", error);
       return;
@@ -35,17 +35,41 @@ export const useBranchStore = create<BranchState>((set, get) => ({
     const { franchises } = useFranchiseStore.getState();
     const { services } = useServiceStore.getState();
 
-    const transformedBranches = data.map((branch) => ({
-      id: branch.id,
-      name: branch.name,
-      location: typeof branch.location === "string" ? branch.location : JSON.stringify(branch.location),
-      location_text: branch.location_text,
-      franchise_id: branch.franchise_id,
-      franchise: franchises.find((f) => f.id === branch.franchise_id)?.name ?? "N/A",
-      services: services.filter((s) => s.branch_id === branch.id),
-      activeBookings: branch.active_bookings,
-      createdAt: new Date(branch.created_at),
-    }));
+    const transformedBranches = data.map((branch) => {
+      // Get branch-specific services
+      const branchServices = services.filter((s) => s.branchId === branch.id);
+
+      // Get global services (services that are marked as global)
+      const globalServices = services.filter((s) => s.is_global);
+
+      // Combine branch-specific and global services, removing duplicates
+      const allServices = [...branchServices];
+      globalServices.forEach((globalService) => {
+        // Only add global service if it's not already in branch services
+        if (!allServices.some((s) => s.name === globalService.name)) {
+          allServices.push(globalService);
+        }
+      });
+
+      return {
+        id: branch.id,
+        name: branch.name,
+        location: typeof branch.location === "string" ? branch.location : JSON.stringify(branch.location),
+        location_text: branch.location_text,
+        franchise_id: branch.franchise_id,
+        franchise: franchises.find((f) => f.id === branch.franchise_id)?.name ?? "N/A",
+        services: allServices,
+        activeBookings: branch.active_bookings,
+        createdAt: new Date(branch.created_at),
+        address: branch.address,
+        city: branch.city,
+        phone_number: branch.phone_number,
+        ratings: branch.ratings,
+        pictures: branch.pictures,
+        latitude: branch.latitude,
+        longitude: branch.longitude,
+      };
+    });
 
     set({ branches: transformedBranches });
   },
@@ -57,6 +81,13 @@ export const useBranchStore = create<BranchState>((set, get) => ({
           name: branch.name,
           franchise_id: branch.franchise_id,
           location: branch.location,
+          address: branch.address,
+          city: branch.city,
+          phone_number: branch.phone_number,
+          ratings: branch.ratings,
+          pictures: branch.pictures,
+          latitude: branch.latitude,
+          longitude: branch.longitude,
         },
       ])
       .select();
@@ -67,9 +98,6 @@ export const useBranchStore = create<BranchState>((set, get) => ({
     }
 
     await get().fetchBranches();
-
-    // Return the created branch
-    return data?.[0] ? { id: data[0].id, ...branch } : null;
   },
   updateBranch: async (branch) => {
     const { data, error } = await supabase
@@ -78,6 +106,13 @@ export const useBranchStore = create<BranchState>((set, get) => ({
         name: branch.name,
         franchise_id: branch.franchise_id,
         location: branch.location,
+        address: branch.address,
+        city: branch.city,
+        phone_number: branch.phone_number,
+        ratings: branch.ratings,
+        pictures: branch.pictures,
+        latitude: branch.latitude,
+        longitude: branch.longitude,
       })
       .eq("id", branch.id)
       .select();

@@ -27,6 +27,7 @@ export const useWasherStore = create<WasherState>((set, get) => ({
     const transformedWashers = data.map((washer) => ({
       id: washer.id,
       name: washer.name,
+      branch_id: washer.branch_id,
       branch: branches.find((b) => b.id === washer.branch_id)?.name ?? "N/A",
       status: washer.status,
       rating: Number(washer.rating),
@@ -45,7 +46,6 @@ export const useWasherStore = create<WasherState>((set, get) => ({
     }
 
     await get().fetchWashers();
-    return data?.[0] ? { id: data[0].id, ...washer } : null;
   },
   updateWasher: async (washer) => {
     const { error } = await supabase

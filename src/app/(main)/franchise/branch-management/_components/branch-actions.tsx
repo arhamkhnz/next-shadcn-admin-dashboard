@@ -2,19 +2,8 @@
 
 import { useState } from "react";
 
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Edit } from "lucide-react";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -33,11 +22,11 @@ interface BranchActionsProps {
 }
 
 export function BranchActions({ branch }: BranchActionsProps) {
-  const { deleteBranch } = useFranchiseBranchStore();
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   return (
-    <AlertDialog>
+    <>
       <DropdownMenu open={isMenuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -49,26 +38,14 @@ export function BranchActions({ branch }: BranchActionsProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => navigator.clipboard.writeText(branch.id)}>Copy ID</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <BranchDialog branch={branch} onDialogClose={() => setMenuOpen(false)}>
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Edit Branch</DropdownMenuItem>
-          </BranchDialog>
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem className="text-red-600">Delete Branch</DropdownMenuItem>
-          </AlertDialogTrigger>
+          <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+            <Edit className="mr-2 h-4 w-4" />
+            Edit Branch
+          </DropdownMenuItem>
+          {/* DELETE FEATURE DISABLED */}
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the branch and all its data.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteBranch(branch.id)}>Continue</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      <BranchDialog branch={branch} open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} />
+    </>
   );
 }

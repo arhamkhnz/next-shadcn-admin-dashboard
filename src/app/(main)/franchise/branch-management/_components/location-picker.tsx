@@ -5,9 +5,11 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 
 // Fix for default icon issue with webpack
+import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import { Info } from "lucide-react";
 import { useMap, MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 
 import { cn } from "@/lib/utils";
@@ -91,18 +93,24 @@ const SearchField = ({ onLocationSelect }: { onLocationSelect: (location: { lat:
 
 export function LocationPicker({ onLocationSelect, initialPosition, className }: LocationPickerProps) {
   return (
-    <MapContainer
-      center={initialPosition ?? [51.505, -0.09]}
-      zoom={13}
-      scrollWheelZoom={false}
-      className={cn("h-[400px] w-full", className)}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <LocationMarker onLocationSelect={onLocationSelect} initialPosition={initialPosition} />
-      <SearchField onLocationSelect={onLocationSelect} />
-    </MapContainer>
+    <div className={cn("relative", className)}>
+      <MapContainer
+        center={initialPosition ?? [51.505, -0.09]}
+        zoom={13}
+        scrollWheelZoom={true}
+        className="z-0 h-full w-full rounded-lg"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <LocationMarker onLocationSelect={onLocationSelect} initialPosition={initialPosition} />
+        <SearchField onLocationSelect={onLocationSelect} />
+      </MapContainer>
+      <div className="bg-background/80 absolute bottom-2 left-2 z-10 flex items-center gap-2 rounded-md px-3 py-2 text-sm backdrop-blur-sm">
+        <Info className="h-4 w-4" />
+        <span>Click on the map to select location</span>
+      </div>
+    </div>
   );
 }

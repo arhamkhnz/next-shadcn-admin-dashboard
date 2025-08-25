@@ -18,8 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Booking } from "./columns";
-
 export type Booking = {
   id: string;
   user: string;

@@ -27,7 +27,7 @@ import { useReviewStore } from "@/stores/admin-dashboard/review-store";
 import { Review } from "@/types/database";
 
 export function ReviewActions({ review }: { review: Review }) {
-  const removeReview = useReviewStore((state) => state.removeReview);
+  const deleteReview = useReviewStore((state) => state.deleteReview);
 
   return (
     <AlertDialog>
@@ -55,7 +55,7 @@ export function ReviewActions({ review }: { review: Review }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => removeReview(review.id)}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={() => deleteReview(review.id)}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

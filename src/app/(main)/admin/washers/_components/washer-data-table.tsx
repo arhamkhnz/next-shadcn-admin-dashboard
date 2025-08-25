@@ -12,7 +12,8 @@ import { useDataTableInstance } from "@/hooks/use-data-table-instance";
 import { exportToCSV } from "@/lib/export-utils";
 import { useBranchStore } from "@/stores/admin-dashboard/branch-store";
 
-import { columns, Washer } from "./columns";
+import { columns } from "./columns";
+import { Washer } from "./types";
 
 interface WasherDataTableProps {
   data: Washer[];

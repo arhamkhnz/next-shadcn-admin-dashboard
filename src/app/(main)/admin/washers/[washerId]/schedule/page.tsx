@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import { notFound } from "next/navigation";
 
 import { useWasherScheduleStore } from "@/stores/admin-dashboard/washer-schedule-store";
@@ -8,8 +10,9 @@ import { useWasherStore } from "@/stores/admin-dashboard/washer-store";
 import { AddScheduleForm } from "./_components/add-schedule-form";
 import { ScheduleList } from "./_components/schedule-list";
 
-export default function WasherSchedulePage({ params }: { params: { washerId: string } }) {
-  const { washerId } = params;
+export default function WasherSchedulePage({ params }: { params: Promise<{ washerId: string }> }) {
+  const resolvedParams = React.use(params);
+  const { washerId } = resolvedParams;
   const { getSchedulesForWasher } = useWasherScheduleStore();
   const { washers } = useWasherStore();
 

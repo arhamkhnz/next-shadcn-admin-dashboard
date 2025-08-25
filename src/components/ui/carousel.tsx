@@ -89,7 +89,7 @@ function Carousel({
   )
 
   React.useEffect(() => {
-    if (!api || !setApi) return
+    if (!api ?? !setApi) return
     setApi(api)
   }, [api, setApi])
 
@@ -111,7 +111,7 @@ function Carousel({
         api: api,
         opts,
         orientation:
-          orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+          orientation ?? (opts?.axis === "y" ? "vertical" : "horizontal"),
         scrollPrev,
         scrollNext,
         canScrollPrev,

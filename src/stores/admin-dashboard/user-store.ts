@@ -32,7 +32,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     set({ users: transformedUsers as any[] }); // Cast to any to avoid type conflicts from other files
   },
   updateUser: async (user) => {
-    await supabase.from("users").update({ name: user.name, email: user.email, phone: user.phone }).eq("id", user.id);
+    await supabase.from("users").update({ name: user.name, phone: user.phone }).eq("id", user.id);
     await get().fetchUsers();
   },
   deleteUser: async (id) => {

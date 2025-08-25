@@ -3,10 +3,11 @@
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import { useDataTableInstance } from "@/hooks/use-data-table-instance";
+import { Payment } from "@/stores/admin-dashboard/payment-store";
 
 import { DataTableToolbar } from "../../_components/data-table-toolbar";
 
-import { columns, Payment } from "./columns";
+import { columns } from "./columns";
 
 interface PaymentDataTableProps {
   data: Payment[];

@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
 
+import { EnrichedBooking } from "@/app/(main)/franchise/utils/bookings";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Booking } from "@/types/franchise";
 
 interface PendingBookingsTableProps {
-  bookings: Booking[];
+  bookings: EnrichedBooking[];
 }
 
 const PendingBookingsTable: React.FC<PendingBookingsTableProps> = ({ bookings }) => {

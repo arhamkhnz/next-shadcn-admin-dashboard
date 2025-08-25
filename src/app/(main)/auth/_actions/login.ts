@@ -39,7 +39,7 @@ export async function login(prevState: any, formData: FormData) {
       error: userError,
     } = await supabase.auth.getUser();
 
-    if (userError || !user) {
+    if (userError ?? !user) {
       console.error("Get user error:", userError);
       return {
         message: "Authentication failed. Please try again.",

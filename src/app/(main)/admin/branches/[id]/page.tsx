@@ -1,14 +1,25 @@
 /* eslint-disable complexity */
 "use client";
 
-import { MapPin } from "lucide-react";
+import React from "react";
 
+import { MapPin, Phone, Star } from "lucide-react";
+
+import { BranchTimeSlots } from "@/app/(main)/admin/branches/_components/branch-time-slots";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useBranchStore } from "@/stores/admin-dashboard/branch-store";
 
-export default function BranchDetailPage({ params }: { params: { id: string } }) {
-  const { branches } = useBranchStore();
-  const branch = branches.find((b) => b.id === params.id);
+export default function BranchDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { branches, fetchBranches } = useBranchStore();
+  // Resolve the params promise to get the actual id value
+  const resolvedParams = React.use(params);
+  const branch = branches.find((b) => b.id === resolvedParams.id);
+
+  React.useEffect(() => {
+    if (branches.length === 0) {
+      fetchBranches();
+    }
+  }, [fetchBranches, branches.length]);
 
   if (!branch) {
     return <div>Branch not found</div>;
@@ -52,46 +63,93 @@ export default function BranchDetailPage({ params }: { params: { id: string } })
   };
 
   const location = parseLocation(branch.location);
-  const mapUrl = location ? `https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}` : null;
+  const mapUrl = location
+    ? `https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`
+    : undefined;
 
   return (
-    <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">{branch.name}</CardTitle>
-          <p className="text-muted-foreground">{branch.franchise}</p>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-1">
-            <p className="text-muted-foreground text-sm font-medium">Location</p>
-            {location ? (
-              <a
-                href={mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary flex items-center gap-2 hover:underline"
-              >
-                <MapPin className="h-4 w-4" />
-                View on Map
-              </a>
-            ) : (
-              <p className="text-muted-foreground">Location not set</p>
+    <div className="flex-1 space-y-6 p-4 pt-6 md:p-8">
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Branch Info Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">{branch.name}</CardTitle>
+            <p className="text-muted-foreground">{branch.franchise}</p>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="space-y-1">
+              <p className="text-muted-foreground text-sm font-medium">Location</p>
+              {location ? (
+                <a
+                  href={mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary flex items-center gap-2 hover:underline"
+                >
+                  <MapPin className="h-4 w-4" />
+                  View on Map
+                </a>
+              ) : (
+                <p className="text-muted-foreground">Location not set</p>
+              )}
+            </div>
+            {branch.address && (
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-sm font-medium">Address</p>
+                <p>{branch.address}</p>
+              </div>
             )}
-          </div>
-          <div className="space-y-1">
-            <p className="text-muted-foreground text-sm font-medium">Services Offered</p>
-            {branch.services ? (
-              <p className="text-lg font-semibold">{branch.services.length}</p>
-            ) : (
-              <p className="text-muted-foreground">Loading...</p>
+            {branch.city && (
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-sm font-medium">City</p>
+                <p>{branch.city}</p>
+              </div>
             )}
-          </div>
-          <div className="space-y-1">
-            <p className="text-muted-foreground text-sm font-medium">Active Bookings</p>
-            <p className="text-lg font-semibold">{branch.activeBookings}</p>
-          </div>
-        </CardContent>
-      </Card>
+            {branch.phone_number && (
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-sm font-medium">Phone</p>
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  <p>{branch.phone_number}</p>
+                </div>
+              </div>
+            )}
+            {branch.ratings !== undefined && branch.ratings > 0 && (
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-sm font-medium">Rating</p>
+                <div className="flex items-center gap-2">
+                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  <p>{branch.ratings.toFixed(1)}</p>
+                </div>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-sm font-medium">Services Offered</p>
+                {branch.services ? (
+                  <p className="text-lg font-semibold">{branch.services.length}</p>
+                ) : (
+                  <p className="text-muted-foreground">Loading...</p>
+                )}
+              </div>
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-sm font-medium">Active Bookings</p>
+                <p className="text-lg font-semibold">{branch.activeBookings}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Operating Hours Card */}
+        <Card className="flex flex-col">
+          <CardHeader>
+            <CardTitle>Operating Hours</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <BranchTimeSlots branchId={branch.id} showSaveButton={false} className="h-full" />
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Services Section */}
       <Card>

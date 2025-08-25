@@ -2,7 +2,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MapPin } from "lucide-react";
+import { MapPin, Phone, Star } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,62 @@ export const columns: ColumnDef<Branch>[] = [
   {
     accessorKey: "franchise",
     header: "Franchise",
+  },
+  {
+    accessorKey: "city",
+    header: "City",
+    cell: ({ row }) => {
+      const branch = row.original;
+      return branch.city ?? <span className="text-muted-foreground">Not set</span>;
+    },
+  },
+  {
+    accessorKey: "phone_number",
+    header: "Phone",
+    cell: ({ row }) => {
+      const branch = row.original;
+      return branch.phone_number ? (
+        <div className="flex items-center gap-2">
+          <Phone className="h-4 w-4" />
+          <span>{branch.phone_number}</span>
+        </div>
+      ) : (
+        <span className="text-muted-foreground">Not set</span>
+      );
+    },
+  },
+  {
+    accessorKey: "ratings",
+    header: "Rating",
+    cell: ({ row }) => {
+      const branch = row.original;
+      return branch.ratings ? (
+        <div className="flex items-center gap-2">
+          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+          <span>{branch.ratings.toFixed(1)}</span>
+        </div>
+      ) : (
+        <span className="text-muted-foreground">Not rated</span>
+      );
+    },
+    filterFn: (row, columnId, filterValue: string[]) => {
+      const branch = row.original;
+
+      // If no filter selected, show all
+      if (filterValue === undefined || filterValue.length === 0) return true;
+
+      const rating = branch.ratings ?? 0;
+
+      // Check if the rating matches any of the selected filters
+      return filterValue.some((filter) => {
+        if (filter === "5") return rating >= 5;
+        if (filter === "4+") return rating >= 4 && rating < 5;
+        if (filter === "3+") return rating >= 3 && rating < 4;
+        if (filter === "<3") return rating < 3 && rating > 0;
+        if (filter === "0") return rating === 0;
+        return false;
+      });
+    },
   },
   {
     accessorKey: "location",
@@ -131,7 +187,7 @@ export const columns: ColumnDef<Branch>[] = [
         return <span className="text-muted-foreground">Loading...</span>;
       }
 
-      const serviceCount = branch.services?.length || 0;
+      const serviceCount = branch.services?.length ?? 0;
       return <span>{serviceCount}</span>;
     },
     filterFn: (row, columnId, filterValue: string[]) => {
@@ -140,11 +196,11 @@ export const columns: ColumnDef<Branch>[] = [
       // If services haven't loaded yet, don't filter
       if (branch.services === undefined) return true;
 
-      const serviceCount = branch.services?.length || 0;
+      const serviceCount = branch.services?.length ?? 0;
       const serviceCountStr = serviceCount.toString();
 
       // If no filter selected, show all
-      if (!filterValue || filterValue.length === 0) return true;
+      if (filterValue === undefined || filterValue.length === 0) return true;
 
       // Check if the service count matches any of the selected filters
       return filterValue.some((filter) => {

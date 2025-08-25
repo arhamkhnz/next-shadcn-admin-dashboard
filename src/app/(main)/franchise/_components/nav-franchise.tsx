@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Home, History, MapPin, UsersRound } from "lucide-react";
+import { BarChart3, FileText, MapPin, UsersRound, History, Wrench, Tag } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const franchiseNavItems = [
-  { href: "/franchise", label: "Franchise Dashboard", icon: Home },
-  { href: "/franchise/booking-history", label: "Booking History", icon: History },
+  { href: "/franchise/analytics", label: "Franchise Analytics", icon: BarChart3 },
+  { href: "/franchise/branch-analytics", label: "Branch Analytics", icon: BarChart3 },
+  { href: "/franchise/promotions", label: "Promotions", icon: Tag },
+  { href: "/franchise/reports", label: "Reports", icon: FileText },
   { href: "/franchise/branch-management", label: "Branch Management", icon: MapPin },
   { href: "/franchise/washer-management", label: "Washer Management", icon: UsersRound },
+  { href: "/franchise/booking-history", label: "Booking History", icon: History },
 ];
 
 export function NavFranchise() {

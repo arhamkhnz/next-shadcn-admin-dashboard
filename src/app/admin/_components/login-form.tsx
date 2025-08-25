@@ -23,7 +23,7 @@ function SubmitButton() {
   }, []);
 
   return (
-    <Button className="w-full" type="submit" disabled={pending || !mounted}>
+    <Button className="w-full" type="submit" disabled={pending ?? !mounted}>
       {pending ? "Logging in..." : "Login"}
     </Button>
   );

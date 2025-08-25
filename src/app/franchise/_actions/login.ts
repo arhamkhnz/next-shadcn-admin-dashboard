@@ -14,7 +14,9 @@ export async function franchiseLogin(prevState: any, formData: FormData) {
     const password = formData.get("password") as string;
 
     // Validate input
-    if (!email || !password) {
+    const emailValid = email !== null && email !== undefined && email.trim() !== "";
+    const passwordValid = password !== null && password !== undefined && password.trim() !== "";
+    if (!emailValid || !passwordValid) {
       return {
         message: "Email and password are required.",
       };
@@ -39,7 +41,7 @@ export async function franchiseLogin(prevState: any, formData: FormData) {
       error: userError,
     } = await supabase.auth.getUser();
 
-    if (userError || !user) {
+    if (userError ?? !user) {
       console.error("Get user error:", userError);
       return {
         message: "Authentication failed. Please try again.",

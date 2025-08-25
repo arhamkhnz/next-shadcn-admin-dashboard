@@ -16,31 +16,40 @@ import { BranchForm } from "./branch-form";
 
 interface BranchDialogProps {
   branch?: Branch;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onDialogClose?: () => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function BranchDialog({ branch, children, onDialogClose }: BranchDialogProps) {
-  const [open, setOpen] = useState(false);
+export function BranchDialog({ branch, children, onDialogClose, open, onOpenChange }: BranchDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const isOpen = open ?? internalOpen;
+  const setIsOpen = onOpenChange ?? setInternalOpen;
 
   const handleOpenChange = (isOpen: boolean) => {
-    setOpen(isOpen);
+    setIsOpen(isOpen);
     if (!isOpen && onDialogClose) {
       onDialogClose();
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>{branch ? "Edit" : "Add"} Branch</DialogTitle>
-          <DialogDescription>
-            {branch ? "Update the details of the branch." : "Add a new branch to your system."}
-          </DialogDescription>
-        </DialogHeader>
-        <BranchForm branch={branch} onSuccess={() => handleOpenChange(false)} />
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
+      <DialogContent className="max-h-[90vh] max-w-4xl gap-0 overflow-y-auto p-0 sm:rounded-lg">
+        <div className="bg-background sticky top-0 z-10 border-b p-6">
+          <DialogHeader className="text-left">
+            <DialogTitle className="text-2xl">{branch ? "Manage Branch Services" : "Add New Branch"}</DialogTitle>
+            <DialogDescription>
+              {branch ? "Manage services for this branch." : "Add a new branch to your system."}
+            </DialogDescription>
+          </DialogHeader>
+        </div>
+        <div className="p-6">
+          <BranchForm branch={branch} onSuccess={() => handleOpenChange(false)} />
+        </div>
       </DialogContent>
     </Dialog>
   );

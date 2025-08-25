@@ -30,7 +30,7 @@ import { Service } from "@/types/database";
 import { ServiceForm } from "./service-form";
 
 export function ServiceActions({ service }: { service: Service }) {
-  const removeService = useServiceStore((state) => state.removeService);
+  const deleteService = useServiceStore((state) => state.deleteService);
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);
 
   return (
@@ -57,12 +57,15 @@ export function ServiceActions({ service }: { service: Service }) {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the service.
+              <span>
+                This is a global service that applies to all branches. Deleting it will remove it from all branches.
+                This action cannot be undone.
+              </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => removeService(service.id)}>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={() => deleteService(service.id)}>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

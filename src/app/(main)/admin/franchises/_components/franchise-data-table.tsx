@@ -12,7 +12,8 @@ import { exportToCSV } from "@/lib/export-utils";
 
 import { DataTableFacetedFilter } from "../../_components/data-table-faceted-filter";
 
-import { columns, Franchise } from "./columns";
+import { columns } from "./columns";
+import { Franchise } from "./types";
 
 interface FranchiseDataTableProps {
   data: Franchise[];

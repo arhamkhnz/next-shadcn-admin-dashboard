@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +12,11 @@ import { FranchiseDataTable } from "./_components/franchise-data-table";
 import { FranchiseDialog } from "./_components/franchise-dialog";
 
 export default function FranchisesPage() {
-  const { franchises } = useFranchiseStore();
+  const { franchises, fetchFranchises } = useFranchiseStore();
+
+  useEffect(() => {
+    fetchFranchises();
+  }, [fetchFranchises]);
 
   return (
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
@@ -28,7 +34,7 @@ export default function FranchisesPage() {
           </FranchiseDialog>
         </div>
       </div>
-      <FranchiseDataTable columns={columns} data={franchises} />
+      <FranchiseDataTable data={franchises} />
     </div>
   );
 }

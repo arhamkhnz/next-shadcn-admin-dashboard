@@ -1,6 +1,6 @@
 "use client";
 
-import { Command } from "lucide-react";
+import { Command, Mail } from "lucide-react";
 
 import { NavAdmin } from "@/app/(main)/dashboard/_components/sidebar/nav-admin";
 import {
@@ -34,6 +34,17 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
         <SidebarGroup>
           <SidebarGroupLabel>Admin Menu</SidebarGroupLabel>
           <NavAdmin />
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Marketing</SidebarGroupLabel>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <a href="/admin/email-marketing">
+                <Mail />
+                <span>Email Marketing</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

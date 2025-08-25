@@ -26,16 +26,16 @@ import { useBookingStore } from "@/stores/admin-dashboard/booking-store";
 
 import { BookingDetailsDialog } from "./booking-details-dialog";
 import { CancelBookingDialog } from "./cancel-booking-dialog";
-import { Booking } from "./columns";
+import { Booking as BookingType } from "./columns";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { UpdateStatusDialog } from "./update-status-dialog";
 
 // Create columns with View Details functionality
 const getColumns = (
-  onViewDetails: (booking: Booking) => void,
-  onUpdateStatus: (booking: Booking) => void,
-  onCancelBooking: (booking: Booking) => void,
-): ColumnDef<Booking>[] => [
+  onViewDetails: (booking: BookingType) => void,
+  onUpdateStatus: (booking: BookingType) => void,
+  onCancelBooking: (booking: BookingType) => void,
+): ColumnDef<BookingType>[] => [
   {
     accessorKey: "id",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Booking ID" />,
@@ -127,29 +127,29 @@ const getColumns = (
 
 export function RecentBookingsTable() {
   const { bookings, updateBookingStatus, cancelBooking } = useBookingStore();
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<BookingType | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
 
-  const handleViewDetails = (booking: Booking) => {
+  const handleViewDetails = (booking: BookingType) => {
     setSelectedBooking(booking);
     setIsDialogOpen(true);
   };
 
-  const handleUpdateStatus = (booking: Booking) => {
+  const handleUpdateStatus = (booking: BookingType) => {
     setSelectedBooking(booking);
     setIsUpdateDialogOpen(true);
   };
 
-  const handleCancelBooking = (booking: Booking) => {
+  const handleCancelBooking = (booking: BookingType) => {
     setSelectedBooking(booking);
     setIsCancelDialogOpen(true);
   };
 
   const handleStatusUpdate = async (bookingId: string, newStatus: string) => {
     try {
-      await updateBookingStatus(bookingId, newStatus as Booking["status"]);
+      await updateBookingStatus(bookingId, newStatus as BookingType["status"]);
       toast.success("Booking status updated successfully");
     } catch (error) {
       toast.error("Failed to update booking status");

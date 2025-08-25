@@ -67,7 +67,7 @@ export function FranchiseForm({ franchise, onSuccess }: FranchiseFormProps) {
     defaultValues: franchise
       ? {
           name: franchise.name,
-          status: franchise.status,
+          status: franchise.status as "active" | "inactive",
           branches: franchise.branches,
           washers: franchise.washers,
         }

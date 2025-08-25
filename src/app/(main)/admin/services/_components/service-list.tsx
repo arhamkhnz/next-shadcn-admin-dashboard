@@ -28,7 +28,12 @@ import { useServiceColumns } from "./columns";
 import { ServiceForm } from "./service-form";
 
 // Define a type that extends Service with branchName
-type ServiceWithBranchName = ReturnType<typeof useServiceStore>["services"][0] & { branchName?: string };
+type ServiceWithBranchName =
+  ReturnType<typeof useServiceStore> extends { services: infer S }
+    ? S extends Array<infer T>
+      ? T & { branchName?: string }
+      : never
+    : never;
 
 export function ServiceList() {
   const services = useServiceStore((state) => state.services);
@@ -39,15 +44,15 @@ export function ServiceList() {
   const columns = useServiceColumns();
 
   // Memoize servicesWithBranchNames to prevent infinite re-renders
+  // All services are global by default
   const servicesWithBranchNames = useMemo(() => {
     return services.map((service) => {
-      const branch = branches.find((b) => b.id === service.branchId);
       return {
         ...service,
-        branchName: branch ? branch.name : `Unknown (${service.branchId})`,
+        branchName: "Global",
       };
     });
-  }, [services, branches]);
+  }, [services]);
 
   const table = useReactTable({
     data: servicesWithBranchNames,
@@ -66,8 +71,9 @@ export function ServiceList() {
 
   // Memoize branchNames to prevent infinite re-renders
   const branchNames = useMemo(() => {
-    return Array.from(new Set(branches.map((branch) => branch.name)));
-  }, [branches]);
+    // Only "Global" since all services are global
+    return ["Global"];
+  }, []);
 
   const facetedFilters = useMemo(
     () => [

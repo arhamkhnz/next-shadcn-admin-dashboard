@@ -2,7 +2,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { create } from "zustand";
 
 import { getCurrentUserFranchiseId } from "@/server/server-actions";
-import { Database } from "@/types/database";
 import { Branch, Service, Washer, Booking } from "@/types/franchise";
 
 type FranchiseDashboardState = {
@@ -17,7 +16,7 @@ type FranchiseDashboardState = {
   updateBooking: (updatedBooking: Booking) => void;
 };
 
-const supabase = createClientComponentClient<Database>();
+const supabase = createClientComponentClient();
 
 export const useFranchiseDashboardStore = create<FranchiseDashboardState>((set) => ({
   branches: [],

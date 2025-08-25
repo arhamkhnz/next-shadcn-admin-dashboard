@@ -50,7 +50,11 @@ export const usePromotionColumns = (): ColumnDef<Promotion>[] => {
   ];
 
   if (isMobile) {
-    return columns.filter((col) => col.accessorKey !== "startDate" && col.accessorKey !== "endDate");
+    return columns.filter(
+      (col) =>
+        ("accessorKey" in col && col.accessorKey !== "startDate" && col.accessorKey !== "endDate") ||
+        ("id" in col && col.id === "actions"),
+    );
   }
 
   return columns;

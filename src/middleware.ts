@@ -1,6 +1,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable complexity */
-import { type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/middleware";
 
@@ -122,7 +122,7 @@ export async function middleware(request: NextRequest) {
       pathname.startsWith("/admin/login") || pathname.startsWith("/franchise/login") || pathname.startsWith("/auth");
 
     if (isAuthPage) {
-      return Response.next();
+      return NextResponse.next();
     }
     return Response.redirect(new URL("/unauthorized", request.url));
   }
