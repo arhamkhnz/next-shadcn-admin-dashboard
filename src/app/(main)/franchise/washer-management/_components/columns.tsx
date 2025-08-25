@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { WasherWithBranch } from "@/stores/franchise-dashboard/user-store";
+import { Washer } from "@/types/franchise";
 
 import { WasherActions } from "./washer-actions";
 

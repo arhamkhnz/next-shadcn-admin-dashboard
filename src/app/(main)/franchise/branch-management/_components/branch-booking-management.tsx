@@ -51,7 +51,7 @@ export function BranchBookingManagement({ branchId }: BranchBookingManagementPro
   const branchBookings = bookings.filter((booking) => booking.branch_id === branchId);
 
   // Enrich bookings with service and washer names
-  const enrichedBookings = branchBookings.map((booking) => {
+  const enrichedBookings = branchBookings.map((booking: Booking) => {
     const service = services.find((s) => s.id === booking.service_id);
     const washer = washers.find((w) => w.id === booking.washer_id);
 
@@ -89,7 +89,7 @@ export function BranchBookingManagement({ branchId }: BranchBookingManagementPro
     }
   };
 
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<Booking>[] = [
     {
       accessorKey: "id",
       header: "Booking ID",

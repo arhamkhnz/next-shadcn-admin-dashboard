@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { LogOut } from "lucide-react";
 
 import { logout } from "@/app/(main)/auth/_actions/logout";
@@ -13,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn, getInitials } from "@/lib/utils";
+import { getInitials } from "@/lib/utils";
 
 export function AdminAccountSwitcher({
   user,

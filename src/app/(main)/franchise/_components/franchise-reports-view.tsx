@@ -129,7 +129,7 @@ const columns: ColumnDef<Report>[] = [
         services: "Services",
         branches: "Branches",
       };
-      return <span className="capitalize">{typeLabels[type] ?? type}</span>;
+      return <span className="capitalize">{typeLabels[type as string] ?? type}</span>;
     },
   },
   {
