@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { adminLogin } from "../_actions/login";
+import { unifiedRoleLogin } from "../_actions/unified-role-login";
 
 const initialState = {
   message: "",
@@ -23,14 +23,14 @@ function SubmitButton() {
   }, []);
 
   return (
-    <Button className="w-full" type="submit" disabled={pending ?? !mounted}>
+    <Button className="w-full" type="submit" disabled={pending || !mounted}>
       {pending ? "Logging in..." : "Login"}
     </Button>
   );
 }
 
-export function AdminLoginForm() {
-  const [state, formAction] = useFormState(adminLogin, initialState);
+export function UnifiedLoginForm({ role }: { role: "admin" | "franchise" }) {
+  const [state, formAction] = useFormState(unifiedRoleLogin, initialState);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ export function AdminLoginForm() {
 
   return (
     <form action={formAction} className="space-y-4">
+      <input type="hidden" name="role" value={role} />
       <div className="space-y-2">
         <Label htmlFor="email">Email Address</Label>
         <Input id="email" name="email" type="email" placeholder="you@example.com" required disabled={!isClient} />

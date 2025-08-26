@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Globe } from "lucide-react";
 
-import { AdminLoginForm } from "@/app/admin/_components/login-form";
+import { UnifiedLoginForm } from "@/app/(main)/auth/_components/unified-login-form";
 import { APP_CONFIG } from "@/config/app-config";
 
 export default function AdminLogin() {
@@ -14,7 +14,7 @@ export default function AdminLogin() {
           <p className="text-muted-foreground text-sm">Enter your credentials to access the admin dashboard.</p>
         </div>
         <div className="space-y-4">
-          <AdminLoginForm />
+          <UnifiedLoginForm role="admin" />
         </div>
       </div>
 

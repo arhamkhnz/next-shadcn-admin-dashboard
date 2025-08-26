@@ -33,13 +33,26 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
 
   // Redirect to login if not authenticated
   if (!user) {
-    redirect("/auth/login");
+    redirect("/admin/login");
   }
 
   // Verify admin role - redirect to user dashboard if not admin
   const isAdminUser = await isAdmin(user.id);
   if (!isAdminUser) {
     redirect("/dashboard");
+  }
+
+  // Check if the admin is associated with a franchise
+  const { data: franchise, error: franchiseError } = await supabase
+    .from("franchises")
+    .select("id")
+    .eq("admin_id", user.id)
+    .limit(1)
+    .single();
+
+  // If this admin manages a franchise, they should use the franchise login
+  if (franchise || (franchiseError && franchiseError.code !== "PGRST116")) {
+    redirect("/unauthorized");
   }
 
   // Set default values in case the preferences can't be loaded

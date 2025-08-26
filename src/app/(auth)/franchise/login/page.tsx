@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Globe } from "lucide-react";
 
-import { FranchiseLoginForm } from "@/app/franchise/_components/login-form";
+import { UnifiedLoginForm } from "@/app/(main)/auth/_components/unified-login-form";
 import { APP_CONFIG } from "@/config/app-config";
 
 export default function FranchiseLogin() {
@@ -14,7 +14,7 @@ export default function FranchiseLogin() {
           <p className="text-muted-foreground text-sm">Enter your credentials to access your franchise dashboard.</p>
         </div>
         <div className="space-y-4">
-          <FranchiseLoginForm />
+          <UnifiedLoginForm role="franchise" />
         </div>
       </div>
 

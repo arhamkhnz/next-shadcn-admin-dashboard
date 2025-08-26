@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { LayoutControls } from "@/app/(main)/dashboard/_components/sidebar/layout-controls";
 import { SearchDialog } from "@/app/(main)/dashboard/_components/sidebar/search-dialog";
@@ -29,6 +30,36 @@ export default async function FranchiseLayout({ children }: Readonly<{ children:
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Redirect to login if not authenticated
+  if (!user) {
+    redirect("/franchise/login");
+  }
+
+  // Check if user is an admin
+  const { data: adminProfile, error: adminError } = await supabase
+    .from("admins")
+    .select("id")
+    .eq("id", user.id)
+    .single();
+
+  if (adminError || !adminProfile) {
+    // User is not an admin
+    redirect("/unauthorized");
+  }
+
+  // Check if the admin is associated with a franchise
+  const { data: franchise, error: franchiseError } = await supabase
+    .from("franchises")
+    .select("id")
+    .eq("admin_id", adminProfile.id)
+    .limit(1)
+    .single();
+
+  if (franchiseError || !franchise) {
+    // This admin doesn't manage a franchise
+    redirect("/unauthorized");
+  }
+
   // Set default values in case the preferences can't be loaded
   let sidebarVariant: SidebarVariant = "inset";
   let sidebarCollapsible: SidebarCollapsible = "icon";
@@ -55,11 +86,6 @@ export default async function FranchiseLayout({ children }: Readonly<{ children:
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
   };
-
-  if (!user) {
-    // This should not happen due to middleware, but as a safeguard:
-    return null;
-  }
 
   const currentUser = {
     id: user.id,

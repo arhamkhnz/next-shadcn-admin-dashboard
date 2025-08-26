@@ -1,5 +1,7 @@
 /* eslint-disable max-depth */
 /* eslint-disable complexity */
+
+/* eslint-disable no-useless-escape */
 import { type NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/middleware";
@@ -16,8 +18,7 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Exclude login and register pages from authentication checks to prevent redirect loops
-    const isAuthPage =
-      pathname.startsWith("/admin/login") || pathname.startsWith("/franchise/login") || pathname.startsWith("/auth");
+    const isAuthPage = pathname === "/admin/login" || pathname === "/franchise/login" || pathname.startsWith("/auth");
 
     // Handle authentication errors - if it's a session missing error, allow access to auth pages
     if (authError) {
@@ -40,10 +41,10 @@ export async function middleware(request: NextRequest) {
 
     // Redirect unauthenticated users from protected routes to the appropriate login page
     if (!user && !isAuthPage) {
-      if (pathname.startsWith("/admin")) {
+      if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
         return Response.redirect(new URL("/admin/login", request.url));
       }
-      if (pathname.startsWith("/franchise")) {
+      if (pathname.startsWith("/franchise") && pathname !== "/franchise/login") {
         return Response.redirect(new URL("/franchise/login", request.url));
       }
       return response;
@@ -84,7 +85,7 @@ export async function middleware(request: NextRequest) {
         }
 
         // Check if accessing a specific franchise
-        const franchiseIdMatch = pathname.match(/^\/admin\/franchises\/([^\\/]+)/);
+        const franchiseIdMatch = pathname.match(/^\/admin\/franchises\/([^\/]+)/);
         if (franchiseIdMatch) {
           const requestedFranchiseId = franchiseIdMatch[1];
           const hasAccess = franchises.some((f) => f.id === requestedFranchiseId);
@@ -101,7 +102,7 @@ export async function middleware(request: NextRequest) {
           // The franchise dashboard will scope data based on the franchise ID
         } else {
           // This is a general admin with no specific franchise
-          if (pathname.startsWith("/franchise")) {
+          if (pathname.startsWith("/franchise") && pathname !== "/franchise/login") {
             // Redirect general admins from franchise routes to main admin dashboard
             return Response.redirect(new URL("/admin", request.url));
           }
@@ -118,8 +119,7 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     // In case of unexpected errors, allow access to auth pages but redirect others to unauthorized
     const { pathname } = request.nextUrl;
-    const isAuthPage =
-      pathname.startsWith("/admin/login") || pathname.startsWith("/franchise/login") || pathname.startsWith("/auth");
+    const isAuthPage = pathname === "/admin/login" || pathname === "/franchise/login" || pathname.startsWith("/auth");
 
     if (isAuthPage) {
       return NextResponse.next();

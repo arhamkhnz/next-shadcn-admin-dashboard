@@ -6,19 +6,25 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
-export async function franchiseLogin(prevState: any, formData: FormData) {
+export async function unifiedRoleLogin(prevState: any, formData: FormData) {
   try {
     const supabase = await createClient();
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const requestedRole = formData.get("role") as string;
 
     // Validate input
-    const emailValid = email !== null && email !== undefined && email.trim() !== "";
-    const passwordValid = password !== null && password !== undefined && password.trim() !== "";
-    if (!emailValid || !passwordValid) {
+    if (!email || !password) {
       return {
         message: "Email and password are required.",
+      };
+    }
+
+    // Validate role
+    if (requestedRole !== "admin" && requestedRole !== "franchise") {
+      return {
+        message: "Invalid role specified.",
       };
     }
 
@@ -41,7 +47,7 @@ export async function franchiseLogin(prevState: any, formData: FormData) {
       error: userError,
     } = await supabase.auth.getUser();
 
-    if (userError ?? !user) {
+    if (userError || !user) {
       console.error("Get user error:", userError);
       return {
         message: "Authentication failed. Please try again.",
@@ -52,20 +58,21 @@ export async function franchiseLogin(prevState: any, formData: FormData) {
     const { data: adminProfile, error: adminError } = await supabase
       .from("admins")
       .select("id")
-      .eq("id", user.id) // Using user.id instead of email for more reliable matching
+      .eq("id", user.id)
       .single();
 
     if (adminError) {
       console.error("Admin check error:", adminError);
-      // Don't sign out here as it might cause issues with the session
+      await supabase.auth.signOut();
       return {
-        message: "You are not authorized to access the franchise dashboard.",
+        message: "Authentication error. Please try again.",
       };
     }
 
     if (!adminProfile) {
+      await supabase.auth.signOut();
       return {
-        message: "You are not authorized to access the franchise dashboard.",
+        message: "You are not authorized to access this application.",
       };
     }
 
@@ -81,26 +88,45 @@ export async function franchiseLogin(prevState: any, formData: FormData) {
     if (franchiseError && franchiseError.code !== "PGRST116") {
       // PGRST116 is "no rows found"
       console.error("Franchise check error:", franchiseError);
+      await supabase.auth.signOut();
       return {
         message: "System error. Please try again later.",
       };
     }
 
-    if (franchise) {
-      // This admin manages a franchise, redirect to franchise dashboard
-      revalidatePath("/", "layout");
-      redirect("/franchise");
+    // Redirect based on requested role and actual franchise association
+    revalidatePath("/", "layout");
+
+    if (requestedRole === "franchise") {
+      // Franchise login requested
+      if (franchise) {
+        // This admin manages a franchise, redirect to franchise dashboard
+        redirect("/franchise");
+      } else {
+        // This admin doesn't manage a franchise but tried to log in as franchise
+        await supabase.auth.signOut();
+        return {
+          message: "You are registered as a general admin. Please use the admin login page.",
+        };
+      }
     } else {
-      // This is a general admin, but they're trying to log in to the franchise panel
-      return {
-        message: "You are registered as a general admin. Please use the admin login page.",
-      };
+      // Admin login requested
+      if (franchise) {
+        // This admin manages a franchise, but tried to log in through admin login
+        await supabase.auth.signOut();
+        return {
+          message: "You are registered as a franchise admin. Please use the franchise login page.",
+        };
+      } else {
+        // This is a general admin, redirect to the main admin dashboard
+        redirect("/admin");
+      }
     }
   } catch (error) {
-    console.error("Unexpected error in franchiseLogin:", error);
-    // Check if it's a redirect error (which is expected)
+    console.error("Unexpected error in unifiedRoleLogin:", error);
+    // Check if it's a redirect error (which is expected when redirect is called)
     if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
-      // This is expected when redirect is called, re-throw it
+      // Re-throw redirect errors as they are expected
       throw error;
     }
     return {
