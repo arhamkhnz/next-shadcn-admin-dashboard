@@ -30,15 +30,6 @@ export default function LoginV2() {
         </div>
       </div>
 
-      <div className="absolute top-5 flex w-full justify-end px-10">
-        <div className="text-muted-foreground text-sm">
-          Don&apos;t have an account?{" "}
-          <Link className="text-foreground" href="register">
-            Register
-          </Link>
-        </div>
-      </div>
-
       <div className="absolute bottom-5 flex w-full justify-between px-10">
         <div className="text-sm">{APP_CONFIG.copyright}</div>
         <div className="flex items-center gap-1 text-sm">

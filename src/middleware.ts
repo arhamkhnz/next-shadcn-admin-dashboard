@@ -20,6 +20,27 @@ export async function middleware(request: NextRequest) {
     // Exclude login and register pages from authentication checks to prevent redirect loops
     const isAuthPage = pathname === "/admin/login" || pathname === "/franchise/login" || pathname.startsWith("/auth");
 
+    // If user is already logged in and trying to access auth pages, redirect them to appropriate dashboard
+    if (user && isAuthPage) {
+      // Check if user is an admin
+      const { data: adminProfile } = await supabase.from("admins").select("id").eq("id", user.id).single();
+
+      if (adminProfile) {
+        // Check if they manage a franchise
+        const { data: franchises } = await supabase.from("franchises").select("id").eq("admin_id", adminProfile.id);
+
+        // If they manage a franchise, redirect to franchise dashboard, otherwise to admin dashboard
+        if (franchises && franchises.length > 0) {
+          return Response.redirect(new URL("/franchise", request.url));
+        } else {
+          return Response.redirect(new URL("/admin", request.url));
+        }
+      } else {
+        // Regular user - redirect to user dashboard (if exists) or unauthorized
+        return Response.redirect(new URL("/unauthorized", request.url));
+      }
+    }
+
     // Handle authentication errors - if it's a session missing error, allow access to auth pages
     if (authError) {
       // For auth pages, allow access even if there's an auth error
@@ -129,5 +150,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/franchise/:path*"],
+  matcher: ["/admin/:path*", "/franchise/:path*", "/auth/:path*"],
 };
