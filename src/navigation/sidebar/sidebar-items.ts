@@ -95,43 +95,43 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Email",
-        url: "/mail",
+        url: "/dashboard",
         icon: Mail,
         comingSoon: true,
       },
       {
         title: "Chat",
-        url: "/chat",
+        url: "/dashboard",
         icon: MessageSquare,
         comingSoon: true,
       },
       {
         title: "Calendar",
-        url: "/calendar",
+        url: "/dashboard",
         icon: Calendar,
         comingSoon: true,
       },
       {
         title: "Kanban",
-        url: "/kanban",
+        url: "/dashboard",
         icon: Kanban,
         comingSoon: true,
       },
       {
         title: "Invoice",
-        url: "/invoice",
+        url: "/dashboard",
         icon: ReceiptText,
         comingSoon: true,
       },
       {
         title: "Users",
-        url: "/users",
+        url: "/dashboard",
         icon: Users,
         comingSoon: true,
       },
       {
         title: "Roles",
-        url: "/roles",
+        url: "/dashboard",
         icon: Lock,
         comingSoon: true,
       },
@@ -154,7 +154,7 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Others",
-        url: "/others",
+        url: "/dashboard",
         icon: SquareArrowUpRight,
         comingSoon: true,
       },
