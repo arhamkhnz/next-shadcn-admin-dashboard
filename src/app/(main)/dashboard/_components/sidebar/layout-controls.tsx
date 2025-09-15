@@ -7,21 +7,22 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { updateContentLayout } from "@/lib/layout-utils";
+import { updateContentLayout, updateNavbarBehavior } from "@/lib/layout-utils";
 import { updateThemeMode, updateThemePreset } from "@/lib/theme-utils";
 import { setValueToCookie } from "@/server/server-actions";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
-import type { SidebarVariant, SidebarCollapsible, ContentLayout } from "@/types/preferences/layout";
+import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarBehavior } from "@/types/preferences/layout";
 import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/types/preferences/theme";
 
 type LayoutControlsProps = {
   readonly variant: SidebarVariant;
   readonly collapsible: SidebarCollapsible;
   readonly contentLayout: ContentLayout;
+  readonly navbarBehavior: NavbarBehavior;
 };
 
 export function LayoutControls(props: LayoutControlsProps) {
-  const { variant, collapsible, contentLayout } = props;
+  const { variant, collapsible, contentLayout, navbarBehavior } = props;
 
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
@@ -41,6 +42,10 @@ export function LayoutControls(props: LayoutControlsProps) {
 
     if (key === "content_layout") {
       updateContentLayout(value);
+    }
+
+    if (key === "navbar_behavior") {
+      updateNavbarBehavior(value);
     }
     await setValueToCookie(key, value);
   };
@@ -156,6 +161,25 @@ export function LayoutControls(props: LayoutControlsProps) {
                 </ToggleGroupItem>
                 <ToggleGroupItem className="text-xs" value="full-width" aria-label="Toggle full-width">
                   Full Width
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+            <div className="space-y-1">
+              <Label className="text-xs font-medium">Navbar Behavior</Label>
+              <ToggleGroup
+                className="w-full"
+                size="sm"
+                variant="outline"
+                type="single"
+                value={navbarBehavior}
+                onValueChange={(value) => handleValueChange("navbar_behavior", value)}
+              >
+                <ToggleGroupItem className="text-xs" value="sticky" aria-label="Toggle sticky">
+                  Sticky
+                </ToggleGroupItem>
+                <ToggleGroupItem className="text-xs" value="offcanvas" aria-label="Toggle offcanvas">
+                  Offcanvas
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>

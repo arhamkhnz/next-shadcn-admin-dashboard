@@ -12,9 +12,11 @@ import {
   SIDEBAR_VARIANT_VALUES,
   SIDEBAR_COLLAPSIBLE_VALUES,
   CONTENT_LAYOUT_VALUES,
+  NAVBAR_BEHAVIOR_VALUES,
   type SidebarVariant,
   type SidebarCollapsible,
   type ContentLayout,
+  type NavbarBehavior,
 } from "@/types/preferences/layout";
 
 import { AccountSwitcher } from "./_components/sidebar/account-switcher";
@@ -26,16 +28,18 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
-  const [sidebarVariant, sidebarCollapsible, contentLayout] = await Promise.all([
+  const [sidebarVariant, sidebarCollapsible, contentLayout, navbarBehavior] = await Promise.all([
     getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
     getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
     getPreference<ContentLayout>("content_layout", CONTENT_LAYOUT_VALUES, "centered"),
+    getPreference<NavbarBehavior>("navbar_behavior", NAVBAR_BEHAVIOR_VALUES, "offcanvas"),
   ]);
 
   const layoutPreferences = {
     contentLayout,
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
+    navbarBehavior,
   };
 
   return (
@@ -50,7 +54,12 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
           "max-[113rem]:peer-data-[variant=inset]:!mr-2 min-[101rem]:peer-data-[variant=inset]:peer-data-[state=collapsed]:!mr-auto",
         )}
       >
-        <header className="flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header
+          className={cn(
+            "flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12",
+            navbarBehavior === "sticky" && "bg-background/80 border-b-border/50 sticky top-0 z-50 backdrop-blur-md",
+          )}
+        >
           <div className="flex w-full items-center justify-between px-4 lg:px-6">
             <div className="flex items-center gap-1 lg:gap-2">
               <SidebarTrigger className="-ml-1" />
