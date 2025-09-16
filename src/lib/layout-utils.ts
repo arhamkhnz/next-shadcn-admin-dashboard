@@ -5,13 +5,9 @@ export function updateContentLayout(value: "centered" | "full-width") {
   }
 }
 
-export function updateNavbarBehavior(value: "sticky" | "offcanvas") {
-  const target = document.querySelector("header");
+export function updateNavbarStyle(value: "sticky" | "scroll") {
+  const target = document.querySelector("header[data-navbar-style]");
   if (target) {
-    if (value === "sticky") {
-      target.classList.add("sticky", "top-0", "z-50", "backdrop-blur-md", "bg-background/80", "border-b-border/50");
-    } else {
-      target.classList.remove("sticky", "top-0", "z-50", "backdrop-blur-md", "bg-background/80", "border-b-border/50");
-    }
+    target.setAttribute("data-navbar-style", value);
   }
 }

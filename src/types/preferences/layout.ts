@@ -23,10 +23,10 @@ export const CONTENT_LAYOUT_OPTIONS = [
 export const CONTENT_LAYOUT_VALUES = CONTENT_LAYOUT_OPTIONS.map((v) => v.value);
 export type ContentLayout = (typeof CONTENT_LAYOUT_VALUES)[number];
 
-// Navbar Behavior
-export const NAVBAR_BEHAVIOR_OPTIONS = [
+// Navbar Style
+export const NAVBAR_STYLE_OPTIONS = [
   { label: "Sticky", value: "sticky" },
-  { label: "Offcanvas", value: "offcanvas" },
+  { label: "Scroll", value: "scroll" },
 ] as const;
-export const NAVBAR_BEHAVIOR_VALUES = NAVBAR_BEHAVIOR_OPTIONS.map((v) => v.value);
-export type NavbarBehavior = (typeof NAVBAR_BEHAVIOR_VALUES)[number];
+export const NAVBAR_STYLE_VALUES = NAVBAR_STYLE_OPTIONS.map((v) => v.value);
+export type NavbarStyle = (typeof NAVBAR_STYLE_VALUES)[number];

@@ -12,11 +12,11 @@ import {
   SIDEBAR_VARIANT_VALUES,
   SIDEBAR_COLLAPSIBLE_VALUES,
   CONTENT_LAYOUT_VALUES,
-  NAVBAR_BEHAVIOR_VALUES,
+  NAVBAR_STYLE_VALUES,
   type SidebarVariant,
   type SidebarCollapsible,
   type ContentLayout,
-  type NavbarBehavior,
+  type NavbarStyle,
 } from "@/types/preferences/layout";
 
 import { AccountSwitcher } from "./_components/sidebar/account-switcher";
@@ -28,18 +28,18 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
-  const [sidebarVariant, sidebarCollapsible, contentLayout, navbarBehavior] = await Promise.all([
+  const [sidebarVariant, sidebarCollapsible, contentLayout, navbarStyle] = await Promise.all([
     getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
     getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
     getPreference<ContentLayout>("content_layout", CONTENT_LAYOUT_VALUES, "centered"),
-    getPreference<NavbarBehavior>("navbar_behavior", NAVBAR_BEHAVIOR_VALUES, "offcanvas"),
+    getPreference<NavbarStyle>("navbar_style", NAVBAR_STYLE_VALUES, "sticky"),
   ]);
 
   const layoutPreferences = {
     contentLayout,
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
-    navbarBehavior,
+    navbarStyle,
   };
 
   return (
@@ -55,9 +55,16 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
         )}
       >
         <header
+          data-navbar-style={navbarStyle}
+          data-sidebar-variant={sidebarVariant}
           className={cn(
             "flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12",
-            navbarBehavior === "sticky" && "bg-background/80 border-b-border/50 sticky top-0 z-50 backdrop-blur-md",
+            // Navbar style classes
+            "data-[navbar-style=sticky]:bg-background/80 data-[navbar-style=sticky]:border-b-border/50 data-[navbar-style=sticky]:sticky data-[navbar-style=sticky]:top-0 data-[navbar-style=sticky]:z-50 data-[navbar-style=sticky]:backdrop-blur-md",
+            // Sidebar variant specific adjustments
+            "data-[sidebar-variant=floating]:border-l-0 data-[sidebar-variant=inset]:border-l-0 data-[sidebar-variant=sidebar]:border-l-0",
+            // Ensure consistent positioning across all variants
+            "relative",
           )}
         >
           <div className="flex w-full items-center justify-between px-4 lg:px-6">
