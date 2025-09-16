@@ -22,3 +22,11 @@ export const CONTENT_LAYOUT_OPTIONS = [
 ] as const;
 export const CONTENT_LAYOUT_VALUES = CONTENT_LAYOUT_OPTIONS.map((v) => v.value);
 export type ContentLayout = (typeof CONTENT_LAYOUT_VALUES)[number];
+
+// Navbar Style
+export const NAVBAR_STYLE_OPTIONS = [
+  { label: "Sticky", value: "sticky" },
+  { label: "Scroll", value: "scroll" },
+] as const;
+export const NAVBAR_STYLE_VALUES = NAVBAR_STYLE_OPTIONS.map((v) => v.value);
+export type NavbarStyle = (typeof NAVBAR_STYLE_VALUES)[number];
