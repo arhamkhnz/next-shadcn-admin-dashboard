@@ -1,6 +1,6 @@
-# Contributing to Next Shadcn Admin Dashboard
+# Contributing to Studio Admin
 
-Thanks for showing interest in improving **Next Shadcn Admin Dashboard**.  
+Thanks for showing interest in improving **Studio Admin** (repo: `next-shadcn-admin-dashboard`).  
 This guide will help you set up your environment and understand how to contribute.
 
 ---
@@ -8,7 +8,7 @@ This guide will help you set up your environment and understand how to contribut
 ## Overview
 
 This project is built with **Next.js 15**, **TypeScript**, **Tailwind CSS v4**, and **Shadcn UI**.  
-The idea is to keep things modular, scalable, and easy to extend.
+The goal is to keep the codebase modular, scalable, and easy to extend.
 
 ---
 
@@ -34,22 +34,30 @@ src
 └── types             # TypeScript definitions
 ```
 
+If you’d like a more detailed example of this setup, check out the [Next Colocation Template](https://github.com/arhamkhnz/next-colocation-template), where the full structure is explained with examples.
+
 ---
 
 ## Getting Started
 
-1. **Fork & Clone**
+### Fork and Clone the Repository
+
+1. Fork the Repository
+   
+Click [here](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/fork) to fork the repository.
+
+2. Clone & Navigate to the Repository
    ```bash
-   git clone https://github.com/&lt;YOUR_USERNAME&gt;/next-shadcn-admin-dashboard.git
+   git clone https://github.com/YOUR_USERNAME/next-shadcn-admin-dashboard.git
    cd next-shadcn-admin-dashboard
    ```
 
-2. **Install dependencies**
+3. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Run the dev server**
+4. **Run the dev server**
    ```bash
    npm run dev
    ```
