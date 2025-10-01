@@ -44,20 +44,24 @@ If you’d like a more detailed example of this setup, check out the [Next Coloc
 
 1. Fork the Repository
    
-Click [here](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/fork) to fork the repository.
+   Click [here](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/fork) to fork the repository.
 
-2. Clone & Navigate to the Repository
+2. Clone the Repository  
    ```bash
    git clone https://github.com/YOUR_USERNAME/next-shadcn-admin-dashboard.git
+   ```
+   
+3. Navigate into the Project  
+   ```bash
    cd next-shadcn-admin-dashboard
    ```
 
-3. **Install dependencies**
+4. **Install dependencies**
    ```bash
    npm install
    ```
 
-4. **Run the dev server**
+5. **Run the dev server**
    ```bash
    npm run dev
    ```
@@ -78,46 +82,46 @@ Click [here](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/fork) to f
   ```
 
 - Open a Pull Request once ready.
+- If your change adds a new UI screen or component, include a screenshot in your PR description.
 
 ---
 
 ## Where to Contribute
 
-- **Screens**: Add new dashboards under `src/app/(main)/(dashboard)/`  
+- **External Pages**: Landing pages or other non-dashboard routes → `src/app/(external)/`  
+- **Auth Screens**: Login, register, and authentication layouts → `src/app/(main)/auth/`  
+- **Dashboard Screens**: Feature dashboards like CRM, Finance, Analytics → `src/app/(main)/dashboard/`
 - **Components**: Reusable UI goes in `src/components/`  
 - **Hooks**: Custom logic goes in `src/hooks/`  
-- **Themes**: New presets under `src/styles/themes/`  
+- **Themes**: New presets under `src/styles/presets/`  
 
 ---
 
 ## Guidelines
 
 - Prefer **TypeScript types** over `any`
-- Run `npm run lint` & `npm run format` before committing
+- Husky pre-commit hooks are enabled - linting and formatting run automatically when you commit, and if there are errors the commit will be blocked until they are fixed. 
 - Follow **Shadcn UI** style & Tailwind v4 conventions
 - Keep accessibility in mind (ARIA, keyboard nav)
+- Use clear commit messages with conventional prefixes (`feat:`, `fix:`, `chore:`, etc.)
+- Avoid unnecessary dependencies — prefer existing utilities where possible
 
 ---
 
 ## Submitting PRs
 
-Before opening a PR:
-
-```bash
-npm run lint
-npm run type-check
-npm run build
-```
-
-Make sure everything passes without errors.
+- Open a Pull Request once your changes are ready.  
+- Ensure your branch is up to date with `main` before submitting.  
+- Reference any related issue in your PR for context.
 
 ---
 
 ## Questions & Support
 
-- Report bugs or issues via [GitHub Issues](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/issues)
-- Share ideas or improvements in **Discussions**
+- Report bugs, suggestions, or issues via [GitHub Issues](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/issues)
 
 ---
 
 Your contributions keep this project growing. 🚀
+
+**Happy Vibe Coding!**
