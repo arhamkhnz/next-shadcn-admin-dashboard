@@ -1,12 +1,12 @@
 # Next.js Admin Template with TypeScript & Shadcn UI
 
-Includes multiple dashboards, authentication layouts, customizable theme presets, and more.
+**Studio Admin** - Includes multiple dashboards, authentication layouts, customizable theme presets, and more.
 
 <img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard.png?version=4" alt="Dashboard Screenshot">
 
-The idea behind this dashboard aims to offer an alternative to typical admin templates. Most I came across, paid or free, felt cluttered, outdated, or too rigid in design.
+Most admin templates I found, free or paid, felt cluttered, outdated, or too rigid. I built this as a cleaner alternative with features often missing in others, such as theme toggling and layout controls, while keeping the design modern, minimal, and flexible.
 
-I’ve taken design inspiration from various sources. Feel free to open an issue or reach out for credits.
+I’ve taken design inspiration from various sources. If you’d like credit for something specific, feel free to open an issue or reach out.
 
 > **View demo:** [studio admin](https://next-shadcn-admin-dashboard.vercel.app)
 
@@ -15,68 +15,64 @@ I’ve taken design inspiration from various sources. Feel free to open an issue
 
 ## Features
 
-- Built with Next.js 15, TypeScript, and Shadcn UI
-- Responsive and mobile-friendly design
-- Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)
-- Multiple layout options (collapsible sidebar, content width variations)
-- Authentication layouts and screens
-- Dashboard screens for analytics, reports, and overview
-- Prebuilt dashboard screens and reusable UI components  
-- Includes 5 out of 15 planned screens
-- RBAC (Role-Based Access Control) with config-driven UI and multi-tenant support *(planned)*
+- Built with Next.js 15, TypeScript, Tailwind CSS v4, and Shadcn UI  
+- Responsive and mobile-friendly  
+- Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)  
+- Flexible layouts (collapsible sidebar, variable content widths)  
+- Authentication flows and screens  
+- Prebuilt dashboards (Default, CRM, Finance) with more coming soon  
+- Role-Based Access Control (RBAC) with config-driven UI and multi-tenant support *(planned)*  
 
 > [!NOTE]
-> The default version of the dashboard uses the **shadcn neutral** theme.  
-> It also supports multiple color themes inspired by [Tweakcn](https://tweakcn.com), including:
+> The default dashboard uses the **shadcn neutral** theme.  
+> It also includes additional color presets inspired by [Tweakcn](https://tweakcn.com):  
 >
 > - Tangerine  
 > - Neo Brutalism  
 > - Soft Pop  
 >
-> You can add more presets by following the same structure as the existing ones.
+> You can create more presets by following the same structure as the existing ones.  
 
-> Looking for the **Next.js 14 + Tailwind CSS v3** version?
+> Looking for the **Next.js 14 + Tailwind CSS v3** version?  
 > Check out the [`archive/next14-tailwindv3`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/tree/archive/next14-tailwindv3) branch.  
-> It uses a different color theme and isn’t actively maintained, but I’m trying to keep it updated with the latest changes and screens.
+> It has a different color theme and is not actively maintained, but I try to keep it updated with major changes.  
 
 ## Tech Stack
 
 - **Framework**: Next.js 15 (App Router), TypeScript, Tailwind CSS v4  
-- **Components**: Shadcn UI  
+- **UI Components**: Shadcn UI  
 - **Validation**: Zod  
-- **Forms & State**: React Hook Form, Zustand  
-- **Data Table**: TanStack Table  
-- **Tooling**: ESLint, Prettier, Husky
+- **Forms & State Management**: React Hook Form, Zustand  
+- **Tables & Data Handling**: TanStack Table  
+- **Tooling & DX**: ESLint, Prettier, Husky  
 
 ## Screens
 
-✅ Available  
-🚧 Coming Soon
+### Available
+- Default Dashboard  
+- CRM Dashboard  
+- Finance Dashboard  
+- Authentication (4 screens)
 
-### Dashboards
-- ✅ Default
-- ✅ CRM
-- ✅ Finance
-- 🚧 Analytics
-- 🚧 eCommerce
-- 🚧 Academy
-- 🚧 Logistics
-
-### Pages
-- 🚧 Email
-- 🚧 Chat
-- 🚧 Calendar
-- 🚧 Kanban
-- 🚧 Invoice
-- 🚧 Users
-- 🚧 Roles
-- ✅ Authentication (4 screens)
+### Coming Soon
+- Analytics Dashboard  
+- eCommerce Dashboard  
+- Academy Dashboard  
+- Logistics Dashboard  
+- Email Page  
+- Chat Page  
+- Calendar Page  
+- Kanban Board  
+- Invoice Page  
+- Users Management  
+- Roles Management  
 
 ## Colocation File System Architecture
 
-Pages, components, and logic are grouped by feature. Each route folder contains everything it needs. Shared UI, hooks, and config live at the top level, keeping the codebase modular and scalable as the app grows.
+This project follows a **colocation-based architecture** each feature keeps its own pages, components, and logic inside its route folder.  
+Shared UI, hooks, and configuration live at the top level, making the codebase modular, scalable, and easier to maintain as the app grows.
 
-Check out [this repo](https://github.com/arhamkhnz/next-colocation-template) for the full file structure and examples.
+For a full breakdown of the structure with examples, see the [Next Colocation Template](https://github.com/arhamkhnz/next-colocation-template).
 
 ## Getting Started
 
@@ -86,7 +82,7 @@ You can run this project locally, or deploy it instantly with Vercel.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard)
 
-_Clone and deploy your own copy of this project in one click._
+_Deploy your own copy with one click._
 
 ### Run locally
 
@@ -95,26 +91,31 @@ _Clone and deploy your own copy of this project in one click._
    git clone https://github.com/arhamkhnz/next-shadcn-admin-dashboard.git
    ```
    
-2. **Install dependencies**
+2. **Navigate into the project**
+   ```bash
+    cd next-shadcn-admin-dashboard
+   ```
+   
+3. **Install dependencies**
    ```bash
     npm install
    ```
 
-3. **Start the development server**
+4. **Start the development server**
    ```bash
    npm run dev
    ```
 
-Once running, the app will be available at [http://localhost:3000](http://localhost:3000)
+Your app will be running at [http://localhost:3000](http://localhost:3000)
 
 ---
 
 > [!IMPORTANT]  
-> This project is frequently updated. If you’re working from a fork or a previously cloned copy, check for the latest changes before syncing. Some updates may include breaking changes.
+> This project is updated frequently. If you’re working from a fork or an older clone, pull the latest changes before syncing. Some updates may include breaking changes.
 
 ---
 
-Feel free to open issues, feature requests, or start a discussion if you'd like to contribute or suggest improvements.
+Contributions are welcome. Feel free to open issues, feature requests, or start a discussion.
 
 
 **Happy Vibe Coding!**
