@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 npm run generate:presets
 git add src/types/preferences/theme.ts
 npx lint-staged
