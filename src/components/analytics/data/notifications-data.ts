@@ -7,7 +7,7 @@ export const mockNotifications: Notification[] = [
     type: "purchase",
     title: "New Purchase",
     description: "John Smith purchased Premium Plan",
-    timestamp: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
+    timestamp: new Date("2025-01-07T14:58:00Z"), // 2 minutes ago
     isRead: false,
     isPriority: true,
     user: {
@@ -26,7 +26,7 @@ export const mockNotifications: Notification[] = [
     type: "alert",
     title: "Performance Alert",
     description: "API response time exceeded threshold",
-    timestamp: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago
+    timestamp: new Date("2025-01-07T14:15:00Z"), // 45 minutes ago
     isRead: false,
     isPriority: true,
     metadata: {

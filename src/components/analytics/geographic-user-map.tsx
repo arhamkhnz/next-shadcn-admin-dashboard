@@ -132,15 +132,22 @@ export function GeographicUserMap() {
                 <div className="text-muted-foreground text-[10px]">New Users</div>
                 <div className="mt-0.5 text-base font-semibold">{totalNewUsers.toLocaleString()}</div>
                 <div className="text-muted-foreground mt-0.5 text-[10px]">
-                  Last {timeRange === "7d" ? "7 days" : timeRange === "30d" ? "30 days" : "90 days"}
+                  Last{" "}
+                  {timeRange === "7d"
+                    ? "7 days"
+                    : timeRange === "30d"
+                      ? "30 days"
+                      : timeRange === "90d"
+                        ? "90 days"
+                        : "year to date"}
                 </div>
               </div>
 
               <div className="rounded-lg border p-2">
                 <div className="text-muted-foreground text-[10px]">Top Region</div>
-                <div className="mt-0.5 text-base font-semibold">{topRegions[0].name}</div>
+                <div className="mt-0.5 text-base font-semibold">{topRegions[0]?.name ?? "N/A"}</div>
                 <div className="text-muted-foreground mt-0.5 text-[10px]">
-                  {Math.round((topRegions[0].users / totalUsers) * 100)}% of total users
+                  {topRegions[0] ? Math.round((topRegions[0].users / totalUsers) * 100) : 0}% of total users
                 </div>
               </div>
             </div>

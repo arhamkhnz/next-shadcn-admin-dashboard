@@ -144,7 +144,7 @@ export function UserActivityHeatmap() {
             </div>
           </div>
 
-          {/* <div className="flex items-center gap-2 rounded-lg border p-2">
+          <div className="flex items-center gap-2 rounded-lg border p-2">
             <div className="bg-primary/10 flex size-7 shrink-0 items-center justify-center rounded-full">
               <Clock className="text-primary size-3.5" />
             </div>
@@ -154,7 +154,7 @@ export function UserActivityHeatmap() {
                 {peakDay} at {peakTime}
               </p>
             </div>
-          </div> */}
+          </div>
         </div>
       </CardContent>
     </Card>

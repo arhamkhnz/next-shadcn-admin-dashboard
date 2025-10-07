@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import {
   UserActivityHeatmap,
   ConversionFunnel,
@@ -9,8 +11,8 @@ import {
 } from "@/components/analytics";
 
 // Wrapper component to constrain the size of analytics components
-const AnalyticsCard = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <div className={`${className}`}>{children}</div>
+const AnalyticsCard = ({ children, className }: { children: ReactNode; className?: string }) => (
+  <div className={className}>{children}</div>
 );
 
 export default function AnalyticsPage() {

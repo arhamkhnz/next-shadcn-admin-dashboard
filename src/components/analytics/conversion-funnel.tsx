@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { ArrowRight, ChevronDown, ChevronUp, Filter, LineChart, Share2 } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Filter, LineChart } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,28 +43,25 @@ const funnelStages = [
     change: -2.7,
     color: "var(--chart-3)",
   },
+  {
+    id: "purchase",
+    label: "Purchases",
+    count: 2100,
+    percentage: 16.9,
+    change: 4.2,
+    color: "var(--chart-4)",
+  },
 ];
-
-// Calculate conversion rates between stages
-const conversionRates = funnelStages.slice(1).map((stage, index) => {
-  const previousStage = funnelStages[index];
-  const conversionRate = (stage.count / previousStage.count) * 100;
-
-  return {
-    fromStage: previousStage.id,
-    toStage: stage.id,
-    fromLabel: previousStage.label,
-    toLabel: stage.label,
-    rate: conversionRate,
-    change: stage.change - previousStage.change,
-  };
-});
 
 // Calculate revenue metrics
 const averageOrderValue = 85.42;
-const totalRevenue = funnelStages[funnelStages.length - 1].count * averageOrderValue;
-const potentialRevenue = funnelStages[funnelStages.length - 2].count * averageOrderValue;
-const lostRevenue = potentialRevenue - totalRevenue;
+const purchaseStage = funnelStages.find((s) => s.id === "purchase");
+const addToCartStage = funnelStages.find((s) => s.id === "add_to_cart");
+const purchases = purchaseStage?.count ?? 0;
+const prePurchase = addToCartStage?.count ?? 0;
+const totalRevenue = purchases * averageOrderValue;
+const potentialRevenue = prePurchase * averageOrderValue;
+const lostRevenue = Math.max(0, potentialRevenue - totalRevenue);
 
 export function ConversionFunnel() {
   const [timeRange, setTimeRange] = React.useState("30d");
@@ -209,11 +206,20 @@ export function ConversionFunnel() {
             return (
               <React.Fragment key={stage.id}>
                 <div
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={selectedStage === stage.id}
                   className={cn(
                     "relative cursor-pointer transition-all",
                     selectedStage === stage.id && "ring-ring rounded-lg ring-1",
                   )}
                   onClick={() => handleStageClick(stage.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleStageClick(stage.id);
+                    }
+                  }}
                 >
                   {renderStageHeader(stage)}
 

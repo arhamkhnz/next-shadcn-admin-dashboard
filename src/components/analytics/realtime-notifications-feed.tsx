@@ -182,7 +182,7 @@ export function RealtimeNotificationsFeed() {
           </div>
 
           <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="flex flex-1 flex-col">
-            <TabsList className="h-8 w-full flex-shrink-0 grid-cols-3">
+            <TabsList className="grid h-8 w-full flex-shrink-0 grid-cols-3">
               <TabsTrigger value="all" className="py-1 text-xs">
                 All
                 <Badge variant="outline" className="ml-1.5 px-1 py-0 text-[10px]">
