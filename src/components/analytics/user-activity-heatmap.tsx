@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Clock, Users } from "lucide-react";
+import { Clock, Users, TrendingUp, Calendar } from "lucide-react";
 
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -34,6 +34,21 @@ export function UserActivityHeatmap() {
 
   const peakDay = dayLabels[peakActivity.day];
   const peakTime = hourLabels[peakActivity.hour];
+
+  // Calculate average activity intensity
+  const totalIntensity = activityData.reduce((sum, item) => sum + item[2], 0);
+  const averageIntensity = (totalIntensity / activityData.length).toFixed(1);
+
+  // Find busiest day
+  const dayActivity = Array.from({ length: 7 }, (_, day) => {
+    const dayData = activityData.filter(([, d]) => d === day);
+    const totalDayIntensity = dayData.reduce((sum, [, , intensity]) => sum + intensity, 0);
+    return { day, totalIntensity: totalDayIntensity };
+  });
+  const busiestDay = dayActivity.reduce((busiest, current) =>
+    current.totalIntensity > busiest.totalIntensity ? current : busiest,
+  );
+  const busiestDayName = dayLabels[busiestDay.day];
 
   return (
     <Card className="@container/heatmap">
@@ -67,7 +82,7 @@ export function UserActivityHeatmap() {
           </Select>
         </CardAction>
       </CardHeader>
-      <CardContent className="space-y-3 pt-0">
+      <CardContent className="space-y-6 pt-0">
         <div className="flex flex-col">
           <div className="mb-1 flex items-center justify-end gap-1.5">
             <div className="text-muted-foreground text-[10px]">Less</div>
@@ -153,6 +168,26 @@ export function UserActivityHeatmap() {
               <p className="text-sm font-semibold">
                 {peakDay} at {peakTime}
               </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 rounded-lg border p-2">
+            <div className="bg-primary/10 flex size-7 shrink-0 items-center justify-center rounded-full">
+              <TrendingUp className="text-primary size-3.5" />
+            </div>
+            <div>
+              <p className="text-muted-foreground text-[10px] uppercase">Avg Activity</p>
+              <p className="text-sm font-semibold">{averageIntensity}/4.0</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 rounded-lg border p-2">
+            <div className="bg-primary/10 flex size-7 shrink-0 items-center justify-center rounded-full">
+              <Calendar className="text-primary size-3.5" />
+            </div>
+            <div>
+              <p className="text-muted-foreground text-[10px] uppercase">Busiest Day</p>
+              <p className="text-sm font-semibold">{busiestDayName}</p>
             </div>
           </div>
         </div>
