@@ -2,14 +2,13 @@
 
 import * as React from "react";
 
-import { ArrowUpRight, BarChart4, Download, InfoIcon } from "lucide-react";
+import { ArrowUpRight, BarChart4, CheckCircle, Download, InfoIcon } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -65,17 +64,16 @@ const metricDescriptions = {
 };
 
 export function PerformanceMetricsRadar() {
-  const [timeRange, setTimeRange] = React.useState("7d");
-  const [compareWith, setCompareWith] = React.useState("previous");
-  const [viewType, setViewType] = React.useState("radar");
-
   // Format the data for the radar chart
-  const radarData = performanceMetrics.current.map((item, index) => ({
-    subject: item.metric,
-    current: item.value,
-    previous: performanceMetrics.previous[index].value,
-    fullMark: item.fullMark,
-  }));
+  const radarData = performanceMetrics.current.map((item) => {
+    const previousItem = performanceMetrics.previous.find((p) => p.metric === item.metric);
+    return {
+      subject: item.metric,
+      current: item.value,
+      previous: previousItem?.value ?? 0,
+      fullMark: item.fullMark,
+    };
+  });
 
   return (
     <Card className="@container/radar">
@@ -85,31 +83,9 @@ export function PerformanceMetricsRadar() {
           Performance Metrics
         </CardTitle>
         <CardDescription className="text-xs">Core Web Vitals and performance scores</CardDescription>
-        <CardAction className="flex gap-1.5">
-          <Select value={compareWith} onValueChange={setCompareWith}>
-            <SelectTrigger className="h-7 w-[120px] text-xs" size="sm">
-              <SelectValue placeholder="Compare with" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="previous">Previous Period</SelectItem>
-              <SelectItem value="baseline">Baseline</SelectItem>
-              <SelectItem value="industry">Industry Average</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="h-7 w-[100px] text-xs" size="sm">
-              <SelectValue placeholder="Last 7 Days" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7d">Last 7 Days</SelectItem>
-              <SelectItem value="30d">Last 30 Days</SelectItem>
-              <SelectItem value="90d">Last 90 Days</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardAction>
       </CardHeader>
       <CardContent className="pt-0">
-        <Tabs defaultValue="radar" className="w-full" onValueChange={setViewType}>
+        <Tabs defaultValue="radar" className="w-full">
           <div className="mb-2 flex items-center justify-between">
             <TabsList>
               <TabsTrigger value="radar" className="px-3 py-1 text-xs">
@@ -206,9 +182,9 @@ export function PerformanceMetricsRadar() {
                       <ArrowUpRight className="text-primary size-3.5" />
                       First Contentful Paint improved by 15%
                     </li>
-                    <li className="text-destructive flex items-center gap-1.5">
-                      <InfoIcon className="size-3.5" />
-                      Cumulative Layout Shift decreased by 3%
+                    <li className="text-primary flex items-center gap-1.5">
+                      <CheckCircle className="size-3.5" />
+                      Cumulative Layout Shift improved by 3 points
                     </li>
                   </ul>
                 </div>
@@ -228,9 +204,9 @@ export function PerformanceMetricsRadar() {
                   </tr>
                 </thead>
                 <tbody>
-                  {performanceMetrics.current.map((metric, index) => {
-                    const previous = performanceMetrics.previous[index];
-                    const change = metric.value - previous.value;
+                  {performanceMetrics.current.map((metric) => {
+                    const previous = performanceMetrics.previous.find((p) => p.metric === metric.metric);
+                    const change = metric.value - (previous?.value ?? 0);
 
                     return (
                       <tr key={metric.metric} className="border-b">
@@ -250,7 +226,7 @@ export function PerformanceMetricsRadar() {
                           </TooltipProvider>
                         </td>
                         <td className="px-3 py-2 text-xs font-medium tabular-nums">{metric.value}</td>
-                        <td className="text-muted-foreground px-3 py-2 text-xs tabular-nums">{previous.value}</td>
+                        <td className="text-muted-foreground px-3 py-2 text-xs tabular-nums">{previous?.value ?? 0}</td>
                         <td className="px-3 py-2">
                           <Badge
                             variant={change >= 0 ? "default" : "destructive"}

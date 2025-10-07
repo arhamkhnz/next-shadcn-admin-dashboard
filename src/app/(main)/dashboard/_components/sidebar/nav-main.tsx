@@ -157,7 +157,7 @@ export function NavMain({ items }: NavMainProps) {
   };
 
   return (
-    <>
+    <div suppressHydrationWarning>
       <SidebarGroup>
         <SidebarGroupContent className="flex flex-col gap-2">
           <SidebarMenu>
@@ -218,6 +218,6 @@ export function NavMain({ items }: NavMainProps) {
           </SidebarGroupContent>
         </SidebarGroup>
       ))}
-    </>
+    </div>
   );
 }
