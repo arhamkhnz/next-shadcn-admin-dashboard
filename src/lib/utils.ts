@@ -40,3 +40,23 @@ export function formatCurrency(
 
   return new Intl.NumberFormat(locale, formatOptions).format(amount);
 }
+
+export function formatNumber(
+  value: number,
+  opts?: {
+    locale?: string;
+    minimumFractionDigits?: number;
+    maximumFractionDigits?: number;
+    notation?: "standard" | "compact";
+    compactDisplay?: "short" | "long";
+  },
+) {
+  const { locale = "en-US", minimumFractionDigits, maximumFractionDigits, notation, compactDisplay } = opts ?? {};
+  const formatter = new Intl.NumberFormat(locale, {
+    minimumFractionDigits,
+    maximumFractionDigits,
+    notation,
+    compactDisplay,
+  });
+  return formatter.format(value);
+}
