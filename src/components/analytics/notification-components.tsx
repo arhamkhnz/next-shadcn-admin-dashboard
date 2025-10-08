@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import { Bell, Check, ChevronRight, MoreHorizontal, Star, User, X } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

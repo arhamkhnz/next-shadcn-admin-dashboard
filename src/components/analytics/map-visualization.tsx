@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+
 import { worldRegions, cityData } from "./data/geographic-data";
 
 interface MapVisualizationProps {
