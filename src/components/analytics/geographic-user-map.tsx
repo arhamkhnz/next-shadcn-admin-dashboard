@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { formatNumber } from "@/lib/utils";
 
 import { topRegions } from "./data/geographic-data";
 import { MapVisualization } from "./map-visualization";
@@ -124,13 +125,13 @@ export function GeographicUserMap() {
             <div className="grid grid-cols-1 gap-2 @lg/map:grid-cols-3">
               <div className="rounded-lg border p-2">
                 <div className="text-muted-foreground text-[10px]">Total Users</div>
-                <div className="mt-0.5 text-base font-semibold">{totalUsers.toLocaleString()}</div>
+                <div className="mt-0.5 text-base font-semibold">{formatNumber(totalUsers)}</div>
                 <div className="text-muted-foreground mt-0.5 text-[10px]">Across {topRegions.length} regions</div>
               </div>
 
               <div className="rounded-lg border p-2">
                 <div className="text-muted-foreground text-[10px]">New Users</div>
-                <div className="mt-0.5 text-base font-semibold">{totalNewUsers.toLocaleString()}</div>
+                <div className="mt-0.5 text-base font-semibold">{formatNumber(totalNewUsers)}</div>
                 <div className="text-muted-foreground mt-0.5 text-[10px]">
                   Last{" "}
                   {timeRange === "7d"
