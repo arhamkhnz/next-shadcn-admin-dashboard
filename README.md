@@ -31,7 +31,11 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 > - Neo Brutalism  
 > - Soft Pop  
 >
-> You can create more presets by following the same structure as the existing ones.  
+> You can create more presets by following the same structure as the existing ones.
+
+> Looking for the **Next.js 15** version?  
+> Check out the [`archive/next15`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/tree/archive/next15) branch.  
+> This branch contains the setup prior to upgrading to Next 16 and the React Compiler.
 
 > Looking for the **Next.js 14 + Tailwind CSS v3** version?  
 > Check out the [`archive/next14-tailwindv3`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/tree/archive/next14-tailwindv3) branch.  
