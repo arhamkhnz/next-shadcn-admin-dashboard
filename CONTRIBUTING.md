@@ -7,7 +7,7 @@ This guide will help you set up your environment and understand how to contribut
 
 ## Overview
 
-This project is built with **Next.js 15**, **TypeScript**, **Tailwind CSS v4**, and **Shadcn UI**.  
+This project is built with **Next.js 16**, **TypeScript**, **Tailwind CSS v4**, and **Shadcn UI**.  
 The goal is to keep the codebase modular, scalable, and easy to extend.
 
 ---
