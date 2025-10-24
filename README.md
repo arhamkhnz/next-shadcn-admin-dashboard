@@ -15,7 +15,7 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 
 ## Features
 
-- Built with Next.js 15, TypeScript, Tailwind CSS v4, and Shadcn UI  
+- Built with Next.js 16, TypeScript, Tailwind CSS v4, and Shadcn UI  
 - Responsive and mobile-friendly  
 - Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)  
 - Flexible layouts (collapsible sidebar, variable content widths)  
@@ -39,7 +39,7 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 (App Router), TypeScript, Tailwind CSS v4  
+- **Framework**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4  
 - **UI Components**: Shadcn UI  
 - **Validation**: Zod  
 - **Forms & State Management**: React Hook Form, Zustand  
