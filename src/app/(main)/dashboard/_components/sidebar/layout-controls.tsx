@@ -89,17 +89,17 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Mode</Label>
               <ToggleGroup
-                className="w-full"
+                className="w-full [&_[data-slot=toggle-group-item]]:flex-1 [&_[data-slot=toggle-group-item]]:text-xs"
                 size="sm"
                 variant="outline"
                 type="single"
                 value={themeMode}
                 onValueChange={(value) => handleValueChange("theme_mode", value)}
               >
-                <ToggleGroupItem className="text-xs" value="light" aria-label="Toggle inset">
+                <ToggleGroupItem value="light" aria-label="Toggle inset">
                   Light
                 </ToggleGroupItem>
-                <ToggleGroupItem className="text-xs" value="dark" aria-label="Toggle sidebar">
+                <ToggleGroupItem value="dark" aria-label="Toggle sidebar">
                   Dark
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -108,20 +108,20 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Variant</Label>
               <ToggleGroup
-                className="w-full"
+                className="w-full [&_[data-slot=toggle-group-item]]:flex-1 [&_[data-slot=toggle-group-item]]:text-xs"
                 size="sm"
                 variant="outline"
                 type="single"
                 value={variant}
                 onValueChange={(value) => handleValueChange("sidebar_variant", value)}
               >
-                <ToggleGroupItem className="text-xs" value="inset" aria-label="Toggle inset">
+                <ToggleGroupItem value="inset" aria-label="Toggle inset">
                   Inset
                 </ToggleGroupItem>
-                <ToggleGroupItem className="text-xs" value="sidebar" aria-label="Toggle sidebar">
+                <ToggleGroupItem value="sidebar" aria-label="Toggle sidebar">
                   Sidebar
                 </ToggleGroupItem>
-                <ToggleGroupItem className="text-xs" value="floating" aria-label="Toggle floating">
+                <ToggleGroupItem value="floating" aria-label="Toggle floating">
                   Floating
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -130,17 +130,17 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Navbar Style</Label>
               <ToggleGroup
-                className="w-full"
+                className="w-full [&_[data-slot=toggle-group-item]]:flex-1 [&_[data-slot=toggle-group-item]]:text-xs"
                 size="sm"
                 variant="outline"
                 type="single"
                 value={navbarStyle}
                 onValueChange={(value) => handleValueChange("navbar_style", value)}
               >
-                <ToggleGroupItem className="text-xs" value="sticky" aria-label="Toggle sticky">
+                <ToggleGroupItem value="sticky" aria-label="Toggle sticky">
                   Sticky
                 </ToggleGroupItem>
-                <ToggleGroupItem className="text-xs" value="scroll" aria-label="Toggle scroll">
+                <ToggleGroupItem value="scroll" aria-label="Toggle scroll">
                   Scroll
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -149,17 +149,17 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Collapsible</Label>
               <ToggleGroup
-                className="w-full"
+                className="w-full [&_[data-slot=toggle-group-item]]:flex-1 [&_[data-slot=toggle-group-item]]:text-xs"
                 size="sm"
                 variant="outline"
                 type="single"
                 value={collapsible}
                 onValueChange={(value) => handleValueChange("sidebar_collapsible", value)}
               >
-                <ToggleGroupItem className="text-xs" value="icon" aria-label="Toggle icon">
+                <ToggleGroupItem value="icon" aria-label="Toggle icon">
                   Icon
                 </ToggleGroupItem>
-                <ToggleGroupItem className="text-xs" value="offcanvas" aria-label="Toggle offcanvas">
+                <ToggleGroupItem value="offcanvas" aria-label="Toggle offcanvas">
                   OffCanvas
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -168,17 +168,17 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Content Layout</Label>
               <ToggleGroup
-                className="w-full"
+                className="w-full [&_[data-slot=toggle-group-item]]:flex-1 [&_[data-slot=toggle-group-item]]:text-xs"
                 size="sm"
                 variant="outline"
                 type="single"
                 value={contentLayout}
                 onValueChange={(value) => handleValueChange("content_layout", value)}
               >
-                <ToggleGroupItem className="text-xs" value="centered" aria-label="Toggle centered">
+                <ToggleGroupItem value="centered" aria-label="Toggle centered">
                   Centered
                 </ToggleGroupItem>
-                <ToggleGroupItem className="text-xs" value="full-width" aria-label="Toggle full-width">
+                <ToggleGroupItem value="full-width" aria-label="Toggle full-width">
                   Full Width
                 </ToggleGroupItem>
               </ToggleGroup>

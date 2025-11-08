@@ -23,7 +23,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^3.10.0",
-    "@tanstack/react-query": "^5.90.6",
+    "@tanstack/react-query": "^5.90.7",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
@@ -53,7 +53,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.16.0",
-    "@tailwindcss/postcss": "^4.1.16",
+    "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^22.19.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
