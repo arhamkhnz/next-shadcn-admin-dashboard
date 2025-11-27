@@ -25,6 +25,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@tanstack/react-query": "^5.90.10",
     "@tanstack/react-table": "^8.21.3",
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
