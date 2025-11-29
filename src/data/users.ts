@@ -4,7 +4,7 @@ export const users = [
     name: "Arham Khan",
     username: "Aarhamkhnz",
     email: "hello@arhamkhnz.com",
-    avatar: "/avatars/arhamkhnz.png",
+    avatar: "https://avatars.githubusercontent.com/u/43849669",
     role: "administrator",
   },
   {
