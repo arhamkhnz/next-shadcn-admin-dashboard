@@ -4,6 +4,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 import { useStore, type StoreApi } from "zustand";
 
+import { THEME_PRESET_VALUES } from "@/types/preferences/theme";
+
 import { createPreferencesStore, PreferencesState } from "./preferences-store";
 
 const PreferencesStoreContext = createContext<StoreApi<PreferencesState> | null>(null);
@@ -26,12 +28,17 @@ export const PreferencesStoreProvider = ({
       ? ("dark" as PreferencesState["themeMode"])
       : ("light" as PreferencesState["themeMode"]);
 
-    const domPresetAttr = root.getAttribute("data-theme-preset") as PreferencesState["themePreset"] | null;
+    const domPresetAttr = root.getAttribute("data-theme-preset");
+
+    const safePreset =
+      domPresetAttr && THEME_PRESET_VALUES.includes(domPresetAttr as PreferencesState["themePreset"])
+        ? (domPresetAttr as PreferencesState["themePreset"])
+        : undefined;
 
     store.setState((prev) => ({
       ...prev,
       themeMode: domMode,
-      themePreset: domPresetAttr ?? prev.themePreset,
+      themePreset: safePreset ?? prev.themePreset,
     }));
   }, [store]);
 

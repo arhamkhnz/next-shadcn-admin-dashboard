@@ -29,25 +29,39 @@ export function LayoutControls(props: LayoutControlsProps) {
   const themePreset = usePreferencesStore((s) => s.themePreset);
   const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
 
-  const handleValueChange = async (key: string, value: any) => {
-    if (key === "theme_mode") {
-      updateThemeMode(value);
-      setThemeMode(value as ThemeMode);
-    }
+  const handleThemePresetChange = async (preset: ThemePreset) => {
+    updateThemePreset(preset);
+    setThemePreset(preset);
+    await setValueToCookie("theme_preset", preset);
+  };
 
-    if (key === "theme_preset") {
-      updateThemePreset(value);
-      setThemePreset(value as ThemePreset);
-    }
+  const handleThemeModeChange = async (mode: ThemeMode | "") => {
+    if (!mode) return;
+    updateThemeMode(mode);
+    setThemeMode(mode);
+    await setValueToCookie("theme_mode", mode);
+  };
 
-    if (key === "content_layout") {
-      updateContentLayout(value);
-    }
+  const handleSidebarVariantChange = async (value: SidebarVariant | "") => {
+    if (!value) return;
+    await setValueToCookie("sidebar_variant", value);
+  };
 
-    if (key === "navbar_style") {
-      updateNavbarStyle(value);
-    }
-    await setValueToCookie(key, value);
+  const handleNavbarStyleChange = async (style: NavbarStyle | "") => {
+    if (!style) return;
+    updateNavbarStyle(style);
+    await setValueToCookie("navbar_style", style);
+  };
+
+  const handleSidebarCollapsibleChange = async (value: SidebarCollapsible | "") => {
+    if (!value) return;
+    await setValueToCookie("sidebar_collapsible", value);
+  };
+
+  const handleContentLayoutChange = async (layout: ContentLayout | "") => {
+    if (!layout) return;
+    updateContentLayout(layout);
+    await setValueToCookie("content_layout", layout);
   };
 
   return (
@@ -66,7 +80,7 @@ export function LayoutControls(props: LayoutControlsProps) {
           <div className="space-y-3">
             <div className="space-y-1">
               <Label className="text-xs font-medium">Preset</Label>
-              <Select value={themePreset} onValueChange={(value) => handleValueChange("theme_preset", value)}>
+              <Select value={themePreset} onValueChange={handleThemePresetChange}>
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Preset" />
                 </SelectTrigger>
@@ -94,7 +108,7 @@ export function LayoutControls(props: LayoutControlsProps) {
                 variant="outline"
                 type="single"
                 value={themeMode}
-                onValueChange={(value) => handleValueChange("theme_mode", value)}
+                onValueChange={handleThemeModeChange}
               >
                 <ToggleGroupItem value="light" aria-label="Toggle inset">
                   Light
@@ -113,7 +127,7 @@ export function LayoutControls(props: LayoutControlsProps) {
                 variant="outline"
                 type="single"
                 value={variant}
-                onValueChange={(value) => handleValueChange("sidebar_variant", value)}
+                onValueChange={handleSidebarVariantChange}
               >
                 <ToggleGroupItem value="inset" aria-label="Toggle inset">
                   Inset
@@ -135,7 +149,7 @@ export function LayoutControls(props: LayoutControlsProps) {
                 variant="outline"
                 type="single"
                 value={navbarStyle}
-                onValueChange={(value) => handleValueChange("navbar_style", value)}
+                onValueChange={handleNavbarStyleChange}
               >
                 <ToggleGroupItem value="sticky" aria-label="Toggle sticky">
                   Sticky
@@ -154,7 +168,7 @@ export function LayoutControls(props: LayoutControlsProps) {
                 variant="outline"
                 type="single"
                 value={collapsible}
-                onValueChange={(value) => handleValueChange("sidebar_collapsible", value)}
+                onValueChange={handleSidebarCollapsibleChange}
               >
                 <ToggleGroupItem value="icon" aria-label="Toggle icon">
                   Icon
@@ -173,7 +187,7 @@ export function LayoutControls(props: LayoutControlsProps) {
                 variant="outline"
                 type="single"
                 value={contentLayout}
-                onValueChange={(value) => handleValueChange("content_layout", value)}
+                onValueChange={handleContentLayoutChange}
               >
                 <ToggleGroupItem value="centered" aria-label="Toggle centered">
                   Centered
