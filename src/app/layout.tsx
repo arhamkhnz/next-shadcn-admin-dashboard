@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: APP_CONFIG.meta.description,
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" className="light" data-theme-preset="default" suppressHydrationWarning>
       <head>
