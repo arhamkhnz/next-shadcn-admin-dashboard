@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useRef } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 import { useStore, type StoreApi } from "zustand";
 
@@ -17,11 +17,25 @@ export const PreferencesStoreProvider = ({
   themeMode: PreferencesState["themeMode"];
   themePreset: PreferencesState["themePreset"];
 }) => {
-  const storeRef = useRef<StoreApi<PreferencesState> | null>(null);
+  const [store] = useState<StoreApi<PreferencesState>>(() => createPreferencesStore({ themeMode, themePreset }));
 
-  storeRef.current ??= createPreferencesStore({ themeMode, themePreset });
+  useEffect(() => {
+    const root = document.documentElement;
 
-  return <PreferencesStoreContext.Provider value={storeRef.current}>{children}</PreferencesStoreContext.Provider>;
+    const domMode = root.classList.contains("dark")
+      ? ("dark" as PreferencesState["themeMode"])
+      : ("light" as PreferencesState["themeMode"]);
+
+    const domPresetAttr = root.getAttribute("data-theme-preset") as PreferencesState["themePreset"] | null;
+
+    store.setState((prev) => ({
+      ...prev,
+      themeMode: domMode,
+      themePreset: domPresetAttr ?? prev.themePreset,
+    }));
+  }, [store]);
+
+  return <PreferencesStoreContext.Provider value={store}>{children}</PreferencesStoreContext.Provider>;
 };
 
 export const usePreferencesStore = <T,>(selector: (state: PreferencesState) => T): T => {

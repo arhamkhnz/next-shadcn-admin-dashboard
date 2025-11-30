@@ -5,9 +5,8 @@ import { Inter } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
 import { APP_CONFIG } from "@/config/app-config";
-import { getPreference } from "@/server/server-actions";
+import { ThemeBootScript } from "@/scripts/theme-boot";
 import { PreferencesStoreProvider } from "@/stores/preferences/preferences-provider";
-import { THEME_MODE_VALUES, THEME_PRESET_VALUES, type ThemePreset, type ThemeMode } from "@/types/preferences/theme";
 
 import "./globals.css";
 
@@ -18,16 +17,15 @@ export const metadata: Metadata = {
   description: APP_CONFIG.meta.description,
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  // const themeMode = await getPreference<ThemeMode>("theme_mode", THEME_MODE_VALUES, "light");
-  // const themePreset = await getPreference<ThemePreset>("theme_preset", THEME_PRESET_VALUES, "default");
-  const themeMode = "light";
-  const themePreset = "default";
-
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className={themeMode} data-theme-preset={themePreset} suppressHydrationWarning>
+    <html lang="en" className="light" data-theme-preset="default" suppressHydrationWarning>
+      <head>
+        {/* RootLayout stays static. Theme (mode + preset) is applied with this script to avoid extra RSC calls and cookie-based rerenders. */}
+        <ThemeBootScript />
+      </head>
       <body className={`${inter.className} min-h-screen antialiased`}>
-        <PreferencesStoreProvider themeMode={themeMode} themePreset={themePreset}>
+        <PreferencesStoreProvider themeMode="light" themePreset="default">
           {children}
           <Toaster />
         </PreferencesStoreProvider>

@@ -19,7 +19,7 @@ export function ThemeSwitcher() {
   };
 
   return (
-    <Button disabled size="icon" onClick={handleValueChange}>
+    <Button size="icon" onClick={handleValueChange}>
       {themeMode === "dark" ? <Sun /> : <Moon />}
     </Button>
   );

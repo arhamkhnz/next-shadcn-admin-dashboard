@@ -62,15 +62,11 @@ export function LayoutControls(props: LayoutControlsProps) {
           <div className="space-y-1.5">
             <h4 className="text-sm leading-none font-medium">Layout Settings</h4>
             <p className="text-muted-foreground text-xs">Customize your dashboard layout preferences.</p>
-            <p className="text-xs font-medium text-black italic">
-              *Controls are temporarily disabled while we adjust cookie-based persistence, which was causing extra
-              usage. They&apos;ll be re-enabled soon. For full access you can clone the repo and run it locally.
-            </p>
           </div>
           <div className="space-y-3">
             <div className="space-y-1">
               <Label className="text-xs font-medium">Preset</Label>
-              <Select disabled value={themePreset} onValueChange={(value) => handleValueChange("theme_preset", value)}>
+              <Select value={themePreset} onValueChange={(value) => handleValueChange("theme_preset", value)}>
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Preset" />
                 </SelectTrigger>
@@ -93,7 +89,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Mode</Label>
               <ToggleGroup
-                disabled
                 className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
                 size="sm"
                 variant="outline"
@@ -113,7 +108,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Variant</Label>
               <ToggleGroup
-                disabled
                 className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
                 size="sm"
                 variant="outline"
@@ -136,7 +130,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Navbar Style</Label>
               <ToggleGroup
-                disabled
                 className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
                 size="sm"
                 variant="outline"
@@ -156,7 +149,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Collapsible</Label>
               <ToggleGroup
-                disabled
                 className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
                 size="sm"
                 variant="outline"
@@ -176,7 +168,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Content Layout</Label>
               <ToggleGroup
-                disabled
                 className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
                 size="sm"
                 variant="outline"
