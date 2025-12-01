@@ -34,7 +34,7 @@
     "eslint-plugin-unicorn": "^56.0.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.453.0",
-    "next": "^16.0.5",
+    "next": "^16.0.6",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
     "react": "^19.2.0",
@@ -48,7 +48,7 @@
     "tailwind-merge": "^3.4.0",
     "vaul": "^1.1.2",
     "zod": "^3.25.76",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
@@ -60,7 +60,7 @@
     "@typescript-eslint/parser": "^8.26.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.5",
+    "eslint-config-next": "^16.0.6",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-security": "^3.0.1",
@@ -69,7 +69,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "postcss": "^8.5.6",
-    "prettier": "^3.7.2",
+    "prettier": "^3.7.3",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4.1.5",
     "ts-node": "^10.9.2",
