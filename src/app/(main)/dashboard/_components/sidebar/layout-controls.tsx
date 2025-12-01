@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { updateContentLayout, updateNavbarStyle } from "@/lib/layout-utils";
-import { updateThemeMode, updateThemePreset } from "@/lib/theme-utils";
+import { applyContentLayout, applyNavbarStyle, applySidebarVariant, applySidebarCollapsible } from "@/lib/layout-utils";
+import { applyThemeMode, applyThemePreset } from "@/lib/theme-utils";
 import { setValueToCookie } from "@/server/server-actions";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/types/preferences/layout";
@@ -30,37 +30,39 @@ export function LayoutControls(props: LayoutControlsProps) {
   const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
 
   const onThemePresetChange = async (preset: ThemePreset) => {
-    updateThemePreset(preset);
+    applyThemePreset(preset);
     setThemePreset(preset);
     // await setValueToCookie("theme_preset", preset);
   };
 
   const onThemeModeChange = async (mode: ThemeMode | "") => {
     if (!mode) return;
-    updateThemeMode(mode);
+    applyThemeMode(mode);
     setThemeMode(mode);
     // await setValueToCookie("theme_mode", mode);
   };
 
   const onContentLayoutChange = async (layout: ContentLayout | "") => {
     if (!layout) return;
-    updateContentLayout(layout);
+    applyContentLayout(layout);
     // await setValueToCookie("content_layout", layout);
   };
 
   const onNavbarStyleChange = async (style: NavbarStyle | "") => {
     if (!style) return;
-    updateNavbarStyle(style);
+    applyNavbarStyle(style);
     // await setValueToCookie("navbar_style", style);
   };
 
   const onSidebarStyleChange = async (value: SidebarVariant | "") => {
     if (!value) return;
+    applySidebarVariant(value);
     // await setValueToCookie("sidebar_variant", value);
   };
 
   const onSidebarCollapseModeChange = async (value: SidebarCollapsible | "") => {
     if (!value) return;
+    applySidebarCollapsible(value);
     // await setValueToCookie("sidebar_collapsible", value);
   };
 
