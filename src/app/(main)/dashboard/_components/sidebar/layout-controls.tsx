@@ -29,39 +29,39 @@ export function LayoutControls(props: LayoutControlsProps) {
   const themePreset = usePreferencesStore((s) => s.themePreset);
   const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
 
-  const handleThemePresetChange = async (preset: ThemePreset) => {
+  const onThemePresetChange = async (preset: ThemePreset) => {
     updateThemePreset(preset);
     setThemePreset(preset);
-    await setValueToCookie("theme_preset", preset);
+    // await setValueToCookie("theme_preset", preset);
   };
 
-  const handleThemeModeChange = async (mode: ThemeMode | "") => {
+  const onThemeModeChange = async (mode: ThemeMode | "") => {
     if (!mode) return;
     updateThemeMode(mode);
     setThemeMode(mode);
-    await setValueToCookie("theme_mode", mode);
+    // await setValueToCookie("theme_mode", mode);
   };
 
-  const handleSidebarVariantChange = async (value: SidebarVariant | "") => {
-    if (!value) return;
-    await setValueToCookie("sidebar_variant", value);
-  };
-
-  const handleNavbarStyleChange = async (style: NavbarStyle | "") => {
-    if (!style) return;
-    updateNavbarStyle(style);
-    await setValueToCookie("navbar_style", style);
-  };
-
-  const handleSidebarCollapsibleChange = async (value: SidebarCollapsible | "") => {
-    if (!value) return;
-    await setValueToCookie("sidebar_collapsible", value);
-  };
-
-  const handleContentLayoutChange = async (layout: ContentLayout | "") => {
+  const onContentLayoutChange = async (layout: ContentLayout | "") => {
     if (!layout) return;
     updateContentLayout(layout);
-    await setValueToCookie("content_layout", layout);
+    // await setValueToCookie("content_layout", layout);
+  };
+
+  const onNavbarStyleChange = async (style: NavbarStyle | "") => {
+    if (!style) return;
+    updateNavbarStyle(style);
+    // await setValueToCookie("navbar_style", style);
+  };
+
+  const onSidebarStyleChange = async (value: SidebarVariant | "") => {
+    if (!value) return;
+    // await setValueToCookie("sidebar_variant", value);
+  };
+
+  const onSidebarCollapseModeChange = async (value: SidebarCollapsible | "") => {
+    if (!value) return;
+    // await setValueToCookie("sidebar_collapsible", value);
   };
 
   return (
@@ -74,13 +74,13 @@ export function LayoutControls(props: LayoutControlsProps) {
       <PopoverContent align="end">
         <div className="flex flex-col gap-5">
           <div className="space-y-1.5">
-            <h4 className="text-sm leading-none font-medium">Layout Settings</h4>
+            <h4 className="text-sm leading-none font-medium">Preferences</h4>
             <p className="text-muted-foreground text-xs">Customize your dashboard layout preferences.</p>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-3 **:data-[slot=toggle-group]:w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs">
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Preset</Label>
-              <Select value={themePreset} onValueChange={handleThemePresetChange}>
+              <Label className="text-xs font-medium">Theme Preset</Label>
+              <Select value={themePreset} onValueChange={onThemePresetChange}>
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Preset" />
                 </SelectTrigger>
@@ -101,14 +101,13 @@ export function LayoutControls(props: LayoutControlsProps) {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Mode</Label>
+              <Label className="text-xs font-medium">Theme Mode</Label>
               <ToggleGroup
-                className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
                 size="sm"
                 variant="outline"
                 type="single"
                 value={themeMode}
-                onValueChange={handleThemeModeChange}
+                onValueChange={onThemeModeChange}
               >
                 <ToggleGroupItem value="light" aria-label="Toggle inset">
                   Light
@@ -120,14 +119,49 @@ export function LayoutControls(props: LayoutControlsProps) {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Sidebar Variant</Label>
+              <Label className="text-xs font-medium">Page Layout</Label>
               <ToggleGroup
-                className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
+                size="sm"
+                variant="outline"
+                type="single"
+                value={contentLayout}
+                onValueChange={onContentLayoutChange}
+              >
+                <ToggleGroupItem value="centered" aria-label="Toggle centered">
+                  Centered
+                </ToggleGroupItem>
+                <ToggleGroupItem value="full-width" aria-label="Toggle full-width">
+                  Full Width
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+            <div className="space-y-1">
+              <Label className="text-xs font-medium">Navbar Behavior</Label>
+              <ToggleGroup
+                size="sm"
+                variant="outline"
+                type="single"
+                value={navbarStyle}
+                onValueChange={onNavbarStyleChange}
+              >
+                <ToggleGroupItem value="sticky" aria-label="Toggle sticky">
+                  Sticky
+                </ToggleGroupItem>
+                <ToggleGroupItem value="scroll" aria-label="Toggle scroll">
+                  Scroll
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+            <div className="space-y-1">
+              <Label className="text-xs font-medium">Sidebar Style</Label>
+              <ToggleGroup
                 size="sm"
                 variant="outline"
                 type="single"
                 value={variant}
-                onValueChange={handleSidebarVariantChange}
+                onValueChange={onSidebarStyleChange}
               >
                 <ToggleGroupItem value="inset" aria-label="Toggle inset">
                   Inset
@@ -142,58 +176,19 @@ export function LayoutControls(props: LayoutControlsProps) {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Navbar Style</Label>
+              <Label className="text-xs font-medium">Sidebar Collapse Mode</Label>
               <ToggleGroup
-                className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
-                size="sm"
-                variant="outline"
-                type="single"
-                value={navbarStyle}
-                onValueChange={handleNavbarStyleChange}
-              >
-                <ToggleGroupItem value="sticky" aria-label="Toggle sticky">
-                  Sticky
-                </ToggleGroupItem>
-                <ToggleGroupItem value="scroll" aria-label="Toggle scroll">
-                  Scroll
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-xs font-medium">Sidebar Collapsible</Label>
-              <ToggleGroup
-                className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
                 size="sm"
                 variant="outline"
                 type="single"
                 value={collapsible}
-                onValueChange={handleSidebarCollapsibleChange}
+                onValueChange={onSidebarCollapseModeChange}
               >
                 <ToggleGroupItem value="icon" aria-label="Toggle icon">
                   Icon
                 </ToggleGroupItem>
                 <ToggleGroupItem value="offcanvas" aria-label="Toggle offcanvas">
                   OffCanvas
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-xs font-medium">Content Layout</Label>
-              <ToggleGroup
-                className="w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs"
-                size="sm"
-                variant="outline"
-                type="single"
-                value={contentLayout}
-                onValueChange={handleContentLayoutChange}
-              >
-                <ToggleGroupItem value="centered" aria-label="Toggle centered">
-                  Centered
-                </ToggleGroupItem>
-                <ToggleGroupItem value="full-width" aria-label="Toggle full-width">
-                  Full Width
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
