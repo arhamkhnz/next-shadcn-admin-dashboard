@@ -4,8 +4,8 @@ import { setValueToCookie } from "@/server/server-actions";
 
 import { PERSISTED_PREFERENCES, type PreferenceKey } from "./preferences-config";
 
-export function persistPreference(key: PreferenceKey, value: string) {
+export async function persistPreference(key: PreferenceKey, value: string) {
   if (!PERSISTED_PREFERENCES[key]) return;
 
-  setValueToCookie(key, value);
+  await setValueToCookie(key, value);
 }
