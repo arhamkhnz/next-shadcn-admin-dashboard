@@ -10,7 +10,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { applyContentLayout, applyNavbarStyle, applySidebarVariant, applySidebarCollapsible } from "@/lib/layout-utils";
 import { persistPreference } from "@/lib/preferences-storage";
 import { applyThemeMode, applyThemePreset } from "@/lib/theme-utils";
-import { setValueToCookie } from "@/server/server-actions";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/types/preferences/layout";
 import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/types/preferences/theme";
@@ -46,25 +45,21 @@ export function LayoutControls(props: LayoutControlsProps) {
   const onContentLayoutChange = async (layout: ContentLayout | "") => {
     if (!layout) return;
     applyContentLayout(layout);
-    // await setValueToCookie("content_layout", layout);
   };
 
   const onNavbarStyleChange = async (style: NavbarStyle | "") => {
     if (!style) return;
     applyNavbarStyle(style);
-    // await setValueToCookie("navbar_style", style);
   };
 
   const onSidebarStyleChange = async (value: SidebarVariant | "") => {
     if (!value) return;
     applySidebarVariant(value);
-    // await setValueToCookie("sidebar_variant", value);
   };
 
   const onSidebarCollapseModeChange = async (value: SidebarCollapsible | "") => {
     if (!value) return;
     applySidebarCollapsible(value);
-    // await setValueToCookie("sidebar_collapsible", value);
   };
 
   return (
@@ -79,6 +74,10 @@ export function LayoutControls(props: LayoutControlsProps) {
           <div className="space-y-1.5">
             <h4 className="text-sm leading-none font-medium">Preferences</h4>
             <p className="text-muted-foreground text-xs">Customize your dashboard layout preferences.</p>
+            <p className="text-foreground text-xs font-medium italic">
+              Values are not persisted in browser storage by default. Persistence can be enabled in code if needed.
+              Other layout preferences are temporarily disabled while a bug is being fixed and will be re-enabled soon.
+            </p>
           </div>
           <div className="space-y-3 **:data-[slot=toggle-group]:w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs">
             <div className="space-y-1">
@@ -124,6 +123,7 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Page Layout</Label>
               <ToggleGroup
+                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -142,6 +142,7 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Navbar Behavior</Label>
               <ToggleGroup
+                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -160,6 +161,7 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Style</Label>
               <ToggleGroup
+                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -181,6 +183,7 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Collapse Mode</Label>
               <ToggleGroup
+                disabled
                 size="sm"
                 variant="outline"
                 type="single"
