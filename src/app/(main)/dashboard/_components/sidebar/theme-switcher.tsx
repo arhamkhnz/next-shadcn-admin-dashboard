@@ -3,8 +3,8 @@
 import { Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { updateThemeMode } from "@/lib/theme-utils";
-import { setValueToCookie } from "@/server/server-actions";
+import { persistPreference } from "@/lib/preferences-storage";
+import { applyThemeMode } from "@/lib/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function ThemeSwitcher() {
@@ -13,13 +13,13 @@ export function ThemeSwitcher() {
 
   const handleValueChange = async () => {
     const newTheme = themeMode === "dark" ? "light" : "dark";
-    updateThemeMode(newTheme);
+    applyThemeMode(newTheme);
     setThemeMode(newTheme);
-    await setValueToCookie("theme_mode", newTheme);
+    persistPreference("theme_mode", newTheme);
   };
 
   return (
-    <Button disabled size="icon" onClick={handleValueChange}>
+    <Button size="icon" onClick={handleValueChange}>
       {themeMode === "dark" ? <Sun /> : <Moon />}
     </Button>
   );

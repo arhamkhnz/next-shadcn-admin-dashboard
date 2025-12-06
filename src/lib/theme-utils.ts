@@ -1,4 +1,4 @@
-export function updateThemeMode(value: "light" | "dark") {
+export function applyThemeMode(value: "light" | "dark") {
   const doc = document.documentElement;
   doc.classList.add("disable-transitions");
   doc.classList.toggle("dark", value === "dark");
@@ -7,6 +7,6 @@ export function updateThemeMode(value: "light" | "dark") {
   });
 }
 
-export function updateThemePreset(value: string) {
+export function applyThemePreset(value: string) {
   document.documentElement.setAttribute("data-theme-preset", value);
 }
