@@ -48,10 +48,10 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
       <SidebarInset
         data-content-layout={contentLayout}
         className={cn(
-          "data-[content-layout=centered]:!mx-auto data-[content-layout=centered]:max-w-screen-2xl",
+          "data-[content-layout=centered]:mx-auto! data-[content-layout=centered]:max-w-screen-2xl",
           // Adds right margin for inset sidebar in centered layout up to 113rem.
           // On wider screens with collapsed sidebar, removes margin and sets margin auto for alignment.
-          "max-[113rem]:peer-data-[variant=inset]:!mr-2 min-[101rem]:peer-data-[variant=inset]:peer-data-[state=collapsed]:!mr-auto",
+          "max-[113rem]:peer-data-[variant=inset]:mr-2! min-[101rem]:peer-data-[variant=inset]:peer-data-[state=collapsed]:mr-auto!",
         )}
       >
         <header

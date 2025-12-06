@@ -45,21 +45,25 @@ export function LayoutControls(props: LayoutControlsProps) {
   const onContentLayoutChange = async (layout: ContentLayout | "") => {
     if (!layout) return;
     applyContentLayout(layout);
+    persistPreference("content_layout", layout);
   };
 
   const onNavbarStyleChange = async (style: NavbarStyle | "") => {
     if (!style) return;
     applyNavbarStyle(style);
+    persistPreference("navbar_style", style);
   };
 
   const onSidebarStyleChange = async (value: SidebarVariant | "") => {
     if (!value) return;
     applySidebarVariant(value);
+    persistPreference("sidebar_variant", value);
   };
 
   const onSidebarCollapseModeChange = async (value: SidebarCollapsible | "") => {
     if (!value) return;
     applySidebarCollapsible(value);
+    persistPreference("sidebar_collapsible", value);
   };
 
   return (
@@ -123,7 +127,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Page Layout</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -142,7 +145,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Navbar Behavior</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -161,7 +163,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Style</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -183,7 +184,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Collapse Mode</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"
