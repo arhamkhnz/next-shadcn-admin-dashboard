@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { applyContentLayout, applyNavbarStyle, applySidebarVariant, applySidebarCollapsible } from "@/lib/layout-utils";
+import { persistPreference } from "@/lib/preferences-storage";
 import { applyThemeMode, applyThemePreset } from "@/lib/theme-utils";
 import { setValueToCookie } from "@/server/server-actions";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
@@ -32,14 +33,14 @@ export function LayoutControls(props: LayoutControlsProps) {
   const onThemePresetChange = async (preset: ThemePreset) => {
     applyThemePreset(preset);
     setThemePreset(preset);
-    // await setValueToCookie("theme_preset", preset);
+    persistPreference("theme_preset", preset);
   };
 
   const onThemeModeChange = async (mode: ThemeMode | "") => {
     if (!mode) return;
     applyThemeMode(mode);
     setThemeMode(mode);
-    // await setValueToCookie("theme_mode", mode);
+    persistPreference("theme_mode", mode);
   };
 
   const onContentLayoutChange = async (layout: ContentLayout | "") => {
