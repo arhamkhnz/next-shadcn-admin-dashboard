@@ -21,11 +21,27 @@ export type PreferenceKey =
 
 export type PreferencePersistence = "none" | "client-cookie" | "server-cookie" | "localStorage";
 
+export const PREFERENCE_DEFAULTS = {
+  theme_mode: "light",
+  theme_preset: "default",
+  content_layout: "centered",
+  navbar_style: "sticky",
+  sidebar_variant: "inset",
+  sidebar_collapsible: "icon",
+} as const satisfies {
+  theme_mode: "light" | "dark";
+  theme_preset: "default" | "brutalist" | "soft-pop" | "tangerine";
+  content_layout: "centered" | "wide";
+  navbar_style: "sticky" | "scroll";
+  sidebar_variant: "inset" | "floating";
+  sidebar_collapsible: "icon" | "offcanvas";
+};
+
 export const PREFERENCE_PERSISTENCE: Record<PreferenceKey, PreferencePersistence> = {
   theme_mode: "none",
   theme_preset: "none",
-  content_layout: "server-cookie",
-  navbar_style: "server-cookie",
+  content_layout: "none",
+  navbar_style: "none",
   sidebar_variant: "server-cookie",
   sidebar_collapsible: "server-cookie",
 };

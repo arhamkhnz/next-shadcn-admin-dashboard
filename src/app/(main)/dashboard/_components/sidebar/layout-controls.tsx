@@ -17,17 +17,19 @@ import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/types/
 type LayoutControlsProps = {
   readonly variant: SidebarVariant;
   readonly collapsible: SidebarCollapsible;
-  readonly contentLayout: ContentLayout;
-  readonly navbarStyle: NavbarStyle;
 };
 
 export function LayoutControls(props: LayoutControlsProps) {
-  const { variant, collapsible, contentLayout, navbarStyle } = props;
+  const { variant, collapsible } = props;
 
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
   const themePreset = usePreferencesStore((s) => s.themePreset);
   const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
+  const contentLayout = usePreferencesStore((s) => s.contentLayout);
+  const setContentLayout = usePreferencesStore((s) => s.setContentLayout);
+  const navbarStyle = usePreferencesStore((s) => s.navbarStyle);
+  const setNavbarStyle = usePreferencesStore((s) => s.setNavbarStyle);
 
   const onThemePresetChange = async (preset: ThemePreset) => {
     applyThemePreset(preset);
@@ -45,12 +47,14 @@ export function LayoutControls(props: LayoutControlsProps) {
   const onContentLayoutChange = async (layout: ContentLayout | "") => {
     if (!layout) return;
     applyContentLayout(layout);
+    setContentLayout(layout);
     persistPreference("content_layout", layout);
   };
 
   const onNavbarStyleChange = async (style: NavbarStyle | "") => {
     if (!style) return;
     applyNavbarStyle(style);
+    setNavbarStyle(style);
     persistPreference("navbar_style", style);
   };
 

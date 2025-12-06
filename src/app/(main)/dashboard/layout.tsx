@@ -11,12 +11,8 @@ import { getPreference } from "@/server/server-actions";
 import {
   SIDEBAR_VARIANT_VALUES,
   SIDEBAR_COLLAPSIBLE_VALUES,
-  CONTENT_LAYOUT_VALUES,
-  NAVBAR_STYLE_VALUES,
   type SidebarVariant,
   type SidebarCollapsible,
-  type ContentLayout,
-  type NavbarStyle,
 } from "@/types/preferences/layout";
 
 import { AccountSwitcher } from "./_components/sidebar/account-switcher";
@@ -28,38 +24,32 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
-  const [sidebarVariant, sidebarCollapsible, contentLayout, navbarStyle] = await Promise.all([
+  const [sidebarVariant, sidebarCollapsible] = await Promise.all([
     getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
     getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
-    getPreference<ContentLayout>("content_layout", CONTENT_LAYOUT_VALUES, "centered"),
-    getPreference<NavbarStyle>("navbar_style", NAVBAR_STYLE_VALUES, "scroll"),
   ]);
 
   const layoutPreferences = {
-    contentLayout,
     variant: sidebarVariant,
     collapsible: sidebarCollapsible,
-    navbarStyle,
   };
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar variant={sidebarVariant} collapsible={sidebarCollapsible} />
       <SidebarInset
-        data-content-layout={contentLayout}
         className={cn(
-          "data-[content-layout=centered]:mx-auto! data-[content-layout=centered]:max-w-screen-2xl",
+          "[html[data-content-layout=centered]_&]:mx-auto! [html[data-content-layout=centered]_&]:max-w-screen-2xl!",
           // Adds right margin for inset sidebar in centered layout up to 113rem.
           // On wider screens with collapsed sidebar, removes margin and sets margin auto for alignment.
           "max-[113rem]:peer-data-[variant=inset]:mr-2! min-[101rem]:peer-data-[variant=inset]:peer-data-[state=collapsed]:mr-auto!",
         )}
       >
         <header
-          data-navbar-style={navbarStyle}
           className={cn(
             "flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12",
             // Handle sticky navbar style with conditional classes so blur, background, z-index, and rounded corners remain consistent across all SidebarVariant layouts.
-            "data-[navbar-style=sticky]:bg-background/50 data-[navbar-style=sticky]:sticky data-[navbar-style=sticky]:top-0 data-[navbar-style=sticky]:z-50 data-[navbar-style=sticky]:overflow-hidden data-[navbar-style=sticky]:rounded-t-[inherit] data-[navbar-style=sticky]:backdrop-blur-md",
+            "[html[data-navbar-style=sticky]_&]:bg-background/50 [html[data-navbar-style=sticky]_&]:sticky [html[data-navbar-style=sticky]_&]:top-0 [html[data-navbar-style=sticky]_&]:z-50 [html[data-navbar-style=sticky]_&]:overflow-hidden [html[data-navbar-style=sticky]_&]:rounded-t-[inherit] [html[data-navbar-style=sticky]_&]:backdrop-blur-md",
           )}
         >
           <div className="flex w-full items-center justify-between px-4 lg:px-6">
