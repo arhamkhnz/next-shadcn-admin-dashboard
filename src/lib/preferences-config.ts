@@ -31,9 +31,9 @@ export const PREFERENCE_DEFAULTS = {
 } as const satisfies {
   theme_mode: "light" | "dark";
   theme_preset: "default" | "brutalist" | "soft-pop" | "tangerine";
-  content_layout: "centered" | "wide";
+  content_layout: "centered" | "full-width";
   navbar_style: "sticky" | "scroll";
-  sidebar_variant: "inset" | "floating";
+  sidebar_variant: "inset" | "sidebar" | "floating";
   sidebar_collapsible: "icon" | "offcanvas";
 };
 
