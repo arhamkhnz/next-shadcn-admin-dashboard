@@ -18,6 +18,7 @@ export type PreferencesState = {
   setNavbarStyle: (style: NavbarStyle) => void;
   setSidebarVariant: (variant: SidebarVariant) => void;
   setSidebarCollapsible: (mode: SidebarCollapsible) => void;
+  bootstrapped: boolean;
 };
 
 export const createPreferencesStore = (init?: Partial<PreferencesState>) =>
@@ -34,4 +35,5 @@ export const createPreferencesStore = (init?: Partial<PreferencesState>) =>
     setNavbarStyle: (style) => set({ navbarStyle: style }),
     setSidebarVariant: (variant) => set({ sidebarVariant: variant }),
     setSidebarCollapsible: (mode) => set({ sidebarCollapsible: mode }),
+    bootstrapped: false,
   }));

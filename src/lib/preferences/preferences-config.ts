@@ -17,7 +17,7 @@ import type { ThemeMode, ThemePreset } from "./theme";
 
 export type PreferencePersistence = "none" | "client-cookie" | "server-cookie" | "localStorage";
 
-type PreferenceValueMap = {
+export type PreferenceValueMap = {
   theme_mode: ThemeMode;
   theme_preset: ThemePreset;
   content_layout: ContentLayout;

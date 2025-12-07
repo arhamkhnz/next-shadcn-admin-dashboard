@@ -79,7 +79,14 @@ export const PreferencesStoreProvider = ({
       sidebarVariant: safeSidebarVariant ?? prev.sidebarVariant,
       sidebarCollapsible: safeSidebarCollapsible ?? prev.sidebarCollapsible,
     }));
+
+    store.setState({ bootstrapped: true });
   }, [store]);
+
+  // NOTE: I personally don't like this guard, but keeping it for now while exploring SSR‑friendly ways to avoid flicker.
+  // If you ever come across a clean solution that keeps SSR intact and removes UI flicker, feel free to suggest.
+  const bootstrapped = useStore(store, (s) => s.bootstrapped);
+  if (!bootstrapped) return null;
 
   return <PreferencesStoreContext.Provider value={store}>{children}</PreferencesStoreContext.Provider>;
 };

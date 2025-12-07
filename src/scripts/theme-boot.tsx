@@ -91,6 +91,23 @@ export function ThemeBootScript() {
         root.setAttribute("data-sidebar-collapsible", sidebarCollapsible);
 
         root.style.colorScheme = mode === "dark" ? "dark" : "light";
+
+        var prefs = {
+          themeMode: mode,
+          themePreset: preset,
+          contentLayout: contentLayout,
+          navbarStyle: navbarStyle,
+          sidebarVariant: sidebarVariant,
+          sidebarCollapsible: sidebarCollapsible,
+        };
+
+        window.__PREFERENCES__ = prefs;
+
+        var script = document.createElement("script");
+        script.id = "__PREFERENCES_JSON__";
+        script.type = "application/json";
+        script.textContent = JSON.stringify(prefs);
+        document.head.appendChild(script);
       } catch (e) {
         console.warn("ThemeBootScript error:", e);
       }
