@@ -7,27 +7,31 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { applyContentLayout, applyNavbarStyle, applySidebarVariant, applySidebarCollapsible } from "@/lib/layout-utils";
-import { persistPreference } from "@/lib/preferences-storage";
-import { applyThemeMode, applyThemePreset } from "@/lib/theme-utils";
+import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/lib/preferences/layout";
+import {
+  applyContentLayout,
+  applyNavbarStyle,
+  applySidebarVariant,
+  applySidebarCollapsible,
+} from "@/lib/preferences/layout-utils";
+import { persistPreference } from "@/lib/preferences/preferences-storage";
+import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/lib/preferences/theme";
+import { applyThemeMode, applyThemePreset } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
-import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/types/preferences/layout";
-import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/types/preferences/theme";
 
-type LayoutControlsProps = {
-  readonly variant: SidebarVariant;
-  readonly collapsible: SidebarCollapsible;
-  readonly contentLayout: ContentLayout;
-  readonly navbarStyle: NavbarStyle;
-};
-
-export function LayoutControls(props: LayoutControlsProps) {
-  const { variant, collapsible, contentLayout, navbarStyle } = props;
-
+export function LayoutControls() {
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
   const themePreset = usePreferencesStore((s) => s.themePreset);
   const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
+  const contentLayout = usePreferencesStore((s) => s.contentLayout);
+  const setContentLayout = usePreferencesStore((s) => s.setContentLayout);
+  const navbarStyle = usePreferencesStore((s) => s.navbarStyle);
+  const setNavbarStyle = usePreferencesStore((s) => s.setNavbarStyle);
+  const variant = usePreferencesStore((s) => s.sidebarVariant);
+  const setSidebarVariant = usePreferencesStore((s) => s.setSidebarVariant);
+  const collapsible = usePreferencesStore((s) => s.sidebarCollapsible);
+  const setSidebarCollapsible = usePreferencesStore((s) => s.setSidebarCollapsible);
 
   const onThemePresetChange = async (preset: ThemePreset) => {
     applyThemePreset(preset);
@@ -45,21 +49,29 @@ export function LayoutControls(props: LayoutControlsProps) {
   const onContentLayoutChange = async (layout: ContentLayout | "") => {
     if (!layout) return;
     applyContentLayout(layout);
+    setContentLayout(layout);
+    persistPreference("content_layout", layout);
   };
 
   const onNavbarStyleChange = async (style: NavbarStyle | "") => {
     if (!style) return;
     applyNavbarStyle(style);
+    setNavbarStyle(style);
+    persistPreference("navbar_style", style);
   };
 
   const onSidebarStyleChange = async (value: SidebarVariant | "") => {
     if (!value) return;
+    setSidebarVariant(value);
     applySidebarVariant(value);
+    persistPreference("sidebar_variant", value);
   };
 
   const onSidebarCollapseModeChange = async (value: SidebarCollapsible | "") => {
     if (!value) return;
+    setSidebarCollapsible(value);
     applySidebarCollapsible(value);
+    persistPreference("sidebar_collapsible", value);
   };
 
   return (
@@ -74,9 +86,8 @@ export function LayoutControls(props: LayoutControlsProps) {
           <div className="space-y-1.5">
             <h4 className="text-sm leading-none font-medium">Preferences</h4>
             <p className="text-muted-foreground text-xs">Customize your dashboard layout preferences.</p>
-            <p className="text-foreground text-xs font-medium italic">
-              Values are not persisted in browser storage by default. Persistence can be enabled in code if needed.
-              Other layout preferences are temporarily disabled while a bug is being fixed and will be re-enabled soon.
+            <p className="text-muted-foreground text-xs font-medium">
+              *Preferences use cookies by default. You can switch between cookies, localStorage, or no storage in code.
             </p>
           </div>
           <div className="space-y-3 **:data-[slot=toggle-group]:w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs">
@@ -123,7 +134,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Page Layout</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -142,7 +152,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Navbar Behavior</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -161,7 +170,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Style</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"
@@ -183,7 +191,6 @@ export function LayoutControls(props: LayoutControlsProps) {
             <div className="space-y-1">
               <Label className="text-xs font-medium">Sidebar Collapse Mode</Label>
               <ToggleGroup
-                disabled
                 size="sm"
                 variant="outline"
                 type="single"

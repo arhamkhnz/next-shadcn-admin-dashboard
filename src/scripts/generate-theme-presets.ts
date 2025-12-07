@@ -5,7 +5,7 @@
  * It extracts `label:`, `value:`, and primary color definitions (`--primary`) for both light and dark modes.
  * These primary colors are used to visually represent each theme in the UI (e.g., colored dots or theme previews).
  * Default theme colors are fetched from /app/globals.css.
- * All extracted metadata is injected into a marked section of the /types/preferences/theme.ts file.
+ * All extracted metadata is injected into a marked section of the /lib/preferences/theme.ts file.
  *
  * Usage:
  * - During local development, run manually after adding any new theme preset:
@@ -26,7 +26,7 @@ if (!fs.existsSync(presetDir)) {
   process.exit(1);
 }
 
-const outputPath = path.resolve(__dirname, "../types/preferences/theme.ts");
+const outputPath = path.resolve(__dirname, "../lib/preferences/theme.ts");
 
 const files = fs.readdirSync(presetDir).filter((file) => file.endsWith(".css"));
 
