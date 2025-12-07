@@ -7,13 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { users } from "@/data/users";
 import { cn } from "@/lib/utils";
-import { getPreference } from "@/server/server-actions";
-import {
-  SIDEBAR_VARIANT_VALUES,
-  SIDEBAR_COLLAPSIBLE_VALUES,
-  type SidebarVariant,
-  type SidebarCollapsible,
-} from "@/types/preferences/layout";
 
 import { AccountSwitcher } from "./_components/sidebar/account-switcher";
 import { LayoutControls } from "./_components/sidebar/layout-controls";
@@ -24,19 +17,9 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
-  const [sidebarVariant, sidebarCollapsible] = await Promise.all([
-    getPreference<SidebarVariant>("sidebar_variant", SIDEBAR_VARIANT_VALUES, "inset"),
-    getPreference<SidebarCollapsible>("sidebar_collapsible", SIDEBAR_COLLAPSIBLE_VALUES, "icon"),
-  ]);
-
-  const layoutPreferences = {
-    variant: sidebarVariant,
-    collapsible: sidebarCollapsible,
-  };
-
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar variant={sidebarVariant} collapsible={sidebarCollapsible} />
+      <AppSidebar />
       <SidebarInset
         className={cn(
           "[html[data-content-layout=centered]_&]:mx-auto! [html[data-content-layout=centered]_&]:max-w-screen-2xl!",
@@ -59,7 +42,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
               <SearchDialog />
             </div>
             <div className="flex items-center gap-2">
-              <LayoutControls {...layoutPreferences} />
+              <LayoutControls />
               <ThemeSwitcher />
               <AccountSwitcher users={users} />
             </div>

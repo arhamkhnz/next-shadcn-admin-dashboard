@@ -42,6 +42,6 @@ export const PREFERENCE_PERSISTENCE: Record<PreferenceKey, PreferencePersistence
   theme_preset: "none",
   content_layout: "none",
   navbar_style: "none",
-  sidebar_variant: "server-cookie",
-  sidebar_collapsible: "server-cookie",
+  sidebar_variant: "none",
+  sidebar_collapsible: "none",
 };

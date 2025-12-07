@@ -14,14 +14,7 @@ import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/types/preferences/layout";
 import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/types/preferences/theme";
 
-type LayoutControlsProps = {
-  readonly variant: SidebarVariant;
-  readonly collapsible: SidebarCollapsible;
-};
-
-export function LayoutControls(props: LayoutControlsProps) {
-  const { variant, collapsible } = props;
-
+export function LayoutControls() {
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
   const themePreset = usePreferencesStore((s) => s.themePreset);
@@ -30,6 +23,10 @@ export function LayoutControls(props: LayoutControlsProps) {
   const setContentLayout = usePreferencesStore((s) => s.setContentLayout);
   const navbarStyle = usePreferencesStore((s) => s.navbarStyle);
   const setNavbarStyle = usePreferencesStore((s) => s.setNavbarStyle);
+  const variant = usePreferencesStore((s) => s.sidebarVariant);
+  const setSidebarVariant = usePreferencesStore((s) => s.setSidebarVariant);
+  const collapsible = usePreferencesStore((s) => s.sidebarCollapsible);
+  const setSidebarCollapsible = usePreferencesStore((s) => s.setSidebarCollapsible);
 
   const onThemePresetChange = async (preset: ThemePreset) => {
     applyThemePreset(preset);
@@ -60,12 +57,14 @@ export function LayoutControls(props: LayoutControlsProps) {
 
   const onSidebarStyleChange = async (value: SidebarVariant | "") => {
     if (!value) return;
+    setSidebarVariant(value);
     applySidebarVariant(value);
     persistPreference("sidebar_variant", value);
   };
 
   const onSidebarCollapseModeChange = async (value: SidebarCollapsible | "") => {
     if (!value) return;
+    setSidebarCollapsible(value);
     applySidebarCollapsible(value);
     persistPreference("sidebar_collapsible", value);
   };

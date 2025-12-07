@@ -9,15 +9,11 @@ export function applyNavbarStyle(value: "sticky" | "scroll") {
 }
 
 export function applySidebarVariant(value: string) {
-  const target = document.querySelector('[data-slot="sidebar"]');
-  if (target) {
-    target.setAttribute("data-variant", value);
-  }
+  const root = document.documentElement;
+  root.setAttribute("data-sidebar-variant", value);
 }
 
 export function applySidebarCollapsible(value: string) {
-  const target = document.querySelector('[data-slot="sidebar"]');
-  if (target) {
-    target.setAttribute("data-collapsible", value);
-  }
+  const root = document.documentElement;
+  root.setAttribute("data-sidebar-collapsible", value);
 }

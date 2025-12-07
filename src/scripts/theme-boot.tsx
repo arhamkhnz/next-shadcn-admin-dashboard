@@ -14,6 +14,8 @@ export function ThemeBootScript() {
     theme_preset: PREFERENCE_PERSISTENCE.theme_preset,
     content_layout: PREFERENCE_PERSISTENCE.content_layout,
     navbar_style: PREFERENCE_PERSISTENCE.navbar_style,
+    sidebar_variant: PREFERENCE_PERSISTENCE.sidebar_variant,
+    sidebar_collapsible: PREFERENCE_PERSISTENCE.sidebar_collapsible,
   });
 
   const defaults = JSON.stringify({
@@ -21,6 +23,8 @@ export function ThemeBootScript() {
     theme_preset: PREFERENCE_DEFAULTS.theme_preset,
     content_layout: PREFERENCE_DEFAULTS.content_layout,
     navbar_style: PREFERENCE_DEFAULTS.navbar_style,
+    sidebar_variant: PREFERENCE_DEFAULTS.sidebar_variant,
+    sidebar_collapsible: PREFERENCE_DEFAULTS.sidebar_collapsible,
   });
 
   const code = `
@@ -68,18 +72,23 @@ export function ThemeBootScript() {
         var rawPreset = readPreference("theme_preset", DEFAULTS.theme_preset);
         var rawContentLayout = readPreference("content_layout", DEFAULTS.content_layout);
         var rawNavbarStyle = readPreference("navbar_style", DEFAULTS.navbar_style);
+        var rawSidebarVariant = readPreference("sidebar_variant", DEFAULTS.sidebar_variant);
+        var rawSidebarCollapsible = readPreference("sidebar_collapsible", DEFAULTS.sidebar_collapsible);
 
         var mode = (rawMode === "dark" || rawMode === "light") ? rawMode : "light";
         var preset = rawPreset || "default";
         var contentLayout = rawContentLayout || "centered";
         var navbarStyle = rawNavbarStyle || "scroll";
+        var sidebarVariant = rawSidebarVariant || DEFAULTS.sidebar_variant;
+        var sidebarCollapsible = rawSidebarCollapsible || DEFAULTS.sidebar_collapsible;
 
         root.classList.remove("light", "dark");
         root.classList.add(mode);
         root.setAttribute("data-theme-preset", preset);
-
         root.setAttribute("data-content-layout", contentLayout);
         root.setAttribute("data-navbar-style", navbarStyle);
+        root.setAttribute("data-sidebar-variant", sidebarVariant);
+        root.setAttribute("data-sidebar-collapsible", sidebarCollapsible);
 
         root.style.colorScheme = mode === "dark" ? "dark" : "light";
       } catch (e) {

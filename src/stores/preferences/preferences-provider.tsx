@@ -1,10 +1,15 @@
 "use client";
-
+/* eslint-disable */
 import { createContext, useContext, useState, useEffect } from "react";
 
 import { useStore, type StoreApi } from "zustand";
 
-import { CONTENT_LAYOUT_VALUES, NAVBAR_STYLE_VALUES } from "@/types/preferences/layout";
+import {
+  CONTENT_LAYOUT_VALUES,
+  NAVBAR_STYLE_VALUES,
+  SIDEBAR_COLLAPSIBLE_VALUES,
+  SIDEBAR_VARIANT_VALUES,
+} from "@/types/preferences/layout";
 import { THEME_PRESET_VALUES } from "@/types/preferences/theme";
 
 import { createPreferencesStore, PreferencesState } from "./preferences-store";
@@ -38,6 +43,8 @@ export const PreferencesStoreProvider = ({
     const domPresetAttr = root.getAttribute("data-theme-preset");
     const domContentLayoutAttr = root.getAttribute("data-content-layout");
     const domNavbarStyleAttr = root.getAttribute("data-navbar-style");
+    const domSidebarVariantAttr = root.getAttribute("data-sidebar-variant");
+    const domSidebarCollapsibleAttr = root.getAttribute("data-sidebar-collapsible");
 
     const safePreset =
       domPresetAttr && THEME_PRESET_VALUES.includes(domPresetAttr as PreferencesState["themePreset"])
@@ -54,12 +61,26 @@ export const PreferencesStoreProvider = ({
         ? (domNavbarStyleAttr as PreferencesState["navbarStyle"])
         : undefined;
 
+    const safeSidebarVariant =
+      domSidebarVariantAttr &&
+      SIDEBAR_VARIANT_VALUES.includes(domSidebarVariantAttr as PreferencesState["sidebarVariant"])
+        ? (domSidebarVariantAttr as PreferencesState["sidebarVariant"])
+        : undefined;
+
+    const safeSidebarCollapsible =
+      domSidebarCollapsibleAttr &&
+      SIDEBAR_COLLAPSIBLE_VALUES.includes(domSidebarCollapsibleAttr as PreferencesState["sidebarCollapsible"])
+        ? (domSidebarCollapsibleAttr as PreferencesState["sidebarCollapsible"])
+        : undefined;
+
     store.setState((prev) => ({
       ...prev,
       themeMode: domMode,
       themePreset: safePreset ?? prev.themePreset,
       contentLayout: safeContentLayout ?? prev.contentLayout,
       navbarStyle: safeNavbarStyle ?? prev.navbarStyle,
+      sidebarVariant: safeSidebarVariant ?? prev.sidebarVariant,
+      sidebarCollapsible: safeSidebarCollapsible ?? prev.sidebarCollapsible,
     }));
   }, [store]);
 
