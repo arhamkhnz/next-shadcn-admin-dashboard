@@ -86,9 +86,8 @@ export function LayoutControls() {
           <div className="space-y-1.5">
             <h4 className="text-sm leading-none font-medium">Preferences</h4>
             <p className="text-muted-foreground text-xs">Customize your dashboard layout preferences.</p>
-            <p className="text-foreground text-xs font-medium italic">
-              Values are not persisted in browser storage by default. Persistence can be enabled in code if needed.
-              Other layout preferences are temporarily disabled while a bug is being fixed and will be re-enabled soon.
+            <p className="text-muted-foreground text-xs font-medium">
+              *Preferences use cookies by default. You can switch between cookies, localStorage, or no storage in code.
             </p>
           </div>
           <div className="space-y-3 **:data-[slot=toggle-group]:w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs">
