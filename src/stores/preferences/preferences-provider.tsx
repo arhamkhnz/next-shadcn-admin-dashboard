@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import { createContext, useContext, useState, useEffect } from "react";
 
 import { useStore, type StoreApi } from "zustand";
@@ -9,12 +9,17 @@ import {
   NAVBAR_STYLE_VALUES,
   SIDEBAR_COLLAPSIBLE_VALUES,
   SIDEBAR_VARIANT_VALUES,
-} from "@/types/preferences/layout";
-import { THEME_PRESET_VALUES } from "@/types/preferences/theme";
+} from "@/lib/preferences/layout";
+import { THEME_PRESET_VALUES } from "@/lib/preferences/theme";
 
 import { createPreferencesStore, PreferencesState } from "./preferences-store";
 
 const PreferencesStoreContext = createContext<StoreApi<PreferencesState> | null>(null);
+
+function getSafeValue<T extends string>(raw: string | null, allowed: readonly T[]): T | undefined {
+  if (!raw) return undefined;
+  return allowed.includes(raw as T) ? (raw as T) : undefined;
+}
 
 export const PreferencesStoreProvider = ({
   children,
@@ -46,32 +51,24 @@ export const PreferencesStoreProvider = ({
     const domSidebarVariantAttr = root.getAttribute("data-sidebar-variant");
     const domSidebarCollapsibleAttr = root.getAttribute("data-sidebar-collapsible");
 
-    const safePreset =
-      domPresetAttr && THEME_PRESET_VALUES.includes(domPresetAttr as PreferencesState["themePreset"])
-        ? (domPresetAttr as PreferencesState["themePreset"])
-        : undefined;
+    const safePreset = getSafeValue<PreferencesState["themePreset"]>(domPresetAttr, THEME_PRESET_VALUES);
 
-    const safeContentLayout =
-      domContentLayoutAttr && CONTENT_LAYOUT_VALUES.includes(domContentLayoutAttr as PreferencesState["contentLayout"])
-        ? (domContentLayoutAttr as PreferencesState["contentLayout"])
-        : undefined;
+    const safeContentLayout = getSafeValue<PreferencesState["contentLayout"]>(
+      domContentLayoutAttr,
+      CONTENT_LAYOUT_VALUES,
+    );
 
-    const safeNavbarStyle =
-      domNavbarStyleAttr && NAVBAR_STYLE_VALUES.includes(domNavbarStyleAttr as PreferencesState["navbarStyle"])
-        ? (domNavbarStyleAttr as PreferencesState["navbarStyle"])
-        : undefined;
+    const safeNavbarStyle = getSafeValue<PreferencesState["navbarStyle"]>(domNavbarStyleAttr, NAVBAR_STYLE_VALUES);
 
-    const safeSidebarVariant =
-      domSidebarVariantAttr &&
-      SIDEBAR_VARIANT_VALUES.includes(domSidebarVariantAttr as PreferencesState["sidebarVariant"])
-        ? (domSidebarVariantAttr as PreferencesState["sidebarVariant"])
-        : undefined;
+    const safeSidebarVariant = getSafeValue<PreferencesState["sidebarVariant"]>(
+      domSidebarVariantAttr,
+      SIDEBAR_VARIANT_VALUES,
+    );
 
-    const safeSidebarCollapsible =
-      domSidebarCollapsibleAttr &&
-      SIDEBAR_COLLAPSIBLE_VALUES.includes(domSidebarCollapsibleAttr as PreferencesState["sidebarCollapsible"])
-        ? (domSidebarCollapsibleAttr as PreferencesState["sidebarCollapsible"])
-        : undefined;
+    const safeSidebarCollapsible = getSafeValue<PreferencesState["sidebarCollapsible"]>(
+      domSidebarCollapsibleAttr,
+      SIDEBAR_COLLAPSIBLE_VALUES,
+    );
 
     store.setState((prev) => ({
       ...prev,

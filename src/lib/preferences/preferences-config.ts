@@ -11,30 +11,30 @@
  *
  * "none"           → Preference is not persisted anywhere and resets on refresh.
  */
-export type PreferenceKey =
-  | "theme_mode"
-  | "theme_preset"
-  | "content_layout"
-  | "navbar_style"
-  | "sidebar_variant"
-  | "sidebar_collapsible";
+
+import type { ContentLayout, NavbarStyle, SidebarVariant, SidebarCollapsible } from "./layout";
+import type { ThemeMode, ThemePreset } from "./theme";
 
 export type PreferencePersistence = "none" | "client-cookie" | "server-cookie" | "localStorage";
 
-export const PREFERENCE_DEFAULTS = {
+type PreferenceValueMap = {
+  theme_mode: ThemeMode;
+  theme_preset: ThemePreset;
+  content_layout: ContentLayout;
+  navbar_style: NavbarStyle;
+  sidebar_variant: SidebarVariant;
+  sidebar_collapsible: SidebarCollapsible;
+};
+
+export type PreferenceKey = keyof PreferenceValueMap;
+
+export const PREFERENCE_DEFAULTS: PreferenceValueMap = {
   theme_mode: "light",
   theme_preset: "default",
   content_layout: "centered",
   navbar_style: "sticky",
   sidebar_variant: "inset",
   sidebar_collapsible: "icon",
-} as const satisfies {
-  theme_mode: "light" | "dark";
-  theme_preset: "default" | "brutalist" | "soft-pop" | "tangerine";
-  content_layout: "centered" | "full-width";
-  navbar_style: "sticky" | "scroll";
-  sidebar_variant: "inset" | "sidebar" | "floating";
-  sidebar_collapsible: "icon" | "offcanvas";
 };
 
 export const PREFERENCE_PERSISTENCE: Record<PreferenceKey, PreferencePersistence> = {

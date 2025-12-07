@@ -1,16 +1,9 @@
 export const THEME_MODE_OPTIONS = [
-  {
-    label: "Light",
-    value: "light",
-  },
-  {
-    label: "Dark",
-    value: "dark",
-  },
+  { label: "Light", value: "light" },
+  { label: "Dark", value: "dark" },
 ] as const;
 
-export const THEME_MODE_VALUES = THEME_MODE_OPTIONS.map((m) => m.value);
-
+export const THEME_MODE_VALUES = THEME_MODE_OPTIONS.map((o) => o.value);
 export type ThemeMode = (typeof THEME_MODE_VALUES)[number];
 
 // --- generated:themePresets:start ---

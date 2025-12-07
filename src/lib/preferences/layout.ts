@@ -1,7 +1,7 @@
 // Sidebar Variant
 export const SIDEBAR_VARIANT_OPTIONS = [
-  { label: "Inset", value: "inset" },
   { label: "Sidebar", value: "sidebar" },
+  { label: "Inset", value: "inset" },
   { label: "Floating", value: "floating" },
 ] as const;
 export const SIDEBAR_VARIANT_VALUES = SIDEBAR_VARIANT_OPTIONS.map((v) => v.value);

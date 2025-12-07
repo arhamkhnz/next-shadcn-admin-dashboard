@@ -6,7 +6,7 @@
  * Runs early in <head> to apply the correct data attributes before hydration,
  * preventing layout or theme flicker and keeping RootLayout fully static.
  */
-import { PREFERENCE_PERSISTENCE, PREFERENCE_DEFAULTS } from "@/lib/preferences-config";
+import { PREFERENCE_PERSISTENCE, PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 
 export function ThemeBootScript() {
   const persistence = JSON.stringify({

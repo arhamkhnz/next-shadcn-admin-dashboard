@@ -7,12 +7,17 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { applyContentLayout, applyNavbarStyle, applySidebarVariant, applySidebarCollapsible } from "@/lib/layout-utils";
-import { persistPreference } from "@/lib/preferences-storage";
-import { applyThemeMode, applyThemePreset } from "@/lib/theme-utils";
+import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/lib/preferences/layout";
+import {
+  applyContentLayout,
+  applyNavbarStyle,
+  applySidebarVariant,
+  applySidebarCollapsible,
+} from "@/lib/preferences/layout-utils";
+import { persistPreference } from "@/lib/preferences/preferences-storage";
+import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/lib/preferences/theme";
+import { applyThemeMode, applyThemePreset } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
-import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/types/preferences/layout";
-import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/types/preferences/theme";
 
 export function LayoutControls() {
   const themeMode = usePreferencesStore((s) => s.themeMode);

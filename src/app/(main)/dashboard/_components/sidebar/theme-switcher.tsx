@@ -3,8 +3,8 @@
 import { Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { persistPreference } from "@/lib/preferences-storage";
-import { applyThemeMode } from "@/lib/theme-utils";
+import { persistPreference } from "@/lib/preferences/preferences-storage";
+import { applyThemeMode } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function ThemeSwitcher() {
