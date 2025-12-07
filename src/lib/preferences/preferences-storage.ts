@@ -2,6 +2,9 @@
 
 import { setValueToCookie } from "@/server/server-actions";
 
+import { setClientCookie } from "../cookie.client";
+import { setLocalStorageValue } from "../local-storage.client";
+
 import { PREFERENCE_PERSISTENCE, type PreferenceKey } from "./preferences-config";
 
 export async function persistPreference(key: PreferenceKey, value: string) {
@@ -12,7 +15,7 @@ export async function persistPreference(key: PreferenceKey, value: string) {
       return;
 
     case "client-cookie":
-      // coming later: setClientCookie(key, value)
+      setClientCookie(key, value);
       return;
 
     case "server-cookie":
@@ -20,7 +23,7 @@ export async function persistPreference(key: PreferenceKey, value: string) {
       return;
 
     case "localStorage":
-      // coming later: localStorage.setItem(key, value)
+      setLocalStorageValue(key, value);
       return;
 
     default:

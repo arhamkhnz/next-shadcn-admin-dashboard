@@ -38,10 +38,10 @@ export const PREFERENCE_DEFAULTS: PreferenceValueMap = {
 };
 
 export const PREFERENCE_PERSISTENCE: Record<PreferenceKey, PreferencePersistence> = {
-  theme_mode: "none",
-  theme_preset: "none",
-  content_layout: "none",
-  navbar_style: "none",
-  sidebar_variant: "none",
-  sidebar_collapsible: "none",
+  theme_mode: "client-cookie",
+  theme_preset: "client-cookie",
+  content_layout: "client-cookie",
+  navbar_style: "client-cookie",
+  sidebar_variant: "client-cookie",
+  sidebar_collapsible: "client-cookie",
 };
