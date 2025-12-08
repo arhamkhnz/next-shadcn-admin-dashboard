@@ -1,3 +1,5 @@
+"use no memo";
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Row, flexRender } from "@tanstack/react-table";
