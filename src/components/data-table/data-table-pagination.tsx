@@ -1,3 +1,5 @@
+"use no memo";
+
 import { Table } from "@tanstack/react-table";
 import { ChevronRight, ChevronsRight, ChevronLeft, ChevronsLeft } from "lucide-react";
 

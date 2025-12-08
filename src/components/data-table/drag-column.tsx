@@ -1,3 +1,5 @@
+"use no memo";
+
 import { useSortable } from "@dnd-kit/sortable";
 import { ColumnDef } from "@tanstack/react-table";
 import { GripVertical } from "lucide-react";
