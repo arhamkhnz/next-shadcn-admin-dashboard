@@ -76,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
+            <SidebarMenuButton asChild>
               <Link prefetch={false} href="/dashboard/default">
                 <Command />
                 <span className="text-base font-semibold">{APP_CONFIG.name}</span>
