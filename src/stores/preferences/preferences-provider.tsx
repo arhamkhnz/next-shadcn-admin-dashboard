@@ -21,6 +21,21 @@ function getSafeValue<T extends string>(raw: string | null, allowed: readonly T[
   return allowed.includes(raw as T) ? (raw as T) : undefined;
 }
 
+function readDomState(): Partial<PreferencesState> {
+  const root = document.documentElement;
+
+  const mode = root.classList.contains("dark") ? "dark" : "light";
+
+  return {
+    themeMode: mode,
+    themePreset: getSafeValue(root.getAttribute("data-theme-preset"), THEME_PRESET_VALUES),
+    contentLayout: getSafeValue(root.getAttribute("data-content-layout"), CONTENT_LAYOUT_VALUES),
+    navbarStyle: getSafeValue(root.getAttribute("data-navbar-style"), NAVBAR_STYLE_VALUES),
+    sidebarVariant: getSafeValue(root.getAttribute("data-sidebar-variant"), SIDEBAR_VARIANT_VALUES),
+    sidebarCollapsible: getSafeValue(root.getAttribute("data-sidebar-collapsible"), SIDEBAR_COLLAPSIBLE_VALUES),
+  };
+}
+
 export const PreferencesStoreProvider = ({
   children,
   themeMode,
@@ -39,54 +54,13 @@ export const PreferencesStoreProvider = ({
   );
 
   useEffect(() => {
-    const root = document.documentElement;
-
-    const domMode = root.classList.contains("dark")
-      ? ("dark" as PreferencesState["themeMode"])
-      : ("light" as PreferencesState["themeMode"]);
-
-    const domPresetAttr = root.getAttribute("data-theme-preset");
-    const domContentLayoutAttr = root.getAttribute("data-content-layout");
-    const domNavbarStyleAttr = root.getAttribute("data-navbar-style");
-    const domSidebarVariantAttr = root.getAttribute("data-sidebar-variant");
-    const domSidebarCollapsibleAttr = root.getAttribute("data-sidebar-collapsible");
-
-    const safePreset = getSafeValue<PreferencesState["themePreset"]>(domPresetAttr, THEME_PRESET_VALUES);
-
-    const safeContentLayout = getSafeValue<PreferencesState["contentLayout"]>(
-      domContentLayoutAttr,
-      CONTENT_LAYOUT_VALUES,
-    );
-
-    const safeNavbarStyle = getSafeValue<PreferencesState["navbarStyle"]>(domNavbarStyleAttr, NAVBAR_STYLE_VALUES);
-
-    const safeSidebarVariant = getSafeValue<PreferencesState["sidebarVariant"]>(
-      domSidebarVariantAttr,
-      SIDEBAR_VARIANT_VALUES,
-    );
-
-    const safeSidebarCollapsible = getSafeValue<PreferencesState["sidebarCollapsible"]>(
-      domSidebarCollapsibleAttr,
-      SIDEBAR_COLLAPSIBLE_VALUES,
-    );
+    const domState = readDomState();
 
     store.setState((prev) => ({
       ...prev,
-      themeMode: domMode,
-      themePreset: safePreset ?? prev.themePreset,
-      contentLayout: safeContentLayout ?? prev.contentLayout,
-      navbarStyle: safeNavbarStyle ?? prev.navbarStyle,
-      sidebarVariant: safeSidebarVariant ?? prev.sidebarVariant,
-      sidebarCollapsible: safeSidebarCollapsible ?? prev.sidebarCollapsible,
+      ...domState,
     }));
-
-    store.setState({ bootstrapped: true });
   }, [store]);
-
-  // NOTE: I personally don't like this guard, but keeping it for now while exploring SSR‑friendly ways to avoid flicker.
-  // If you ever come across a clean solution that keeps SSR intact and removes UI flicker, feel free to suggest.
-  const bootstrapped = useStore(store, (s) => s.bootstrapped);
-  if (!bootstrapped) return null;
 
   return <PreferencesStoreContext.Provider value={store}>{children}</PreferencesStoreContext.Provider>;
 };
