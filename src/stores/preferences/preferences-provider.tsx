@@ -59,6 +59,7 @@ export const PreferencesStoreProvider = ({
     store.setState((prev) => ({
       ...prev,
       ...domState,
+      isSynced: true,
     }));
   }, [store]);
 
