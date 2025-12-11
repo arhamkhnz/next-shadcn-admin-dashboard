@@ -76,9 +76,9 @@ export function ThemeBootScript() {
         var rawSidebarCollapsible = readPreference("sidebar_collapsible", DEFAULTS.sidebar_collapsible);
 
         var mode = (rawMode === "dark" || rawMode === "light") ? rawMode : "light";
-        var preset = rawPreset || "default";
-        var contentLayout = rawContentLayout || "centered";
-        var navbarStyle = rawNavbarStyle || "scroll";
+        var preset = rawPreset || DEFAULTS.theme_preset;
+        var contentLayout = rawContentLayout || DEFAULTS.content_layout;
+        var navbarStyle = rawNavbarStyle || DEFAULTS.navbar_style;
         var sidebarVariant = rawSidebarVariant || DEFAULTS.sidebar_variant;
         var sidebarCollapsible = rawSidebarCollapsible || DEFAULTS.sidebar_collapsible;
 
