@@ -102,12 +102,6 @@ export function ThemeBootScript() {
         };
 
         window.__PREFERENCES__ = prefs;
-
-        var script = document.createElement("script");
-        script.id = "__PREFERENCES_JSON__";
-        script.type = "application/json";
-        script.textContent = JSON.stringify(prefs);
-        document.head.appendChild(script);
       } catch (e) {
         console.warn("ThemeBootScript error:", e);
       }

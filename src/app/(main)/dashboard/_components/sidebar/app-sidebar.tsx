@@ -63,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const sidebarCollapsible = usePreferencesStore((s) => s.sidebarCollapsible);
 
   return (
-    <Sidebar variant={sidebarVariant} collapsible={sidebarCollapsible} {...props}>
+    <Sidebar {...props} variant={sidebarVariant} collapsible={sidebarCollapsible}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
