@@ -15,8 +15,7 @@
  * - You may optionally integrate it directly into a build step if preferred.
  */
 
-import prettier from "prettier";
-
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -109,7 +108,10 @@ const updated = fileContent.replace(
 );
 
 async function main() {
-  const formatted = await prettier.format(updated, { parser: "typescript" });
+  const formatted = execFileSync("npx", ["@biomejs/biome", "format", "--stdin-file-path", outputPath], {
+    input: updated,
+    encoding: "utf8",
+  });
 
   if (formatted === fileContent) {
     console.log("ℹ️  No changes in theme.ts");
