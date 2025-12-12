@@ -112,6 +112,14 @@ _Deploy your own copy with one click._
 
 Your app will be running at [http://localhost:3000](http://localhost:3000)
 
+### Formatting and Linting
+
+Format, lint, and organize imports
+```bash
+npx @biomejs/biome check --write
+```
+> For more information on available rules, fixes, and CLI options, refer to the [Biome documentation](https://biomejs.dev/).
+
 ---
 
 > [!IMPORTANT]  
