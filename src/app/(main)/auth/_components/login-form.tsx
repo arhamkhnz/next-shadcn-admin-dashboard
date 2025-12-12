@@ -84,7 +84,7 @@ export function LoginForm() {
                   className="size-4"
                 />
               </FormControl>
-              <FormLabel htmlFor="login-remember" className="text-muted-foreground ml-1 text-sm font-medium">
+              <FormLabel htmlFor="login-remember" className="ml-1 font-medium text-muted-foreground text-sm">
                 Remember me for 30 days
               </FormLabel>
             </FormItem>

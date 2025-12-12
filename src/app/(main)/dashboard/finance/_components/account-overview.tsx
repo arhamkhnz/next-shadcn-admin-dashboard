@@ -1,14 +1,14 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { siApple, siPaypal, siOpenai, siVercel, siFigma } from "simple-icons";
+import { siApple, siFigma, siOpenai, siPaypal, siVercel } from "simple-icons";
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatCurrency, cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
 function ChipSVG() {
   return (
@@ -86,13 +86,13 @@ export function AccountOverview() {
           </TabsList>
           <TabsContent value="virtual">
             <div className="space-y-4">
-              <div className="bg-primary relative aspect-8/5 w-full max-w-96 overflow-hidden rounded-xl perspective-distant">
+              <div className="perspective-distant relative aspect-8/5 w-full max-w-96 overflow-hidden rounded-xl bg-primary">
                 <div className="absolute top-6 left-6">
-                  <SimpleIcon icon={siApple} className="fill-primary-foreground size-8" />
+                  <SimpleIcon icon={siApple} className="size-8 fill-primary-foreground" />
                 </div>
-                <div className="absolute top-1/2 w-full -translate-y-1/2">
+                <div className="-translate-y-1/2 absolute top-1/2 w-full">
                   <div className="flex items-end justify-between px-6">
-                    <span className="text-accent font-mono text-lg leading-none font-medium tracking-wide uppercase">
+                    <span className="font-medium font-mono text-accent text-lg uppercase leading-none tracking-wide">
                       Arham Khan
                     </span>
                     <ChipSVG />
@@ -143,18 +143,18 @@ export function AccountOverview() {
                 <div className="space-y-4">
                   {recentPayments.map((transaction) => (
                     <div key={transaction.id} className="flex items-center gap-2">
-                      <div className="bg-muted flex size-10 shrink-0 items-center justify-center rounded-full">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted">
                         <SimpleIcon icon={transaction.icon} className="size-5" />
                       </div>
                       <div className="flex w-full items-end justify-between">
                         <div>
-                          <p className="text-sm font-medium">{transaction.title}</p>
-                          <p className="text-muted-foreground line-clamp-1 text-xs">{transaction.subtitle}</p>
+                          <p className="font-medium text-sm">{transaction.title}</p>
+                          <p className="line-clamp-1 text-muted-foreground text-xs">{transaction.subtitle}</p>
                         </div>
                         <div>
                           <span
                             className={cn(
-                              "text-sm leading-none font-medium tabular-nums",
+                              "font-medium text-sm tabular-nums leading-none",
                               transaction.type === "debit" ? "text-destructive" : "text-green-500",
                             )}
                           >

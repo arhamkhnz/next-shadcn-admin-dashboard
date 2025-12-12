@@ -1,7 +1,6 @@
-/* eslint-disable */
 import { createStore } from "zustand/vanilla";
 
-import type { ContentLayout, NavbarStyle, SidebarVariant, SidebarCollapsible } from "@/lib/preferences/layout";
+import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "@/lib/preferences/layout";
 import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import type { ThemeMode, ThemePreset } from "@/lib/preferences/theme";
 

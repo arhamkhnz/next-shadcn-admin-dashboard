@@ -1,7 +1,8 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
+
+import { Inter } from "next/font/google";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
 import { APP_CONFIG } from "@/config/app-config";

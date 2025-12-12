@@ -1,19 +1,19 @@
 "use client";
 
 import { format, subMonths } from "date-fns";
-import { Wallet, BadgeDollarSign } from "lucide-react";
-import { Area, AreaChart, Line, LineChart, Bar, BarChart, XAxis } from "recharts";
+import { BadgeDollarSign, Wallet } from "lucide-react";
+import { Area, AreaChart, Bar, BarChart, Line, LineChart, XAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 import {
-  leadsChartData,
   leadsChartConfig,
-  proposalsChartData,
+  leadsChartData,
   proposalsChartConfig,
-  revenueChartData,
+  proposalsChartData,
   revenueChartConfig,
+  revenueChartData,
 } from "./crm.config";
 
 const lastMonth = format(subMonths(new Date(), 1), "LLLL");
@@ -43,8 +43,8 @@ export function OverviewCards() {
           </ChartContainer>
         </CardContent>
         <CardFooter className="flex items-center justify-between">
-          <span className="text-xl font-semibold tabular-nums">635</span>
-          <span className="text-sm font-medium text-green-500">+54.6%</span>
+          <span className="font-semibold text-xl tabular-nums">635</span>
+          <span className="font-medium text-green-500 text-sm">+54.6%</span>
         </CardFooter>
       </Card>
 
@@ -91,15 +91,15 @@ export function OverviewCards() {
             <CardTitle>Revenue</CardTitle>
             <CardDescription>Last 6 Months</CardDescription>
           </div>
-          <p className="text-2xl font-medium tabular-nums">$56,050</p>
-          <div className="w-fit rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-500">+22.2%</div>
+          <p className="font-medium text-2xl tabular-nums">$56,050</p>
+          <div className="w-fit rounded-md bg-green-500/10 px-2 py-1 font-medium text-green-500 text-xs">+22.2%</div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <div className="bg-destructive/10 w-fit rounded-lg p-2">
-            <BadgeDollarSign className="text-destructive size-5" />
+          <div className="w-fit rounded-lg bg-destructive/10 p-2">
+            <BadgeDollarSign className="size-5 text-destructive" />
           </div>
         </CardHeader>
         <CardContent className="flex size-full flex-col justify-between">
@@ -107,8 +107,8 @@ export function OverviewCards() {
             <CardTitle>Projects Won</CardTitle>
             <CardDescription>Last 6 Months</CardDescription>
           </div>
-          <p className="text-2xl font-medium tabular-nums">136</p>
-          <div className="text-destructive bg-destructive/10 w-fit rounded-md px-2 py-1 text-xs font-medium">-2.5%</div>
+          <p className="font-medium text-2xl tabular-nums">136</p>
+          <div className="w-fit rounded-md bg-destructive/10 px-2 py-1 font-medium text-destructive text-xs">-2.5%</div>
         </CardContent>
       </Card>
 

@@ -12,13 +12,13 @@ export default function RegisterV2() {
     <>
       <div className="mx-auto flex w-full flex-col justify-center space-y-8 sm:w-[350px]">
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-medium">Create your account</h1>
+          <h1 className="font-medium text-3xl">Create your account</h1>
           <p className="text-muted-foreground text-sm">Please enter your details to register.</p>
         </div>
         <div className="space-y-4">
           <GoogleButton className="w-full" />
-          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-            <span className="bg-background text-muted-foreground relative z-10 px-2">Or continue with</span>
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t">
+            <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
           </div>
           <RegisterForm />
         </div>
@@ -36,7 +36,7 @@ export default function RegisterV2() {
       <div className="absolute bottom-5 flex w-full justify-between px-10">
         <div className="text-sm">{APP_CONFIG.copyright}</div>
         <div className="flex items-center gap-1 text-sm">
-          <Globe className="text-muted-foreground size-4" />
+          <Globe className="size-4 text-muted-foreground" />
           ENG
         </div>
       </div>

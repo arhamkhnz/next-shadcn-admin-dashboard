@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-import { useStore, type StoreApi } from "zustand";
+import { type StoreApi, useStore } from "zustand";
 
 import {
   CONTENT_LAYOUT_VALUES,
@@ -12,7 +12,7 @@ import {
 } from "@/lib/preferences/layout";
 import { THEME_PRESET_VALUES } from "@/lib/preferences/theme";
 
-import { createPreferencesStore, PreferencesState } from "./preferences-store";
+import { createPreferencesStore, type PreferencesState } from "./preferences-store";
 
 const PreferencesStoreContext = createContext<StoreApi<PreferencesState> | null>(null);
 

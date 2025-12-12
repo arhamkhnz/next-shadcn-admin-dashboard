@@ -1,13 +1,13 @@
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVertical } from "lucide-react";
-import z from "zod";
+import type z from "zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { recentLeadSchema } from "./schema";
+import type { recentLeadSchema } from "./schema";
 
 export const recentLeadsColumns: ColumnDef<z.infer<typeof recentLeadSchema>>[] = [
   {
@@ -73,7 +73,7 @@ export const recentLeadsColumns: ColumnDef<z.infer<typeof recentLeadSchema>>[] =
   {
     id: "actions",
     cell: () => (
-      <Button variant="ghost" className="text-muted-foreground flex size-8" size="icon">
+      <Button variant="ghost" className="flex size-8 text-muted-foreground" size="icon">
         <EllipsisVertical />
         <span className="sr-only">Open menu</span>
       </Button>

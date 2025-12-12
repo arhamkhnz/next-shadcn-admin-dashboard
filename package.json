@@ -1,21 +1,20 @@
 {
   "name": "studio-admin",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "biome lint",
+    "format": "biome format --write",
+    "check": "biome check",
+    "check:fix": "biome check --write",
     "prepare": "husky",
     "generate:presets": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/generate-theme-presets.ts"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "eslint --fix"
-    ]
+    "*.{js,ts,jsx,tsx}": ["biome check --write"]
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -31,7 +30,6 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
-    "eslint-plugin-unicorn": "^56.0.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.453.0",
     "next": "^16.0.10",
@@ -51,30 +49,20 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.16.0",
+    "@biomejs/biome": "2.3.8",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^22.19.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/parser": "^8.26.0",
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.10",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-security": "^3.0.1",
-    "eslint-plugin-sonarjs": "^3.0.5",
     "globals": "^15.15.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
-    "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4.1.5",
     "ts-node": "^10.9.2",
     "tw-animate-css": "^1.4.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0"
+    "typescript": "^5.9.3"
   }
 }
