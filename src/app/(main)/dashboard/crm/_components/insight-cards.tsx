@@ -1,16 +1,16 @@
 "use client";
 
-import { XAxis, Label, Pie, PieChart, Bar, BarChart, CartesianGrid, LabelList, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, XAxis, YAxis } from "recharts";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend } from "@/components/ui/chart";
+import { ChartContainer, ChartLegend, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 import {
-  leadsBySourceChartData,
   leadsBySourceChartConfig,
-  projectRevenueChartData,
+  leadsBySourceChartData,
   projectRevenueChartConfig,
+  projectRevenueChartData,
 } from "./crm.config";
 
 export function InsightCards() {
@@ -51,7 +51,7 @@ export function InsightCards() {
                           <tspan
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold tabular-nums"
+                            className="fill-foreground font-bold text-3xl tabular-nums"
                           >
                             {totalLeads.toLocaleString()}
                           </tspan>

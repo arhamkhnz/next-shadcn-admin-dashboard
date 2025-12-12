@@ -1,15 +1,15 @@
 "use client";
 
 import { Clock } from "lucide-react";
-import { FunnelChart, Funnel, LabelList } from "recharts";
+import { Funnel, FunnelChart, LabelList } from "recharts";
 
-import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
-import { formatCurrency, cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
-import { salesPipelineChartData, salesPipelineChartConfig, regionSalesData, actionItems } from "./crm.config";
+import { actionItems, regionSalesData, salesPipelineChartConfig, salesPipelineChartData } from "./crm.config";
 
 export function OperationalCards() {
   const totalSales = regionSalesData.reduce((sum, region) => sum + region.sales, 0);
@@ -22,7 +22,7 @@ export function OperationalCards() {
         <CardContent className="size-full">
           <ChartContainer config={salesPipelineChartConfig} className="size-full">
             <FunnelChart margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-              <Funnel className="stroke-card stroke-2" dataKey="value" data={salesPipelineChartData}>
+              <Funnel className="stroke-2 stroke-card" dataKey="value" data={salesPipelineChartData}>
                 <LabelList className="fill-foreground stroke-0" dataKey="stage" position="right" offset={10} />
                 <LabelList className="fill-foreground stroke-0" dataKey="value" position="left" offset={10} />
               </Funnel>
@@ -46,14 +46,14 @@ export function OperationalCards() {
             {regionSalesData.map((region) => (
               <div key={region.region} className="space-y-0.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{region.region}</span>
+                  <span className="font-medium text-sm">{region.region}</span>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-semibold tabular-nums">
+                    <span className="font-semibold text-sm tabular-nums">
                       {formatCurrency(region.sales, { noDecimals: true })}
                     </span>
                     <span
                       className={cn(
-                        "text-xs font-medium tabular-nums",
+                        "font-medium text-xs tabular-nums",
                         region.isPositive ? "text-green-500" : "text-destructive",
                       )}
                     >
@@ -63,14 +63,14 @@ export function OperationalCards() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Progress value={region.percentage} />
-                  <span className="text-muted-foreground text-xs font-medium tabular-nums">{region.percentage}%</span>
+                  <span className="font-medium text-muted-foreground text-xs tabular-nums">{region.percentage}%</span>
                 </div>
               </div>
             ))}
           </div>
         </CardContent>
         <CardFooter>
-          <div className="text-muted-foreground flex justify-between gap-1 text-xs">
+          <div className="flex justify-between gap-1 text-muted-foreground text-xs">
             <span>{regionSalesData.length} regions tracked</span>
             <span>•</span>
             <span>{regionSalesData.filter((r) => r.isPositive).length} regions growing</span>
@@ -88,11 +88,11 @@ export function OperationalCards() {
               <li key={item.id} className="space-y-2 rounded-md border px-3 py-2">
                 <div className="flex items-center gap-2">
                   <Checkbox defaultChecked={item.checked} />
-                  <span className="text-sm font-medium">{item.title}</span>
+                  <span className="font-medium text-sm">{item.title}</span>
                   <span
                     className={cn(
-                      "w-fit rounded-md px-2 py-1 text-xs font-medium",
-                      item.priority === "High" && "text-destructive bg-destructive/20",
+                      "w-fit rounded-md px-2 py-1 font-medium text-xs",
+                      item.priority === "High" && "bg-destructive/20 text-destructive",
                       item.priority === "Medium" && "bg-yellow-500/20 text-yellow-500",
                       item.priority === "Low" && "bg-green-500/20 text-green-500",
                     )}
@@ -100,10 +100,10 @@ export function OperationalCards() {
                     {item.priority}
                   </span>
                 </div>
-                <div className="text-muted-foreground text-xs font-medium">{item.desc}</div>
+                <div className="font-medium text-muted-foreground text-xs">{item.desc}</div>
                 <div className="flex items-center gap-1">
-                  <Clock className="text-muted-foreground size-3" />
-                  <span className="text-muted-foreground text-xs font-medium">{item.due}</span>
+                  <Clock className="size-3 text-muted-foreground" />
+                  <span className="font-medium text-muted-foreground text-xs">{item.due}</span>
                 </div>
               </li>
             ))}

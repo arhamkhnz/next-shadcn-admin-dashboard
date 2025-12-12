@@ -7,15 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { SidebarVariant, SidebarCollapsible, ContentLayout, NavbarStyle } from "@/lib/preferences/layout";
+import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "@/lib/preferences/layout";
 import {
   applyContentLayout,
   applyNavbarStyle,
-  applySidebarVariant,
   applySidebarCollapsible,
+  applySidebarVariant,
 } from "@/lib/preferences/layout-utils";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
-import { THEME_PRESET_OPTIONS, type ThemePreset, type ThemeMode } from "@/lib/preferences/theme";
+import { THEME_PRESET_OPTIONS, type ThemeMode, type ThemePreset } from "@/lib/preferences/theme";
 import { applyThemeMode, applyThemePreset } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
@@ -84,15 +84,15 @@ export function LayoutControls() {
       <PopoverContent align="end">
         <div className="flex flex-col gap-5">
           <div className="space-y-1.5">
-            <h4 className="text-sm leading-none font-medium">Preferences</h4>
+            <h4 className="font-medium text-sm leading-none">Preferences</h4>
             <p className="text-muted-foreground text-xs">Customize your dashboard layout preferences.</p>
-            <p className="text-muted-foreground text-xs font-medium">
+            <p className="font-medium text-muted-foreground text-xs">
               *Preferences use cookies by default. You can switch between cookies, localStorage, or no storage in code.
             </p>
           </div>
           <div className="space-y-3 **:data-[slot=toggle-group]:w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs">
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Theme Preset</Label>
+              <Label className="font-medium text-xs">Theme Preset</Label>
               <Select value={themePreset} onValueChange={onThemePresetChange}>
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Preset" />
@@ -114,7 +114,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Theme Mode</Label>
+              <Label className="font-medium text-xs">Theme Mode</Label>
               <ToggleGroup
                 size="sm"
                 variant="outline"
@@ -132,7 +132,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Page Layout</Label>
+              <Label className="font-medium text-xs">Page Layout</Label>
               <ToggleGroup
                 size="sm"
                 variant="outline"
@@ -150,7 +150,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Navbar Behavior</Label>
+              <Label className="font-medium text-xs">Navbar Behavior</Label>
               <ToggleGroup
                 size="sm"
                 variant="outline"
@@ -168,7 +168,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Sidebar Style</Label>
+              <Label className="font-medium text-xs">Sidebar Style</Label>
               <ToggleGroup
                 size="sm"
                 variant="outline"
@@ -189,7 +189,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Sidebar Collapse Mode</Label>
+              <Label className="font-medium text-xs">Sidebar Collapse Mode</Label>
               <ToggleGroup
                 size="sm"
                 variant="outline"

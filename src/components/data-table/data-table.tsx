@@ -3,19 +3,19 @@
 import * as React from "react";
 
 import {
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
+  type UniqueIdentifier,
   useSensor,
   useSensors,
-  DndContext,
-  closestCenter,
-  type UniqueIdentifier,
-  type DragEndEvent,
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
-import { ColumnDef, flexRender, type Table as TanStackTable } from "@tanstack/react-table";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { type ColumnDef, flexRender, type Table as TanStackTable } from "@tanstack/react-table";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
 
   const tableContent = (
     <Table>
-      <TableHeader className="bg-muted sticky top-0 z-10">
+      <TableHeader className="sticky top-0 z-10 bg-muted">
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => {

@@ -1,9 +1,9 @@
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { z } from "zod";
+import type { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import {
   Drawer,
   DrawerClose,
@@ -20,7 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import { sectionSchema } from "./schema";
+import type { sectionSchema } from "./schema";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -48,7 +48,7 @@ export function TableCellViewer({ item }: { item: z.infer<typeof sectionSchema> 
   return (
     <Drawer direction={isMobile ? "bottom" : "right"}>
       <DrawerTrigger asChild>
-        <Button variant="link" className="text-foreground w-fit px-0 text-left">
+        <Button variant="link" className="w-fit px-0 text-left text-foreground">
           {item.header}
         </Button>
       </DrawerTrigger>
@@ -99,7 +99,7 @@ export function TableCellViewer({ item }: { item: z.infer<typeof sectionSchema> 
               </ChartContainer>
               <Separator />
               <div className="grid gap-2">
-                <div className="flex gap-2 leading-none font-medium">
+                <div className="flex gap-2 font-medium leading-none">
                   Trending up by 5.2% this month <TrendingUp className="size-4" />
                 </div>
                 <div className="text-muted-foreground">

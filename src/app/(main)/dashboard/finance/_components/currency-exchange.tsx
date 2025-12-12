@@ -4,7 +4,7 @@ import { ArrowLeftRight, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/utils";
 
@@ -39,7 +39,7 @@ export function CurrencyExchange() {
               </div>
               <Separator orientation="vertical" className="!h-auto" />
               <div className="flex flex-1 items-center justify-center">
-                <ArrowLeftRight className="text-muted-foreground size-4" />
+                <ArrowLeftRight className="size-4 text-muted-foreground" />
               </div>
               <Separator orientation="vertical" className="!h-auto" />
               <div className="flex flex-1 justify-center">
@@ -49,11 +49,11 @@ export function CurrencyExchange() {
           </div>
           <div className="space-y-2 py-6 text-center tabular-nums">
             <p className="text-4xl">{formatCurrency(100.0)}</p>
-            <p className="text-muted-foreground text-xs font-medium">
+            <p className="font-medium text-muted-foreground text-xs">
               Available: <span className="text-foreground">{formatCurrency(13100.06)}</span>
             </p>
           </div>
-          <div className="bg-muted border-t py-1 text-center text-xs tabular-nums">
+          <div className="border-t bg-muted py-1 text-center text-xs tabular-nums">
             <span className="text-muted-foreground">1 USD = </span> 0.85 EUR
           </div>
         </div>

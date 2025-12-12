@@ -11,7 +11,7 @@
  * Others are flexible and can use any persistence.
  */
 
-import type { ContentLayout, NavbarStyle, SidebarVariant, SidebarCollapsible } from "./layout";
+import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "./layout";
 import type { ThemeMode, ThemePreset } from "./theme";
 
 export type PreferencePersistence = "none" | "client-cookie" | "server-cookie" | "localStorage";

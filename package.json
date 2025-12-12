@@ -13,9 +13,7 @@
     "generate:presets": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/generate-theme-presets.ts"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "biome check --write"
-    ]
+    "*.{js,ts,jsx,tsx}": ["biome check --write"]
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

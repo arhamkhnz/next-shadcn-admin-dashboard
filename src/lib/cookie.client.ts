@@ -10,7 +10,7 @@ export function setClientCookie(key: string, value: string, days = 7) {
 export function getClientCookie(key: string) {
   return document.cookie
     .split("; ")
-    .find((row) => row.startsWith(key + "="))
+    .find((row) => row.startsWith(`${key}=`))
     ?.split("=")[1];
 }
 

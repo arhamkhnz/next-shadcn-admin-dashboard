@@ -4,7 +4,7 @@
 import * as React from "react";
 
 import { Plus } from "lucide-react";
-import { z } from "zod";
+import type { z } from "zod";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,8 @@ import { DataTable as DataTableNew } from "../../../../../components/data-table/
 import { DataTablePagination } from "../../../../../components/data-table/data-table-pagination";
 import { DataTableViewOptions } from "../../../../../components/data-table/data-table-view-options";
 import { withDndColumn } from "../../../../../components/data-table/table-utils";
-
 import { dashboardColumns } from "./columns";
-import { sectionSchema } from "./schema";
+import type { sectionSchema } from "./schema";
 
 export function DataTable({ data: initialData }: { data: z.infer<typeof sectionSchema>[] }) {
   const [data, setData] = React.useState(() => initialData);
@@ -33,7 +32,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof sectionS
           View
         </Label>
         <Select defaultValue="outline">
-          <SelectTrigger className="flex w-fit @4xl/main:hidden" size="sm" id="view-selector">
+          <SelectTrigger className="flex @4xl/main:hidden w-fit" size="sm" id="view-selector">
             <SelectValue placeholder="Select a view" />
           </SelectTrigger>
           <SelectContent>
@@ -43,7 +42,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof sectionS
             <SelectItem value="focus-documents">Focus Documents</SelectItem>
           </SelectContent>
         </Select>
-        <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
+        <TabsList className="@4xl/main:flex hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1">
           <TabsTrigger value="outline">Outline</TabsTrigger>
           <TabsTrigger value="past-performance">
             Past Performance <Badge variant="secondary">3</Badge>
@@ -68,13 +67,13 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof sectionS
         <DataTablePagination table={table} />
       </TabsContent>
       <TabsContent value="past-performance" className="flex flex-col">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
       </TabsContent>
       <TabsContent value="key-personnel" className="flex flex-col">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
       </TabsContent>
       <TabsContent value="focus-documents" className="flex flex-col">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
       </TabsContent>
     </Tabs>
   );

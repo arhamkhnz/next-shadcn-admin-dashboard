@@ -1,10 +1,10 @@
 "use client";
 
 import { ArrowDownLeft, ArrowUpRight, CalendarCheck } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/utils";
@@ -66,27 +66,27 @@ export function FinancialOverview() {
         <div className="flex flex-col items-start justify-between gap-2 py-5 md:flex-row md:items-stretch md:gap-0">
           <div className="flex flex-1 items-center justify-center gap-2">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
-              <ArrowDownLeft className="stroke-chart-1 size-6" />
+              <ArrowDownLeft className="size-6 stroke-chart-1" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Income</p>
               <p className="font-medium tabular-nums">{formatCurrency(totalIncome, { noDecimals: true })}</p>
             </div>
           </div>
-          <Separator orientation="vertical" className="!h-auto" />
+          <Separator orientation="vertical" className="h-auto!" />
           <div className="flex flex-1 items-center justify-center gap-2">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
-              <ArrowUpRight className="stroke-chart-2 size-6" />
+              <ArrowUpRight className="size-6 stroke-chart-2" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Expenses</p>
               <p className="font-medium tabular-nums">{formatCurrency(totalExpenses, { noDecimals: true })}</p>
             </div>
           </div>
-          <Separator orientation="vertical" className="!h-auto" />
+          <Separator orientation="vertical" className="h-auto!" />
           <div className="flex flex-1 items-center justify-center gap-2">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
-              <CalendarCheck className="stroke-chart-3 size-6" />
+              <CalendarCheck className="size-6 stroke-chart-3" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Scheduled</p>
@@ -103,7 +103,7 @@ export function FinancialOverview() {
               axisLine={false}
               tickLine={false}
               tickMargin={8}
-              tickFormatter={(value) => `${value >= 1000 ? value / 1000 + "k" : value}`}
+              tickFormatter={(value) => `${value >= 1000 ? `${value / 1000}k` : value}`}
               domain={[0, 20000]}
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />

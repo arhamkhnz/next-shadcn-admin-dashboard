@@ -72,6 +72,9 @@
         "noArrayIndexKey": "warn",
         "noConstantBinaryExpressions": "error",
         "noEmptyBlockStatements": "error"
+      },
+      "complexity": {
+        "noImportantStyles": "off"
       }
     }
   },
