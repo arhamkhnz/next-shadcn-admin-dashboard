@@ -16,7 +16,6 @@
  */
 import fs from "fs";
 import path from "path";
-
 import prettier from "prettier";
 
 const presetDir = path.resolve(__dirname, "../styles/presets");
@@ -34,10 +33,8 @@ if (files.length === 0) {
   console.warn("⚠️ No preset CSS files found. Only default preset will be included.");
 }
 
-// eslint-disable-next-line complexity
 const presets = files.map((file) => {
   const filePath = path.join(presetDir, file);
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   const content = fs.readFileSync(filePath, "utf8");
 
   const labelMatch = content.match(/label:\s*(.+)/);

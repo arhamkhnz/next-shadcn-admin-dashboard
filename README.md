@@ -48,7 +48,7 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 - **Validation**: Zod  
 - **Forms & State Management**: React Hook Form, Zustand  
 - **Tables & Data Handling**: TanStack Table  
-- **Tooling & DX**: ESLint, Prettier, Husky  
+- **Tooling & DX**: Biome, Husky  
 
 ## Screens
 
