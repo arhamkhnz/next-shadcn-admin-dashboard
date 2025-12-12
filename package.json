@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome lint",
     "format": "biome format --write",
-    "format:check": "biome check --write",
+    "check": "biome check",
+    "check:fix": "biome check --write",
     "prepare": "husky",
     "generate:presets": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/generate-theme-presets.ts"
   },

@@ -102,7 +102,7 @@ export function ExpenseSummary() {
               <p className="font-medium tabular-nums">{formatCurrency(chartData[0].groceries, { noDecimals: true })}</p>
             </div>
           </div>
-          <Separator orientation="vertical" className="!h-auto" />
+          <Separator orientation="vertical" className="h-auto!" />
           <div className="flex flex-1 flex-col items-center space-y-2">
             <div className="flex size-10 items-center justify-center rounded-full bg-muted">
               <TramFront className="size-5 stroke-chart-2" />
@@ -112,7 +112,7 @@ export function ExpenseSummary() {
               <p className="font-medium tabular-nums">{formatCurrency(chartData[0].transport, { noDecimals: true })}</p>
             </div>
           </div>
-          <Separator orientation="vertical" className="!h-auto" />
+          <Separator orientation="vertical" className="h-auto!" />
           <div className="flex flex-1 flex-col items-center space-y-2">
             <div className="flex size-10 items-center justify-center rounded-full bg-muted">
               <Ellipsis className="size-5 stroke-chart-3" />

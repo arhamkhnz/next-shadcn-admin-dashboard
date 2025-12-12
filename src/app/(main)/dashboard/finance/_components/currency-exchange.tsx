@@ -37,11 +37,11 @@ export function CurrencyExchange() {
               <div className="flex flex-1 justify-center">
                 <CurrencySelector defaultValue="usd" />
               </div>
-              <Separator orientation="vertical" className="!h-auto" />
+              <Separator orientation="vertical" className="h-auto!" />
               <div className="flex flex-1 items-center justify-center">
                 <ArrowLeftRight className="size-4 text-muted-foreground" />
               </div>
-              <Separator orientation="vertical" className="!h-auto" />
+              <Separator orientation="vertical" className="h-auto!" />
               <div className="flex flex-1 justify-center">
                 <CurrencySelector defaultValue="eur" />
               </div>
