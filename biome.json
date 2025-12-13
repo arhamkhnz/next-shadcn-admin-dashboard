@@ -30,6 +30,7 @@
     }
   },
   "files": {
+    "ignoreUnknown": true,
     "includes": ["**", "!.github", "!.husky", "!node_modules", "!.next", "!dist", "!out", "!src/components/ui"]
   },
   "formatter": {
@@ -71,11 +72,16 @@
       "suspicious": {
         "noArrayIndexKey": "warn",
         "noConstantBinaryExpressions": "error",
-        "noEmptyBlockStatements": "error"
+        "noEmptyBlockStatements": "error",
+        "noUnknownAtRules": "off"
       },
       "complexity": {
         "noImportantStyles": "off"
       }
+    },
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
     }
   },
   "css": {
