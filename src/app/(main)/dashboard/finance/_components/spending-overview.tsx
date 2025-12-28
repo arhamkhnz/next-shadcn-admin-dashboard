@@ -23,10 +23,8 @@ export function SpendingOverview() {
         <div className="space-y-0.5">
           <p className="font-medium text-xl tabular-nums">{formatCurrency(12450, { noDecimals: true })}</p>
 
-          <p className="text-muted-foreground text-xs">$550 more spent vs last month</p>
+          <p className="text-muted-foreground text-xs">Available balance</p>
         </div>
-
-        {/* <Separator /> */}
 
         <div className="flex items-center gap-2">
           <Button className="flex-1" size="sm">

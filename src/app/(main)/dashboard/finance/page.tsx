@@ -24,10 +24,10 @@ export default function Page() {
         <TabsContent value="overview">
           <div className="flex flex-col gap-4">
             <div className="grid gap-4 *:data-[slot=card]:gap-2 *:data-[slot=card]:shadow-xs sm:grid-cols-2 lg:grid-cols-4">
+              <SpendingOverview />
               <NetWorthSummary />
               <CashFlowOverview />
               <AssetsBreakdown />
-              <SpendingOverview />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

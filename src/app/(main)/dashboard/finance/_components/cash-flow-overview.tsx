@@ -20,7 +20,7 @@ export function CashFlowOverview() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           <p className="font-medium text-xl tabular-nums">+{formatCurrency(2780, { noDecimals: true })}</p>
           <p className="text-muted-foreground text-xs">This month · Net after expenses</p>
         </div>
@@ -28,7 +28,7 @@ export function CashFlowOverview() {
         <Separator />
         <p className="flex items-center text-muted-foreground text-xs">
           <TrendingUp className="size-4" />
-          &nbsp;4.1% vs last month
+          &nbsp;4.1% MoM
         </p>
       </CardContent>
     </Card>

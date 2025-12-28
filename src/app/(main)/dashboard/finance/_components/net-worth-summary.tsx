@@ -2,7 +2,6 @@
 
 import { SaudiRiyal } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/utils";
@@ -24,7 +23,7 @@ export function NetWorthSummary() {
         <div className="space-y-0.5">
           <div className="flex items-center justify-between">
             <p className="font-medium text-xl tabular-nums">{formatCurrency(84250, { noDecimals: true })}</p>
-            <Badge variant="outline">+$3,680</Badge>
+            <span className="text-xs">+$3,680 MoM</span>
           </div>
           <p className="text-muted-foreground text-xs">This month</p>
         </div>
