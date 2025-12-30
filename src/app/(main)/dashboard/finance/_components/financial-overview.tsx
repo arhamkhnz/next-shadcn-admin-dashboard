@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowDownLeft, ArrowUpRight, CalendarCheck } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from "recharts";
 
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -10,53 +10,49 @@ import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/utils";
 
 const chartData = [
-  { month: "Jan", scheduled: 2000, expenses: 4000, income: 9500 },
-  { month: "Feb", scheduled: 2200, expenses: 4200, income: 9500 },
-  { month: "Mar", scheduled: 2100, expenses: 4100, income: 9500 },
-  { month: "Apr", scheduled: 2100, expenses: 4100, income: 9500 },
-  { month: "May", scheduled: 2200, expenses: 4200, income: 9500 },
-  { month: "Jun", scheduled: 2000, expenses: 4000, income: 9500 },
-  { month: "Jul", scheduled: 2100, expenses: 4100, income: 9500 },
-  { month: "Aug", scheduled: 2100, expenses: 4100, income: 9500 },
-  { month: "Sep", scheduled: 2100, expenses: 4100, income: 9500 },
-  { month: "Oct", scheduled: 2100, expenses: 4100, income: 9500 },
-  { month: "Nov", scheduled: 2100, expenses: 4100, income: 9500 },
-  { month: "Dec", scheduled: 2100, expenses: 4100, income: 9500 },
+  { month: "Jan", income: 5900, expenses: -4200 },
+  { month: "Feb", income: 3800, expenses: -6100 },
+  { month: "Mar", income: 5200, expenses: -5600 },
+  { month: "Apr", income: 7100, expenses: -3200 },
+  { month: "May", income: 4500, expenses: -4400 },
+  { month: "Jun", income: 6100, expenses: -3600 },
+  { month: "Jul", income: 3300, expenses: -5200 },
+  { month: "Aug", income: 4300, expenses: -4000 },
+  { month: "Sep", income: 7200, expenses: -5800 },
+  { month: "Oct", income: 5600, expenses: -4600 },
+  { month: "Nov", income: 3600, expenses: -6400 },
+  { month: "Dec", income: 4700, expenses: -3400 },
 ];
 
 const chartConfig = {
-  scheduled: {
-    label: "Scheduled",
+  income: {
+    label: "Income",
     color: "var(--chart-1)",
   },
   expenses: {
     label: "Expenses",
-    color: "var(--chart-2)",
-  },
-  income: {
-    label: "Income",
     color: "var(--chart-3)",
   },
 } as ChartConfig;
 
 export function FinancialOverview() {
   const totalIncome = chartData.reduce((acc, item) => acc + item.income, 0);
-  const totalExpenses = chartData.reduce((acc, item) => acc + item.expenses, 0);
-  const totalScheduled = chartData.reduce((acc, item) => acc + item.scheduled, 0);
+  const totalExpenses = chartData.reduce((acc, item) => acc + Math.abs(item.expenses), 0);
   return (
-    <Card className="shadow-xs">
+    <Card>
       <CardHeader>
-        <CardTitle>Financial Overview</CardTitle>
-        <CardDescription>Track your income, expenses, and scheduled amounts at a glance.</CardDescription>
+        <CardTitle>Cash Flow Overview</CardTitle>
+        <CardDescription>Monthly income and expenses with net cash impact.</CardDescription>
         <CardAction>
-          <Select defaultValue="last-year">
-            <SelectTrigger>
+          <Select defaultValue="this-year">
+            <SelectTrigger className="w-37">
               <SelectValue placeholder="Select period" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="last-year">Last Year</SelectItem>
-              <SelectItem value="last-month">Last Month</SelectItem>
+              <SelectItem value="this-month">This Month</SelectItem>
+              <SelectItem value="last-6-months">Last 6 Months</SelectItem>
               <SelectItem value="ytd">Year to Date</SelectItem>
+              <SelectItem value="this-year">This Year</SelectItem>
             </SelectContent>
           </Select>
         </CardAction>
@@ -65,8 +61,8 @@ export function FinancialOverview() {
         <Separator />
         <div className="flex flex-col items-start justify-between gap-2 py-5 md:flex-row md:items-stretch md:gap-0">
           <div className="flex flex-1 items-center justify-center gap-2">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
-              <ArrowDownLeft className="size-6 stroke-chart-1" />
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-1">
+              <ArrowDownLeft className="size-6 stroke-background" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Income</p>
@@ -75,41 +71,40 @@ export function FinancialOverview() {
           </div>
           <Separator orientation="vertical" className="h-auto!" />
           <div className="flex flex-1 items-center justify-center gap-2">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
-              <ArrowUpRight className="size-6 stroke-chart-2" />
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-3">
+              <ArrowUpRight className="size-6 stroke-background" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Expenses</p>
               <p className="font-medium tabular-nums">{formatCurrency(totalExpenses, { noDecimals: true })}</p>
             </div>
           </div>
-          <Separator orientation="vertical" className="h-auto!" />
-          <div className="flex flex-1 items-center justify-center gap-2">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
-              <CalendarCheck className="size-6 stroke-chart-3" />
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs uppercase">Scheduled</p>
-              <p className="font-medium tabular-nums">{formatCurrency(totalScheduled, { noDecimals: true })}</p>
-            </div>
-          </div>
         </div>
         <Separator />
         <ChartContainer className="max-h-72 w-full" config={chartConfig}>
-          <BarChart margin={{ left: -25, right: 0, top: 25, bottom: 0 }} accessibilityLayer data={chartData}>
+          <BarChart
+            stackOffset="sign"
+            margin={{ left: -25, right: 0, top: 25, bottom: 0 }}
+            accessibilityLayer
+            data={chartData}
+          >
             <CartesianGrid vertical={false} />
             <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
             <YAxis
               axisLine={false}
               tickLine={false}
               tickMargin={8}
-              tickFormatter={(value) => `${value >= 1000 ? `${value / 1000}k` : value}`}
-              domain={[0, 20000]}
+              tickFormatter={(value) => {
+                const abs = Math.abs(value);
+                const formatted = abs >= 1000 ? `${abs / 1000}k` : `${abs}`;
+                return value < 0 ? `-${formatted}` : formatted;
+              }}
+              ticks={[-8000, -4000, 0, 4000, 8000]}
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="scheduled" stackId="a" fill={chartConfig.scheduled.color} />
-            <Bar dataKey="expenses" stackId="a" fill={chartConfig.expenses.color} />
-            <Bar dataKey="income" stackId="a" fill={chartConfig.income.color} />
+            <ReferenceLine y={0} stroke="var(--border)" />
+            <Bar dataKey="income" stackId="a" fill={chartConfig.income.color} radius={[4, 4, 0, 0]} />
+            <Bar dataKey="expenses" stackId="a" fill={chartConfig.expenses.color} radius={[4, 4, 0, 0]} />
           </BarChart>
         </ChartContainer>
       </CardContent>

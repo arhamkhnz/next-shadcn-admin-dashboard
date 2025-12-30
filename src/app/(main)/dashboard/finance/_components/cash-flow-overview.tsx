@@ -22,7 +22,7 @@ export function CashFlowOverview() {
       <CardContent className="space-y-4">
         <div className="space-y-0.5">
           <p className="font-medium text-xl tabular-nums">+{formatCurrency(2780, { noDecimals: true })}</p>
-          <p className="text-muted-foreground text-xs">This month · Net after expenses</p>
+          <p className="text-muted-foreground text-xs">This month · Net</p>
         </div>
 
         <Separator />
