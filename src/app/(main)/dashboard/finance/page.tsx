@@ -5,11 +5,8 @@ import { AssetsBreakdown } from "./_components/assets-breakdown";
 import { CashFlowOverview } from "./_components/cash-flow-overview";
 import { FinancialOverview } from "./_components/financial-overview";
 import { NetWorthSummary } from "./_components/net-worth-summary";
-import { RecentPayments } from "./_components/recent-payments";
 import { RecentTransactions } from "./_components/recent-transactions";
-import { SavingsTrend } from "./_components/savings-trend";
 import { SpendingOverview } from "./_components/spending-overview";
-import { UpcomingPayments } from "./_components/upcoming-payments";
 
 export default function Page() {
   return (
@@ -37,25 +34,17 @@ export default function Page() {
               <AssetsBreakdown />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-[7fr_3fr]">
-              <FinancialOverview />
-              <AccountOverview />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <AccountOverview />
-
-              <RecentTransactions />
-
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-[2fr_1fr]">
               <div className="flex flex-col gap-4">
-                <SavingsTrend />
+                <FinancialOverview />
 
-                <div className="grid grid-cols-2 gap-4">
-                  <RecentPayments />
-
-                  <UpcomingPayments />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <RecentTransactions />
+                  <AssetsBreakdown />
                 </div>
               </div>
+
+              <AccountOverview />
             </div>
           </div>
         </TabsContent>
