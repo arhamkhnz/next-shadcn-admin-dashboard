@@ -1,131 +1,99 @@
 "use client";
 
-import { Ellipsis, ShoppingBasket, TramFront } from "lucide-react";
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 
-const chartData = [{ period: "last-week", groceries: 380, transport: 120, other: 80 }];
-
-const chartConfig = {
-  groceries: {
+const expenses = [
+  {
+    key: "housing",
+    label: "Housing",
+    amount: 1650,
+  },
+  {
+    key: "utilities",
+    label: "Utilities",
+    amount: 420,
+  },
+  {
+    key: "groceries",
     label: "Groceries",
-    color: "var(--chart-1)",
+    amount: 560,
   },
-  transport: {
+  {
+    key: "transportation",
     label: "Transport",
-    color: "var(--chart-2)",
+    amount: 740,
   },
-  other: {
+  {
+    key: "subscriptions",
+    label: "Subscriptions",
+    amount: 260,
+  },
+  {
+    key: "healthcare",
+    label: "Healthcare",
+    amount: 390,
+  },
+  {
+    key: "other",
     label: "Other",
-    color: "var(--chart-3)",
+    amount: 980,
   },
-} satisfies ChartConfig;
+];
 
 export function ExpenseSummary() {
-  const totalExpenses = chartData.length ? chartData[0].groceries + chartData[0].transport + chartData[0].other : 0;
+  const total = expenses.reduce((sum, item) => sum + item.amount, 0);
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Expense Summary</CardTitle>
+        <CardTitle>Spending Breakdown</CardTitle>
+        <CardDescription>Expense distribution by category.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Separator />
+        <div className="space-y-1">
+          <div className="font-medium text-2xl">{formatCurrency(total, { noDecimals: true })}</div>
+          <div className="flex h-6 w-full overflow-hidden rounded-md">
+            {expenses.map((item, index) => {
+              const width = (item.amount / total) * 100;
+              const alpha = Math.max(0.35, 1 - index * 0.08);
 
-        <div className="h-32">
-          <ChartContainer config={chartConfig}>
-            <RadialBarChart
-              margin={{ left: 0, right: 0, top: 0, bottom: 0 }}
-              data={chartData}
-              endAngle={180}
-              innerRadius={80}
-              outerRadius={130}
-            >
-              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-              <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy ?? 0) - 16}
-                            className="fill-foreground font-bold text-2xl tabular-nums"
-                          >
-                            {formatCurrency(totalExpenses, { noDecimals: true })}
-                          </tspan>
-                          <tspan x={viewBox.cx} y={(viewBox.cy ?? 0) + 4} className="fill-muted-foreground">
-                            Spent
-                          </tspan>
-                        </text>
-                      );
-                    }
+              return (
+                <div
+                  key={item.key}
+                  className="h-full shrink-0 border-background border-l first:border-l-0"
+                  style={{
+                    width: `${width}%`,
+                    background: `color-mix(in oklch, var(--primary) ${alpha * 100}%, transparent)`,
                   }}
+                  title={`${item.label}: ${formatCurrency(item.amount)}`}
                 />
-              </PolarRadiusAxis>
-              <RadialBar
-                dataKey="other"
-                stackId="a"
-                cornerRadius={4}
-                fill="var(--color-other)"
-                className="stroke-4 stroke-card"
-              />
-              <RadialBar
-                dataKey="transport"
-                stackId="a"
-                cornerRadius={4}
-                fill="var(--color-transport)"
-                className="stroke-4 stroke-card"
-              />
-              <RadialBar
-                dataKey="groceries"
-                stackId="a"
-                cornerRadius={4}
-                fill="var(--color-groceries)"
-                className="stroke-4 stroke-card"
-              />
-            </RadialBarChart>
-          </ChartContainer>
-        </div>
-        <Separator />
-        <div className="flex justify-between gap-4">
-          <div className="flex flex-1 flex-col items-center space-y-2">
-            <div className="flex size-10 items-center justify-center rounded-full bg-muted">
-              <ShoppingBasket className="size-5 stroke-chart-1" />
-            </div>
-            <div className="space-y-0.5 text-center">
-              <p className="text-muted-foreground text-xs uppercase">Groceries</p>
-              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].groceries, { noDecimals: true })}</p>
-            </div>
-          </div>
-          <Separator orientation="vertical" className="h-auto!" />
-          <div className="flex flex-1 flex-col items-center space-y-2">
-            <div className="flex size-10 items-center justify-center rounded-full bg-muted">
-              <TramFront className="size-5 stroke-chart-2" />
-            </div>
-            <div className="space-y-0.5 text-center">
-              <p className="text-muted-foreground text-xs uppercase">Transport</p>
-              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].transport, { noDecimals: true })}</p>
-            </div>
-          </div>
-          <Separator orientation="vertical" className="h-auto!" />
-          <div className="flex flex-1 flex-col items-center space-y-2">
-            <div className="flex size-10 items-center justify-center rounded-full bg-muted">
-              <Ellipsis className="size-5 stroke-chart-3" />
-            </div>
-            <div className="space-y-0.5 text-center">
-              <p className="text-muted-foreground text-xs uppercase">Other</p>
-              <p className="font-medium tabular-nums">{formatCurrency(chartData[0].other, { noDecimals: true })}</p>
-            </div>
+              );
+            })}
           </div>
         </div>
-        <span className="text-muted-foreground text-xs tabular-nums">
-          Weekly spending is capped at {formatCurrency(2000, { noDecimals: true })}
-        </span>
+
+        <div className="space-y-2">
+          {expenses.map((item, index) => {
+            const pct = Math.round((item.amount / total) * 100);
+            const alpha = Math.max(0.35, 1 - index * 0.08);
+
+            return (
+              <div key={item.key} className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="size-3 rounded-sm"
+                    style={{
+                      background: `color-mix(in oklch, var(--primary) ${alpha * 100}%, transparent)`,
+                    }}
+                  />
+                  <span className="text-muted-foreground text-sm">{item.label}</span>
+                </div>
+
+                <span className="font-medium text-sm tabular-nums">{pct}%</span>
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );

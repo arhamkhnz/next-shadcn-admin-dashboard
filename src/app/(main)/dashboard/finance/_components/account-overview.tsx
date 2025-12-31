@@ -83,7 +83,15 @@ export function AccountOverview() {
 
           <div className="space-y-2 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Spending Limit</span>
+              <span className="text-muted-foreground">Card type</span>
+              <span className="font-medium tabular-nums">Virtual</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Billing cycle</span>
+              <span className="font-medium tabular-nums">21st monthly</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Card Limit</span>
               <span className="font-medium tabular-nums">$62,000.00</span>
             </div>
             <div className="flex items-center justify-between">

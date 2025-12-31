@@ -59,7 +59,7 @@ export function FinancialOverview() {
       </CardHeader>
       <CardContent>
         <Separator />
-        <div className="flex flex-col items-start justify-between gap-2 py-5 md:flex-row md:items-stretch md:gap-0">
+        <div className="flex items-start justify-between gap-2 py-5 md:items-stretch md:gap-0">
           <div className="flex flex-1 items-center justify-center gap-2">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-1">
               <ArrowDownLeft className="size-6 stroke-background" />
@@ -69,7 +69,7 @@ export function FinancialOverview() {
               <p className="font-medium tabular-nums">{formatCurrency(totalIncome, { noDecimals: true })}</p>
             </div>
           </div>
-          <Separator orientation="vertical" className="h-auto!" />
+          <Separator orientation="vertical" className="h-auto! self-stretch" />
           <div className="flex flex-1 items-center justify-center gap-2">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-3">
               <ArrowUpRight className="size-6 stroke-background" />
