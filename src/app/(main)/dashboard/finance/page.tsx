@@ -35,11 +35,11 @@ export default function Page() {
               <SavingsRate />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
               <div className="flex flex-col gap-4">
                 <CashFlowOverview />
 
-                <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2">
+                <div className="grid h-full grid-cols-1 gap-4 lg:grid-cols-2">
                   <SpendingBreakdown />
                   <IncomeReliability />
                 </div>
