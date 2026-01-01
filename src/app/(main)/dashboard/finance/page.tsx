@@ -1,13 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { AccountOverview } from "./_components/account-overview";
-import { AssetsBreakdown } from "./_components/assets-breakdown";
+import { CardOverview } from "./_components/card-overview";
 import { CashFlowOverview } from "./_components/cash-flow-overview";
-import { ExpenseSummary } from "./_components/expense-summary";
-import { FinancialOverview } from "./_components/financial-overview";
-import { NetWorthSummary } from "./_components/net-worth-summary";
-import { RecentTransactions } from "./_components/recent-transactions";
-import { SpendingOverview } from "./_components/spending-overview";
+import { IncomeReliability } from "./_components/income-reliability";
+import { MonthlyCashFlow } from "./_components/kpis/monthly-cash-flow";
+import { NetWorth } from "./_components/kpis/net-worth";
+import { PrimaryAccount } from "./_components/kpis/primary-account";
+import { SavingsRate } from "./_components/kpis/savings-rate";
+import { SpendingBreakdown } from "./_components/spending-breakdown";
 
 export default function Page() {
   return (
@@ -29,23 +29,23 @@ export default function Page() {
         <TabsContent value="overview">
           <div className="flex flex-col gap-4 **:data-[slot=card]:shadow-xs">
             <div className="grid grid-cols-1 gap-4 *:data-[slot=card]:gap-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-              <SpendingOverview />
-              <NetWorthSummary />
-              <CashFlowOverview />
-              <AssetsBreakdown />
+              <PrimaryAccount />
+              <NetWorth />
+              <MonthlyCashFlow />
+              <SavingsRate />
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
               <div className="flex flex-col gap-4">
-                <FinancialOverview />
+                <CashFlowOverview />
 
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2">
-                  <ExpenseSummary />
-                  <RecentTransactions />
+                <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2">
+                  <SpendingBreakdown />
+                  <IncomeReliability />
                 </div>
               </div>
 
-              <AccountOverview />
+              <CardOverview />
             </div>
           </div>
         </TabsContent>

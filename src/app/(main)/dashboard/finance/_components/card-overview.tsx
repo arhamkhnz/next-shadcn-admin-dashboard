@@ -43,7 +43,7 @@ const upcomingPayments = [
   },
 ];
 
-export function AccountOverview() {
+export function CardOverview() {
   return (
     <Card className="shadow-xs">
       <CardHeader className="items-center">

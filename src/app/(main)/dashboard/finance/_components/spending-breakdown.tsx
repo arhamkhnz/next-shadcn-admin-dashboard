@@ -41,7 +41,7 @@ const expenses = [
   },
 ];
 
-export function ExpenseSummary() {
+export function SpendingBreakdown() {
   const total = expenses.reduce((sum, item) => sum + item.amount, 0);
   return (
     <Card>

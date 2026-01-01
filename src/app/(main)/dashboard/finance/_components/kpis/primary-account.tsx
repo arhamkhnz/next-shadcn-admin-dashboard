@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 
-export function SpendingOverview() {
+export function PrimaryAccount() {
   return (
     <Card>
       <CardHeader>

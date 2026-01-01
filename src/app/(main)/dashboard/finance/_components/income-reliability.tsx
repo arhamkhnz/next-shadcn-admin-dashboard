@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/utils";
 
-export function RecentTransactions() {
+export function IncomeReliability() {
   return (
     <Card>
       <CardHeader>
