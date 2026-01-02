@@ -31,7 +31,7 @@ const chartConfig = {
   },
   expenses: {
     label: "Expenses",
-    color: "var(--chart-3)",
+    color: "var(--chart-2)",
   },
 } as ChartConfig;
 
@@ -71,7 +71,7 @@ export function CashFlowOverview() {
           </div>
           <Separator orientation="vertical" className="h-auto! self-stretch" />
           <div className="flex flex-1 items-center justify-center gap-2">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-2">
               <ArrowUpRight className="size-6 stroke-background" />
             </div>
             <div>

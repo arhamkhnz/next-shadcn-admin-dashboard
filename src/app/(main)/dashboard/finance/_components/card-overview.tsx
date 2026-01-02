@@ -71,11 +71,11 @@ export function CardOverview() {
                   </p>
                   <div className="flex gap-6">
                     <div>
-                      <p className="text-[10px] text-primary-foreground/50 uppercase tracking-wider">Valid Thru</p>
+                      <p className="text-[10px] text-primary-foreground/80 uppercase tracking-wider">Valid Thru</p>
                       <p className="font-mono text-primary-foreground/80 text-xs">06/30</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-primary-foreground/50 uppercase tracking-wider">CVV</p>
+                      <p className="text-[10px] text-primary-foreground/80 uppercase tracking-wider">CVV</p>
                       <p className="font-mono text-primary-foreground/80 text-xs">•••</p>
                     </div>
                   </div>
