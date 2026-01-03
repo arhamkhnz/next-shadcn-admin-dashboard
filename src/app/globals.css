@@ -169,6 +169,9 @@ These serve as the fallback; there is no separate default.css file. */
   html[data-font="geist"] body {
     --font-sans: var(--font-geist);
   }
+  html[data-font="geistMono"] body {
+    --font-sans: var(--font-geist-mono);
+  }
   html[data-font="calSans"] body {
     --font-sans: var(--font-cal-sans);
   }

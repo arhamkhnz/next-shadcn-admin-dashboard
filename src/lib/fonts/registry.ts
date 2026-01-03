@@ -13,7 +13,11 @@ import {
   Roboto,
 } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", preload: true });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  preload: true,
+});
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -28,13 +32,18 @@ const roboto = Roboto({
   preload: false,
 });
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist", preload: false });
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+  preload: false,
+});
 
 const calSans = Cal_Sans({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-cal-sans",
   preload: false,
+  adjustFontFallback: false,
 });
 
 const poppins = Poppins({
@@ -44,7 +53,11 @@ const poppins = Poppins({
   preload: false,
 });
 
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", preload: false });
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  preload: false,
+});
 
 const domine = Domine({
   subsets: ["latin"],
