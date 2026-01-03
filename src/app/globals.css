@@ -171,11 +171,11 @@ These serve as the fallback; there is no separate default.css file. */
   html[data-font="inter"] body {
     --font-sans: var(--font-inter);
   }
-  html[data-font="jakarta"] body {
-    --font-sans: var(--font-jakarta);
-  }
   html[data-font="roboto"] body {
     --font-sans: var(--font-roboto);
+  }
+  html[data-font="poppins"] body {
+    --font-sans: var(--font-poppins);
   }
   html[data-font="geist"] body {
     --font-sans: var(--font-geist);
@@ -183,26 +183,26 @@ These serve as the fallback; there is no separate default.css file. */
   html[data-font="geistMono"] body {
     --font-sans: var(--font-geist-mono);
   }
-  html[data-font="calSans"] body {
-    --font-sans: var(--font-cal-sans);
+  html[data-font="jakarta"] body {
+    --font-sans: var(--font-jakarta);
   }
-  html[data-font="poppins"] body {
-    --font-sans: var(--font-poppins);
+  html[data-font="nunito"] body {
+    --font-sans: var(--font-nunito);
+  }
+  html[data-font="gabriela"] body {
+    --font-sans: var(--font-gabriela);
   }
   html[data-font="outfit"] body {
     --font-sans: var(--font-outfit);
   }
-  html[data-font="domine"] body {
-    --font-sans: var(--font-domine);
+  html[data-font="manrope"] body {
+    --font-sans: var(--font-manrope);
   }
-  html[data-font="dancing"] body {
-    --font-sans: var(--font-dancing);
+  html[data-font="dmSans"] body {
+    --font-sans: var(--font-dm-sans);
   }
-  html[data-font="allura"] body {
-    --font-sans: var(--font-allura);
-  }
-  html[data-font="playball"] body {
-    --font-sans: var(--font-playball);
+  html[data-font="greatVibes"] body {
+    --font-sans: var(--font-great-vibes);
   }
 }
 

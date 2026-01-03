@@ -1,13 +1,13 @@
 import {
-  Allura,
-  Cal_Sans,
-  Dancing_Script,
-  Domine,
+  DM_Sans,
+  Gabriela,
   Geist,
   Geist_Mono,
+  Great_Vibes,
   Inter,
+  Manrope,
+  Nunito,
   Outfit,
-  Playball,
   Plus_Jakarta_Sans,
   Poppins,
   Roboto,
@@ -38,14 +38,6 @@ const geist = Geist({
   preload: false,
 });
 
-const calSans = Cal_Sans({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-cal-sans",
-  preload: false,
-  adjustFontFallback: false,
-});
-
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -59,36 +51,41 @@ const outfit = Outfit({
   preload: false,
 });
 
-const domine = Domine({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-domine",
-  preload: false,
-});
-
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
   preload: false,
 });
 
-const dancing = Dancing_Script({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-dancing",
+  variable: "--font-dm-sans",
   preload: false,
 });
 
-const allura = Allura({
+const nunito = Nunito({
   subsets: ["latin"],
-  weight: "400",
-  variable: "--font-allura",
+  variable: "--font-nunito",
   preload: false,
 });
 
-const playball = Playball({
+const gabriela = Gabriela({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-gabriela",
+  preload: false,
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  preload: false,
+});
+
+const greatVibes = Great_Vibes({
   subsets: ["latin"],
   weight: "400",
-  variable: "--font-playball",
+  variable: "--font-great-vibes",
   preload: false,
 });
 
@@ -97,49 +94,49 @@ export const fontRegistry = {
     label: "Inter",
     font: inter,
   },
-  jakarta: {
-    label: "Plus Jakarta Sans",
-    font: jakarta,
-  },
   roboto: {
     label: "Roboto",
     font: roboto,
-  },
-  geist: {
-    label: "Geist",
-    font: geist,
-  },
-  calSans: {
-    label: "Cal Sans",
-    font: calSans,
   },
   poppins: {
     label: "Poppins",
     font: poppins,
   },
-  outfit: {
-    label: "Outfit",
-    font: outfit,
-  },
-  domine: {
-    label: "Domine",
-    font: domine,
+  geist: {
+    label: "Geist",
+    font: geist,
   },
   geistMono: {
     label: "Geist Mono",
     font: geistMono,
   },
-  dancing: {
-    label: "Dancing Script",
-    font: dancing,
+  jakarta: {
+    label: "Plus Jakarta Sans",
+    font: jakarta,
   },
-  allura: {
-    label: "Allura",
-    font: allura,
+  nunito: {
+    label: "Nunito",
+    font: nunito,
   },
-  playball: {
-    label: "Playball",
-    font: playball,
+  gabriela: {
+    label: "Gabriela",
+    font: gabriela,
+  },
+  outfit: {
+    label: "Outfit",
+    font: outfit,
+  },
+  manrope: {
+    label: "Manrope",
+    font: manrope,
+  },
+  dmSans: {
+    label: "DM Sans",
+    font: dmSans,
+  },
+  greatVibes: {
+    label: "Great Vibes",
+    font: greatVibes,
   },
 } as const;
 
