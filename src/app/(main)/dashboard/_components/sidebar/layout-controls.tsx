@@ -86,7 +86,7 @@ export function LayoutControls() {
     persistPreference("font", value);
   };
 
-  const handleReset = async () => {
+  const handleRestore = () => {
     onThemePresetChange(PREFERENCE_DEFAULTS.theme_preset);
     onThemeModeChange(PREFERENCE_DEFAULTS.theme_mode);
     onContentLayoutChange(PREFERENCE_DEFAULTS.content_layout);
@@ -244,11 +244,9 @@ export function LayoutControls() {
               </ToggleGroup>
             </div>
 
-            <div className="space-y-4">
-              <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
-                Restore Defaults
-              </Button>
-            </div>
+            <Button type="button" size="sm" variant="outline" className="w-full" onClick={handleRestore}>
+              Restore Defaults
+            </Button>
           </div>
         </div>
       </PopoverContent>
