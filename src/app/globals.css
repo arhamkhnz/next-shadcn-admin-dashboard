@@ -124,6 +124,17 @@ These serve as the fallback; there is no separate default.css file. */
   --sidebar-ring: oklch(0.439 0 0);
 }
 
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+}
+
 @layer utilities {
   [data-theme-preset]:not([data-theme-preset="default"]) .shadow-2xs {
     box-shadow: var(--shadow-2xs);
@@ -192,17 +203,6 @@ These serve as the fallback; there is no separate default.css file. */
   }
   html[data-font="playball"] body {
     --font-sans: var(--font-playball);
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans), system-ui, sans-serif;
   }
 }
 
