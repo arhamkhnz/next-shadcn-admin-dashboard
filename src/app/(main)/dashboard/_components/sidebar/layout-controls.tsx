@@ -16,6 +16,7 @@ import {
   applySidebarCollapsible,
   applySidebarVariant,
 } from "@/lib/preferences/layout-utils";
+import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
 import { THEME_PRESET_OPTIONS, type ThemeMode, type ThemePreset } from "@/lib/preferences/theme";
 import { applyThemeMode, applyThemePreset } from "@/lib/preferences/theme-utils";
@@ -83,6 +84,16 @@ export function LayoutControls() {
     applyFont(value);
     setFont(value);
     persistPreference("font", value);
+  };
+
+  const handleRestore = () => {
+    onThemePresetChange(PREFERENCE_DEFAULTS.theme_preset);
+    onThemeModeChange(PREFERENCE_DEFAULTS.theme_mode);
+    onContentLayoutChange(PREFERENCE_DEFAULTS.content_layout);
+    onNavbarStyleChange(PREFERENCE_DEFAULTS.navbar_style);
+    onSidebarStyleChange(PREFERENCE_DEFAULTS.sidebar_variant);
+    onSidebarCollapseModeChange(PREFERENCE_DEFAULTS.sidebar_collapsible);
+    onFontChange(PREFERENCE_DEFAULTS.font);
   };
 
   return (
@@ -232,6 +243,10 @@ export function LayoutControls() {
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
+
+            <Button type="button" size="sm" variant="outline" className="w-full" onClick={handleRestore}>
+              Restore Defaults
+            </Button>
           </div>
         </div>
       </PopoverContent>
