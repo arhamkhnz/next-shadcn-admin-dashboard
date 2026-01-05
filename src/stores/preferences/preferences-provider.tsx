@@ -11,7 +11,8 @@ import {
   SIDEBAR_COLLAPSIBLE_VALUES,
   SIDEBAR_VARIANT_VALUES,
 } from "@/lib/preferences/layout";
-import { THEME_PRESET_VALUES } from "@/lib/preferences/theme";
+import { THEME_MODE_VALUES, THEME_PRESET_VALUES } from "@/lib/preferences/theme";
+import { applyThemeMode, subscribeToSystemTheme } from "@/lib/preferences/theme-utils";
 
 import { createPreferencesStore, type PreferencesState } from "./preferences-store";
 
@@ -27,10 +28,12 @@ function getSafeValue<T extends string>(raw: string | null, allowed: readonly T[
 function readDomState(): Partial<PreferencesState> {
   const root = document.documentElement;
 
-  const mode = root.classList.contains("dark") ? "dark" : "light";
+  const modeAttr = getSafeValue(root.getAttribute("data-theme-mode"), THEME_MODE_VALUES);
+  const resolved = root.classList.contains("dark") ? "dark" : "light";
 
   return {
-    themeMode: mode,
+    themeMode: modeAttr ?? resolved,
+    resolvedThemeMode: resolved,
     themePreset: getSafeValue(root.getAttribute("data-theme-preset"), THEME_PRESET_VALUES),
     font: getSafeValue(root.getAttribute("data-font"), FONT_VALUES),
     contentLayout: getSafeValue(root.getAttribute("data-content-layout"), CONTENT_LAYOUT_VALUES),
@@ -60,13 +63,42 @@ export const PreferencesStoreProvider = ({
   );
 
   useEffect(() => {
-    const domState = readDomState();
+    if (typeof window === "undefined") return;
 
-    store.setState((prev) => ({
-      ...prev,
-      ...domState,
-      isSynced: true,
-    }));
+    let unsubscribeMedia: () => void = () => undefined;
+
+    const domState = readDomState();
+    store.setState((prev) => ({ ...prev, ...domState, isSynced: true }));
+
+    const applyFromMode = (mode: PreferencesState["themeMode"]) => {
+      unsubscribeMedia();
+
+      if (mode === "system") {
+        const resolved = applyThemeMode("system");
+        store.setState((prev) => ({ ...prev, resolvedThemeMode: resolved }));
+
+        unsubscribeMedia = subscribeToSystemTheme((nextResolved) => {
+          applyThemeMode("system");
+          store.setState((prev) => ({ ...prev, resolvedThemeMode: nextResolved }));
+        });
+      } else {
+        const resolved = applyThemeMode(mode);
+        store.setState((prev) => ({ ...prev, resolvedThemeMode: resolved }));
+      }
+    };
+
+    const startMode = domState.themeMode ?? store.getState().themeMode;
+    applyFromMode(startMode);
+
+    const unsubscribeTheme = store.subscribe(
+      (state) => state.themeMode,
+      (mode) => applyFromMode(mode),
+    );
+
+    return () => {
+      unsubscribeMedia();
+      unsubscribeTheme();
+    };
   }, [store]);
 
   return <PreferencesStoreContext.Provider value={store}>{children}</PreferencesStoreContext.Provider>;

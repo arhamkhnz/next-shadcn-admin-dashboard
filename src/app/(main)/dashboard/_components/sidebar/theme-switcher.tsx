@@ -8,19 +8,21 @@ import { applyThemeMode } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function ThemeSwitcher() {
-  const themeMode = usePreferencesStore((s) => s.themeMode);
+  const resolvedThemeMode = usePreferencesStore((s) => s.resolvedThemeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
 
   const handleValueChange = async () => {
-    const newTheme = themeMode === "dark" ? "light" : "dark";
+    const newTheme = resolvedThemeMode === "dark" ? "light" : "dark";
     applyThemeMode(newTheme);
     setThemeMode(newTheme);
     persistPreference("theme_mode", newTheme);
   };
 
+  const icon = resolvedThemeMode === "light" ? <Moon /> : <Sun />;
+
   return (
     <Button size="icon" onClick={handleValueChange}>
-      {themeMode === "dark" ? <Sun /> : <Moon />}
+      {icon}
     </Button>
   );
 }

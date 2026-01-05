@@ -4,6 +4,7 @@ declare global {
   interface Window {
     __PREFERENCES__?: {
       themeMode?: PreferenceValueMap["theme_mode"];
+      resolvedThemeMode?: "light" | "dark";
       themePreset?: PreferenceValueMap["theme_preset"];
       contentLayout?: PreferenceValueMap["content_layout"];
       navbarStyle?: PreferenceValueMap["navbar_style"];
