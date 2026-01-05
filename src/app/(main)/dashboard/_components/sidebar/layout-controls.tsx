@@ -19,14 +19,13 @@ import {
 import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
 import { THEME_PRESET_OPTIONS, type ThemeMode, type ThemePreset } from "@/lib/preferences/theme";
-import { applyThemeMode, applyThemePreset } from "@/lib/preferences/theme-utils";
+import { applyThemePreset } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function LayoutControls() {
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const resolvedThemeMode = usePreferencesStore((s) => s.resolvedThemeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
-  const setResolvedThemeMode = usePreferencesStore((s) => s.setResolvedThemeMode);
   const themePreset = usePreferencesStore((s) => s.themePreset);
   const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
   const contentLayout = usePreferencesStore((s) => s.contentLayout);
@@ -48,9 +47,7 @@ export function LayoutControls() {
 
   const onThemeModeChange = async (mode: ThemeMode | "") => {
     if (!mode) return;
-    const resolved = applyThemeMode(mode);
     setThemeMode(mode);
-    setResolvedThemeMode(resolved);
     persistPreference("theme_mode", mode);
   };
 

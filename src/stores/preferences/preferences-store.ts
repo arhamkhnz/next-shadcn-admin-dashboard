@@ -4,7 +4,7 @@ import type { FontKey } from "@/lib/fonts/registry";
 import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "@/lib/preferences/layout";
 import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import type { ThemeMode, ThemePreset } from "@/lib/preferences/theme";
-import type { ResolvedThemeMode } from "@/lib/preferences/theme-utils";
+import { type ResolvedThemeMode, resolveThemeMode } from "@/lib/preferences/theme-utils";
 
 export type PreferencesState = {
   themeMode: ThemeMode;
@@ -16,7 +16,6 @@ export type PreferencesState = {
   sidebarVariant: SidebarVariant;
   sidebarCollapsible: SidebarCollapsible;
   setThemeMode: (mode: ThemeMode) => void;
-  setResolvedThemeMode: (mode: ResolvedThemeMode) => void;
   setThemePreset: (preset: ThemePreset) => void;
   setFont: (font: FontKey) => void;
   setContentLayout: (layout: ContentLayout) => void;
@@ -39,8 +38,11 @@ export const createPreferencesStore = (init?: Partial<PreferencesState>) =>
     navbarStyle: init?.navbarStyle ?? PREFERENCE_DEFAULTS.navbar_style,
     sidebarVariant: init?.sidebarVariant ?? PREFERENCE_DEFAULTS.sidebar_variant,
     sidebarCollapsible: init?.sidebarCollapsible ?? PREFERENCE_DEFAULTS.sidebar_collapsible,
-    setThemeMode: (mode) => set({ themeMode: mode }),
-    setResolvedThemeMode: (mode) => set({ resolvedThemeMode: mode }),
+    setThemeMode: (mode) =>
+      set(() => ({
+        themeMode: mode,
+        resolvedThemeMode: typeof window !== "undefined" ? resolveThemeMode(mode) : mode === "dark" ? "dark" : "light",
+      })),
     setThemePreset: (preset) => set({ themePreset: preset }),
     setFont: (font) => set({ font }),
     setContentLayout: (layout) => set({ contentLayout: layout }),

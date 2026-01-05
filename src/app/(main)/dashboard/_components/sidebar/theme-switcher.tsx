@@ -4,7 +4,6 @@ import { Monitor, Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
-import { applyThemeMode } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 const THEME_CYCLE = ["light", "dark", "system"] as const;
@@ -23,7 +22,6 @@ export function ThemeSwitcher() {
     const currentIndex = THEME_CYCLE.indexOf(themeMode);
     const nextTheme = THEME_CYCLE[(currentIndex + 1) % THEME_CYCLE.length];
 
-    applyThemeMode(nextTheme);
     setThemeMode(nextTheme);
     persistPreference("theme_mode", nextTheme);
   };
