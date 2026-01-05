@@ -36,17 +36,9 @@ export function subscribeToSystemTheme(onChange: (mode: ResolvedThemeMode) => vo
     onChange(event.matches ? "dark" : "light");
   };
 
-  if (media.addEventListener) {
-    media.addEventListener("change", listener);
-  } else {
-    media.addEventListener("change", listener);
-  }
+  media.addEventListener("change", listener);
 
   return () => {
-    if (media.removeEventListener) {
-      media.removeEventListener("change", listener);
-    } else {
-      media.removeEventListener("change", listener);
-    }
+    media.removeEventListener("change", listener);
   };
 }

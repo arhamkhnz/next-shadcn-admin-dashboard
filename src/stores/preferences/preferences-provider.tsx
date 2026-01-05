@@ -90,10 +90,10 @@ export const PreferencesStoreProvider = ({
     const startMode = domState.themeMode ?? store.getState().themeMode;
     applyFromMode(startMode);
 
-    const unsubscribeTheme = store.subscribe(
-      (state) => state.themeMode,
-      (mode) => applyFromMode(mode),
-    );
+    const unsubscribeTheme = store.subscribe((state, prevState) => {
+      if (state.themeMode === prevState.themeMode) return;
+      applyFromMode(state.themeMode);
+    });
 
     return () => {
       unsubscribeMedia();
