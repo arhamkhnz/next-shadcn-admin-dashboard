@@ -38,9 +38,9 @@ export function ThemeBootScript() {
 
         function readCookie(name) {
           var match = document.cookie.split("; ").find(function(c) {
-            return c.indexOf(name + "=") === 0;
+            return c.startsWith(name + "=");
           });
-          return match ? match.split("=")[1] : null;
+          return match ? decodeURIComponent(match.split("=")[1]) : null;
         }
 
         function readLocal(name) {
@@ -80,9 +80,10 @@ export function ThemeBootScript() {
 
         var isValidMode = rawMode === "dark" || rawMode === "light" || rawMode === "system";
         var mode = isValidMode ? rawMode : DEFAULTS.theme_mode;
-        var resolvedMode = mode === "system"
-          ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-          : mode === "dark" ? "dark" : "light";
+        var resolvedMode =
+          mode === "system" && window.matchMedia
+            ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : mode;
         var preset = rawPreset || DEFAULTS.theme_preset;
         var font = rawFont || DEFAULTS.font;
         var contentLayout = rawContentLayout || DEFAULTS.content_layout;
@@ -91,8 +92,8 @@ export function ThemeBootScript() {
         var sidebarCollapsible = rawSidebarCollapsible || DEFAULTS.sidebar_collapsible;
 
         root.classList.remove("light", "dark");
-        root.setAttribute("data-theme-mode", mode);
         root.classList.add(resolvedMode);
+        root.setAttribute("data-theme-mode", mode);
         root.setAttribute("data-theme-preset", preset);
         root.setAttribute("data-font", font);
         root.setAttribute("data-content-layout", contentLayout);
@@ -102,18 +103,6 @@ export function ThemeBootScript() {
 
         root.style.colorScheme = resolvedMode === "dark" ? "dark" : "light";
 
-        var prefs = {
-          themeMode: mode,
-          resolvedThemeMode: resolvedMode,
-          themePreset: preset,
-          font: font,
-          contentLayout: contentLayout,
-          navbarStyle: navbarStyle,
-          sidebarVariant: sidebarVariant,
-          sidebarCollapsible: sidebarCollapsible,
-        };
-
-        window.__PREFERENCES__ = prefs;
       } catch (e) {
         console.warn("ThemeBootScript error:", e);
       }
