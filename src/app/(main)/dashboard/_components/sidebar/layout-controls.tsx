@@ -19,11 +19,12 @@ import {
 import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
 import { THEME_PRESET_OPTIONS, type ThemeMode, type ThemePreset } from "@/lib/preferences/theme";
-import { applyThemeMode, applyThemePreset } from "@/lib/preferences/theme-utils";
+import { applyThemePreset } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function LayoutControls() {
   const themeMode = usePreferencesStore((s) => s.themeMode);
+  const resolvedThemeMode = usePreferencesStore((s) => s.resolvedThemeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
   const themePreset = usePreferencesStore((s) => s.themePreset);
   const setThemePreset = usePreferencesStore((s) => s.setThemePreset);
@@ -46,7 +47,6 @@ export function LayoutControls() {
 
   const onThemeModeChange = async (mode: ThemeMode | "") => {
     if (!mode) return;
-    applyThemeMode(mode);
     setThemeMode(mode);
     persistPreference("theme_mode", mode);
   };
@@ -125,7 +125,8 @@ export function LayoutControls() {
                       <span
                         className="size-2.5 rounded-full"
                         style={{
-                          backgroundColor: themeMode === "dark" ? preset.primary.dark : preset.primary.light,
+                          backgroundColor:
+                            (resolvedThemeMode ?? "light") === "dark" ? preset.primary.dark : preset.primary.light,
                         }}
                       />
                       {preset.label}
@@ -160,11 +161,14 @@ export function LayoutControls() {
                 value={themeMode}
                 onValueChange={onThemeModeChange}
               >
-                <ToggleGroupItem value="light" aria-label="Toggle inset">
+                <ToggleGroupItem value="light" aria-label="Toggle light">
                   Light
                 </ToggleGroupItem>
-                <ToggleGroupItem value="dark" aria-label="Toggle sidebar">
+                <ToggleGroupItem value="dark" aria-label="Toggle dark">
                   Dark
+                </ToggleGroupItem>
+                <ToggleGroupItem value="system" aria-label="Toggle system">
+                  System
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
