@@ -29,11 +29,11 @@ function readDomState(): Partial<PreferencesState> {
   const root = document.documentElement;
 
   const modeAttr = getSafeValue(root.getAttribute("data-theme-mode"), THEME_MODE_VALUES);
-  const resolved = root.classList.contains("dark") ? "dark" : "light";
+  const resolvedMode = root.classList.contains("dark") ? "dark" : "light";
 
   return {
-    themeMode: modeAttr ?? resolved,
-    resolvedThemeMode: resolved,
+    themeMode: modeAttr ?? resolvedMode,
+    resolvedThemeMode: resolvedMode,
     themePreset: getSafeValue(root.getAttribute("data-theme-preset"), THEME_PRESET_VALUES),
     font: getSafeValue(root.getAttribute("data-font"), FONT_VALUES),
     contentLayout: getSafeValue(root.getAttribute("data-content-layout"), CONTENT_LAYOUT_VALUES),
@@ -77,9 +77,9 @@ export const PreferencesStoreProvider = ({
         const resolved = applyThemeMode("system");
         store.setState((prev) => ({ ...prev, resolvedThemeMode: resolved }));
 
-        unsubscribeMedia = subscribeToSystemTheme((nextResolved) => {
+        unsubscribeMedia = subscribeToSystemTheme((nextResolvedMode) => {
           applyThemeMode("system");
-          store.setState((prev) => ({ ...prev, resolvedThemeMode: nextResolved }));
+          store.setState((prev) => ({ ...prev, resolvedThemeMode: nextResolvedMode }));
         });
       } else {
         const resolved = applyThemeMode(mode);
