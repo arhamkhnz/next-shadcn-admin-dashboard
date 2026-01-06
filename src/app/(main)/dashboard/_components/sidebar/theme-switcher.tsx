@@ -8,17 +8,11 @@ import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 const THEME_CYCLE = ["light", "dark", "system"] as const;
 
-const THEME_CONFIG = {
-  light: { icon: Sun, label: "Light mode" },
-  dark: { icon: Moon, label: "Dark mode" },
-  system: { icon: Monitor, label: "System theme" },
-} as const;
-
 export function ThemeSwitcher() {
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
 
-  const cycleTheme = async () => {
+  const cycleTheme = () => {
     const currentIndex = THEME_CYCLE.indexOf(themeMode);
     const nextTheme = THEME_CYCLE[(currentIndex + 1) % THEME_CYCLE.length];
 
@@ -26,11 +20,16 @@ export function ThemeSwitcher() {
     persistPreference("theme_mode", nextTheme);
   };
 
-  const { icon: Icon, label } = THEME_CONFIG[themeMode];
-
   return (
-    <Button size="icon" aria-label={`Current theme: ${label}. Click to cycle themes`} onClick={cycleTheme}>
-      <Icon />
+    <Button size="icon" onClick={cycleTheme} aria-label={`Current theme: ${themeMode}. Click to cycle themes`}>
+      {/* SYSTEM */}
+      <Monitor className="hidden [html[data-theme-mode=system]_&]:block" />
+
+      {/* DARK (resolved) */}
+      <Sun className="hidden dark:block [html[data-theme-mode=system]_&]:hidden" />
+
+      {/* LIGHT (resolved) */}
+      <Moon className="block dark:hidden [html[data-theme-mode=system]_&]:hidden" />
     </Button>
   );
 }

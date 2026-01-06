@@ -28,11 +28,11 @@ function getSafeValue<T extends string>(raw: string | null, allowed: readonly T[
 function readDomState(): Partial<PreferencesState> {
   const root = document.documentElement;
 
-  const modeAttr = getSafeValue(root.getAttribute("data-theme-mode"), THEME_MODE_VALUES);
+  const themeModeAttr = getSafeValue(root.getAttribute("data-theme-mode"), THEME_MODE_VALUES);
   const resolvedMode = root.classList.contains("dark") ? "dark" : "light";
 
   return {
-    themeMode: modeAttr ?? resolvedMode,
+    themeMode: themeModeAttr ?? resolvedMode,
     resolvedThemeMode: resolvedMode,
     themePreset: getSafeValue(root.getAttribute("data-theme-preset"), THEME_PRESET_VALUES),
     font: getSafeValue(root.getAttribute("data-font"), FONT_VALUES),
@@ -63,41 +63,40 @@ export const PreferencesStoreProvider = ({
   );
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    let unsubscribeMedia: () => void = () => undefined;
-
     const domState = readDomState();
-    store.setState((prev) => ({ ...prev, ...domState, isSynced: true }));
+
+    store.setState((prev) => ({
+      ...prev,
+      ...domState,
+      isSynced: true,
+    }));
+  }, [store]);
+
+  useEffect(() => {
+    let unsubscribeMedia: (() => void) | undefined;
 
     const applyFromMode = (mode: PreferencesState["themeMode"]) => {
-      unsubscribeMedia();
+      unsubscribeMedia?.();
+      const resolved = applyThemeMode(mode);
+      store.setState((prev) => ({ ...prev, resolvedThemeMode: resolved }));
 
       if (mode === "system") {
-        const resolved = applyThemeMode("system");
-        store.setState((prev) => ({ ...prev, resolvedThemeMode: resolved }));
-
-        unsubscribeMedia = subscribeToSystemTheme((nextResolvedMode) => {
-          applyThemeMode("system");
-          store.setState((prev) => ({ ...prev, resolvedThemeMode: nextResolvedMode }));
+        unsubscribeMedia = subscribeToSystemTheme(() => {
+          const next = applyThemeMode("system");
+          store.setState((prev) => ({ ...prev, resolvedThemeMode: next }));
         });
-      } else {
-        const resolved = applyThemeMode(mode);
-        store.setState((prev) => ({ ...prev, resolvedThemeMode: resolved }));
       }
     };
 
-    const startMode = domState.themeMode ?? store.getState().themeMode;
-    applyFromMode(startMode);
+    applyFromMode(store.getState().themeMode);
 
-    const unsubscribeTheme = store.subscribe((state, prevState) => {
-      if (state.themeMode === prevState.themeMode) return;
-      applyFromMode(state.themeMode);
+    const unsubscribeStore = store.subscribe((s, p) => {
+      if (s.themeMode !== p.themeMode) applyFromMode(s.themeMode);
     });
 
     return () => {
-      unsubscribeMedia();
-      unsubscribeTheme();
+      unsubscribeMedia?.();
+      unsubscribeStore();
     };
   }, [store]);
 

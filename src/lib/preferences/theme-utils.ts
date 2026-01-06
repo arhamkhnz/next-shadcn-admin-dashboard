@@ -4,7 +4,7 @@ export type ResolvedThemeMode = "light" | "dark";
 
 export function resolveThemeMode(mode: ThemeMode): ResolvedThemeMode {
   if (mode === "system") {
-    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
     return prefersDark ? "dark" : "light";
   }
   return mode === "dark" ? "dark" : "light";
@@ -29,7 +29,7 @@ export function applyThemePreset(value: string) {
 
 export function subscribeToSystemTheme(onChange: (mode: ResolvedThemeMode) => void): () => void {
   if (typeof window === "undefined") return () => undefined;
-  const media = window.matchMedia ? window?.matchMedia("(prefers-color-scheme: dark)") : null;
+  const media = window.matchMedia?.("(prefers-color-scheme: dark)");
   if (!media) return () => undefined;
 
   const listener = (event: MediaQueryListEvent) => {
