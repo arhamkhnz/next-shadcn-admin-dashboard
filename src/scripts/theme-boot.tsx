@@ -91,8 +91,7 @@ export function ThemeBootScript() {
         var sidebarVariant = rawSidebarVariant || DEFAULTS.sidebar_variant;
         var sidebarCollapsible = rawSidebarCollapsible || DEFAULTS.sidebar_collapsible;
 
-        root.classList.remove("light", "dark");
-        root.classList.add(resolvedMode);
+        root.classList.toggle("dark", resolvedMode === "dark");
         root.setAttribute("data-theme-mode", mode);
         root.setAttribute("data-theme-preset", preset);
         root.setAttribute("data-font", font);
