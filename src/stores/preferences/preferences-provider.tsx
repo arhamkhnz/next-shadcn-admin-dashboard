@@ -59,7 +59,13 @@ export const PreferencesStoreProvider = ({
   navbarStyle: PreferencesState["navbarStyle"];
 }) => {
   const [store] = useState<StoreApi<PreferencesState>>(() =>
-    createPreferencesStore({ themeMode, themePreset, font, contentLayout, navbarStyle }),
+    createPreferencesStore({
+      themeMode,
+      themePreset,
+      font,
+      contentLayout,
+      navbarStyle,
+    }),
   );
 
   useEffect(() => {
@@ -88,7 +94,8 @@ export const PreferencesStoreProvider = ({
       }
     };
 
-    applyFromMode(store.getState().themeMode);
+    const startMode = readDomState().themeMode ?? store.getState().themeMode;
+    applyFromMode(startMode);
 
     const unsubscribeStore = store.subscribe((s, p) => {
       if (s.themeMode !== p.themeMode) applyFromMode(s.themeMode);
