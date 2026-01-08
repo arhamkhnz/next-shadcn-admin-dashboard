@@ -81,7 +81,7 @@ function RiskViewSelect() {
                   key={view.value}
                   value={view.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    setValue(currentValue);
                     setOpen(false);
                   }}
                 >
