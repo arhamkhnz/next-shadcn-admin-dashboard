@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 import { type StoreApi, useStore } from "zustand";
 
@@ -68,8 +68,11 @@ export const PreferencesStoreProvider = ({
     }),
   );
 
+  const domSnapshotRef = useRef<Partial<PreferencesState> | null>(null);
+
   useEffect(() => {
     const domState = readDomState();
+    domSnapshotRef.current = domState;
 
     store.setState((prev) => ({
       ...prev,
@@ -94,7 +97,7 @@ export const PreferencesStoreProvider = ({
       }
     };
 
-    const startMode = readDomState().themeMode ?? store.getState().themeMode;
+    const startMode = domSnapshotRef.current?.themeMode ?? store.getState().themeMode;
     applyFromMode(startMode);
 
     const unsubscribeStore = store.subscribe((s, p) => {
