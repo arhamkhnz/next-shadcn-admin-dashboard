@@ -1,5 +1,6 @@
 import {
   Banknote,
+  ShoppingBagIcon,
   Calendar,
   ChartBar,
   Fingerprint,
@@ -62,6 +63,15 @@ export const sidebarItems: NavGroup[] = [
         title: "Finance",
         url: "/dashboard/finance",
         icon: Banknote,
+      },
+      {
+        title: "Product",
+        url: "dashboard/product",
+        icon: ShoppingBagIcon,
+        subItems: [
+          { title: "Product list", url: "/dashboard/product/list", newTab: true },
+          { title: "Add product", url: "/dashboard/product/add", newTab: true },
+        ],
       },
       {
         title: "Analytics",

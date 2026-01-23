@@ -41,6 +41,8 @@ export function useDataTableInstance<TData, TValue>({
     pageSize: defaultPageSize ?? 10,
   });
 
+  const [version, setVersion] = React.useState(0);
+
   const table = useReactTable({
     data,
     columns,
@@ -52,8 +54,16 @@ export function useDataTableInstance<TData, TValue>({
       pagination,
     },
     enableRowSelection,
-    getRowId: getRowId ?? ((row) => (row as any).id.toString()),
-    onRowSelectionChange: setRowSelection,
+    getRowId: getRowId ?? ((row: any, index) => {
+      if (row.id !== undefined) {
+        return String(row.id);
+      }
+      return String(index);
+    }),
+    onRowSelectionChange: React.useCallback((updater: React.SetStateAction<{}>) => {
+      setRowSelection(updater);
+      setVersion(prev => prev + 1); 
+    }, []),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
@@ -66,5 +76,17 @@ export function useDataTableInstance<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  return table;
+  const enhancedTable = React.useMemo(() => {
+    return {
+      ...table,
+      subscribe: (callback: () => void) => {
+        const unsubscribe = () => {
+        };
+        return unsubscribe;
+      },
+      version,
+    };
+  }, [table, version]);
+
+  return enhancedTable;
 }
