@@ -212,7 +212,7 @@ function RiskViewSelect() {
                 >
                   <div className="flex flex-col">
                     <span>{view.label}</span>
-                    <span className="text-muted-foreground text-sm">{view.description}</span>
+                    <span className="text-muted-foreground text-xs">{view.description}</span>
                   </div>
                   <Check className={cn("ml-auto", value === view.value ? "opacity-100" : "opacity-0")} />
                 </CommandItem>
@@ -227,7 +227,7 @@ function RiskViewSelect() {
 
 function FiltersPopover() {
   const [open, setOpen] = React.useState(false);
-  const [selectedFilters, setSelectedFilters] = React.useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = React.useState<string[]>(["enterprise", "closed"]);
 
   const handleFilterChange = (filterId: string, checked: boolean) => {
     if (checked) {
