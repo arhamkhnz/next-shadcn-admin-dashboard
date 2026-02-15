@@ -17,7 +17,7 @@
     "*.{js,ts,jsx,tsx}": ["biome check --write --no-errors-on-unmatched"]
   },
   "dependencies": {
-    "@base-ui/react": "^1.1.0",
+    "@base-ui/react": "^1.2.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
@@ -40,7 +40,7 @@
     "react-day-picker": "^9.13.2",
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.71.1",
-    "react-resizable-panels": "^4.6.2",
+    "react-resizable-panels": "^4.6.4",
     "recharts": "^2.15.4",
     "simple-icons": "^15.22.0",
     "sonner": "^2.0.7",
