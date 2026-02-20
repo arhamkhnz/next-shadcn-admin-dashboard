@@ -1,42 +1,45 @@
-/**
- * Génère un tableau d'utilisateurs factices pour le mode démo.
- */
-
-const firstNames = [
-  "Emma", "Noah", "Liam", "Olivia", "Ava", "Sophia", "Mia", "Isabella",
-  "Lucas", "Ethan", "James", "Amelia", "Charlotte", "Benjamin", "Logan",
-  "Harper", "Daniel", "Chloe", "Jackson", "Evelyn"
-]
-
-const lastNames = [
-  "Smith", "Johnson", "Brown", "Taylor", "Anderson", "Thomas", "Jackson",
-  "White", "Harris", "Martin", "Thompson", "Garcia", "Martinez", "Lee"
-]
-
-const roles = ["Admin", "Editor", "Viewer"]
-const statuses = ["Active", "Pending", "Suspended"]
-
-function random<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)]
+export type User = {
+  id: number
+  name: string
+  email: string
+  role: string
+  status: "Active" | "Disabled"
 }
 
-export function generateDemoUsers(count = 25) {
-  const users = []
-
-  for (let i = 1; i <= count; i++) {
-    const first = random(firstNames)
-    const last = random(lastNames)
-    const name = `${first} ${last}`
-    const email = `${first.toLowerCase()}.${last.toLowerCase()}@example.com`
-
-    users.push({
-      id: i,
-      name,
-      email,
-      role: random(roles),
-      status: random(statuses),
-    })
-  }
-
-  return users
-}
+export const demoUsers: User[] = [
+  {
+    id: 1,
+    name: "Emma Smith",
+    email: "emma.smith@example.com",
+    role: "Admin",
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Liam Johnson",
+    email: "liam.johnson@example.com",
+    role: "Editor",
+    status: "Disabled",
+  },
+  {
+    id: 3,
+    name: "Olivia Brown",
+    email: "olivia.brown@example.com",
+    role: "Viewer",
+    status: "Active",
+  },
+  {
+    id: 4,
+    name: "Noah Taylor",
+    email: "noah.taylor@example.com",
+    role: "Editor",
+    status: "Active",
+  },
+  {
+    id: 5,
+    name: "Ava Anderson",
+    email: "ava.anderson@example.com",
+    role: "Viewer",
+    status: "Disabled",
+  },
+]
