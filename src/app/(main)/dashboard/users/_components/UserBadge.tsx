@@ -1,19 +1,25 @@
 "use client"
 
+import type { UserStatus } from "../_data/users"
+
 interface UserBadgeProps {
-  status: "Active" | "Disabled"
+  status: UserStatus
 }
 
 export function UserBadge({ status }: UserBadgeProps) {
+  const label =
+    status.charAt(0).toUpperCase() + status.slice(1)
+
+  const color =
+    status === "active"
+      ? "text-emerald-600"
+      : status === "pending"
+      ? "text-yellow-600"
+      : "text-muted-foreground"
+
   return (
-    <span
-      className={
-        status === "Active"
-          ? "text-emerald-600 font-medium"
-          : "text-muted-foreground"
-      }
-    >
-      {status}
+    <span className={`${color} font-medium`}>
+      {label}
     </span>
   )
 }

@@ -9,16 +9,24 @@ import {
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
 import { toast } from "sonner"
+import type { UserRole, UserStatus } from "../_data/users"
 
 interface UserDropdownProps {
   userId: number
-  currentRole: string
-  currentStatus: string
-  onUpdate: (id: number, field: string, value: string) => void
+  currentRole: UserRole
+  currentStatus: UserStatus
+  onUpdate?: (
+    id: number,
+    field: "role" | "status",
+    value: string
+  ) => void
 }
 
-const roles = ["Admin", "Editor", "Viewer"]
-const statuses = ["Active", "Pending", "Suspended"]
+const roles: UserRole[] = ["admin", "editor", "viewer"]
+const statuses: UserStatus[] = ["active", "pending", "suspended"]
+
+const capitalize = (value: string) =>
+  value.charAt(0).toUpperCase() + value.slice(1)
 
 export function UserDropdown({
   userId,
@@ -28,61 +36,57 @@ export function UserDropdown({
 }: UserDropdownProps) {
   return (
     <div className="flex items-center gap-2">
-      {/* Role menu */}
+      {/* Role */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             size="sm"
-            className="flex items-center gap-1 capitalize text-xs font-medium transition-all duration-150 hover:shadow-sm"
+            className="w-[140px] justify-between truncate"
           >
-            {currentRole}
+            {capitalize(currentRole)}
             <ChevronDown className="h-3 w-3 opacity-60" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="start"
-          className="animate-in fade-in slide-in-from-top-2 duration-200"
-        >
+        <DropdownMenuContent>
           {roles.map((role) => (
             <DropdownMenuItem
               key={role}
               onClick={() => {
-                onUpdate(userId, "role", role)
-                toast.success(`Role updated to ${role}`)
+                onUpdate?.(userId, "role", role)
+                toast.success(`Role updated to ${capitalize(role)}`)
               }}
             >
-              {role}
+              {capitalize(role)}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Status menu */}
+      {/* Status */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             size="sm"
-            className="flex items-center gap-1 capitalize text-xs font-medium transition-all duration-150 hover:shadow-sm"
+            className="w-[140px] justify-between truncate"
           >
-            {currentStatus}
+            {capitalize(currentStatus)}
             <ChevronDown className="h-3 w-3 opacity-60" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="start"
-          className="animate-in fade-in slide-in-from-top-2 duration-200"
-        >
+        <DropdownMenuContent>
           {statuses.map((status) => (
             <DropdownMenuItem
               key={status}
               onClick={() => {
-                onUpdate(userId, "status", status)
-                toast.success(`Status changed to ${status}`)
+                onUpdate?.(userId, "status", status)
+                toast.success(
+                  `Status changed to ${capitalize(status)}`
+                )
               }}
             >
-              {status}
+              {capitalize(status)}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

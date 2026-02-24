@@ -1,38 +1,54 @@
-// Mock user dataset for the Users Management module
-// Defines a reusable TypeScript interface for type safety.
+export type UserRole = "admin" | "editor" | "viewer"
+export type UserStatus = "active" | "pending" | "suspended"
 
 export type User = {
   id: number
   name: string
   email: string
-  role: string
-  status: "active" | "pending" | "suspended"
+  role: UserRole
+  status: UserStatus
   createdAt: string
 }
 
 export const users: User[] = [
   {
     id: 1,
-    name: "Rachid Hammami",
-    email: "rachid.hammami@example.com",
-    role: "Admin",
+    name: "Emma Smith",
+    email: "emma.smith@example.com",
+    role: "admin",
     status: "active",
-    createdAt: "2025-10-05",
+    createdAt: "2024-01-01",
   },
   {
     id: 2,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Editor",
+    name: "Liam Johnson",
+    email: "liam.johnson@example.com",
+    role: "editor",
     status: "pending",
-    createdAt: "2025-11-01",
+    createdAt: "2024-01-03",
   },
   {
     id: 3,
-    name: "Sarah Connor",
-    email: "sarah.connor@example.com",
-    role: "Viewer",
+    name: "Olivia Brown",
+    email: "olivia.brown@example.com",
+    role: "viewer",
     status: "suspended",
-    createdAt: "2025-09-27",
+    createdAt: "2024-01-05",
+  },
+  {
+    id: 4,
+    name: "Noah Taylor",
+    email: "noah.taylor@example.com",
+    role: "editor",
+    status: "active",
+    createdAt: "2024-01-07",
+  },
+  {
+    id: 5,
+    name: "Ava Anderson",
+    email: "ava.anderson@example.com",
+    role: "viewer",
+    status: "pending",
+    createdAt: "2024-01-10",
   },
 ]
