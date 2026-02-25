@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ChangeEvent } from "react"
+import type { Row } from "@tanstack/react-table"
+
 import {
   Dialog,
   DialogContent,
@@ -22,16 +24,26 @@ import {
 import { MoreHorizontal, Pencil, Trash2, Ban } from "lucide-react"
 import { toast } from "sonner"
 
-export function UserActions({ row, onEdit, onDelete, onSuspend }) {
+import type { User } from "../_data/users"
+
+interface UserActionsProps {
+  row: Row<User>
+  onEdit?: (user: User) => void
+  onDelete?: (id: number) => void
+  onSuspend?: (id: number) => void
+}
+
+type FormState = Pick<User, "name" | "email">
+
+export function UserActions({ row, onEdit, onDelete, onSuspend }: UserActionsProps) {
   const user = row.original
   const [open, setOpen] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     name: user.name,
     email: user.email,
   })
 
-  // 🔧 Gestion du formulaire
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
@@ -39,7 +51,6 @@ export function UserActions({ row, onEdit, onDelete, onSuspend }) {
   const handleSave = () => {
     const { name, email } = formData
 
-    // 🧩 Validation de base
     if (!name.trim() || !email.trim()) {
       toast.error("Name and email cannot be empty.")
       return
@@ -50,18 +61,18 @@ export function UserActions({ row, onEdit, onDelete, onSuspend }) {
       return
     }
 
-    // ✅ Met à jour uniquement name + email
-    onEdit({ ...user, name, email })
+    onEdit?.({ ...user, name, email })
     toast.success(`User ${name} updated successfully`)
     setOpen(false)
   }
 
   const handleSuspend = () => {
-    onSuspend(user.id)
+    onSuspend?.(user.id)
     toast.warning(`${user.name} has been suspended`)
   }
 
   const handleDelete = () => {
+    if (!onDelete) return
     if (confirm(`Are you sure you want to delete ${user.name}?`)) {
       onDelete(user.id)
       toast.error(`${user.name} deleted`)
@@ -72,7 +83,7 @@ export function UserActions({ row, onEdit, onDelete, onSuspend }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" aria-label="User actions">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -92,7 +103,6 @@ export function UserActions({ row, onEdit, onDelete, onSuspend }) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* 🧩 Modale d’édition restreinte à name + email */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
