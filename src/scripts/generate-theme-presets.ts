@@ -108,7 +108,8 @@ const updated = fileContent.replace(
 );
 
 async function main() {
-  const formatted = execFileSync("npx", ["@biomejs/biome", "format", "--stdin-file-path", outputPath], {
+  const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
+  const formatted = execFileSync(npmCmd, ["exec", "--", "@biomejs/biome", "format", "--stdin-file-path", outputPath], {
     input: updated,
     encoding: "utf8",
   });
