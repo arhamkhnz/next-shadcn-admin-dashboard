@@ -1,8 +1,8 @@
-import { CoverageTriageCard } from "./_components/analytics-coverage-triage-card";
-import { ForecastVsTargetCard } from "./_components/analytics-forecast-vs-target-card";
-import { ManagerActionQueueCard } from "./_components/analytics-manager-action-queue-card";
+import { ActionsManagerQueue } from "./_components/analytics-actions-manager-queue";
+import { ActionsRiskLedger } from "./_components/analytics-actions-risk-ledger";
+import { DriversCoverageTriage } from "./_components/analytics-drivers-coverage-triage";
+import { DriversForecastTarget } from "./_components/analytics-drivers-forecast-target";
 import { AnalyticsOverview } from "./_components/analytics-overview";
-import { RevenueRiskLedgerCard } from "./_components/analytics-revenue-risk-ledger-card";
 
 export default function Page() {
   return (
@@ -11,13 +11,13 @@ export default function Page() {
 
       <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
-          <ForecastVsTargetCard />
-          <CoverageTriageCard />
+          <DriversForecastTarget />
+          <DriversCoverageTriage />
         </div>
-        <ManagerActionQueueCard />
+        <ActionsManagerQueue />
       </div>
 
-      <RevenueRiskLedgerCard />
+      <ActionsRiskLedger />
     </div>
   );
 }

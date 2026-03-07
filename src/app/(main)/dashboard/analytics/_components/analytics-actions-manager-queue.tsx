@@ -26,7 +26,7 @@ const NEXT_INTERVENTIONS = [
   },
 ] as const;
 
-export function ManagerActionQueueCard() {
+export function ActionsManagerQueue() {
   return (
     <Card className="h-full shadow-xs">
       <CardHeader>

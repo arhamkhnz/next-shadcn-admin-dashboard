@@ -1,22 +1,17 @@
 "use client";
 
-import { BarChart3, Circle } from "lucide-react";
-import { Bar, CartesianGrid, ComposedChart, LabelList, Line, ReferenceLine, XAxis, YAxis } from "recharts";
+import { Bar, CartesianGrid, ComposedChart, Dot, LabelList, Line, ReferenceLine, XAxis, YAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
-import { getForecastTrendChartData } from "./analytics.data";
-
 const forecastChartConfig = {
   closedWon: {
     label: "Closed Won",
-    icon: BarChart3,
     color: "var(--chart-1)",
   },
   weightedPipeline: {
     label: "Weighted Pipeline",
-    icon: Circle,
     color: "var(--chart-2)",
   },
   target: {
@@ -25,15 +20,34 @@ const forecastChartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ForecastVsTargetCard() {
-  const chartData = getForecastTrendChartData().map((point) => ({
-    period: point.period,
-    closedWon: Number(((point.closedWon / point.target) * 100).toFixed(1)),
-    weightedPipeline: Number(((point.weightedPipeline / point.target) * 100).toFixed(1)),
-    target: 100,
-  }));
-  const pipelineMin = Math.min(...chartData.map((point) => point.weightedPipeline));
-  const pipelineMax = Math.max(...chartData.map((point) => point.weightedPipeline));
+type TrendPoint = {
+  period: string;
+  closedWon: number;
+  weightedPipeline: number;
+  target: number;
+  deltaLabel?: string;
+};
+
+const CHART_DATA: TrendPoint[] = [
+  { period: "W1", closedWon: 68.6, weightedPipeline: 274.3, target: 100 },
+  { period: "W2", closedWon: 87.1, weightedPipeline: 291.4, target: 100 },
+  { period: "W3", closedWon: 77.1, weightedPipeline: 282.9, target: 100 },
+  { period: "W4", closedWon: 94.3, weightedPipeline: 298.6, target: 100 },
+  { period: "W5", closedWon: 80.6, weightedPipeline: 298.6, target: 100 },
+  { period: "W6", closedWon: 100, weightedPipeline: 313.9, target: 100 },
+  { period: "W7", closedWon: 87.5, weightedPipeline: 322.2, target: 100 },
+  { period: "W8", closedWon: 95.8, weightedPipeline: 334.7, target: 100 },
+  { period: "W9", closedWon: 100, weightedPipeline: 332.4, target: 100 },
+  { period: "W10", closedWon: 95.9, weightedPipeline: 343.2, target: 100 },
+  { period: "W11", closedWon: 104.1, weightedPipeline: 352.7, target: 100 },
+  { period: "W12", closedWon: 109.5, weightedPipeline: 367.6, target: 100, deltaLabel: "+9.5pp" },
+];
+
+export function DriversForecastTarget() {
+  const chartData = CHART_DATA;
+  const pipelineMin = Math.min(...CHART_DATA.map((point) => point.weightedPipeline));
+  const pipelineMax = Math.max(...CHART_DATA.map((point) => point.weightedPipeline));
+
   return (
     <Card className="shadow-xs">
       <CardHeader>
@@ -56,11 +70,24 @@ export function ForecastVsTargetCard() {
               axisLine={false}
               tickMargin={8}
               width={44}
-              domain={[0, 140]}
+              domain={[0, "auto"]}
               ticks={[0, 50, 100, 150]}
             />
             <YAxis yAxisId="pipeline" hide domain={[pipelineMin, pipelineMax]} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <ChartTooltip
+              cursor={false}
+              content={(props) => (
+                <ChartTooltipContent
+                  active={props.active}
+                  label={props.label}
+                  className="w-48"
+                  payload={(props.payload ?? []).map((item) => ({
+                    ...item,
+                    value: typeof item.value === "number" ? `${item.value.toFixed(1)}%` : item.value,
+                  }))}
+                />
+              )}
+            />
             <ReferenceLine y={100} stroke="var(--color-target)" strokeWidth={2} strokeDasharray="6 5" />
             <Bar
               dataKey="closedWon"
@@ -72,64 +99,35 @@ export function ForecastVsTargetCard() {
               radius={[5, 5, 0, 0]}
               barSize={14}
             >
-              <LabelList content={renderW12DeltaLabel} />
+              <LabelList dataKey="deltaLabel" position="top" offset={8} fill="var(--color-closedWon)" />
             </Bar>
             <Line
               type="monotone"
               yAxisId="pipeline"
               dataKey="weightedPipeline"
               name="Pipeline vs target"
-              stroke="var(--color-weightedPipeline)"
               strokeOpacity={0}
               strokeWidth={0}
-              dot={<PipelineMarker />}
+              stroke="var(--color-weightedPipeline)"
+              isAnimationActive={false}
+              dot={({ payload, ...props }) => (
+                <Dot
+                  key={`${payload.period}-weighted-pipeline`}
+                  cx={props.cx}
+                  cy={props.cy}
+                  r={3.5}
+                  fill="var(--color-weightedPipeline)"
+                  stroke="var(--color-weightedPipeline)"
+                  strokeWidth={7}
+                  strokeOpacity={0.08}
+                />
+              )}
               activeDot={false}
             />
           </ComposedChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  );
-}
-
-function PipelineMarker(props: { cx?: number; cy?: number }) {
-  if (typeof props.cx !== "number" || typeof props.cy !== "number") {
-    return null;
-  }
-
-  return (
-    <g>
-      <circle cx={props.cx} cy={props.cy} r={3.5} fill="var(--color-weightedPipeline)" fillOpacity={0.95} />
-      <circle cx={props.cx} cy={props.cy} r={7} fill="var(--color-weightedPipeline)" fillOpacity={0.08} />
-    </g>
-  );
-}
-
-function renderW12DeltaLabel(props: { x?: number; y?: number; width?: number; index?: number; value?: number }) {
-  if (
-    typeof props.index !== "number" ||
-    props.index !== 11 ||
-    typeof props.x !== "number" ||
-    typeof props.y !== "number" ||
-    typeof props.width !== "number" ||
-    typeof props.value !== "number"
-  ) {
-    return null;
-  }
-
-  const delta = props.value - 100;
-
-  return (
-    <text
-      x={props.x + props.width / 2}
-      y={props.y - 10}
-      textAnchor="middle"
-      fill="var(--color-closedWon)"
-      fontSize={11}
-      fontWeight={600}
-    >
-      +{delta.toFixed(1)}pp
-    </text>
   );
 }
 

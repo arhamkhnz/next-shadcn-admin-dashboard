@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { startOfDay, subDays } from "date-fns";
+import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns";
 import { Check, ChevronsUpDown, Download } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { Area, ComposedChart, XAxis, YAxis } from "recharts";
@@ -18,8 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-import { buildRevenueChartData, type RiskView } from "./analytics.data";
-
+type RiskView = "risk-view" | "momentum" | "quality";
 type FilterToggleKey = "enterpriseOnly" | "stalledOnly" | "overdueOnly" | "includeRenewals";
 
 const FILTER_OPTIONS: Array<{ key: FilterToggleKey; label: string; summaryLabel: string }> = [
@@ -85,7 +84,10 @@ export function AnalyticsOverview() {
   });
   const [selectedFilters, setSelectedFilters] = React.useState<FilterToggleKey[]>(["includeRenewals"]);
 
-  const revenueSeries = buildRevenueChartData(dateRange.to);
+  const revenueSeries = React.useMemo(
+    () => buildRevenueChartData(dateRange.from, dateRange.to),
+    [dateRange.from, dateRange.to],
+  );
 
   const handleFilterToggle = (key: FilterToggleKey, checked: boolean) => {
     setSelectedFilters((prev) => {
@@ -124,6 +126,23 @@ export function AnalyticsOverview() {
   );
 }
 
+function buildRevenueChartData(from: Date, to: Date) {
+  const days = eachDayOfInterval({ start: from, end: to });
+  const minRevenue = 22_000;
+  const maxRevenue = 32_000;
+  let currentRevenue = 27_500;
+
+  return days.map((day) => {
+    const nextRevenue = currentRevenue + Math.round((Math.random() - 0.45) * 4_000);
+    currentRevenue = Math.max(minRevenue, Math.min(maxRevenue, nextRevenue));
+
+    return {
+      day: format(day, "MMM d"),
+      revenue: currentRevenue,
+    };
+  });
+}
+
 function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; revenue: number }> }) {
   const revenueChartConfig = {
     revenue: {
@@ -131,6 +150,12 @@ function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; rev
       color: "var(--chart-1)",
     },
   } satisfies ChartConfig;
+
+  const revenueValues = revenueSeries.map((point) => point.revenue);
+  const minRevenue = Math.min(...revenueValues);
+  const maxRevenue = Math.max(...revenueValues);
+  const midpoint = (minRevenue + maxRevenue) / 2;
+  const halfRange = Math.max((maxRevenue - minRevenue) * 1.6, 4_500);
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -154,7 +179,7 @@ function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; rev
           <ChartContainer config={revenueChartConfig} className="h-10 w-full rounded-md border">
             <ComposedChart data={revenueSeries} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
               <XAxis dataKey="day" hide />
-              <YAxis hide domain={[0, "auto"]} />
+              <YAxis hide domain={[midpoint - halfRange, midpoint + halfRange]} />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <Area
                 dataKey="revenue"
@@ -165,7 +190,7 @@ function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; rev
               />
             </ComposedChart>
           </ChartContainer>
-          <span className="text-muted-foreground text-xs">Last 30 days</span>
+          <span className="text-muted-foreground text-xs">Selected range</span>
         </div>
       </div>
 

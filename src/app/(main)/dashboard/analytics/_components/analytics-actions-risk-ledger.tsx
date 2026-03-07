@@ -252,7 +252,7 @@ const ledgerColumns: ColumnDef<LedgerRow>[] = [
   },
 ];
 
-export function RevenueRiskLedgerCard() {
+export function ActionsRiskLedger() {
   const [sorting, setSorting] = React.useState<SortingState>([{ id: "riskScore", desc: true }]);
 
   const table = useReactTable({
@@ -320,7 +320,7 @@ export function RevenueRiskLedgerCard() {
 
 function LedgerStat({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="flex flex-col gap-1 px-0 first:sm:pl-0 last:sm:pr-0 sm:px-3">
+    <div className="flex flex-col gap-1 px-0 sm:px-3 last:sm:pr-0 first:sm:pl-0">
       <p className="text-muted-foreground text-xs">{label}</p>
       <p className="font-semibold text-base tabular-nums">{value}</p>
       <p className="text-muted-foreground text-xs">{detail}</p>
