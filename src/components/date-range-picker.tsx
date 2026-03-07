@@ -9,13 +9,26 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-export function DateRangePicker() {
+interface DateRangePickerProps {
+  value?: DateRange;
+  onChange?: (value: DateRange | undefined) => void;
+}
+
+export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
   const [open, setOpen] = React.useState(false);
-  const [dateRange, setDateRange] = React.useState<DateRange | undefined>(() => {
+  const [internalDateRange, setInternalDateRange] = React.useState<DateRange | undefined>(() => {
     const to = new Date();
     const from = subDays(to, 29);
     return { from, to };
   });
+  const dateRange = value ?? internalDateRange;
+
+  const handleDateChange = (nextValue: DateRange | undefined) => {
+    if (!value) {
+      setInternalDateRange(nextValue);
+    }
+    onChange?.(nextValue);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -33,7 +46,7 @@ export function DateRangePicker() {
           mode="range"
           defaultMonth={dateRange?.from}
           selected={dateRange}
-          onSelect={setDateRange}
+          onSelect={handleDateChange}
           numberOfMonths={2}
         />
       </PopoverContent>

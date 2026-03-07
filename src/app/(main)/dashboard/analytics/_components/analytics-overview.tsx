@@ -2,13 +2,15 @@
 
 import * as React from "react";
 
+import { startOfDay, subDays } from "date-fns";
 import { Check, ChevronsUpDown, Download } from "lucide-react";
-import { Area, AreaChart, XAxis, YAxis } from "recharts";
+import type { DateRange } from "react-day-picker";
+import { Area, ComposedChart, XAxis, YAxis } from "recharts";
 
 import { DateRangePicker } from "@/components/date-range-picker";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
@@ -16,7 +18,22 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-const riskViews = [
+import { buildRevenueChartData, type RiskView } from "./analytics.data";
+
+type FilterToggleKey = "enterpriseOnly" | "stalledOnly" | "overdueOnly" | "includeRenewals";
+
+const FILTER_OPTIONS: Array<{ key: FilterToggleKey; label: string; summaryLabel: string }> = [
+  { key: "enterpriseOnly", label: "Enterprise only", summaryLabel: "Enterprise" },
+  { key: "stalledOnly", label: "Stalled deals (>14 days)", summaryLabel: "Stalled" },
+  { key: "overdueOnly", label: "Closing date exceeded", summaryLabel: "Overdue" },
+  { key: "includeRenewals", label: "Include renewals", summaryLabel: "Renewals" },
+];
+
+const riskViews: Array<{
+  value: RiskView;
+  label: string;
+  description: string;
+}> = [
   {
     value: "risk-view",
     label: "Risk view",
@@ -34,63 +51,67 @@ const riskViews = [
   },
 ];
 
-const filterOptions = [
-  { id: "enterprise", label: "Enterprise only" },
-  { id: "stalled", label: "Stalled deals (>14 days)" },
-  { id: "closed", label: "Closing date exceeded" },
-  { id: "renewals", label: "Include renewals" },
-];
-
-const last30DaysRevenue = [
-  { day: "D1", revenue: 24850 },
-  { day: "D2", revenue: 25620 },
-  { day: "D3", revenue: 26310 },
-  { day: "D4", revenue: 26940 },
-  { day: "D5", revenue: 26280 },
-  { day: "D6", revenue: 25540 },
-  { day: "D7", revenue: 24890 },
-  { day: "D8", revenue: 25480 },
-  { day: "D9", revenue: 26170 },
-  { day: "D10", revenue: 26860 },
-  { day: "D11", revenue: 27520 },
-  { day: "D12", revenue: 26910 },
-  { day: "D13", revenue: 26180 },
-  { day: "D14", revenue: 25530 },
-  { day: "D15", revenue: 24940 },
-  { day: "D16", revenue: 25560 },
-  { day: "D17", revenue: 26290 },
-  { day: "D18", revenue: 27040 },
-  { day: "D19", revenue: 27710 },
-  { day: "D20", revenue: 27120 },
-  { day: "D21", revenue: 26410 },
-  { day: "D22", revenue: 25780 },
-  { day: "D23", revenue: 25160 },
-  { day: "D24", revenue: 25740 },
-  { day: "D25", revenue: 26480 },
-  { day: "D26", revenue: 27220 },
-  { day: "D27", revenue: 27910 },
-  { day: "D28", revenue: 27360 },
-  { day: "D29", revenue: 26640 },
-  { day: "D30", revenue: 26020 },
-];
-const revenueChartConfig = {
-  revenue: {
-    label: "Revenue",
-    color: "var(--chart-1)",
+const RISK_SUMMARY_METRICS = [
+  {
+    key: "stalled",
+    label: "Stalled Deals",
+    value: "8",
+    comparatorLabel: "vs 5 Jan - 3 Feb",
   },
-} satisfies ChartConfig;
+  {
+    key: "risk",
+    label: "Revenue at Risk",
+    value: "$1,151,000",
+    comparatorLabel: "vs 5 Jan - 3 Feb",
+  },
+  {
+    key: "win-rate",
+    label: "Win Rate Trend",
+    value: "+8.3pp",
+    comparatorLabel: "vs 5 Jan - 3 Feb",
+  },
+  {
+    key: "cycle",
+    label: "Sales Cycle Drift",
+    value: "+2.3 days",
+    comparatorLabel: "vs 5 Jan - 3 Feb",
+  },
+] as const;
 
 export function AnalyticsOverview() {
+  const [dateRange, setDateRange] = React.useState<{ from: Date; to: Date }>(() => {
+    const to = startOfDay(new Date());
+    return { from: subDays(to, 29), to };
+  });
+  const [selectedFilters, setSelectedFilters] = React.useState<FilterToggleKey[]>(["includeRenewals"]);
+
+  const revenueSeries = buildRevenueChartData(dateRange.to);
+
+  const handleFilterToggle = (key: FilterToggleKey, checked: boolean) => {
+    setSelectedFilters((prev) => {
+      if (checked) {
+        return prev.includes(key) ? prev : [...prev, key];
+      }
+      return prev.filter((item) => item !== key);
+    });
+  };
+
+  const handleDateRangeChange = (value: DateRange | undefined) => {
+    if (!value?.from || !value?.to) {
+      return;
+    }
+    setDateRange({ from: value.from, to: value.to });
+  };
   return (
     <div className="grid gap-4">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <RiskViewSelect />
-          <FiltersPopover />
+          <FiltersPopover selectedFilters={selectedFilters} onToggle={handleFilterToggle} />
         </div>
 
-        <div className="flex items-center gap-2">
-          <DateRangePicker />
+        <div className="flex flex-wrap items-center gap-2">
+          <DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
           <Button variant="secondary">
             <Download />
             Export
@@ -98,86 +119,71 @@ export function AnalyticsOverview() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
-        <div className="space-y-2">
-          <div>
-            <div className="font-medium text-muted-foreground text-sm">Revenue</div>
-            <div className="font-semibold text-4xl tabular-nums tracking-tight">$745,200</div>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary">+11%</Badge>
-            <Badge variant="secondary">+$71,700</Badge>
-            <Badge variant="outline">vs last month</Badge>
-          </div>
+      <SummaryRow revenueSeries={revenueSeries} />
+    </div>
+  );
+}
 
-          <div className="text-muted-foreground text-sm">vs $673,500 last month</div>
-          <div>
-            <ChartContainer config={revenueChartConfig} className="h-10 w-full max-w-74 rounded-md border">
-              <AreaChart
-                accessibilityLayer
-                data={last30DaysRevenue}
-                margin={{
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                }}
-              >
-                <XAxis dataKey="day" hide />
-                <YAxis hide domain={[20000, 40000]} />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                <defs>
-                  <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--color-revenue)" stopOpacity={0.8} />
-                    <stop offset="90%" stopColor="var(--color-revenue)" stopOpacity={0.1} />
-                    <stop offset="100%" stopColor="var(--color-revenue)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <Area
-                  dataKey="revenue"
-                  type="natural"
-                  fill="url(#fillRevenue)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-revenue)"
-                  stackId="a"
-                />
-              </AreaChart>
-            </ChartContainer>
-            <span className="text-muted-foreground text-xs">Last 30 days</span>
-          </div>
+function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; revenue: number }> }) {
+  const revenueChartConfig = {
+    revenue: {
+      label: "Revenue",
+      color: "var(--chart-1)",
+    },
+  } satisfies ChartConfig;
+
+  return (
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="space-y-2">
+        <div>
+          <div className="font-medium text-muted-foreground text-sm">Revenue</div>
+          <div className="font-semibold text-4xl tabular-nums tracking-tight">$1,248,000</div>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary">+9.4%</Badge>
+          <Badge variant="secondary">+$107,000</Badge>
         </div>
 
-        <Card className="col-span-2 py-4 shadow-xs">
-          <CardHeader className="px-4">
-            <CardTitle>Risk summary</CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-4 divide-x [&>div:first-child]:pl-0 [&>div:last-child]:pr-0 [&>div]:px-6">
-            <div className="space-y-2">
-              <div>Stalled Deals</div>
-              <div className="text-2xl">22</div>
-              <div className="text-muted-foreground text-xs">{">"}14 days idle</div>
-            </div>
-
-            <div className="space-y-2">
-              <div>Revenue at Risk</div>
-              <div className="text-2xl">$157,300</div>
-              <div className="text-muted-foreground text-xs">closing date exceeded</div>
-            </div>
-
-            <div className="space-y-2">
-              <div>Win Rate Trend</div>
-              <div className="text-2xl">3.5%</div>
-              <div className="text-muted-foreground text-xs">-4.2%</div>
-            </div>
-
-            <div className="space-y-2">
-              <div>Avg Sales Cycle Drift</div>
-              <div className="text-2xl">31 days</div>
-              <div className="text-muted-foreground text-xs">vs previous period</div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
+          <span>Previous $1,141,000</span>
+          <Badge variant="outline" className="font-medium text-xs">
+            Risk Ladder 30
+          </Badge>
+        </div>
+        <div>
+          <ChartContainer config={revenueChartConfig} className="h-10 w-full rounded-md border">
+            <ComposedChart data={revenueSeries} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+              <XAxis dataKey="day" hide />
+              <YAxis hide domain={[0, "auto"]} />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <Area
+                dataKey="revenue"
+                type="natural"
+                fill="var(--color-revenue)"
+                fillOpacity={0.14}
+                stroke="var(--color-revenue)"
+              />
+            </ComposedChart>
+          </ChartContainer>
+          <span className="text-muted-foreground text-xs">Last 30 days</span>
+        </div>
       </div>
+
+      <Card className="py-4 shadow-xs lg:col-span-2">
+        <CardHeader className="px-4">
+          <CardTitle>Risk summary</CardTitle>
+          <CardDescription>Core risk signals vs previous period</CardDescription>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:[&>div:first-child]:pl-0 lg:[&>div:last-child]:pr-0 lg:[&>div]:px-5">
+          {RISK_SUMMARY_METRICS.map((item) => (
+            <div key={item.key} className="space-y-1">
+              <div className="text-muted-foreground text-sm">{item.label}</div>
+              <div className="font-semibold text-2xl tabular-nums">{item.value}</div>
+              <div className="text-muted-foreground text-xs">{item.comparatorLabel}</div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -189,15 +195,20 @@ function RiskViewSelect() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" role="combobox" aria-expanded={open} className="w-50 justify-between">
+        <Button variant="outline" role="combobox" aria-expanded={open} className="w-54 justify-between">
           <div className="flex items-center gap-2">
-            <div className="size-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+            <div
+              className="size-2 rounded-full bg-primary"
+              style={{
+                boxShadow: "0 0 8px color-mix(in oklab, var(--primary) 50%, transparent)",
+              }}
+            />
             {riskViews.find((view) => view.value === value)?.label}
           </div>
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-50 p-0">
+      <PopoverContent className="w-54 p-0">
         <Command>
           <CommandList>
             <CommandGroup>
@@ -225,25 +236,15 @@ function RiskViewSelect() {
   );
 }
 
-function FiltersPopover() {
+function FiltersPopover({
+  selectedFilters,
+  onToggle,
+}: {
+  selectedFilters: FilterToggleKey[];
+  onToggle: (key: FilterToggleKey, checked: boolean) => void;
+}) {
   const [open, setOpen] = React.useState(false);
-  const [selectedFilters, setSelectedFilters] = React.useState<string[]>(["enterprise", "closed"]);
-
-  const handleFilterChange = (filterId: string, checked: boolean) => {
-    if (checked) {
-      setSelectedFilters([...selectedFilters, filterId]);
-    } else {
-      setSelectedFilters(selectedFilters.filter((id) => id !== filterId));
-    }
-  };
-
-  const handleClear = () => {
-    setSelectedFilters([]);
-  };
-
-  const activeFiltersLabels = selectedFilters
-    .map((id) => filterOptions.find((f) => f.id === id)?.label)
-    .filter(Boolean) as string[];
+  const activeCount = selectedFilters.length;
 
   return (
     <div className="flex items-center gap-2">
@@ -251,46 +252,67 @@ function FiltersPopover() {
         <PopoverTrigger asChild>
           <Button variant="outline" aria-expanded={open}>
             Filters
-            <Badge variant="secondary">{selectedFilters.length}</Badge>
+            <Badge className="tabular-nums" variant="secondary">
+              {activeCount}
+            </Badge>
           </Button>
         </PopoverTrigger>
-        <PopoverContent align="start" className="w-60">
+        <PopoverContent align="start" className="w-72">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-sm">Filters</h3>
-              <span className="text-xs">Applies instantly</span>
+              <Badge variant="outline" className="font-medium text-xs tabular-nums">
+                Risk Ladder 30
+              </Badge>
             </div>
             <div className="space-y-3">
-              {filterOptions.map((filter) => (
-                <div key={filter.id} className="flex cursor-pointer items-center gap-2">
-                  <Checkbox
-                    id={filter.id}
-                    checked={selectedFilters.includes(filter.id)}
-                    onCheckedChange={(checked) => handleFilterChange(filter.id, checked as boolean)}
-                  />
-                  <Label htmlFor={filter.id} className="cursor-pointer font-normal text-sm">
-                    {filter.label}
-                  </Label>
-                </div>
+              {FILTER_OPTIONS.map((item) => (
+                <FilterToggle
+                  key={item.key}
+                  id={item.key}
+                  label={item.label}
+                  checked={selectedFilters.includes(item.key)}
+                  onCheckedChange={(checked) => onToggle(item.key, checked)}
+                />
               ))}
             </div>
-            <Button className="w-full" variant="outline" size="sm" onClick={handleClear}>
-              Clear
-            </Button>
           </div>
         </PopoverContent>
       </Popover>
 
       <span className="text-muted-foreground text-sm">
-        Showing:{" "}
-        <span className="font-medium">
-          {selectedFilters.length === 0
-            ? "None"
-            : selectedFilters.length === filterOptions.length
-              ? "All"
-              : activeFiltersLabels.join(" · ")}
-        </span>
+        Showing: <span className="font-medium">{summarizeFilterState(selectedFilters)}</span>
       </span>
     </div>
   );
+}
+
+function FilterToggle({
+  id,
+  label,
+  checked,
+  onCheckedChange,
+}: {
+  id: string;
+  label: string;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+}) {
+  return (
+    <div className="flex cursor-pointer items-center gap-2">
+      <Checkbox id={id} checked={checked} onCheckedChange={(value) => onCheckedChange(Boolean(value))} />
+      <Label htmlFor={id} className="cursor-pointer font-normal text-sm">
+        {label}
+      </Label>
+    </div>
+  );
+}
+
+function summarizeFilterState(selectedFilters: FilterToggleKey[]) {
+  if (selectedFilters.length === 0) {
+    return "All deals";
+  }
+  return FILTER_OPTIONS.filter((item) => selectedFilters.includes(item.key))
+    .map((item) => item.summaryLabel)
+    .join(" · ");
 }
