@@ -248,7 +248,7 @@ export function LayoutControls() {
               </ToggleGroup>
             </div>
 
-            <Button type="button" size="sm" variant="outline" className="w-full" onClick={handleRestore}>
+            <Button type="button" size="sm" variant="outline" className="w-full text-xs" onClick={handleRestore}>
               Restore Defaults
             </Button>
           </div>

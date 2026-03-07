@@ -14,9 +14,7 @@
     "generate:presets": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/generate-theme-presets.ts"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "biome check --write --no-errors-on-unmatched"
-    ]
+    "*.{js,ts,jsx,tsx}": ["biome check --write --no-errors-on-unmatched"]
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -33,6 +31,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
+    "geist": "^1.7.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.562.0",
     "next": "^16.1.6",
