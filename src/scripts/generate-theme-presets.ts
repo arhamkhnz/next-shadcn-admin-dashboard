@@ -107,9 +107,9 @@ const updated = fileContent.replace(
   generatedBlock,
 );
 
-async function main() {
-  const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
-  const formatted = execFileSync(npmCmd, ["exec", "--", "@biomejs/biome", "format", "--stdin-file-path", outputPath], {
+function main() {
+  const biomeBin = require.resolve("@biomejs/biome/bin/biome");
+  const formatted = execFileSync(process.execPath, [biomeBin, "format", "--stdin-file-path", outputPath], {
     input: updated,
     encoding: "utf8",
   });
@@ -123,7 +123,9 @@ async function main() {
   console.log("✅ theme.ts updated with new theme presets");
 }
 
-main().catch((err) => {
+try {
+  main();
+} catch (err) {
   console.error("❌ Unexpected error while generating theme presets:", err);
   process.exit(1);
-});
+}
