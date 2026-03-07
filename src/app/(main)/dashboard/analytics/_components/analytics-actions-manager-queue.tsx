@@ -94,7 +94,7 @@ export function ActionsManagerQueue() {
               <div className="flex items-center justify-between gap-2 rounded-md border bg-background/70 px-2.5 py-1.5">
                 <span>Stale pipeline</span>
                 <span className="text-muted-foreground tabular-nums">
-                  12 deals · {formatCurrency(1151000, { noDecimals: true })}
+                  8 deals · {formatCurrency(1151000, { noDecimals: true })}
                 </span>
               </div>
             </div>
@@ -121,7 +121,7 @@ export function ActionsManagerQueue() {
 
           <div className="flex items-center justify-between gap-2 rounded-md border bg-muted/20 px-3 py-2">
             <span className="text-muted-foreground text-xs">No-action monitor</span>
-            <span className="font-medium text-xs tabular-nums">0 Deals</span>
+            <span className="font-medium text-xs tabular-nums">3 Deals</span>
           </div>
         </div>
       </CardContent>

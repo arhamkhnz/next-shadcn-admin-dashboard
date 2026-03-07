@@ -55,25 +55,25 @@ const RISK_SUMMARY_METRICS = [
     key: "stalled",
     label: "Stalled Deals",
     value: "8",
-    comparatorLabel: "vs 5 Jan - 3 Feb",
+    comparatorLabel: "vs previous period",
   },
   {
     key: "risk",
     label: "Revenue at Risk",
     value: "$1,151,000",
-    comparatorLabel: "vs 5 Jan - 3 Feb",
+    comparatorLabel: "vs previous period",
   },
   {
     key: "win-rate",
     label: "Win Rate Trend",
     value: "+8.3pp",
-    comparatorLabel: "vs 5 Jan - 3 Feb",
+    comparatorLabel: "vs previous period",
   },
   {
     key: "cycle",
     label: "Sales Cycle Drift",
     value: "+2.3 days",
-    comparatorLabel: "vs 5 Jan - 3 Feb",
+    comparatorLabel: "vs previous period",
   },
 ] as const;
 

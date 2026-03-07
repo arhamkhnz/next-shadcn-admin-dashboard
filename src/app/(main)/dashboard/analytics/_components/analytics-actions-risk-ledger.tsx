@@ -135,7 +135,7 @@ const LEDGER_ROWS: LedgerRow[] = [
     idleDays: 23,
     closeVariance: "14d overdue",
     priority: null,
-    nextAction: "Escalate with manager",
+    nextAction: "No immediate intervention required.",
     riskScore: 42,
   },
   {
@@ -148,7 +148,7 @@ const LEDGER_ROWS: LedgerRow[] = [
     idleDays: 21,
     closeVariance: "10d overdue",
     priority: null,
-    nextAction: "Escalate with manager",
+    nextAction: "No immediate intervention required.",
     riskScore: 39,
   },
   {
@@ -161,7 +161,7 @@ const LEDGER_ROWS: LedgerRow[] = [
     idleDays: 24,
     closeVariance: "5d overdue",
     priority: null,
-    nextAction: "Escalate with manager",
+    nextAction: "No immediate intervention required.",
     riskScore: 31,
   },
 ];
