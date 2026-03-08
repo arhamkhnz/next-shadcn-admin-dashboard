@@ -9,7 +9,7 @@ import { PrimaryAccount } from "./_components/kpis/primary-account";
 import { SavingsRate } from "./_components/kpis/savings-rate";
 import { SpendingBreakdown } from "./_components/spending-breakdown";
 
-export default function Page() {
+export default function   () {
   return (
     <div>
       <Tabs className="gap-4" defaultValue="overview">
