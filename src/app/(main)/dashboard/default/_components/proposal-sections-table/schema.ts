@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const sectionSchema = z.object({
+export const proposalSectionsSchema = z.object({
   id: z.number(),
   header: z.string(),
   type: z.string(),
@@ -9,3 +9,5 @@ export const sectionSchema = z.object({
   limit: z.string(),
   reviewer: z.string(),
 });
+
+export type ProposalSectionsRow = z.infer<typeof proposalSectionsSchema>;

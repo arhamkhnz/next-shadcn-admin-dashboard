@@ -1,21 +1,30 @@
+"use client";
+"use no memo";
+
 import type { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVertical } from "lucide-react";
-import type z from "zod";
 
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-import type { recentLeadSchema } from "./schema";
+import type { RecentLeadRow } from "./schema";
 
-export const recentLeadsColumns: ColumnDef<z.infer<typeof recentLeadSchema>>[] = [
+export const recentLeadsColumns: ColumnDef<RecentLeadRow>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <div className="flex items-center justify-center">
         <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
@@ -30,54 +39,63 @@ export const recentLeadsColumns: ColumnDef<z.infer<typeof recentLeadSchema>>[] =
         />
       </div>
     ),
-    enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: "id",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Ref" />,
+    header: "Ref",
     cell: ({ row }) => <span className="tabular-nums">{row.original.id}</span>,
-    enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: "name",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
-    cell: ({ row }) => <span>{row.original.name}</span>,
+    header: "Name",
+    cell: ({ row }) => row.original.name,
     enableHiding: false,
   },
   {
     accessorKey: "company",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Company" />,
-    cell: ({ row }) => <span>{row.original.company}</span>,
-    enableSorting: false,
+    header: "Company",
+    cell: ({ row }) => row.original.company,
   },
   {
     accessorKey: "status",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+    header: "Status",
     cell: ({ row }) => <Badge variant="secondary">{row.original.status}</Badge>,
-    enableSorting: false,
   },
   {
     accessorKey: "source",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Source" />,
+    header: "Source",
     cell: ({ row }) => <Badge variant="outline">{row.original.source}</Badge>,
-    enableSorting: false,
   },
   {
     accessorKey: "lastActivity",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Last Activity" />,
+    header: "Last Activity",
     cell: ({ row }) => <span className="text-muted-foreground tabular-nums">{row.original.lastActivity}</span>,
-    enableSorting: false,
   },
   {
     id: "actions",
     cell: () => (
-      <Button variant="ghost" className="flex size-8 text-muted-foreground" size="icon">
-        <EllipsisVertical />
-        <span className="sr-only">Open menu</span>
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="flex size-8 text-muted-foreground">
+            <EllipsisVertical />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuGroup>
+            <DropdownMenuItem>View</DropdownMenuItem>
+            <DropdownMenuItem>Assign</DropdownMenuItem>
+            <DropdownMenuItem>Archive</DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     ),
-    enableSorting: false,
+    enableHiding: false,
   },
 ];

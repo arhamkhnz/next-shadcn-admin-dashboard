@@ -1,7 +1,8 @@
+import { recentLeadsData } from "./_components/crm.config";
 import { InsightCards } from "./_components/insight-cards";
 import { OperationalCards } from "./_components/operational-cards";
 import { OverviewCards } from "./_components/overview-cards";
-import { TableCards } from "./_components/table-cards";
+import { RecentLeadsTable } from "./_components/recent-leads-table/table";
 
 export default function Page() {
   return (
@@ -9,7 +10,7 @@ export default function Page() {
       <OverviewCards />
       <InsightCards />
       <OperationalCards />
-      <TableCards />
+      <RecentLeadsTable data={recentLeadsData} />
     </div>
   );
 }
