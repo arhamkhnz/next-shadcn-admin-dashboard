@@ -119,7 +119,7 @@ export function LayoutControls() {
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Preset" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {THEME_PRESET_OPTIONS.map((preset) => (
                     <SelectItem key={preset.value} className="text-xs" value={preset.value}>
                       <span
@@ -142,7 +142,7 @@ export function LayoutControls() {
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Select font" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {fontOptions.map((font) => (
                     <SelectItem key={font.key} className="text-xs" value={font.key}>
                       {font.label}
