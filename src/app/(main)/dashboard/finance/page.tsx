@@ -39,7 +39,7 @@ export default function Page() {
               <div className="flex flex-col gap-4">
                 <CashFlowOverview />
 
-                <div className="grid h-full grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                   <SpendingBreakdown />
                   <IncomeReliability />
                 </div>

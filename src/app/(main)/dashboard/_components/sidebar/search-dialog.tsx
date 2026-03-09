@@ -5,6 +5,7 @@ import { ChartBar, Forklift, Gauge, GraduationCap, LayoutDashboard, Search, Shop
 
 import { Button } from "@/components/ui/button";
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -16,8 +17,8 @@ import {
 
 const searchItems = [
   { group: "Dashboards", icon: LayoutDashboard, label: "Default" },
-  { group: "Dashboards", icon: ChartBar, label: "CRM", disabled: true },
-  { group: "Dashboards", icon: Gauge, label: "Analytics", disabled: true },
+  { group: "Dashboards", icon: ChartBar, label: "CRM" },
+  { group: "Dashboards", icon: Gauge, label: "Analytics" },
   { group: "Dashboards", icon: ShoppingBag, label: "E-Commerce", disabled: true },
   { group: "Dashboards", icon: GraduationCap, label: "Academy", disabled: true },
   { group: "Dashboards", icon: Forklift, label: "Logistics", disabled: true },
@@ -29,6 +30,8 @@ const searchItems = [
 
 export function SearchDialog() {
   const [open, setOpen] = React.useState(false);
+  const groups = [...new Set(searchItems.map((item) => item.group))];
+
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
@@ -43,36 +46,46 @@ export function SearchDialog() {
   return (
     <>
       <Button
-        variant="link"
-        className="!px-0 font-normal text-muted-foreground hover:no-underline"
         onClick={() => setOpen(true)}
+        variant="link"
+        className="px-0! font-normal text-muted-foreground hover:no-underline"
       >
-        <Search className="size-4" />
+        <Search data-icon="inline-start" />
         Search
         <kbd className="inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-medium text-[10px]">
           <span className="text-xs">⌘</span>J
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search dashboards, users, and more…" />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          {[...new Set(searchItems.map((item) => item.group))].map((group, i) => (
-            <React.Fragment key={group}>
-              {i !== 0 && <CommandSeparator />}
-              <CommandGroup heading={group} key={group}>
-                {searchItems
-                  .filter((item) => item.group === group)
-                  .map((item) => (
-                    <CommandItem className="!py-1.5" key={item.label} onSelect={() => setOpen(false)}>
-                      {item.icon && <item.icon />}
-                      <span>{item.label}</span>
-                    </CommandItem>
-                  ))}
-              </CommandGroup>
-            </React.Fragment>
-          ))}
-        </CommandList>
+        <Command>
+          <CommandInput placeholder="Search dashboards, users, and more…" />
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            {groups.map((group, index) => (
+              <React.Fragment key={group}>
+                {index > 0 && <CommandSeparator />}
+                <CommandGroup heading={group}>
+                  {searchItems
+                    .filter((item) => item.group === group)
+                    .map((item) => (
+                      <CommandItem
+                        disabled={item.disabled}
+                        key={item.label}
+                        onSelect={() => {
+                          if (!item.disabled) {
+                            setOpen(false);
+                          }
+                        }}
+                      >
+                        {item.icon && <item.icon />}
+                        <span>{item.label}</span>
+                      </CommandItem>
+                    ))}
+                </CommandGroup>
+              </React.Fragment>
+            ))}
+          </CommandList>
+        </Command>
       </CommandDialog>
     </>
   );
