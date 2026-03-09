@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { DataTableColumnHeader } from "../../../../../components/data-table/data-table-column-header";
 import type { sectionSchema } from "./schema";
@@ -156,8 +156,10 @@ export const dashboardColumns: ColumnDef<z.infer<typeof sectionSchema>>[] = [
               <SelectValue placeholder="Assign reviewer" />
             </SelectTrigger>
             <SelectContent align="end">
-              <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-              <SelectItem value="Jamik Tashpulatov">Jamik Tashpulatov</SelectItem>
+              <SelectGroup>
+                <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
+                <SelectItem value="Jamik Tashpulatov">Jamik Tashpulatov</SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
         </>

@@ -5,7 +5,7 @@ import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { type FontKey, fontOptions } from "@/lib/fonts/registry";
 import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "@/lib/preferences/layout";
@@ -119,19 +119,21 @@ export function LayoutControls() {
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Preset" />
                 </SelectTrigger>
-                <SelectContent position="popper">
-                  {THEME_PRESET_OPTIONS.map((preset) => (
-                    <SelectItem key={preset.value} className="text-xs" value={preset.value}>
-                      <span
-                        className="size-2.5 rounded-full"
-                        style={{
-                          backgroundColor:
-                            (resolvedThemeMode ?? "light") === "dark" ? preset.primary.dark : preset.primary.light,
-                        }}
-                      />
-                      {preset.label}
-                    </SelectItem>
-                  ))}
+                <SelectContent>
+                  <SelectGroup>
+                    {THEME_PRESET_OPTIONS.map((preset) => (
+                      <SelectItem key={preset.value} className="text-xs" value={preset.value}>
+                        <span
+                          className="size-2.5 rounded-full"
+                          style={{
+                            backgroundColor:
+                              (resolvedThemeMode ?? "light") === "dark" ? preset.primary.dark : preset.primary.light,
+                          }}
+                        />
+                        {preset.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
@@ -142,12 +144,14 @@ export function LayoutControls() {
                 <SelectTrigger size="sm" className="w-full text-xs">
                   <SelectValue placeholder="Select font" />
                 </SelectTrigger>
-                <SelectContent position="popper">
-                  {fontOptions.map((font) => (
-                    <SelectItem key={font.key} className="text-xs" value={font.key}>
-                      {font.label}
-                    </SelectItem>
-                  ))}
+                <SelectContent>
+                  <SelectGroup>
+                    {fontOptions.map((font) => (
+                      <SelectItem key={font.key} className="text-xs" value={font.key}>
+                        {font.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -123,14 +123,16 @@ export function TableCellViewer({ item }: { item: z.infer<typeof sectionSchema> 
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Table of Contents">Table of Contents</SelectItem>
-                    <SelectItem value="Executive Summary">Executive Summary</SelectItem>
-                    <SelectItem value="Technical Approach">Technical Approach</SelectItem>
-                    <SelectItem value="Design">Design</SelectItem>
-                    <SelectItem value="Capabilities">Capabilities</SelectItem>
-                    <SelectItem value="Focus Documents">Focus Documents</SelectItem>
-                    <SelectItem value="Narrative">Narrative</SelectItem>
-                    <SelectItem value="Cover Page">Cover Page</SelectItem>
+                    <SelectGroup>
+                      <SelectItem value="Table of Contents">Table of Contents</SelectItem>
+                      <SelectItem value="Executive Summary">Executive Summary</SelectItem>
+                      <SelectItem value="Technical Approach">Technical Approach</SelectItem>
+                      <SelectItem value="Design">Design</SelectItem>
+                      <SelectItem value="Capabilities">Capabilities</SelectItem>
+                      <SelectItem value="Focus Documents">Focus Documents</SelectItem>
+                      <SelectItem value="Narrative">Narrative</SelectItem>
+                      <SelectItem value="Cover Page">Cover Page</SelectItem>
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
               </div>
@@ -141,9 +143,11 @@ export function TableCellViewer({ item }: { item: z.infer<typeof sectionSchema> 
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Done">Done</SelectItem>
-                    <SelectItem value="In Progress">In Progress</SelectItem>
-                    <SelectItem value="Not Started">Not Started</SelectItem>
+                    <SelectGroup>
+                      <SelectItem value="Done">Done</SelectItem>
+                      <SelectItem value="In Progress">In Progress</SelectItem>
+                      <SelectItem value="Not Started">Not Started</SelectItem>
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
               </div>
@@ -165,9 +169,11 @@ export function TableCellViewer({ item }: { item: z.infer<typeof sectionSchema> 
                   <SelectValue placeholder="Select a reviewer" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-                  <SelectItem value="Jamik Tashpulatov">Jamik Tashpulatov</SelectItem>
-                  <SelectItem value="Emily Whalen">Emily Whalen</SelectItem>
+                  <SelectGroup>
+                    <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
+                    <SelectItem value="Jamik Tashpulatov">Jamik Tashpulatov</SelectItem>
+                    <SelectItem value="Emily Whalen">Emily Whalen</SelectItem>
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
