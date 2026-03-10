@@ -6,21 +6,21 @@ const NEXT_INTERVENTIONS = [
   {
     dealId: "OPP-489",
     priority: "Escalate",
-    owner: "Maya Chen",
+    owner: "Leila Zhang",
     risk: 81,
     recommendation: "Join next customer call and reset close plan.",
   },
   {
     dealId: "OPP-475",
     priority: "Coach",
-    owner: "Leo Martinez",
+    owner: "Omar Ali",
     risk: 76,
     recommendation: "Review deal strategy and unblock stage exit.",
   },
   {
     dealId: "OPP-447",
     priority: "Coach",
-    owner: "Rina Patel",
+    owner: "Sofia Bautista",
     risk: 75,
     recommendation: "Review deal strategy and unblock stage exit.",
   },
@@ -88,7 +88,7 @@ export function ActionsManagerQueue() {
 
               <div className="flex items-center justify-between gap-2 rounded-md border bg-background/70 px-2.5 py-1.5">
                 <span>Primary owner</span>
-                <span className="text-muted-foreground tabular-nums">Maya Chen · 3 deals</span>
+                <span className="text-muted-foreground tabular-nums">Leila Zhang · 3 deals</span>
               </div>
 
               <div className="flex items-center justify-between gap-2 rounded-md border bg-background/70 px-2.5 py-1.5">

@@ -63,7 +63,7 @@ export function DriversCoverageTriage() {
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border bg-muted/20 px-3 py-2">
           <div className="flex flex-wrap items-center gap-3 text-xs">
             <span className="text-muted-foreground">
-              Owner: <span className="font-medium text-foreground">Maya Chen</span>
+              Owner: <span className="font-medium text-foreground">Leila Zhang</span>
             </span>
             <span className="text-muted-foreground">
               Focus: <span className="text-foreground">top gap-filling deals</span>
