@@ -38,10 +38,22 @@ export default function UsersTable() {
     setUsers((prev) => [...prev, newUser]);
   };
 
+  // ✅ AJOUT DES HANDLERS (IMPORTANT)
+  const handleEdit = (updated: User) => setUsers((prev) => prev.map((u) => (u.id === updated.id ? updated : u)));
+
+  const handleDelete = (id: number) => setUsers((prev) => prev.filter((u) => u.id !== id));
+
+  const handleSuspend = (id: number) =>
+    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, status: "suspended" } : u)));
+
+  const handleUpdate = (id: number, field: "role" | "status", value: string) =>
+    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, [field]: value } : u)));
+
   const filteredUsers = useMemo(() => {
     return users.filter((user) => Object.values(user).join(" ").toLowerCase().includes(search.toLowerCase()));
   }, [users, search]);
 
+  // ✅ AJOUT DU META ICI
   const table = useReactTable({
     data: filteredUsers,
     columns,
@@ -49,6 +61,13 @@ export default function UsersTable() {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+
+    meta: {
+      onEdit: handleEdit,
+      onDelete: handleDelete,
+      onSuspend: handleSuspend,
+      onUpdate: handleUpdate,
+    },
   });
 
   return (
