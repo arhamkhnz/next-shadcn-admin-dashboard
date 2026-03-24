@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { APP_CONFIG } from "@/config/app-config";
+import { Badge } from "@/components/ui/badge";
 import { rootUser } from "@/data/users";
 import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
@@ -78,9 +78,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link prefetch={false} href="/dashboard/default">
+              <Link prefetch={false} href="/dashboard">
                 <Command />
-                <span className="font-semibold text-base">{APP_CONFIG.name}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sm">Realm Backstage</span>
+                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0 rounded-sm">
+                    Beta
+                  </Badge>
+                </div>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
