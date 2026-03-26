@@ -4,7 +4,7 @@ import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, XAxis, Y
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartLegend, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 import {
   leadsBySourceChartConfig,
@@ -22,8 +22,8 @@ export function InsightCards() {
         <CardHeader>
           <CardTitle>Leads by Source</CardTitle>
         </CardHeader>
-        <CardContent className="max-h-48">
-          <ChartContainer config={leadsBySourceChartConfig} className="size-full">
+        <CardContent className="flex items-center gap-6">
+          <ChartContainer config={leadsBySourceChartConfig} className="mx-auto aspect-square max-h-48 flex-1">
             <PieChart
               className="m-0"
               margin={{
@@ -55,7 +55,7 @@ export function InsightCards() {
                           >
                             {totalLeads.toLocaleString()}
                           </tspan>
-                          <tspan x={viewBox.cx} y={(viewBox.cy ?? 0) + 24} className="fill-muted-foreground">
+                          <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
                             Leads
                           </tspan>
                         </text>
@@ -64,26 +64,28 @@ export function InsightCards() {
                   }}
                 />
               </Pie>
-              <ChartLegend
-                layout="vertical"
-                verticalAlign="middle"
-                align="right"
-                content={() => (
-                  <ul className="ml-8 flex flex-col gap-3">
-                    {leadsBySourceChartData.map((item) => (
-                      <li key={item.source} className="flex w-36 items-center justify-between">
-                        <span className="flex items-center gap-2 capitalize">
-                          <span className="size-2.5 rounded-full" style={{ background: item.fill }} />
-                          {leadsBySourceChartConfig[item.source].label}
-                        </span>
-                        <span className="tabular-nums">{item.leads}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              />
             </PieChart>
           </ChartContainer>
+
+          <ul className="flex flex-col gap-3">
+            {leadsBySourceChartData.map((item) => (
+              <li key={item.source} className="flex w-36 items-center justify-between">
+                <span className="flex items-center gap-2 text-xs capitalize">
+                  <span
+                    className="size-2.5 rounded-full"
+                    style={{
+                      background:
+                        "color" in leadsBySourceChartConfig[item.source]
+                          ? leadsBySourceChartConfig[item.source].color
+                          : undefined,
+                    }}
+                  />
+                  {leadsBySourceChartConfig[item.source].label}
+                </span>
+                <span className="text-xs tabular-nums">{item.leads}</span>
+              </li>
+            ))}
+          </ul>
         </CardContent>
         <CardFooter className="gap-2">
           <Button size="sm" variant="outline" className="basis-1/2">
@@ -114,7 +116,7 @@ export function InsightCards() {
               />
               <XAxis dataKey="actual" type="number" hide />
               <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-              <Bar stackId="a" dataKey="actual" layout="vertical" fill="var(--color-actual)">
+              <Bar stackId="a" dataKey="actual" fill="var(--color-actual)">
                 <LabelList
                   dataKey="name"
                   position="insideLeft"
@@ -128,13 +130,7 @@ export function InsightCards() {
                   className="fill-primary-foreground text-xs tabular-nums"
                 />
               </Bar>
-              <Bar
-                stackId="a"
-                dataKey="remaining"
-                layout="vertical"
-                fill="var(--color-remaining)"
-                radius={[0, 6, 6, 0]}
-              >
+              <Bar stackId="a" dataKey="remaining" fill="var(--color-remaining)" radius={[0, 6, 6, 0]}>
                 <LabelList
                   dataKey="remaining"
                   position="insideRight"
