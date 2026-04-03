@@ -42,6 +42,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
           "[html[data-content-layout=centered]_&>*]:mx-auto",
           "[html[data-content-layout=centered]_&>*]:w-full",
           "[html[data-content-layout=centered]_&>*]:max-w-screen-2xl",
+          "peer-data-[variant=inset]:border",
         )}
       >
         <header
