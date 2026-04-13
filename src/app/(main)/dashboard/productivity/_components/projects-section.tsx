@@ -1,3 +1,4 @@
+import { addDays, format } from "date-fns";
 import { Globe, Orbit, Plus, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -6,13 +7,15 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+const today = new Date();
+
 const projects = [
   {
     title: "Q2 Roadmap",
     status: "In Progress",
     description: "Ship better, ship smarter.",
     progress: 68,
-    due: "Due Jun 30",
+    due: `Due ${format(addDays(today, 9), "MMM d")}`,
     icon: Orbit,
   },
   {
@@ -20,7 +23,7 @@ const projects = [
     status: "Planning",
     description: "Clean, modern, and fast.",
     progress: 42,
-    due: "Due Jul 12",
+    due: `Due ${format(addDays(today, 21), "MMM d")}`,
     icon: Globe,
   },
   {
@@ -28,7 +31,7 @@ const projects = [
     status: "In Progress",
     description: "Build once, create more.",
     progress: 75,
-    due: "Due Jun 25",
+    due: `Due ${format(addDays(today, 4), "MMM d")}`,
     icon: Sparkles,
   },
 ] as const;

@@ -1,13 +1,22 @@
+import { format, isToday, isYesterday, subDays } from "date-fns";
 import { BookOpen, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+const today = new Date();
+
+function formatNoteDate(date: Date) {
+  if (isToday(date)) return "Today";
+  if (isYesterday(date)) return "Yesterday";
+  return format(date, "MMM d");
+}
+
 const recentNotes = [
-  { title: "Design principles that scale", date: "Today", icon: FileText },
-  { title: "Content ideas – June", date: "Yesterday", icon: FileText },
-  { title: "Lessons from the week", date: "Jun 9", icon: FileText },
-  { title: "Books I’m Reading", date: "Jun 8", icon: BookOpen },
+  { title: "Design principles that scale", date: formatNoteDate(today), icon: FileText },
+  { title: `Content ideas – ${format(today, "MMMM")}`, date: formatNoteDate(subDays(today, 1)), icon: FileText },
+  { title: "Lessons from the week", date: formatNoteDate(subDays(today, 4)), icon: FileText },
+  { title: "Books I’m Reading", date: formatNoteDate(subDays(today, 5)), icon: BookOpen },
 ] as const;
 
 export function RecentNotesCard() {
