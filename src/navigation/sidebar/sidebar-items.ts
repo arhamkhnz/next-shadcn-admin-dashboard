@@ -74,6 +74,11 @@ export const sidebarItems: NavGroup[] = [
         icon: Gauge,
       },
       {
+        title: "Productivity",
+        url: "/dashboard/productivity",
+        icon: Kanban,
+      },
+      {
         title: "E-commerce",
         url: "/dashboard/coming-soon",
         icon: ShoppingBag,
