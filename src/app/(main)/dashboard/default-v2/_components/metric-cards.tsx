@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export function MetricCards() {
   return (
-    <div className="grid grid-cols-1 gap-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs xl:grid-cols-4 dark:*:data-[slot=card]:bg-card">
+    <div className="grid grid-cols-1 gap-4 *:data-[slot=card]:shadow-xs xl:grid-cols-4">
       <Card>
         <CardHeader>
           <CardTitle>
@@ -15,9 +15,9 @@ export function MetricCards() {
           </CardTitle>
           <CardDescription>Total Revenue</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <CardTitle className="text-3xl tracking-tight">$1,250.00</CardTitle>
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">$1,250.00</div>
             <Badge>
               <TrendingUp className="size-3" />
               +12.5%
@@ -36,9 +36,9 @@ export function MetricCards() {
           </CardTitle>
           <CardDescription>New Customers</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <CardTitle className="text-3xl tracking-tight">1,234</CardTitle>
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">1,234</div>
             <Badge variant="destructive">
               <TrendingDown className="size-3" />
               -20%
@@ -57,9 +57,9 @@ export function MetricCards() {
           </CardTitle>
           <CardDescription>Active Accounts</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <CardTitle className="text-3xl tracking-tight">45,678</CardTitle>
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">45,678</div>
             <Badge>
               <TrendingUp className="size-3" />
               +12.5%
@@ -78,9 +78,9 @@ export function MetricCards() {
           </CardTitle>
           <CardDescription>Growth Rate</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <CardTitle className="text-3xl tracking-tight">4.5%</CardTitle>
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">4.5%</div>
             <Badge>
               <TrendingUp className="size-3" />
               +4.5%

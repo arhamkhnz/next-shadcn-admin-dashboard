@@ -1,231 +1,149 @@
 "use client";
 
-import * as React from "react";
+import { addMonths, format, startOfMonth } from "date-fns";
+import { CalendarDays } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { Area, Bar, ComposedChart, XAxis, YAxis } from "recharts";
-
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
-type TimeRange = "30d" | "7d" | "24h";
-
-const performanceData = Array.from({ length: 240 }, (_, index) => {
-  const date = new Date("2026-07-01T00:00:00");
-  date.setHours(date.getHours() + index * 3);
-
-  const weeklyWave = Math.sin(index / 6) * 5200;
-  const dailyWave = Math.sin(index / 2.4) * 2100;
-  const momentum = index * 72;
+const signedRevenueData = [
+  { monthOffset: 0, signed: 198_000, target: 112_000 },
+  { monthOffset: 1, signed: 146_000, target: 176_000 },
+  { monthOffset: 2, signed: 146_000, target: 108_000 },
+  { monthOffset: 3, signed: 218_000, target: 108_000 },
+  { monthOffset: 4, signed: 220_000, target: 162_000 },
+  { monthOffset: 5, signed: 278_000, target: 168_000 },
+  { monthOffset: 6, signed: 276_000, target: 332_000 },
+  { monthOffset: 7, signed: 160_000, target: 332_000 },
+  { monthOffset: 8, signed: 178_000, target: 256_000 },
+  { monthOffset: 9, signed: 180_000, target: 154_000 },
+  { monthOffset: 10, signed: 182_000, target: 148_000 },
+  { monthOffset: 11, signed: 226_000, target: 198_000 },
+].map((item) => {
+  const date = addMonths(startOfMonth(new Date("2026-01-01T00:00:00")), item.monthOffset);
 
   return {
     date: date.toISOString(),
-    revenue: Math.round(48_000 + weeklyWave + dailyWave + momentum),
-    customers: Math.max(6, Math.round(16 + Math.sin(index / 3.4) * 7 + index / 18)),
+    signed: item.signed,
+    target: item.target,
   };
 });
 
-const metricCards = [
-  { label: "New customers", value: "182", change: "+8.4%" },
-  { label: "Active accounts", value: "1,248", change: "+4.5%" },
-  { label: "Growth rate", value: "8.32%", change: "+1.2%" },
-  { label: "Revenue", value: "$60.77", change: "+3.1%" },
-] as const;
-
 const chartConfig = {
-  revenue: {
-    label: "Revenue",
-    color: "var(--primary)",
+  signed: {
+    label: "Signed",
+    color: "var(--chart-2)",
   },
-  customers: {
-    label: "New customers",
-    color: "var(--muted-foreground)",
+  target: {
+    label: "Target",
+    color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 
-const _wholeNumberFormatter = new Intl.NumberFormat("en-US");
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-});
+const numberFormatter = new Intl.NumberFormat("en-US");
 
 export function PerformanceOverview() {
-  const [timeRange, setTimeRange] = React.useState<TimeRange>("30d");
-
-  const filteredData = React.useMemo(() => {
-    switch (timeRange) {
-      case "24h":
-        return performanceData.slice(-8);
-      case "7d":
-        return performanceData.slice(-56);
-      default:
-        return performanceData;
-    }
-  }, [timeRange]);
-
-  const latestPoint = filteredData.at(-1);
-  const revenueMin = Math.min(...filteredData.map((item) => item.revenue));
-  const revenueMax = Math.max(...filteredData.map((item) => item.revenue));
-
   return (
-    <div className="grid gap-4">
-      <Card>
+    <div className="grid gap-4 lg:grid-cols-12">
+      <Card className="@container/card lg:col-span-12">
         <CardHeader>
-          <CardTitle>Revenue Performance</CardTitle>
-          <CardDescription>Booked revenue and new customer activity across the last month.</CardDescription>
+          <CardTitle>Signed Over Time</CardTitle>
+          <CardDescription>Momentum against the projected signing pace from January to December.</CardDescription>
 
           <CardAction>
-            <ToggleGroup
-              type="single"
-              value={timeRange}
-              onValueChange={(value) => {
-                if (value) {
-                  setTimeRange(value as TimeRange);
-                }
-              }}
-              variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:px-3! md:flex"
-            >
-              <ToggleGroupItem value="30d">30 Days</ToggleGroupItem>
-              <ToggleGroupItem value="7d">7 Days</ToggleGroupItem>
-              <ToggleGroupItem value="24h">24 Hours</ToggleGroupItem>
-            </ToggleGroup>
+            <Button variant="outline" size="sm">
+              <CalendarDays data-icon="inline-start" />
+              Jan - Dec
+            </Button>
           </CardAction>
         </CardHeader>
 
-        <CardContent className="space-y-6">
-          <div className="flex flex-col gap-6 border-border/50 border-b pb-6 xl:flex-row xl:items-end xl:justify-between">
-            <div className="space-y-3 xl:min-w-55">
-              <div className="font-semibold text-4xl tabular-nums tracking-tight">
-                {currencyFormatter.format(latestPoint?.revenue ?? 0)}
-              </div>
-              <div className="flex flex-wrap items-center gap-2 text-sm">
-                <Badge className="rounded-full px-2.5 py-0.5">{metricCards[2].change}</Badge>
-                <span className="text-muted-foreground">Compared to last month</span>
-              </div>
-            </div>
-
-            <div className="flex flex-1 flex-wrap justify-end gap-3">
-              {metricCards.map((item) => (
-                <div
-                  key={item.label}
-                  className="w-30 space-y-1.5 rounded-lg border border-border p-2 text-left shadow-xs"
-                >
-                  <div className="text-muted-foreground text-xs">{item.label}</div>
-                  <div className="flex items-center gap-2">
-                    <div className="font-medium tabular-nums">{item.value}</div>
-                    <div className="text-[0.625rem] text-muted-foreground">{item.change}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <ChartContainer config={chartConfig} className="h-80 w-full">
-            <ComposedChart accessibilityLayer data={filteredData} margin={{ left: 0 }}>
+        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+          <ChartContainer config={chartConfig} className="aspect-auto h-80 w-full">
+            <AreaChart accessibilityLayer data={signedRevenueData}>
               <defs>
-                <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-revenue)" stopOpacity={0.18} />
-                  <stop offset="95%" stopColor="var(--color-revenue)" stopOpacity={0.02} />
+                <linearGradient id="fillSigned" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="10%" stopColor="var(--color-signed)" stopOpacity={0.3} />
+                  <stop offset="50%" stopColor="var(--color-signed)" stopOpacity={0.1} />
                 </linearGradient>
+                {/* <linearGradient id="fillTarget" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--color-target)" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="var(--color-target)" stopOpacity={0.08} />
+                </linearGradient> */}
               </defs>
+
+              <CartesianGrid vertical={false} strokeDasharray="3 6" />
 
               <XAxis
                 dataKey="date"
                 axisLine={false}
                 tickLine={false}
-                tickMargin={12}
-                minTickGap={24}
-                tickFormatter={(value) =>
-                  new Date(value).toLocaleDateString("en-US", {
-                    ...(timeRange === "24h"
-                      ? {
-                          hour: "numeric" as const,
-                        }
-                      : {
-                          month: "short" as const,
-                          day: "numeric" as const,
-                        }),
-                  })
-                }
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) => format(new Date(value), "MMM")}
               />
 
               <YAxis
-                yAxisId="revenue"
                 axisLine={false}
                 tickLine={false}
                 tickMargin={12}
-                width={42}
-                tickFormatter={(value) => `${Math.round(value / 1000)}k`}
-                domain={[Math.floor(revenueMin / 1000) * 1000 - 2000, Math.ceil(revenueMax / 1000) * 1000 + 2000]}
+                width={44}
+                tickFormatter={(value) => Math.round(Number(value) / 1000).toString()}
               />
 
-              {/* <ChartTooltip
-                cursor={{ stroke: "var(--border)", strokeDasharray: "4 4" }}
-                defaultIndex={Math.max(0, filteredData.length - 6)}
+              <ChartTooltip
+                cursor={false}
                 content={
                   <ChartTooltipContent
-                    labelFormatter={(value) =>
-                      new Date(value).toLocaleDateString("en-US", {
-                        ...(timeRange === "24h"
-                          ? {
-                              month: "short" as const,
-                              day: "numeric" as const,
-                              hour: "numeric" as const,
-                            }
-                          : {
-                              month: "long" as const,
-                              day: "numeric" as const,
-                              year: "numeric" as const,
-                            }),
-                      })
-                    }
+                    indicator="dot"
+                    labelFormatter={(_value, payload) => {
+                      const item = payload?.[0]?.payload;
+                      if (!item) return "";
+                      return format(new Date(item.date), "MMM yyyy");
+                    }}
                     formatter={(value, name) => {
-                      if (name === "Revenue") {
-                        return (
-                          <span className="font-medium text-foreground tabular-nums">
-                            {currencyFormatter.format(Number(value))}
-                          </span>
-                        );
-                      }
+                      const label = name === "signed" ? "Signed value" : "Target pace";
 
                       return (
-                        <span className="font-medium text-foreground tabular-nums">
-                          {wholeNumberFormatter.format(Number(value))}
-                        </span>
+                        <div className="flex min-w-40 items-center justify-between gap-4">
+                          <span className="text-muted-foreground">{label}</span>
+                          <span className="font-medium text-foreground tabular-nums">
+                            {numberFormatter.format(Number(value))}
+                          </span>
+                        </div>
                       );
                     }}
                   />
                 }
-              /> */}
-
-              <Bar
-                yAxisId="customers"
-                dataKey="customers"
-                fill="var(--color-customers)"
-                opacity={0.18}
-                radius={[999, 999, 0, 0]}
-                maxBarSize={10}
               />
 
               <Area
-                yAxisId="revenue"
-                dataKey="revenue"
-                type="natural"
-                fill="url(#fillRevenue)"
-                stroke="var(--color-revenue)"
-                strokeWidth={2.5}
+                dataKey="target"
+                type="monotone"
+                stroke="var(--color-target)"
+                strokeDasharray="4 6"
                 dot={false}
+                fill="url(#fillTarget)"
+                fillOpacity={1}
+              />
+
+              <Area
+                dataKey="signed"
+                type="monotone"
+                stroke="var(--color-signed)"
+                dot={false}
+                fill="url(#fillSigned)"
+                fillOpacity={1}
                 activeDot={{
                   r: 5,
-                  fill: "var(--color-revenue)",
-                  stroke: "var(--background)",
+                  fill: "var(--background)",
+                  stroke: "var(--color-signed)",
                   strokeWidth: 2,
                 }}
               />
-            </ComposedChart>
+            </AreaChart>
           </ChartContainer>
         </CardContent>
       </Card>
