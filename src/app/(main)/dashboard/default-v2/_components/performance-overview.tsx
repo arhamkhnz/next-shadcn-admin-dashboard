@@ -1,152 +1,174 @@
 "use client";
 
-import { addMonths, format, startOfMonth } from "date-fns";
-import { CalendarDays } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { addHours, format } from "date-fns";
+import { Area, CartesianGrid, ComposedChart, Line, XAxis } from "recharts";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const signedRevenueData = [
-  { monthOffset: 0, signed: 198_000, target: 112_000 },
-  { monthOffset: 1, signed: 146_000, target: 176_000 },
-  { monthOffset: 2, signed: 146_000, target: 108_000 },
-  { monthOffset: 3, signed: 218_000, target: 108_000 },
-  { monthOffset: 4, signed: 220_000, target: 162_000 },
-  { monthOffset: 5, signed: 278_000, target: 168_000 },
-  { monthOffset: 6, signed: 276_000, target: 332_000 },
-  { monthOffset: 7, signed: 160_000, target: 332_000 },
-  { monthOffset: 8, signed: 178_000, target: 256_000 },
-  { monthOffset: 9, signed: 180_000, target: 154_000 },
-  { monthOffset: 10, signed: 182_000, target: 148_000 },
-  { monthOffset: 11, signed: 226_000, target: 198_000 },
-].map((item) => {
-  const date = addMonths(startOfMonth(new Date("2026-01-01T00:00:00")), item.monthOffset);
+const referenceDate = new Date("2024-06-30T18:00:00");
+const startDate = addHours(referenceDate, -(179 * 12));
+
+const chartData = Array.from({ length: 180 }, (_, index) => {
+  const date = addHours(startDate, index * 12);
+
+  const newCustomersBase = 9200 + Math.sin(index / 2.8) * 1350 + Math.cos(index / 5.1) * 920;
+  const newCustomersJitter = Math.sin(index * 1.9) * 840 + Math.cos(index * 1.3) * 520;
+  const newCustomersSpike = index % 31 === 0 ? 13200 : index % 23 === 0 ? 8800 : index % 11 === 0 ? 5200 : 0;
+
+  const activeAccountsBase = 6200 + Math.sin(index / 18) * 120 + Math.cos(index / 26) * 80;
+  const activeAccountsJitter = Math.sin(index * 1.95) * 160 + Math.cos(index * 1.2) * 90;
+  const activeAccountsSpike = index % 41 === 0 ? 260 : index % 23 === 0 ? 140 : 0;
+
+  const returningUsersBase = 4550 + Math.sin(index / 20) * 90 + Math.cos(index / 28) * 60;
+  const returningUsersJitter = Math.cos(index * 1.72) * 90 + Math.sin(index * 1.08) * 48;
+  const returningUsersSpike = index % 47 === 0 ? 180 : index % 29 === 0 ? 90 : 0;
 
   return {
-    date: date.toISOString(),
-    signed: item.signed,
-    target: item.target,
+    date: format(date, "yyyy-MM-dd"),
+    newCustomers: Math.round(newCustomersBase + newCustomersJitter + newCustomersSpike),
+    activeAccounts: Math.round(activeAccountsBase + activeAccountsJitter + activeAccountsSpike),
+    returningUsers: Math.round(returningUsersBase + returningUsersJitter + returningUsersSpike),
   };
 });
 
 const chartConfig = {
-  signed: {
-    label: "Signed",
+  newCustomers: {
+    label: "New Customers",
+    color: "var(--chart-1)",
+  },
+  activeAccounts: {
+    label: "Active Accounts",
     color: "var(--chart-2)",
   },
-  target: {
-    label: "Target",
+  returningUsers: {
+    label: "Returning Users",
     color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 
-const numberFormatter = new Intl.NumberFormat("en-US");
-
 export function PerformanceOverview() {
   return (
-    <div className="grid gap-4 lg:grid-cols-12">
-      <Card className="@container/card lg:col-span-12">
-        <CardHeader>
-          <CardTitle>Signed Over Time</CardTitle>
-          <CardDescription>Momentum against the projected signing pace from January to December.</CardDescription>
+    <Card className="@container/card">
+      <CardHeader>
+        <CardTitle>Customer Activity</CardTitle>
+        <CardDescription>
+          <span className="@[540px]/card:block hidden">Customer activity for the last 3 months</span>
+          <span className="@[540px]/card:hidden">Last 3 months</span>
+        </CardDescription>
+        <CardAction className="flex items-center gap-2">
+          <Select defaultValue="quarter">
+            <SelectTrigger size="sm" className="w-28">
+              <SelectValue placeholder="3 months" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Period</SelectLabel>
+                <SelectItem value="quarter">3 months</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-          <CardAction>
-            <Button variant="outline" size="sm">
-              <CalendarDays data-icon="inline-start" />
-              Jan - Dec
-            </Button>
-          </CardAction>
-        </CardHeader>
+          <Select defaultValue="all">
+            <SelectTrigger size="sm" className="w-32">
+              <SelectValue placeholder="All segments" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Segments</SelectLabel>
+                <SelectItem value="all">All segments</SelectItem>
+                <SelectItem value="paid">Paid</SelectItem>
+                <SelectItem value="organic">Organic</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-          <ChartContainer config={chartConfig} className="aspect-auto h-80 w-full">
-            <AreaChart accessibilityLayer data={signedRevenueData}>
-              <defs>
-                <linearGradient id="fillSigned" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="10%" stopColor="var(--color-signed)" stopOpacity={0.3} />
-                  <stop offset="50%" stopColor="var(--color-signed)" stopOpacity={0.1} />
-                </linearGradient>
-                {/* <linearGradient id="fillTarget" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-target)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="var(--color-target)" stopOpacity={0.08} />
-                </linearGradient> */}
-              </defs>
+          <Button variant="outline" size="sm">
+            View report
+          </Button>
+        </CardAction>
+      </CardHeader>
 
-              <CartesianGrid vertical={false} strokeDasharray="3 6" />
+      <CardContent>
+        <ChartContainer config={chartConfig} className="aspect-auto h-80 w-full">
+          <ComposedChart data={chartData} margin={{ top: 0 }}>
+            <defs>
+              <linearGradient id="fillNewCustomers" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-newCustomers)" stopOpacity={0.36} />
+                <stop offset="95%" stopColor="var(--color-newCustomers)" stopOpacity={0.04} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid vertical={false} strokeOpacity={0.5} />
 
-              <XAxis
-                dataKey="date"
-                axisLine={false}
-                tickLine={false}
-                tickMargin={8}
-                minTickGap={32}
-                tickFormatter={(value) => format(new Date(value), "MMM")}
-              />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={48}
+              tickFormatter={(value) =>
+                new Date(value).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })
+              }
+            />
 
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tickMargin={12}
-                width={44}
-                tickFormatter={(value) => Math.round(Number(value) / 1000).toString()}
-              />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  className="w-50"
+                  indicator="line"
+                  labelFormatter={(value) => format(new Date(value), "d MMMM yyyy")}
+                />
+              }
+            />
+            <ChartLegend verticalAlign="top" content={<ChartLegendContent className="mb-5 justify-end" />} />
 
-              <ChartTooltip
-                cursor={false}
-                content={
-                  <ChartTooltipContent
-                    indicator="dot"
-                    labelFormatter={(_value, payload) => {
-                      const item = payload?.[0]?.payload;
-                      if (!item) return "";
-                      return format(new Date(item.date), "MMM yyyy");
-                    }}
-                    formatter={(value, name) => {
-                      const label = name === "signed" ? "Signed value" : "Target pace";
-
-                      return (
-                        <div className="flex min-w-40 items-center justify-between gap-4">
-                          <span className="text-muted-foreground">{label}</span>
-                          <span className="font-medium text-foreground tabular-nums">
-                            {numberFormatter.format(Number(value))}
-                          </span>
-                        </div>
-                      );
-                    }}
-                  />
-                }
-              />
-
-              <Area
-                dataKey="target"
-                type="monotone"
-                stroke="var(--color-target)"
-                strokeDasharray="4 6"
-                dot={false}
-                fill="url(#fillTarget)"
-                fillOpacity={1}
-              />
-
-              <Area
-                dataKey="signed"
-                type="monotone"
-                stroke="var(--color-signed)"
-                dot={false}
-                fill="url(#fillSigned)"
-                fillOpacity={1}
-                activeDot={{
-                  r: 5,
-                  fill: "var(--background)",
-                  stroke: "var(--color-signed)",
-                  strokeWidth: 2,
-                }}
-              />
-            </AreaChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-    </div>
+            <Area
+              dataKey="newCustomers"
+              type="natural"
+              fill="url(#fillNewCustomers)"
+              stroke="var(--color-newCustomers)"
+              strokeWidth={1.7}
+              dot={false}
+              fillOpacity={1}
+            />
+            <Line
+              dataKey="activeAccounts"
+              type="natural"
+              stroke="var(--color-activeAccounts)"
+              strokeWidth={1.4}
+              dot={false}
+            />
+            <Line
+              dataKey="returningUsers"
+              type="natural"
+              stroke="var(--color-returningUsers)"
+              strokeWidth={1.2}
+              dot={false}
+            />
+          </ComposedChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   );
 }
