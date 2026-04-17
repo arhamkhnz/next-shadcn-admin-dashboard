@@ -1,6 +1,6 @@
 "use client";
 
-import { addHours, endOfToday, format, subHours } from "date-fns";
+import { addHours, endOfToday, format, parseISO, subHours } from "date-fns";
 import { Area, CartesianGrid, ComposedChart, Line, XAxis } from "recharts";
 
 import { Button } from "@/components/ui/button";
@@ -289,7 +289,7 @@ export function PerformanceOverview() {
               tickMargin={8}
               minTickGap={48}
               tickFormatter={(value) =>
-                new Date(value).toLocaleDateString("en-US", {
+                parseISO(value).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                 })
@@ -302,7 +302,7 @@ export function PerformanceOverview() {
                 <ChartTooltipContent
                   className="w-50"
                   indicator="line"
-                  labelFormatter={(value) => format(new Date(value), "d MMMM yyyy")}
+                  labelFormatter={(value) => format(parseISO(value), "d MMMM yyyy")}
                 />
               }
             />
