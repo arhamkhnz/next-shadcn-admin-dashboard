@@ -313,7 +313,7 @@ export function PerformanceOverview() {
               type="natural"
               fill="url(#fillNewCustomers)"
               stroke="var(--color-newCustomers)"
-              strokeWidth={1.7}
+              strokeWidth={1.25}
               dot={false}
               fillOpacity={1}
             />
