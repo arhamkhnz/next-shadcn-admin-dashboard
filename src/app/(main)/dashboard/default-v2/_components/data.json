@@ -1,0 +1,137 @@
+[
+  {
+    "id": 1,
+    "customer": "Acme Corp",
+    "plan": "Enterprise",
+    "status": "Active",
+    "revenue": "12,400",
+    "accounts": "18",
+    "owner": "Eddie Lake"
+  },
+  {
+    "id": 2,
+    "customer": "Northstar Labs",
+    "plan": "Growth",
+    "status": "Upgraded",
+    "revenue": "8,260",
+    "accounts": "11",
+    "owner": "Maya Johnson"
+  },
+  {
+    "id": 3,
+    "customer": "BluePeak",
+    "plan": "Pro",
+    "status": "Trial",
+    "revenue": "1,240",
+    "accounts": "4",
+    "owner": "Sarah Chen"
+  },
+  {
+    "id": 4,
+    "customer": "Vertex Co",
+    "plan": "Enterprise",
+    "status": "Active",
+    "revenue": "15,900",
+    "accounts": "22",
+    "owner": "Raj Patel"
+  },
+  {
+    "id": 5,
+    "customer": "Summit Health",
+    "plan": "Growth",
+    "status": "At Risk",
+    "revenue": "6,480",
+    "accounts": "9",
+    "owner": "Carlos Rodriguez"
+  },
+  {
+    "id": 6,
+    "customer": "CloudNine",
+    "plan": "Pro",
+    "status": "Active",
+    "revenue": "3,180",
+    "accounts": "6",
+    "owner": "Leila Ahmadi"
+  },
+  {
+    "id": 7,
+    "customer": "Pulse Labs",
+    "plan": "Starter",
+    "status": "Trial",
+    "revenue": "860",
+    "accounts": "3",
+    "owner": "Assign owner"
+  },
+  {
+    "id": 8,
+    "customer": "Apex Group",
+    "plan": "Growth",
+    "status": "Upgraded",
+    "revenue": "9,720",
+    "accounts": "13",
+    "owner": "Thomas Wilson"
+  },
+  {
+    "id": 9,
+    "customer": "Ironclad",
+    "plan": "Enterprise",
+    "status": "Active",
+    "revenue": "18,300",
+    "accounts": "27",
+    "owner": "Eddie Lake"
+  },
+  {
+    "id": 10,
+    "customer": "Quantix",
+    "plan": "Pro",
+    "status": "At Risk",
+    "revenue": "2,940",
+    "accounts": "5",
+    "owner": "Maya Johnson"
+  },
+  {
+    "id": 11,
+    "customer": "NovaTech",
+    "plan": "Growth",
+    "status": "Active",
+    "revenue": "7,810",
+    "accounts": "10",
+    "owner": "Sarah Chen"
+  },
+  {
+    "id": 12,
+    "customer": "Orion Tech",
+    "plan": "Pro",
+    "status": "Trial",
+    "revenue": "1,560",
+    "accounts": "4",
+    "owner": "Raj Patel"
+  },
+  {
+    "id": 13,
+    "customer": "CoreStack",
+    "plan": "Enterprise",
+    "status": "Upgraded",
+    "revenue": "13,140",
+    "accounts": "17",
+    "owner": "Carlos Rodriguez"
+  },
+  {
+    "id": 14,
+    "customer": "EduNest",
+    "plan": "Starter",
+    "status": "Active",
+    "revenue": "980",
+    "accounts": "2",
+    "owner": "Leila Ahmadi"
+  },
+  {
+    "id": 15,
+    "customer": "HealthBridge",
+    "plan": "Growth",
+    "status": "At Risk",
+    "revenue": "5,620",
+    "accounts": "8",
+    "owner": "Thomas Wilson"
+  }
+]
