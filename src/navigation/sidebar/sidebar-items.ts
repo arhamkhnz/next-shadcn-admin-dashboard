@@ -54,11 +54,6 @@ export const sidebarItems: NavGroup[] = [
         icon: LayoutDashboard,
       },
       {
-        title: "Default v2",
-        url: "/dashboard/default-v2",
-        icon: LayoutDashboard,
-      },
-      {
         title: "CRM",
         url: "/dashboard/crm",
         icon: ChartBar,
@@ -159,6 +154,17 @@ export const sidebarItems: NavGroup[] = [
   },
   {
     id: 3,
+    label: "Legacy",
+    items: [
+      {
+        title: "Dashboards",
+        url: "/dashboard/default-v1",
+        subItems: [{ title: "Default V1", url: "/dashboard/default-v1" }],
+      },
+    ],
+  },
+  {
+    id: 4,
     label: "Misc",
     items: [
       {
