@@ -16,6 +16,9 @@ const pipelineChartConfig = {
   },
 } satisfies ChartConfig;
 
+const axisMonthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
+const tooltipMonthFormatter = new Intl.DateTimeFormat("en-US", { month: "short", year: "2-digit" });
+
 function getRollingMonthData(values: readonly number[]) {
   return values.map((qualified, index) => {
     const date = new Date();
@@ -33,8 +36,6 @@ export function PipelineActivity() {
   const totalQualified = pipelineChartData.reduce((sum, item) => sum + item.qualified, 0);
   const discoveryCallsBooked = 184;
   const discoveryProgress = Math.round((discoveryCallsBooked / totalQualified) * 100);
-  const axisMonthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
-  const tooltipMonthFormatter = new Intl.DateTimeFormat("en-US", { month: "short", year: "2-digit" });
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
