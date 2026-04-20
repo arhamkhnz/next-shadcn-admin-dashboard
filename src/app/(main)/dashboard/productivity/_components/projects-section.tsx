@@ -1,5 +1,5 @@
 import { addDays, format } from "date-fns";
-import { Globe, Orbit, Plus, Sparkles } from "lucide-react";
+import { ClipboardCheck, Globe, Orbit, Plus } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,12 @@ const projects = [
     icon: Globe,
   },
   {
-    title: "Creator Hub",
-    status: "In Progress",
-    description: "Build once, create more.",
-    progress: 75,
-    due: `Due ${format(addDays(today, 4), "MMM d")}`,
-    icon: Sparkles,
+    title: "Onboarding",
+    status: "Planning",
+    description: "Trim first-run steps.",
+    progress: 31,
+    due: `Due ${format(addDays(today, 18), "MMM d")}`,
+    icon: ClipboardCheck,
   },
 ] as const;
 
