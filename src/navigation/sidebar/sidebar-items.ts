@@ -59,11 +59,6 @@ export const sidebarItems: NavGroup[] = [
         icon: ChartBar,
       },
       {
-        title: "CRM V2",
-        url: "/dashboard/crm-v2",
-        icon: ChartBar,
-      },
-      {
         title: "Finance",
         url: "/dashboard/finance",
         icon: Banknote,
@@ -164,7 +159,10 @@ export const sidebarItems: NavGroup[] = [
       {
         title: "Dashboards",
         url: "/dashboard/default-v1",
-        subItems: [{ title: "Default V1", url: "/dashboard/default-v1" }],
+        subItems: [
+          { title: "Default V1", url: "/dashboard/default-v1" },
+          { title: "CRM V1", url: "/dashboard/crm-v1" },
+        ],
       },
     ],
   },
