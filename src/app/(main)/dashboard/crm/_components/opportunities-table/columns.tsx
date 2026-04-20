@@ -69,6 +69,7 @@ export const opportunitiesColumns: ColumnDef<OpportunityRow>[] = [
         {row.original.stage}
       </Badge>
     ),
+    filterFn: "equalsString",
   },
   {
     accessorKey: "priority",
@@ -92,19 +93,12 @@ export const opportunitiesColumns: ColumnDef<OpportunityRow>[] = [
         ))}
       </div>
     ),
+    filterFn: "equalsString",
   },
   {
     accessorKey: "value",
     header: "Value",
     cell: ({ row }) => <div className="font-medium text-sm tabular-nums">{row.original.value}</div>,
-  },
-  {
-    id: "search",
-    accessorFn: (row) => [row.id, row.account, row.stage, row.health, row.value].join(" "),
-    enableHiding: false,
-    cell: () => null,
-    header: () => null,
-    filterFn: "includesString",
   },
   {
     id: "actions",

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 const proposalSent = 12;
 const proposalGoal = 18;
+const proposalProgressPercentage = Math.round((proposalSent / proposalGoal) * 100);
 const proposalGoalBarCount = 42;
 const activeProposalBars = Math.round((proposalSent / proposalGoal) * proposalGoalBarCount);
 
@@ -92,7 +93,9 @@ export function TaskReminders() {
               </div>
             ))}
           </div>
-          <p className="text-muted-foreground text-sm">67% of this month’s proposal target reached.</p>
+          <p className="text-muted-foreground text-sm">
+            {proposalProgressPercentage}% of this month&apos;s proposal target reached.
+          </p>
         </CardContent>
       </Card>
     </section>

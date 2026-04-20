@@ -51,9 +51,8 @@ function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>)
 export function OpportunitiesSection() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility] = React.useState<VisibilityState>({
-    search: false,
-  });
+  const [columnVisibility] = React.useState<VisibilityState>({});
+  const [globalFilter, setGlobalFilter] = React.useState("");
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -66,18 +65,21 @@ export function OpportunitiesSection() {
       rowSelection,
       columnFilters,
       columnVisibility,
+      globalFilter,
       pagination,
     },
     getRowId: (row) => row.id,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    globalFilterFn: "includesString",
   });
-  const searchQuery = (table.getColumn("search")?.getFilterValue() as string) ?? "";
+  const searchQuery = table.getState().globalFilter ?? "";
   const stageFilter = (table.getColumn("stage")?.getFilterValue() as string) ?? "all";
   const healthFilter = (table.getColumn("health")?.getFilterValue() as string) ?? "all";
   const currentPage = table.getState().pagination.pageIndex + 1;
@@ -110,7 +112,7 @@ export function OpportunitiesSection() {
                 placeholder="Search deals..."
                 value={searchQuery}
                 onChange={(event) => {
-                  table.getColumn("search")?.setFilterValue(event.target.value || undefined);
+                  table.setGlobalFilter(event.target.value || undefined);
                   table.setPageIndex(0);
                 }}
               />
