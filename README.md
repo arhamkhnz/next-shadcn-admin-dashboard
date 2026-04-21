@@ -20,7 +20,7 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 - Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)  
 - Flexible layouts (collapsible sidebar, variable content widths)  
 - Authentication flows and screens  
-- Prebuilt dashboards (Default, CRM, Finance) with more coming soon  
+- Prebuilt dashboards (Default, CRM, Finance, Analytics, Productivity) plus legacy variants  
 - Role-Based Access Control (RBAC) with config-driven UI and multi-tenant support *(planned)*  
 
 > [!NOTE]
@@ -56,11 +56,14 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 - Default Dashboard  
 - CRM Dashboard  
 - Finance Dashboard  
-- Authentication (4 screens)
+- Analytics Dashboard  
+- Productivity Dashboard  
+- Authentication (4 screens)  
+- Legacy: Default v1, CRM v1
 
 ### Coming Soon
 - Analytics Dashboard  
-- eCommerce Dashboard  
+- E-commerce Dashboard  
 - Academy Dashboard  
 - Logistics Dashboard  
 - Email Page  
