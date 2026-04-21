@@ -200,7 +200,7 @@ export function OpportunitiesSection() {
               </TableBody>
             </Table>
           </div>
-          <div className="flex items-center justify-between gap-4 px-6 pb-1">
+          <div className="flex items-center justify-between gap-4 px-4 pb-1">
             <p className="text-muted-foreground text-sm">
               Viewing {visibleOpportunityCount} out of {filteredOpportunityCount.toLocaleString()} opportunities
             </p>
