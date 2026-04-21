@@ -62,7 +62,6 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 - Legacy: Default v1, CRM v1
 
 ### Coming Soon
-- Analytics Dashboard  
 - E-commerce Dashboard  
 - Academy Dashboard  
 - Logistics Dashboard  
