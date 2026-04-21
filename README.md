@@ -124,6 +124,8 @@ npx @biomejs/biome check --write
 
 ---
 
+> Looking for the Base UI version? Check out [next-shadcn-admin-dashboard-baseui](https://github.com/arhamkhnz/next-shadcn-admin-dashboard-baseui).
+
 > [!IMPORTANT]  
 > This project is updated frequently. If you’re working from a fork or an older clone, pull the latest changes before syncing. Some updates may include breaking changes.
 
