@@ -158,11 +158,11 @@ function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; rev
   const halfRange = Math.max((maxRevenue - minRevenue) * 1.6, 4_500);
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-      <div className="space-y-2">
+    <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <div className="min-w-0 space-y-2">
         <div>
           <div className="font-medium text-muted-foreground text-sm">Revenue</div>
-          <div className="font-semibold text-4xl tabular-nums tracking-tight">$1,248,000</div>
+          <div className="font-semibold text-3xl tabular-nums tracking-tight sm:text-4xl">$1,248,000</div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="secondary">+9.4%</Badge>
@@ -194,16 +194,16 @@ function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; rev
         </div>
       </div>
 
-      <Card className="py-4 shadow-xs lg:col-span-2">
+      <Card className="min-w-0 py-4 shadow-xs xl:col-span-2">
         <CardHeader className="px-4">
           <CardTitle>Risk summary</CardTitle>
           <CardDescription>Core risk signals vs previous period</CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:[&>div:first-child]:pl-0 lg:[&>div:last-child]:pr-0 lg:[&>div]:px-5">
+        <CardContent className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0 xl:divide-x xl:[&>div:first-child]:pl-0 xl:[&>div:last-child]:pr-0 xl:[&>div]:px-5">
           {RISK_SUMMARY_METRICS.map((item) => (
-            <div key={item.key} className="space-y-1">
+            <div key={item.key} className="min-w-0 space-y-1">
               <div className="text-muted-foreground text-sm">{item.label}</div>
-              <div className="font-semibold text-2xl tabular-nums">{item.value}</div>
+              <div className="font-semibold text-2xl tabular-nums leading-tight">{item.value}</div>
               <div className="text-muted-foreground text-xs">{item.comparatorLabel}</div>
             </div>
           ))}

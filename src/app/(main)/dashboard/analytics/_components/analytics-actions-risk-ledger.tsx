@@ -188,7 +188,7 @@ const ledgerColumns: ColumnDef<LedgerRow>[] = [
   {
     accessorKey: "blocker",
     header: "Blocker",
-    cell: ({ row }) => <div className="max-w-44 text-xs">{row.original.blocker}</div>,
+    cell: ({ row }) => <div className="max-w-44 whitespace-normal text-xs">{row.original.blocker}</div>,
   },
   {
     accessorKey: "owner",
@@ -209,7 +209,7 @@ const ledgerColumns: ColumnDef<LedgerRow>[] = [
     accessorKey: "nextAction",
     header: "Next action",
     cell: ({ row }) => (
-      <div className="flex max-w-64 flex-col gap-1">
+      <div className="flex max-w-64 flex-col gap-1 whitespace-normal">
         {row.original.priority ? (
           <Badge variant="outline" className={cn("text-[10px] uppercase", priorityTone[row.original.priority])}>
             {row.original.priority}
@@ -266,7 +266,7 @@ export function ActionsRiskLedger() {
   });
 
   return (
-    <Card className="shadow-xs">
+    <Card className="min-w-0 shadow-xs">
       <CardHeader>
         <CardTitle>Revenue Risk Ledger</CardTitle>
         <CardDescription>Accounts under pressure with blocker, next action, and owner responsibility.</CardDescription>
@@ -289,7 +289,7 @@ export function ActionsRiskLedger() {
           />
         </div>
 
-        <div className="overflow-hidden rounded-lg border">
+        <div className="min-w-0 overflow-hidden rounded-lg border">
           <Table>
             <TableHeader className="bg-muted/30">
               {table.getHeaderGroups().map((headerGroup) => (
