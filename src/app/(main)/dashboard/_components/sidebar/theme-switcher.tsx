@@ -17,7 +17,7 @@ export function ThemeSwitcher() {
     const nextTheme = THEME_CYCLE[(currentIndex + 1) % THEME_CYCLE.length];
 
     setThemeMode(nextTheme);
-    persistPreference("theme_mode", nextTheme);
+    void persistPreference("theme_mode", nextTheme);
   };
 
   return (

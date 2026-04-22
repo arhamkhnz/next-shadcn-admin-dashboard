@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -51,10 +51,16 @@
     "rules": {
       "recommended": true,
       "correctness": {
-        "noUndeclaredVariables": "error"
+        "noUndeclaredVariables": "error",
+        "noNestedComponentDefinitions": "error",
+        "noUndeclaredDependencies": "error"
       },
       "nursery": {
-        "useSortedClasses": "on"
+        "useSortedClasses": "on",
+        "useNullishCoalescing": "error",
+        "noUnnecessaryConditions": "warn",
+        "noFloatingPromises": "error",
+        "noMisusedPromises": "error"
       },
       "performance": {
         "noImgElement": "warn"
@@ -67,13 +73,15 @@
         "useSelfClosingElements": "error",
         "noParameterAssign": "error",
         "noInferrableTypes": "error",
-        "noUselessElse": "error"
+        "noUselessElse": "error",
+        "useFilenamingConvention": "error"
       },
       "suspicious": {
         "noArrayIndexKey": "warn",
         "noConstantBinaryExpressions": "error",
         "noEmptyBlockStatements": "error",
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noImportCycles": "error"
       },
       "complexity": {
         "noImportantStyles": "off"
