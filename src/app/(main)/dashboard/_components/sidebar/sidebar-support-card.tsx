@@ -11,7 +11,7 @@ export function SidebarSupportCard() {
       <CardHeader className="px-4">
         <CardTitle className="text-sm">Looking for something more?</CardTitle>
         <CardDescription>
-          Open an issue or do reach out to me on{" "}
+          Open an issue or do reach out to me on&nbsp;
           <Link
             href="https://x.com/arhamkhnz"
             target="_blank"
