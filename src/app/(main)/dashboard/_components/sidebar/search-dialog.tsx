@@ -78,28 +78,28 @@ export function SearchDialog() {
   const router = useRouter();
 
   React.useEffect(() => {
-    const timer = setTimeout(() => setDebouncedQuery(query), 500);
+    const timer = setTimeout(() => setDebouncedQuery(query), 150);
     return () => clearTimeout(timer);
   }, [query]);
 
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((prev) => !prev);
-      }
-    };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
-
-  const handleOpenChange = (value: boolean) => {
+  const handleOpenChange = React.useCallback((value: boolean) => {
     setOpen(value);
     if (!value) {
       setQuery("");
       setDebouncedQuery("");
     }
-  };
+  }, []);
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        handleOpenChange(!open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, [open, handleOpenChange]);
 
   const handleSelect = (item: SearchItem) => {
     if (item.disabled) return;
