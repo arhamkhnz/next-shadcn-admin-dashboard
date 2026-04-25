@@ -1,6 +1,8 @@
 "use client";
 import * as React from "react";
 
+import { useRouter } from "next/navigation";
+
 import { ChartBar, Forklift, Gauge, GraduationCap, LayoutDashboard, Search, ShoppingBag } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -19,7 +21,7 @@ const searchItems = [
   { group: "Dashboards", icon: LayoutDashboard, label: "Default" },
   { group: "Dashboards", icon: ChartBar, label: "CRM" },
   { group: "Dashboards", icon: Gauge, label: "Analytics" },
-  { group: "Dashboards", icon: ShoppingBag, label: "E-Commerce", disabled: true },
+  { group: "Dashboards", icon: ShoppingBag, label: "E-commerce", url: "/dashboard/e-commerce" },
   { group: "Dashboards", icon: GraduationCap, label: "Academy", disabled: true },
   { group: "Dashboards", icon: Forklift, label: "Logistics", disabled: true },
   { group: "Authentication", label: "Login v1" },
@@ -29,6 +31,7 @@ const searchItems = [
 ];
 
 export function SearchDialog() {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const groups = [...new Set(searchItems.map((item) => item.group))];
 
@@ -74,6 +77,9 @@ export function SearchDialog() {
                         onSelect={() => {
                           if (!item.disabled) {
                             setOpen(false);
+                            if (item.url) {
+                              router.push(item.url);
+                            }
                           }
                         }}
                       >
