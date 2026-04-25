@@ -2,13 +2,13 @@ import { format } from "date-fns";
 import { Download, RotateCw, Settings2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { BalanceDistributionCard } from "./_components/balance-distribution-card";
 import { FinanceNotification } from "./_components/finance-notification";
 import { IncomeBreakdown } from "./_components/income-breakdown";
 import { OverviewKpis } from "./_components/overview-kpis";
+import { TransactionsOverviewCard } from "./_components/transactions-overview-card";
 
 export default function Page() {
   const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");
@@ -57,7 +57,9 @@ export default function Page() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-        <Card className="min-h-72 xl:col-span-7" />
+        <div className="xl:col-span-7">
+          <TransactionsOverviewCard />
+        </div>
         <div className="xl:col-span-5">
           <BalanceDistributionCard />
         </div>
