@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { useRouter } from "next/navigation";
 
-import { ChartBar, Forklift, Gauge, GraduationCap, LayoutDashboard, Search, ShoppingBag } from "lucide-react";
+import { Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,72 +30,17 @@ type SearchItem = {
   newTab?: boolean;
 };
 
-const recommendations: SearchItem[] = [
-  {
-    group: "Dashboards",
-    icon: LayoutDashboard,
-    label: "Default",
-    url: "/dashboard/default",
-  },
-  { group: "Dashboards", icon: ChartBar, label: "CRM", url: "/dashboard/crm" },
-  {
-    group: "Dashboards",
-    icon: Gauge,
-    label: "Analytics",
-    url: "/dashboard/analytics",
-  },
-  {
-    group: "Dashboards",
-    icon: ShoppingBag,
-    label: "E-Commerce",
-    url: "/dashboard/coming-soon",
-    disabled: true,
-  },
-  {
-    group: "Dashboards",
-    icon: GraduationCap,
-    label: "Academy",
-    url: "/dashboard/coming-soon",
-    disabled: true,
-  },
-  {
-    group: "Dashboards",
-    icon: Forklift,
-    label: "Logistics",
-    url: "/dashboard/coming-soon",
-    disabled: true,
-  },
-  {
-    group: "Authentication",
-    label: "Login v1",
-    url: "/auth/v1/login",
-    newTab: true,
-  },
-  {
-    group: "Authentication",
-    label: "Login v2",
-    url: "/auth/v2/login",
-    newTab: true,
-  },
-  {
-    group: "Authentication",
-    label: "Register v1",
-    url: "/auth/v1/register",
-    newTab: true,
-  },
-  {
-    group: "Authentication",
-    label: "Register v2",
-    url: "/auth/v2/register",
-    newTab: true,
-  },
-];
+const sidebarGroupLabels = new Set(sidebarItems.flatMap((group) => (group.label ? [group.label] : [])));
 
-const searchIndex: SearchItem[] = sidebarItems.flatMap((group) =>
+function getSubItemGroup(groupLabel: string | undefined, itemTitle: string) {
+  return sidebarGroupLabels.has(itemTitle) ? (groupLabel ?? "Other") : itemTitle;
+}
+
+const searchItems: SearchItem[] = sidebarItems.flatMap((group) =>
   group.items.flatMap((item) => {
     if (item.subItems) {
       return item.subItems.map((sub) => ({
-        group: group.label ?? "Other",
+        group: getSubItemGroup(group.label, item.title),
         label: sub.title,
         url: sub.url,
         icon: item.icon,
@@ -115,6 +60,12 @@ const searchIndex: SearchItem[] = sidebarItems.flatMap((group) =>
     ];
   }),
 );
+
+function getAvailableItems(items: SearchItem[]) {
+  return items.filter((item) => !item.disabled && !item.url.includes("coming-soon"));
+}
+
+const recommendations = getAvailableItems(searchItems);
 
 function groupBy(items: SearchItem[]) {
   const groups = [...new Set(items.map((item) => item.group))];
@@ -149,7 +100,7 @@ export function SearchDialog() {
     if (item.disabled) return;
     handleOpenChange(false);
     if (item.newTab) {
-      window.open(item.url, "_blank", "noreferrer");
+      window.open(item.url, "_blank", "noopener,noreferrer");
     } else {
       router.push(item.url);
     }
@@ -161,11 +112,20 @@ export function SearchDialog() {
         {index > 0 && <CommandSeparator />}
         <CommandGroup heading={group}>
           {groupItems.map((item) => (
-            <CommandItem disabled={item.disabled} key={`${group}-${item.label}`} onSelect={() => handleSelect(item)}>
+            <CommandItem
+              disabled={item.disabled}
+              key={`${group}-${item.url}-${item.label}`}
+              value={`${item.group} ${item.label}`}
+              onSelect={() => handleSelect(item)}
+            >
               {item.icon && <item.icon />}
               <span>{item.label}</span>
 
-              {item.disabled && <Badge className="rounded-md bg-gray-200 dark:text-gray-800 text-black">Soon</Badge>}
+              {item.disabled && (
+                <Badge variant="outline" className="text-xs">
+                  Soon
+                </Badge>
+              )}
             </CommandItem>
           ))}
         </CommandGroup>
@@ -175,7 +135,7 @@ export function SearchDialog() {
   return (
     <>
       <Button
-        onClick={() => setOpen(true)}
+        onClick={() => handleOpenChange(true)}
         variant="link"
         className="px-0! font-normal text-muted-foreground hover:no-underline"
       >
@@ -190,7 +150,7 @@ export function SearchDialog() {
           <CommandInput placeholder="Search dashboards, users, and more…" value={query} onValueChange={setQuery} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
-            {query ? renderGroups(searchIndex) : renderGroups(recommendations)}
+            {query ? renderGroups(searchItems) : renderGroups(recommendations)}
           </CommandList>
         </Command>
       </CommandDialog>
