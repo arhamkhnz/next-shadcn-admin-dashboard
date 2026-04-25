@@ -7,6 +7,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 import { KpiStrip } from "./kpi-strip";
+import { MerchandiseMovementTable } from "./merchandise-movement-table";
+import { OperationsGrid } from "./operations-grid";
+import { TradingPulseCard } from "./trading-pulse-card";
 
 export function ECommerceDashboard() {
   return (
@@ -55,6 +58,9 @@ export function ECommerceDashboard() {
       </div>
 
       <KpiStrip />
+      <TradingPulseCard />
+      <OperationsGrid />
+      <MerchandiseMovementTable />
     </div>
   );
 }

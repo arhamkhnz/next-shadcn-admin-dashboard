@@ -67,3 +67,175 @@ export const kpiMetrics: KpiMetric[] = [
     helper: "Replenishment needed",
   },
 ];
+
+export type TradingPoint = {
+  date: string;
+  netSales: number;
+  targetSales: number;
+  orders: number;
+};
+
+export const tradingPulseData: TradingPoint[] = [
+  { date: "Apr 1", netSales: 21_400, targetSales: 20_000, orders: 318 },
+  { date: "Apr 2", netSales: 23_800, targetSales: 20_800, orders: 346 },
+  { date: "Apr 3", netSales: 19_600, targetSales: 21_400, orders: 291 },
+  { date: "Apr 4", netSales: 25_100, targetSales: 22_000, orders: 372 },
+  { date: "Apr 5", netSales: 31_900, targetSales: 23_200, orders: 461 },
+  { date: "Apr 6", netSales: 29_200, targetSales: 24_000, orders: 428 },
+  { date: "Apr 7", netSales: 33_600, targetSales: 24_800, orders: 498 },
+  { date: "Apr 8", netSales: 27_400, targetSales: 25_600, orders: 402 },
+  { date: "Apr 9", netSales: 35_100, targetSales: 26_400, orders: 512 },
+  { date: "Apr 10", netSales: 37_800, targetSales: 27_200, orders: 548 },
+  { date: "Apr 11", netSales: 34_600, targetSales: 28_000, orders: 519 },
+  { date: "Apr 12", netSales: 41_200, targetSales: 28_800, orders: 604 },
+  { date: "Apr 13", netSales: 39_500, targetSales: 29_600, orders: 573 },
+  { date: "Apr 14", netSales: 44_300, targetSales: 30_400, orders: 641 },
+];
+
+export type ChannelMix = {
+  channel: string;
+  revenue: number;
+  share: number;
+  delta: string;
+};
+
+export const channelMix: ChannelMix[] = [
+  { channel: "Direct", revenue: 109_400, share: 44, delta: "+14.2%" },
+  { channel: "Marketplace", revenue: 77_200, share: 31, delta: "+6.8%" },
+  { channel: "Social", revenue: 38_600, share: 16, delta: "+21.5%" },
+  { channel: "Retail media", revenue: 23_700, share: 9, delta: "-3.4%" },
+];
+
+export type FunnelStage = {
+  stage: string;
+  count: number;
+  rate: number;
+  change: string;
+};
+
+export const funnelStages: FunnelStage[] = [
+  { stage: "Sessions", count: 81_540, rate: 100, change: "+10.1%" },
+  { stage: "Product views", count: 52_180, rate: 64, change: "+8.7%" },
+  { stage: "Add to cart", count: 12_980, rate: 15.9, change: "+4.3%" },
+  { stage: "Checkout", count: 6120, rate: 7.5, change: "+2.1%" },
+  { stage: "Orders", count: 3918, rate: 4.8, change: "+0.7pp" },
+];
+
+export type InventoryRisk = {
+  sku: string;
+  product: string;
+  channel: string;
+  daysLeft: number;
+  stock: number;
+  sellThrough: number;
+  risk: "High" | "Medium" | "Low";
+};
+
+export const inventoryRisks: InventoryRisk[] = [
+  {
+    sku: "WT-240",
+    product: "Wool Trail Overshirt",
+    channel: "Direct",
+    daysLeft: 3,
+    stock: 84,
+    sellThrough: 86,
+    risk: "High",
+  },
+  {
+    sku: "SN-112",
+    product: "Studio Nylon Tote",
+    channel: "Marketplace",
+    daysLeft: 5,
+    stock: 126,
+    sellThrough: 72,
+    risk: "High",
+  },
+  {
+    sku: "KN-501",
+    product: "Knit Rib Set",
+    channel: "Social",
+    daysLeft: 9,
+    stock: 210,
+    sellThrough: 58,
+    risk: "Medium",
+  },
+  {
+    sku: "CS-019",
+    product: "Core Shell Jacket",
+    channel: "Direct",
+    daysLeft: 16,
+    stock: 328,
+    sellThrough: 41,
+    risk: "Low",
+  },
+];
+
+export type MerchandiseRow = {
+  sku: string;
+  product: string;
+  category: string;
+  units: number;
+  netSales: number;
+  margin: number;
+  returns: number;
+  stock: number;
+  status: "Hero" | "Scale" | "Protect" | "Markdown";
+};
+
+export const merchandiseRows: MerchandiseRow[] = [
+  {
+    sku: "WT-240",
+    product: "Wool Trail Overshirt",
+    category: "Outerwear",
+    units: 842,
+    netSales: 67_360,
+    margin: 51.4,
+    returns: 3.1,
+    stock: 84,
+    status: "Protect",
+  },
+  {
+    sku: "SN-112",
+    product: "Studio Nylon Tote",
+    category: "Accessories",
+    units: 1268,
+    netSales: 50_720,
+    margin: 56.8,
+    returns: 2.7,
+    stock: 126,
+    status: "Hero",
+  },
+  {
+    sku: "KN-501",
+    product: "Knit Rib Set",
+    category: "Sets",
+    units: 613,
+    netSales: 42_910,
+    margin: 49.2,
+    returns: 5.8,
+    stock: 210,
+    status: "Scale",
+  },
+  {
+    sku: "CT-070",
+    product: "Canvas Court Sneaker",
+    category: "Footwear",
+    units: 487,
+    netSales: 38_473,
+    margin: 44.1,
+    returns: 7.4,
+    stock: 392,
+    status: "Markdown",
+  },
+  {
+    sku: "CS-019",
+    product: "Core Shell Jacket",
+    category: "Outerwear",
+    units: 322,
+    netSales: 35_098,
+    margin: 47.6,
+    returns: 4.4,
+    stock: 328,
+    status: "Scale",
+  },
+];
