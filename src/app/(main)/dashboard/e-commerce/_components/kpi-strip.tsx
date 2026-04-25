@@ -3,7 +3,7 @@ import type { ComponentType } from "react";
 import { AlertTriangle, BadgeDollarSign, PackageCheck, Percent, Receipt, ShoppingCart } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn, formatCurrency } from "@/lib/utils";
 
 import { type KpiMetric, kpiMetrics } from "./data";
@@ -25,29 +25,33 @@ const toneClasses = {
 
 export function KpiStrip() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
+    <div className="grid grid-cols-1 gap-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 dark:*:data-[slot=card]:bg-card">
       {kpiMetrics.map((metric) => {
         const Icon = metricIcons[metric.key];
 
         return (
-          <Card key={metric.key} size="sm" className="shadow-xs">
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
+          <Card key={metric.key}>
+            <CardHeader>
+              <CardTitle>
+                <div className="flex size-7 items-center justify-center rounded-lg border bg-muted text-muted-foreground">
                   <Icon className="size-4" />
                 </div>
+              </CardTitle>
+              <CardDescription>{metric.label}</CardDescription>
+              <CardAction>
                 <Badge variant="secondary" className={cn("font-medium tabular-nums", toneClasses[metric.tone])}>
                   {metric.delta}
                 </Badge>
-              </div>
+              </CardAction>
+            </CardHeader>
 
-              <div className="min-w-0 space-y-1">
-                <div className="text-muted-foreground text-sm">{metric.label}</div>
-                <div className="truncate font-semibold text-2xl tabular-nums tracking-tight">
+            <CardContent className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">
                   {formatMetricValue(metric)}
                 </div>
-                <div className="truncate text-muted-foreground text-xs">{metric.helper}</div>
               </div>
+              <p className="text-muted-foreground text-sm">{metric.helper}</p>
             </CardContent>
           </Card>
         );

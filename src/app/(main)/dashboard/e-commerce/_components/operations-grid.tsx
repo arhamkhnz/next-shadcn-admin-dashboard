@@ -35,7 +35,7 @@ function CheckoutFunnelCard() {
   return (
     <Card className="shadow-xs">
       <CardHeader>
-        <CardTitle>Checkout funnel</CardTitle>
+        <CardTitle className="leading-none">Checkout Funnel</CardTitle>
         <CardDescription>Session flow from product discovery to paid orders.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -65,37 +65,37 @@ function InventoryRiskCard() {
   return (
     <Card className="shadow-xs">
       <CardHeader>
-        <CardTitle>Inventory watch</CardTitle>
+        <CardTitle className="leading-none">Inventory Watch</CardTitle>
         <CardDescription>Fast-moving SKUs and replenishment pressure.</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="overflow-hidden rounded-lg border bg-card">
-          <Table>
-            <TableHeader className="bg-muted/15">
+      <CardContent className="px-0">
+        <div className="overflow-hidden">
+          <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4 **:data-[slot='table-cell']:py-4">
+            <TableHeader className="border-t **:data-[slot='table-head']:h-11 **:data-[slot='table-head']:font-medium **:data-[slot='table-head']:text-foreground **:data-[slot='table-head']:text-sm">
               <TableRow>
-                <TableHead className="h-10 px-3">SKU</TableHead>
-                <TableHead className="h-10 px-3">Product</TableHead>
-                <TableHead className="h-10 px-3 text-right">Days</TableHead>
-                <TableHead className="h-10 px-3 text-right">Sell-through</TableHead>
-                <TableHead className="h-10 px-3">Risk</TableHead>
+                <TableHead>SKU</TableHead>
+                <TableHead>Product</TableHead>
+                <TableHead className="text-right">Days</TableHead>
+                <TableHead className="text-right">Sell-through</TableHead>
+                <TableHead>Risk</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-row']:hover:bg-transparent">
               {inventoryRisks.map((item) => {
                 const Icon = riskIcons[item.risk];
 
                 return (
                   <TableRow key={item.sku}>
-                    <TableCell className="px-3 font-mono text-xs">{item.sku}</TableCell>
-                    <TableCell className="min-w-48 px-3">
+                    <TableCell className="font-mono text-xs">{item.sku}</TableCell>
+                    <TableCell className="min-w-48">
                       <div className="font-medium text-sm">{item.product}</div>
                       <div className="text-muted-foreground text-xs">
                         {item.channel} - {item.stock} units
                       </div>
                     </TableCell>
-                    <TableCell className="px-3 text-right font-medium tabular-nums">{item.daysLeft}</TableCell>
-                    <TableCell className="px-3 text-right tabular-nums">{item.sellThrough}%</TableCell>
-                    <TableCell className="px-3">
+                    <TableCell className="text-right font-medium tabular-nums">{item.daysLeft}</TableCell>
+                    <TableCell className="text-right tabular-nums">{item.sellThrough}%</TableCell>
+                    <TableCell>
                       <Badge variant="secondary" className={cn("font-medium", riskStyles[item.risk])}>
                         <Icon />
                         {item.risk}

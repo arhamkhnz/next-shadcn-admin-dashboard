@@ -18,7 +18,7 @@ export function MerchandiseMovementTable() {
   return (
     <Card className="shadow-xs">
       <CardHeader>
-        <CardTitle>Merchandise movement</CardTitle>
+        <CardTitle className="leading-none">Merchandise Movement</CardTitle>
         <CardDescription>Top SKUs by sales velocity, margin, returns, and stock cover.</CardDescription>
         <CardAction>
           <Badge variant="outline" className="font-medium">
@@ -26,35 +26,35 @@ export function MerchandiseMovementTable() {
           </Badge>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <div className="overflow-hidden rounded-lg border bg-card">
-          <Table>
-            <TableHeader className="bg-muted/15">
+      <CardContent className="px-0">
+        <div className="overflow-hidden">
+          <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4 **:data-[slot='table-cell']:py-4">
+            <TableHeader className="border-t **:data-[slot='table-head']:h-11 **:data-[slot='table-head']:font-medium **:data-[slot='table-head']:text-foreground **:data-[slot='table-head']:text-sm">
               <TableRow>
-                <TableHead className="h-11 px-3">Product</TableHead>
-                <TableHead className="h-11 px-3">Category</TableHead>
-                <TableHead className="h-11 px-3 text-right">Units</TableHead>
-                <TableHead className="h-11 px-3 text-right">Net sales</TableHead>
-                <TableHead className="h-11 px-3 text-right">Margin</TableHead>
-                <TableHead className="h-11 px-3 text-right">Returns</TableHead>
-                <TableHead className="h-11 px-3 text-right">Stock</TableHead>
-                <TableHead className="h-11 px-3">Action</TableHead>
+                <TableHead>Product</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead className="text-right">Units</TableHead>
+                <TableHead className="text-right">Net sales</TableHead>
+                <TableHead className="text-right">Margin</TableHead>
+                <TableHead className="text-right">Returns</TableHead>
+                <TableHead className="text-right">Stock</TableHead>
+                <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-row']:hover:bg-transparent">
               {merchandiseRows.map((row) => (
                 <TableRow key={row.sku}>
-                  <TableCell className="min-w-64 px-3">
+                  <TableCell className="min-w-64">
                     <div className="font-medium text-sm">{row.product}</div>
                     <div className="font-mono text-muted-foreground text-xs">{row.sku}</div>
                   </TableCell>
-                  <TableCell className="px-3 text-muted-foreground">{row.category}</TableCell>
-                  <TableCell className="px-3 text-right tabular-nums">{row.units.toLocaleString("en-US")}</TableCell>
-                  <TableCell className="px-3 text-right font-medium tabular-nums">
+                  <TableCell className="text-muted-foreground">{row.category}</TableCell>
+                  <TableCell className="text-right tabular-nums">{row.units.toLocaleString("en-US")}</TableCell>
+                  <TableCell className="text-right font-medium tabular-nums">
                     {formatCurrency(row.netSales, { noDecimals: true })}
                   </TableCell>
-                  <TableCell className="px-3 text-right tabular-nums">{row.margin}%</TableCell>
-                  <TableCell className="px-3 text-right tabular-nums">
+                  <TableCell className="text-right tabular-nums">{row.margin}%</TableCell>
+                  <TableCell className="text-right tabular-nums">
                     <span className="inline-flex items-center justify-end gap-1">
                       {row.returns > 6 ? (
                         <ArrowUpRight className="size-3 text-destructive" />
@@ -64,8 +64,8 @@ export function MerchandiseMovementTable() {
                       {row.returns}%
                     </span>
                   </TableCell>
-                  <TableCell className="px-3 text-right tabular-nums">{row.stock}</TableCell>
-                  <TableCell className="px-3">
+                  <TableCell className="text-right tabular-nums">{row.stock}</TableCell>
+                  <TableCell>
                     <Badge variant="secondary" className={cn("font-medium", statusStyles[row.status])}>
                       {row.status}
                     </Badge>

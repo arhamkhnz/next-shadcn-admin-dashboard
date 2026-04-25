@@ -30,9 +30,9 @@ export function TradingPulseCard() {
   const totalOrders = tradingPulseData.reduce((total, day) => total + day.orders, 0);
 
   return (
-    <Card className="shadow-xs">
+    <Card className="@container/card shadow-xs">
       <CardHeader>
-        <CardTitle>Trading pulse</CardTitle>
+        <CardTitle className="leading-none">Trading Pulse</CardTitle>
         <CardDescription>Daily sales, order volume, and target pace.</CardDescription>
         <CardAction>
           <Badge variant="outline" className="font-medium tabular-nums">
@@ -42,13 +42,13 @@ export function TradingPulseCard() {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_260px]">
-          <ChartContainer className="h-80 w-full" config={chartConfig}>
+          <ChartContainer className="aspect-auto h-80 w-full" config={chartConfig}>
             <ComposedChart
               accessibilityLayer
               data={tradingPulseData}
-              margin={{ top: 12, right: 6, bottom: 0, left: -12 }}
+              margin={{ top: 0, right: 0, bottom: 0, left: -12 }}
             >
-              <CartesianGrid vertical={false} />
+              <CartesianGrid vertical={false} strokeOpacity={0.5} />
               <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={10} />
               <YAxis
                 yAxisId="sales"
