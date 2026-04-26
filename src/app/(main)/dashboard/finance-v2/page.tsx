@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { Download, RotateCw, Settings2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { BalanceDistributionCard } from "./_components/balance-distribution-card";
@@ -9,6 +10,7 @@ import { FinanceNotification } from "./_components/finance-notification";
 import { IncomeBreakdown } from "./_components/income-breakdown";
 import { OverviewKpis } from "./_components/overview-kpis";
 import { TransactionsOverviewCard } from "./_components/transactions-overview-card";
+import { UpcomingTransactionsTable } from "./_components/upcoming-transactions-table";
 
 export default function Page() {
   const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");
@@ -62,6 +64,24 @@ export default function Page() {
         </div>
         <div className="xl:col-span-5">
           <BalanceDistributionCard />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
+        <div className="xl:col-span-8">
+          <Card className="h-full">
+            <CardHeader>
+              <CardTitle className="font-normal">More Insights</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-center rounded-md border border-foreground/20 border-dashed text-muted-foreground text-sm">
+                Placeholder
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="xl:col-span-4">
+          <UpcomingTransactionsTable />
         </div>
       </div>
     </div>
