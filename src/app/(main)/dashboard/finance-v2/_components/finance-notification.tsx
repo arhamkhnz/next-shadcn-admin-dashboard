@@ -1,4 +1,4 @@
-import { AlertCircle } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
@@ -7,15 +7,15 @@ export function FinanceNotification() {
   return (
     <Item className="rounded-xl" variant="outline">
       <ItemMedia variant="icon">
-        <AlertCircle />
+        <TrendingUp />
       </ItemMedia>
       <ItemContent>
-        <ItemTitle>Bills due this week</ItemTitle>
-        <ItemDescription>$1,250 scheduled against $12.8K available cash.</ItemDescription>
+        <ItemTitle>Credit score updated</ItemTitle>
+        <ItemDescription>Your score increased by 14 points to 782.</ItemDescription>
       </ItemContent>
       <ItemActions>
         <Button size="sm" variant="outline">
-          Review bills
+          View details
         </Button>
       </ItemActions>
     </Item>
