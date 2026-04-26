@@ -10,7 +10,7 @@ import { IncomeBreakdown } from "./_components/income-breakdown";
 import { OverviewKpis } from "./_components/overview-kpis";
 import { QuickActions } from "./_components/quick-actions";
 import { TransactionsOverviewCard } from "./_components/transactions-overview-card";
-import { UpcomingTransactionsTable } from "./_components/upcoming-transactions-table";
+import { UpcomingTransactions } from "./_components/upcoming-transactions";
 import { Wallet } from "./_components/wallet";
 
 export default function Page() {
@@ -73,7 +73,7 @@ export default function Page() {
           <Wallet />
         </div>
         <div className="xl:col-span-4">
-          <UpcomingTransactionsTable />
+          <UpcomingTransactions />
         </div>
         <div className="xl:col-span-4">
           <QuickActions />

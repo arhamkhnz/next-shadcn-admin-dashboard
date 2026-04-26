@@ -27,7 +27,7 @@ const transactions = [
   },
 ];
 
-export function UpcomingTransactionsTable() {
+export function UpcomingTransactions() {
   return (
     <Card>
       <CardHeader>
