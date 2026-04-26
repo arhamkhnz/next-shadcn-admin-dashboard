@@ -6,8 +6,6 @@
 
 Most admin templates I found, free or paid, felt cluttered, outdated, or too rigid. I built this as a cleaner alternative with features often missing in others, such as theme toggling and layout controls, while keeping the design modern, minimal, and flexible.
 
-I’ve taken design inspiration from various sources. If you’d like credit for something specific, feel free to open an issue or reach out.
-
 > **View demo:** [studio admin](https://next-shadcn-admin-dashboard.vercel.app)
 
 > [!NOTE]
@@ -62,7 +60,7 @@ I’ve taken design inspiration from various sources. If you’d like credit for
 - Analytics Dashboard  
 - Productivity Dashboard  
 - Authentication (4 screens)  
-- Legacy: Default v1, CRM v1
+- Legacy: Default v1, CRM v1, Finance v1
 
 ### Coming Soon
 - E-commerce Dashboard  
