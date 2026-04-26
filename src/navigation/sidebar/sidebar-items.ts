@@ -65,11 +65,6 @@ export const sidebarItems: NavGroup[] = [
         icon: Banknote,
       },
       {
-        title: "Finance V2",
-        url: "/dashboard/finance-v2",
-        icon: Banknote,
-      },
-      {
         title: "Analytics",
         url: "/dashboard/analytics",
         icon: Gauge,
@@ -168,6 +163,7 @@ export const sidebarItems: NavGroup[] = [
         subItems: [
           { title: "Default V1", url: "/dashboard/default-v1" },
           { title: "CRM V1", url: "/dashboard/crm-v1" },
+          { title: "Finance V1", url: "/dashboard/finance-v1" },
         ],
       },
     ],
