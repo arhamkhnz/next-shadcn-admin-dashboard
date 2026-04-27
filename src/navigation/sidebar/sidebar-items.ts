@@ -162,6 +162,7 @@ export const sidebarItems: NavGroup[] = [
         subItems: [
           { title: "Default V1", url: "/dashboard/default-v1" },
           { title: "CRM V1", url: "/dashboard/crm-v1" },
+          { title: "Finance V1", url: "/dashboard/finance-v1" },
         ],
       },
     ],
