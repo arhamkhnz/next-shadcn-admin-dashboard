@@ -76,20 +76,20 @@ export type TradingPoint = {
 };
 
 export const tradingPulseData: TradingPoint[] = [
-  { date: "Apr 1", netSales: 21_400, targetSales: 20_000, orders: 318 },
-  { date: "Apr 2", netSales: 23_800, targetSales: 20_800, orders: 346 },
-  { date: "Apr 3", netSales: 19_600, targetSales: 21_400, orders: 291 },
-  { date: "Apr 4", netSales: 25_100, targetSales: 22_000, orders: 372 },
-  { date: "Apr 5", netSales: 31_900, targetSales: 23_200, orders: 461 },
-  { date: "Apr 6", netSales: 29_200, targetSales: 24_000, orders: 428 },
-  { date: "Apr 7", netSales: 33_600, targetSales: 24_800, orders: 498 },
-  { date: "Apr 8", netSales: 27_400, targetSales: 25_600, orders: 402 },
-  { date: "Apr 9", netSales: 35_100, targetSales: 26_400, orders: 512 },
-  { date: "Apr 10", netSales: 37_800, targetSales: 27_200, orders: 548 },
-  { date: "Apr 11", netSales: 34_600, targetSales: 28_000, orders: 519 },
-  { date: "Apr 12", netSales: 41_200, targetSales: 28_800, orders: 604 },
-  { date: "Apr 13", netSales: 39_500, targetSales: 29_600, orders: 573 },
-  { date: "Apr 14", netSales: 44_300, targetSales: 30_400, orders: 641 },
+  { date: "Apr 1", netSales: 11_900, targetSales: 11_100, orders: 188 },
+  { date: "Apr 2", netSales: 13_200, targetSales: 11_600, orders: 208 },
+  { date: "Apr 3", netSales: 10_900, targetSales: 11_900, orders: 172 },
+  { date: "Apr 4", netSales: 14_000, targetSales: 12_300, orders: 220 },
+  { date: "Apr 5", netSales: 17_800, targetSales: 12_900, orders: 280 },
+  { date: "Apr 6", netSales: 16_300, targetSales: 13_400, orders: 257 },
+  { date: "Apr 7", netSales: 18_800, targetSales: 13_800, orders: 296 },
+  { date: "Apr 8", netSales: 15_300, targetSales: 14_200, orders: 241 },
+  { date: "Apr 9", netSales: 19_700, targetSales: 14_700, orders: 310 },
+  { date: "Apr 10", netSales: 21_100, targetSales: 15_100, orders: 332 },
+  { date: "Apr 11", netSales: 19_300, targetSales: 15_600, orders: 304 },
+  { date: "Apr 12", netSales: 23_000, targetSales: 16_000, orders: 362 },
+  { date: "Apr 13", netSales: 22_100, targetSales: 16_500, orders: 348 },
+  { date: "Apr 14", netSales: 25_500, targetSales: 16_900, orders: 400 },
 ];
 
 export type ChannelMix = {
