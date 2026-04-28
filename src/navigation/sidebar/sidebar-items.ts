@@ -136,9 +136,8 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Roles",
-        url: "/dashboard/coming-soon",
+        url: "/dashboard/roles",
         icon: Lock,
-        comingSoon: true,
       },
       {
         title: "Authentication",
