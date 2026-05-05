@@ -217,7 +217,7 @@ export function KpiStrip() {
                       </feMerge>
                     </filter>
                   </defs>
-                  <CartesianGrid xAxisId="revenue" yAxisId="profit" vertical={false} />
+                  <CartesianGrid yAxisId="profit" vertical={false} />
                   <XAxis
                     dataKey="period"
                     axisLine={false}
