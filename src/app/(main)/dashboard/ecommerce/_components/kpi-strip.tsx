@@ -200,7 +200,7 @@ export function KpiStrip() {
             </CardHeader>
 
             <CardContent>
-              <ChartContainer config={revenueOverviewConfig} className="h-72 w-full">
+              <ChartContainer config={revenueOverviewConfig} className="h-74 w-full">
                 <ComposedChart
                   accessibilityLayer
                   data={revenueOverviewData}
