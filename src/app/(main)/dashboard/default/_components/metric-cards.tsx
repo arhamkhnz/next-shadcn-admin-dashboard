@@ -1,4 +1,4 @@
-import { DollarSign, TrendingDown, TrendingUp, UserPlus, Users, Waves } from "lucide-react";
+import { AudioLines, Headphones, Mic, TrendingUp, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,62 +10,20 @@ export function MetricCards() {
         <CardHeader>
           <CardTitle>
             <div className="flex size-7 items-center justify-center rounded-lg border bg-muted text-muted-foreground">
-              <DollarSign className="size-4" />
-            </div>
-          </CardTitle>
-          <CardDescription>Total Revenue</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">$1,250.00</div>
-            <Badge>
-              <TrendingUp className="size-3" />
-              +12.5%
-            </Badge>
-          </div>
-          <p className="text-muted-foreground text-sm">Visitors for the last 6 months</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <div className="flex size-7 items-center justify-center rounded-lg border bg-muted text-muted-foreground">
-              <UserPlus className="size-4" />
-            </div>
-          </CardTitle>
-          <CardDescription>New Customers</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">1,234</div>
-            <Badge variant="destructive">
-              <TrendingDown className="size-3" />
-              -20%
-            </Badge>
-          </div>
-          <p className="text-muted-foreground text-sm">Acquisition needs attention</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <div className="flex size-7 items-center justify-center rounded-lg border bg-muted text-muted-foreground">
               <Users className="size-4" />
             </div>
           </CardTitle>
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>Total Users</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">45,678</div>
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">12,540</div>
             <Badge>
               <TrendingUp className="size-3" />
-              +12.5%
+              +8.2%
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm">Engagement exceeds targets</p>
+          <p className="text-muted-foreground text-sm">Growth in the last 30 days</p>
         </CardContent>
       </Card>
 
@@ -73,20 +31,62 @@ export function MetricCards() {
         <CardHeader>
           <CardTitle>
             <div className="flex size-7 items-center justify-center rounded-lg border bg-muted text-muted-foreground">
-              <Waves className="size-4" />
+              <AudioLines className="size-4" />
             </div>
           </CardTitle>
-          <CardDescription>Growth Rate</CardDescription>
+          <CardDescription>Audio Posts</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">4.5%</div>
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">4,821</div>
             <Badge>
               <TrendingUp className="size-3" />
-              +4.5%
+              +15.3%
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm">Meets growth projections</p>
+          <p className="text-muted-foreground text-sm">New posts this week</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <div className="flex size-7 items-center justify-center rounded-lg border bg-muted text-muted-foreground">
+              <Mic className="size-4" />
+            </div>
+          </CardTitle>
+          <CardDescription>Live Rooms</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">84</div>
+            <Badge>
+              <TrendingUp className="size-3" />
+              +12.5%
+            </Badge>
+          </div>
+          <p className="text-muted-foreground text-sm">Active conversations now</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <div className="flex size-7 items-center justify-center rounded-lg border bg-muted text-muted-foreground">
+              <Headphones className="size-4" />
+            </div>
+          </CardTitle>
+          <CardDescription>Total Listens</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="font-medium text-3xl tabular-nums leading-none tracking-tight">85.2K</div>
+            <Badge>
+              <TrendingUp className="size-3" />
+              +24.1%
+            </Badge>
+          </div>
+          <p className="text-muted-foreground text-sm">Cumulative audio plays</p>
         </CardContent>
       </Card>
     </div>

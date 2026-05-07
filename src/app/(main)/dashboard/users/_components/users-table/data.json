@@ -1,0 +1,47 @@
+[
+  {
+    "id": "USR-001",
+    "name": "Sarah Mwangi",
+    "handle": "@sarah_m",
+    "email": "sarah.mwangi@example.com",
+    "status": "Active",
+    "role": "User",
+    "joined": "2024-01-15"
+  },
+  {
+    "id": "USR-002",
+    "name": "James Odhiambo",
+    "handle": "@james_dev",
+    "email": "james.o@example.com",
+    "status": "Active",
+    "role": "User",
+    "joined": "2024-02-20"
+  },
+  {
+    "id": "USR-003",
+    "name": "Amina Hassan",
+    "handle": "@amina_h",
+    "email": "amina.h@example.com",
+    "status": "Suspended",
+    "role": "User",
+    "joined": "2024-03-10"
+  },
+  {
+    "id": "USR-004",
+    "name": "Kevin Waweru",
+    "handle": "@kevin_w",
+    "email": "kevin.w@example.com",
+    "status": "Active",
+    "role": "Moderator",
+    "joined": "2024-01-05"
+  },
+  {
+    "id": "USR-005",
+    "name": "Diana Kamau",
+    "handle": "@diana_k",
+    "email": "diana.k@example.com",
+    "status": "Active",
+    "role": "Admin",
+    "joined": "2023-12-01"
+  }
+]

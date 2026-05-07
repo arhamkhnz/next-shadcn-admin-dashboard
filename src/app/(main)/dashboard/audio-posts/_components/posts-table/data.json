@@ -1,0 +1,46 @@
+[
+  {
+    "id": "POST-001",
+    "title": "Life in Eastlands, Nairobi",
+    "author": "Sarah Mwangi",
+    "duration": "0:28",
+    "replies": 24,
+    "likes": 142,
+    "listens": 1205,
+    "timestamp": "2024-05-06T10:00:00Z",
+    "status": "Published"
+  },
+  {
+    "id": "POST-002",
+    "title": "My morning routine as a developer",
+    "author": "James Odhiambo",
+    "duration": "0:45",
+    "replies": 56,
+    "likes": 287,
+    "listens": 3240,
+    "timestamp": "2024-05-06T07:00:00Z",
+    "status": "Published"
+  },
+  {
+    "id": "POST-003",
+    "title": "Quick thoughts on AI and creativity",
+    "author": "Amina Hassan",
+    "duration": "0:52",
+    "replies": 89,
+    "likes": 412,
+    "listens": 5100,
+    "timestamp": "2024-05-06T04:00:00Z",
+    "status": "Flagged"
+  },
+  {
+    "id": "POST-004",
+    "title": "The best matatu experience ever",
+    "author": "Kevin Waweru",
+    "duration": "1:15",
+    "replies": 134,
+    "likes": 678,
+    "listens": 8900,
+    "timestamp": "2024-05-05T15:00:00Z",
+    "status": "Published"
+  }
+]
