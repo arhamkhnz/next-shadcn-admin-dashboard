@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Separator } from "@/components/ui/separator";
 
 import { KpiStrip } from "./_components/kpi-strip";
+import { StoreTraffic } from "./_components/store-traffic";
 
 export default function Page() {
   const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");
@@ -58,6 +59,7 @@ export default function Page() {
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
         <KpiStrip />
+        <StoreTraffic />
       </div>
     </div>
   );
