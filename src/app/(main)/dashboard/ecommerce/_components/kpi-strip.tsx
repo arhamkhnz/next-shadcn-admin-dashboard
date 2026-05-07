@@ -73,8 +73,9 @@ function formatTooltipLabel(value: string) {
   const range = parts.at(-1);
   const month = parse(parts.slice(0, -1).join(" "), "MMM yy", new Date());
   const [start, end] = String(range).split("-");
+  const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
   const startDate = new Date(month.getFullYear(), month.getMonth(), Number(start));
-  const endDate = new Date(month.getFullYear(), month.getMonth(), Number(end));
+  const endDate = new Date(month.getFullYear(), month.getMonth(), Math.min(Number(end), lastDayOfMonth));
 
   return `${format(month, "MMM")} ${format(startDate, "do")} - ${format(endDate, "do")}, ${format(month, "yyyy")}`;
 }
