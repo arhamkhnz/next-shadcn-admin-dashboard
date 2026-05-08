@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { KpiStrip } from "./_components/kpi-strip";
 import { StoreTraffic } from "./_components/store-traffic";
+import { TrafficSources } from "./_components/traffic-sources";
 
 export default function Page() {
   const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");
@@ -61,6 +62,9 @@ export default function Page() {
         <KpiStrip />
         <div className="xl:col-span-5">
           <StoreTraffic />
+        </div>
+        <div className="xl:col-span-7">
+          <TrafficSources />
         </div>
       </div>
     </div>
