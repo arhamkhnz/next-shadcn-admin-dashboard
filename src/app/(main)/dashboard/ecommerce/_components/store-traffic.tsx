@@ -155,7 +155,7 @@ export function StoreTraffic() {
   }
 
   return (
-    <Card className="xl:col-span-7">
+    <Card>
       <CardHeader>
         <CardTitle className="font-normal text-muted-foreground text-sm">Store Traffic</CardTitle>
         <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
