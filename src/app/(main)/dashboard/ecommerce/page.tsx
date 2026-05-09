@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Separator } from "@/components/ui/separator";
 
 import { KpiStrip } from "./_components/kpi-strip";
+import { RecentOrders } from "./_components/recent-orders";
 import { StoreTraffic } from "./_components/store-traffic";
 import { TrafficSources } from "./_components/traffic-sources";
 
@@ -65,6 +66,9 @@ export default function Page() {
         </div>
         <div className="xl:col-span-7">
           <TrafficSources />
+        </div>
+        <div className="xl:col-span-12">
+          <RecentOrders />
         </div>
       </div>
     </div>
