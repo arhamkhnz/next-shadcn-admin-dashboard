@@ -32,7 +32,7 @@ export function CustomerReviews() {
               </div>
               <div>
                 <div className="font-medium text-sm">Melody Macy</div>
-                <p className="mt-2 line-clamp-3 text-muted-foreground text-sm">
+                <p className="mt-2 line-clamp-3 min-h-[4.5em] text-muted-foreground text-sm">
                   The linen overshirt arrived faster than expected and the fit was exactly right.
                 </p>
               </div>
@@ -52,7 +52,7 @@ export function CustomerReviews() {
         <div className="flex items-center justify-between gap-4 rounded-lg border px-4 py-3">
           <div className="min-w-0">
             <div className="font-medium text-sm">12.8K reviews</div>
-            <div className="text-muted-foreground text-xs">Customers reviewed this month</div>
+            <div className="line-clamp-2 min-h-[3em] text-muted-foreground text-xs">Customers reviewed this month</div>
           </div>
 
           <AvatarGroup>
