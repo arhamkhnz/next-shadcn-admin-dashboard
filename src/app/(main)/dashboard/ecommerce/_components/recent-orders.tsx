@@ -94,7 +94,7 @@ export function RecentOrders() {
     <Card>
       <CardHeader>
         <CardTitle className="font-normal text-muted-foreground text-sm">Recent Orders</CardTitle>
-        <CardDescription className="text-foreground text-xl capitalize tabular-nums leading-none tracking-tight">
+        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
           {orderCountDescription}
         </CardDescription>
         <CardAction className="flex items-center gap-1">

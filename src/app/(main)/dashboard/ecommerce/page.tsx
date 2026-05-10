@@ -5,9 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
+import { CustomerReviews } from "./_components/customer-reviews";
+import { Inventory } from "./_components/inventory";
 import { KpiStrip } from "./_components/kpi-strip";
 import { RecentOrders } from "./_components/recent-orders";
 import { StoreTraffic } from "./_components/store-traffic";
+import { TopProducts } from "./_components/top-products";
 import { TrafficSources } from "./_components/traffic-sources";
 
 export default function Page() {
@@ -66,6 +69,15 @@ export default function Page() {
         </div>
         <div className="xl:col-span-7">
           <TrafficSources />
+        </div>
+        <div className="xl:col-span-4">
+          <TopProducts />
+        </div>
+        <div className="xl:col-span-4">
+          <Inventory />
+        </div>
+        <div className="xl:col-span-4">
+          <CustomerReviews />
         </div>
         <div className="xl:col-span-12">
           <RecentOrders />
