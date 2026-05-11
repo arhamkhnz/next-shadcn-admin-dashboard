@@ -2,6 +2,7 @@ import { BarChart3, Plus, UserPlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
+import { ClassSchedule } from "./_components/class-schedule";
 import { KpiCards } from "./_components/kpi-cards";
 
 export default function Page() {
@@ -31,9 +32,11 @@ export default function Page() {
         </div>
       </div>
 
+      <KpiCards />
+
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-        <div className="xl:col-span-12">
-          <KpiCards />
+        <div className="xl:col-span-5">
+          <ClassSchedule />
         </div>
       </div>
     </div>

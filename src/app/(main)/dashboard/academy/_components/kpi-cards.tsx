@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, Info } from "lucide-react";
+import { ArrowUp, Info } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +9,7 @@ export function KpiCards() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Total Enrollment</CardTitle>
+            <CardTitle className="text-sm">Total Students</CardTitle>
             <CardAction>
               <Info className="size-3 text-muted-foreground" />
             </CardAction>
@@ -41,45 +41,35 @@ export function KpiCards() {
                 1.1%
               </Badge>
             </div>
-            <div className="text-right text-muted-foreground text-xs">vs last semester</div>
+            <div className="text-right text-muted-foreground text-xs">vs last month</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Faculty Members</CardTitle>
+            <CardTitle className="text-sm">Assignments</CardTitle>
             <CardAction>
               <Info className="size-3 text-muted-foreground" />
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-3xl text-foreground leading-none tracking-tight">112</span>
-              <Badge className="rounded-sm border-destructive/50 bg-rose-500/10 px-1 font-normal text-destructive text-xs">
-                <ArrowDown />
-                2.4%
-              </Badge>
-            </div>
-            <div className="text-right text-muted-foreground text-xs">vs last semester</div>
+            <div className="text-3xl text-foreground leading-none tracking-tight">18</div>
+
+            <div className="text-right text-muted-foreground text-xs">12 to mark · 6 late</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Active Courses</CardTitle>
+            <CardTitle className="text-sm">Classes Today</CardTitle>
             <CardAction>
               <Info className="size-3 text-muted-foreground" />
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-3xl text-foreground leading-none tracking-tight">142</span>
-              <Badge className="rounded-sm border-green-600/50 bg-green-500/10 px-1 font-normal text-green-700 text-xs dark:border-green-800/50 dark:bg-green-500/15 dark:text-green-300">
-                <ArrowUp />
-                8.5%
-              </Badge>
-            </div>
-            <div className="text-right text-muted-foreground text-xs">vs last semester</div>
+            <div className="text-3xl text-foreground leading-none tracking-tight">42</div>
+
+            <div className="text-right text-muted-foreground text-xs">28 completed · 14 remaining</div>
           </CardContent>
         </Card>
       </div>
