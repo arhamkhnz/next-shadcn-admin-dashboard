@@ -67,9 +67,9 @@ export function KpiCards() {
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
-            <div className="text-3xl text-foreground leading-none tracking-tight">42</div>
+            <div className="text-3xl text-foreground leading-none tracking-tight">6</div>
 
-            <div className="text-right text-muted-foreground text-xs">28 completed · 14 remaining</div>
+            <div className="text-right text-muted-foreground text-xs">1 in progress · 5 remaining</div>
           </CardContent>
         </Card>
       </div>
