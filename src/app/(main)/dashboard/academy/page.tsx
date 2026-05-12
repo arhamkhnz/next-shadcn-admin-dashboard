@@ -1,9 +1,12 @@
-import { BarChart3, Plus, UserPlus } from "lucide-react";
+import { BookOpenCheck, Megaphone, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
+import { AssignmentStatus } from "./_components/assignment-status";
 import { ClassSchedule } from "./_components/class-schedule";
 import { KpiCards } from "./_components/kpi-cards";
+import { PerformanceHighlights } from "./_components/performance-highlights";
+import { UpcomingEvents } from "./_components/upcoming-events";
 
 export default function Page() {
   return (
@@ -12,22 +15,22 @@ export default function Page() {
         <div className="space-y-1">
           <h1 className="text-3xl tracking-tight">Academy Dashboard</h1>
           <p className="text-muted-foreground text-sm">
-            Good morning, Admin. Here's a quick overview of today's activity.
+            Good morning, Teacher. Here's a quick overview of today's activity.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 lg:w-fit">
           <Button size="sm">
-            <Plus />
+            <Megaphone />
             New Announcement
           </Button>
           <Button size="sm" variant="outline">
-            <BarChart3 />
-            View Results
+            <BookOpenCheck />
+            Gradebook
           </Button>
           <Button size="sm" variant="outline">
-            <UserPlus />
-            Add Student
+            <Plus />
+            Add Assignment
           </Button>
         </div>
       </div>
@@ -37,6 +40,18 @@ export default function Page() {
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
         <div className="xl:col-span-5">
           <ClassSchedule />
+        </div>
+        <div className="xl:col-span-7">
+          <AssignmentStatus />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
+        <div className="xl:col-span-8">
+          <PerformanceHighlights />
+        </div>
+        <div className="xl:col-span-4">
+          <UpcomingEvents />
         </div>
       </div>
     </div>

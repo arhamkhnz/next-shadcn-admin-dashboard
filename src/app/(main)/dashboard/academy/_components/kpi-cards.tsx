@@ -9,20 +9,20 @@ export function KpiCards() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Total Students</CardTitle>
+            <CardTitle className="text-sm">Students Taught</CardTitle>
             <CardAction>
               <Info className="size-3 text-muted-foreground" />
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-3xl text-foreground leading-none tracking-tight">1,245</span>
+              <span className="text-3xl text-foreground leading-none tracking-tight">128</span>
               <Badge className="rounded-sm border-green-600/50 bg-green-500/10 px-1 font-normal text-green-700 text-xs dark:border-green-800/50 dark:bg-green-500/15 dark:text-green-300">
                 <ArrowUp />
                 2.8%
               </Badge>
             </div>
-            <div className="text-right text-muted-foreground text-xs">vs last semester</div>
+            <div className="text-right text-muted-foreground text-xs">across 5 Grade 11 sections</div>
           </CardContent>
         </Card>
 
@@ -53,9 +53,9 @@ export function KpiCards() {
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
-            <div className="text-3xl text-foreground leading-none tracking-tight">18</div>
+            <div className="text-3xl text-foreground leading-none tracking-tight">81</div>
 
-            <div className="text-right text-muted-foreground text-xs">12 to mark · 6 late</div>
+            <div className="text-right text-muted-foreground text-xs">63 pending · 18 overdue</div>
           </CardContent>
         </Card>
 
@@ -67,9 +67,9 @@ export function KpiCards() {
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
-            <div className="text-3xl text-foreground leading-none tracking-tight">6</div>
+            <div className="text-3xl text-foreground leading-none tracking-tight">5</div>
 
-            <div className="text-right text-muted-foreground text-xs">1 in progress · 5 remaining</div>
+            <div className="text-right text-muted-foreground text-xs">1 in progress · 3 upcoming · 1 cancelled</div>
           </CardContent>
         </Card>
       </div>

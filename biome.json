@@ -63,7 +63,7 @@
         "noMisusedPromises": "error"
       },
       "performance": {
-        "noImgElement": "off"
+        "noImgElement": "warn"
       },
       "style": {
         "noCommonJs": "error",
