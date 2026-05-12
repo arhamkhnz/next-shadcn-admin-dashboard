@@ -88,6 +88,7 @@ You can run this project locally, or deploy it instantly with Vercel.
 ### Deploy with Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard)
+[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=arhamkhnz/next-shadcn-admin-dashboard&type=static&buildCmd=npm+run+build&outputDir=dist)
 
 _Deploy your own copy with one click._
 
