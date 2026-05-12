@@ -81,9 +81,9 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Academy",
-        url: "/dashboard/coming-soon",
+        url: "/dashboard/academy",
         icon: GraduationCap,
-        comingSoon: true,
+        isNew: true,
       },
       {
         title: "Logistics",
