@@ -103,10 +103,9 @@ function PerformanceHighlightBar({
 
       <text
         dominantBaseline="middle"
-        fill="var(--background)"
         x={labelX}
         y={barY + barHeight / 2 + 0.5}
-        className="font-medium text-xs"
+        className="fill-primary-foreground font-medium text-xs"
       >
         {payload.subject}
       </text>
