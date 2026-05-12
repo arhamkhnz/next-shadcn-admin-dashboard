@@ -11,7 +11,7 @@ export function OverviewKpis() {
           </CardHeader>
           <CardContent className="flex items-end justify-between">
             <div className="space-y-1">
-              <div className="font-heading text-3xl leading-none tracking-tight">$128.4K</div>
+              <div className="text-3xl leading-none tracking-tight">$128.4K</div>
               <p className="text-muted-foreground text-xs">+$9.8K vs last month</p>
             </div>
             <Badge className="bg-green-500/10 text-green-700 dark:bg-green-500/15 dark:text-green-300">+8.4%</Badge>
@@ -24,7 +24,7 @@ export function OverviewKpis() {
           </CardHeader>
           <CardContent className="flex items-end justify-between">
             <div className="flex flex-col gap-1">
-              <div className="font-heading text-3xl leading-none tracking-tight">$12.8K</div>
+              <div className="text-3xl leading-none tracking-tight">$12.8K</div>
               <p className="text-muted-foreground text-xs">$410 above your 30-day average</p>
             </div>
             <Badge className="bg-green-500/10 text-green-700 dark:bg-green-500/15 dark:text-green-300">+3.2%</Badge>
@@ -37,7 +37,7 @@ export function OverviewKpis() {
           </CardHeader>
           <CardContent className="flex items-end justify-between">
             <div className="flex flex-col gap-1">
-              <div className="font-heading text-3xl leading-none tracking-tight">$2,140</div>
+              <div className="text-3xl leading-none tracking-tight">$2,140</div>
               <p className="text-muted-foreground text-xs">$124 more than last month</p>
             </div>
             <Badge variant="destructive" className="bg-destructive/10 text-destructive">
@@ -52,7 +52,7 @@ export function OverviewKpis() {
           </CardHeader>
           <CardContent className="flex items-end justify-between">
             <div className="flex flex-col gap-1">
-              <div className="font-heading text-3xl leading-none tracking-tight">28%</div>
+              <div className="text-3xl leading-none tracking-tight">28%</div>
               <p className="text-muted-foreground text-xs">Up from 25.6% last month</p>
             </div>
             <Badge className="bg-green-500/10 text-green-700 dark:bg-green-500/15 dark:text-green-300">+2.4%</Badge>

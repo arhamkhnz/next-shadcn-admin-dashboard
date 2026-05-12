@@ -145,7 +145,7 @@ export function BalanceDistributionCard() {
                         Total
                       </tspan>
                       <tspan
-                        className="fill-foreground font-heading font-medium text-lg tabular-nums"
+                        className="fill-foreground font-medium text-lg tabular-nums"
                         x={viewBox.cx}
                         y={(viewBox.cy ?? 0) + 14}
                       >

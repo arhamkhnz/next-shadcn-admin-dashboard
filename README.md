@@ -59,12 +59,12 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 - Finance Dashboard  
 - Analytics Dashboard  
 - Productivity Dashboard  
+- E-commerce Dashboard  
+- Academy Dashboard  
 - Authentication (4 screens)  
 - Legacy: Default v1, CRM v1, Finance v1, Analytics v1
 
 ### Coming Soon
-- E-commerce Dashboard  
-- Academy Dashboard  
 - Logistics Dashboard  
 - Email Page  
 - Chat Page  
