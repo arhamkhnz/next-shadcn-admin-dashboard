@@ -46,7 +46,7 @@ export function MailComponent({
   return (
     <ResizablePanelGroup
       orientation="horizontal"
-      onLayoutChange={(layout) => {
+      onLayoutChanged={(layout) => {
         const sizes = [layout[MAIL_NAV_PANEL_ID], layout[MAIL_LIST_PANEL_ID], layout[MAIL_DETAIL_PANEL_ID]];
         setClientCookie(MAIL_LAYOUT_COOKIE, JSON.stringify(sizes));
       }}

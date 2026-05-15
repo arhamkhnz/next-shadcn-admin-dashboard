@@ -121,7 +121,7 @@ export function MailSidebar({ isCollapsed, accounts }: AccountSwitcherProps) {
           <MailNav isCollapsed={isCollapsed} links={quickMailNavLinks} />
 
           <div className="space-y-1.5">
-            <div className="mx-2 text-muted-foreground text-xs leading-none">Folders</div>
+            <div className="mx-2.5 text-muted-foreground text-xs leading-none">Folders</div>
             <MailNav isCollapsed={isCollapsed} links={folderMailNavLinks} />
           </div>
         </div>
