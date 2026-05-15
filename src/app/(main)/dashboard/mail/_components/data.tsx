@@ -244,7 +244,7 @@ export const accounts = [
   {
     id: 1,
     label: "Arham Khan",
-    email: "hello@arhamkhnz",
+    email: "hello@arhamkhnz.com",
   },
   {
     id: 2,
