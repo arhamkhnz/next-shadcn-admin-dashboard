@@ -8,34 +8,35 @@ import { buttonVariants } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-interface NavProps {
+interface MailNavProps {
   isCollapsed: boolean;
-  links: {
+  links: readonly {
+    id: string;
     title: string;
     label?: string;
     icon: LucideIcon;
-    variant: "default" | "ghost";
+    variant: "default" | "ghost" | "secondary";
   }[];
 }
 
-export function Nav({ links, isCollapsed }: NavProps) {
+export function MailNav({ links, isCollapsed }: MailNavProps) {
   return (
-    <div data-collapsed={isCollapsed} className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
-      <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        {links.map((link, index) =>
+    <div data-collapsed={isCollapsed} className="group flex flex-col gap-4 data-[collapsed=true]:py-2">
+      <nav className="grid gap-1 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2">
+        {links.map((link) =>
           isCollapsed ? (
-            <Tooltip key={index} delayDuration={0}>
+            <Tooltip key={link.id} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
                   href="#"
                   className={cn(
                     buttonVariants({ variant: link.variant, size: "icon" }),
-                    "h-9 w-9",
+                    "size-9",
                     link.variant === "default" &&
                       "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white",
                   )}
                 >
-                  <link.icon className="h-4 w-4" />
+                  <link.icon className="size-4" />
                   <span className="sr-only">{link.title}</span>
                 </Link>
               </TooltipTrigger>
@@ -46,16 +47,18 @@ export function Nav({ links, isCollapsed }: NavProps) {
             </Tooltip>
           ) : (
             <Link
-              key={index}
+              key={link.id}
               href="#"
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 link.variant === "default" && "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                "justify-start",
+                "justify-start px-2",
               )}
             >
-              <link.icon className="mr-2 h-4 w-4" />
-              {link.title}
+              <div className="flex items-center gap-1.5">
+                <link.icon className="size-3.5" />
+                <span className="font-medium text-xs">{link.title}</span>
+              </div>
               {link.label && (
                 <span className={cn("ml-auto", link.variant === "default" && "text-background dark:text-white")}>
                   {link.label}
