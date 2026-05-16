@@ -7,7 +7,6 @@ import { setClientCookie } from "@/lib/cookie.client";
 import { cn } from "@/lib/utils";
 
 import type { Mail } from "./data";
-import { MailDisplay } from "./mail-display";
 import { MailInbox } from "./mail-inbox";
 import {
   DEFAULT_MAIL_COLLAPSED,
@@ -20,6 +19,7 @@ import {
   MAIL_SIDEBAR_COLLAPSED_SIZE,
 } from "./mail-layout-config";
 import { MailSidebar } from "./mail-sidebar";
+import { MailView } from "./mail-view";
 import { useMail } from "./use-mail";
 
 interface MailProps {
@@ -74,7 +74,7 @@ export function MailComponent({
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel id={MAIL_DETAIL_PANEL_ID} defaultSize={`${defaultLayout[2]}%`} minSize="30%" className="min-h-0">
-        <MailDisplay mail={mails.find((item) => item.id === mail.selected) || null} />
+        <MailView mail={mails.find((item) => item.id === mail.selected) || null} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );
