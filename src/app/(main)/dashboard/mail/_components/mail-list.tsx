@@ -60,7 +60,7 @@ export function MailList({ groups }: MailListProps) {
                           <div
                             className={cn(
                               "flex items-center gap-2 truncate font-normal text-sm",
-                              item.isRead && "font-medium",
+                              !item.isRead && "font-medium",
                             )}
                           >
                             {item.from.name} {!item.isRead && <span className="size-2 rounded-full bg-blue-600" />}
