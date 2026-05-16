@@ -3,21 +3,27 @@
 import { format } from "date-fns/format";
 import {
   Archive,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   EllipsisVertical,
   Forward,
   MailOpen,
+  Paperclip,
   Pin,
   Reply,
   ReplyAll,
+  Send,
+  Smile,
   Tag,
   Trash2,
   X,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SimpleIcon } from "@/components/simple-icon";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,11 +32,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 import type { Mail } from "./data";
 
@@ -146,49 +151,103 @@ export function MailView({ mail }: MailDisplayProps) {
 
       <Separator />
 
-      <div>
+      <div className="flex min-h-0 flex-1 flex-col">
         {mail ? (
-          <div className="flex flex-1 flex-col">
-            <div className="flex items-start p-4">
-              <div className="flex items-start gap-4 text-sm">
-                <Avatar>
-                  <AvatarImage alt={mail.name} />
-                  <AvatarFallback>
-                    {mail.name
-                      .split(" ")
-                      .map((chunk) => chunk[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="font-semibold">{mail.name}</div>
-                  <div className="line-clamp-1 text-xs">{mail.subject}</div>
-                  <div className="line-clamp-1 text-xs">
-                    <span className="font-medium">Reply-To:</span> {mail.email}
+          <div className="flex min-h-0 flex-1 flex-col gap-3">
+            <div className="space-y-1.5">
+              <div className="font-medium leading-none">{mail.subject}</div>
+
+              <div className="text-muted-foreground text-xs leading-none">
+                {format(new Date(mail.receivedAt), "EEE, d MMM yyyy, h:mm a")}
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="flex gap-2">
+              <Avatar className="size-9 after:rounded-sm">
+                <AvatarFallback className="rounded-sm bg-background">{mail.from.name[0]}</AvatarFallback>
+              </Avatar>
+
+              <div className="flex h-full flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <div className="text-xs">{mail.from.name}</div>
+                  <Separator className="h-3 data-vertical:self-center" orientation="vertical" />
+                  <div className="text-muted-foreground text-xs">{mail.from.email}</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-muted-foreground text-xs">
+                    To: <span className="text-foreground">{mail.to.map((recipient) => recipient.name).join(", ")}</span>
                   </div>
+
+                  {mail.cc?.length ? (
+                    <div className="text-muted-foreground text-xs">
+                      Cc:{" "}
+                      <span className="text-foreground">{mail.cc.map((recipient) => recipient.name).join(", ")}</span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
-              {mail.date && (
-                <div className="ml-auto text-muted-foreground text-xs">{format(new Date(mail.date), "PPpp")}</div>
-              )}
             </div>
+
             <Separator />
-            <div className="flex-1 whitespace-pre-wrap p-4 text-sm">{mail.text}</div>
-            <Separator className="mt-auto" />
-            <div className="p-4">
-              <form>
-                <div className="grid gap-4">
-                  <Textarea className="p-4" placeholder={`Reply ${mail.name}...`} />
-                  <div className="flex items-center">
-                    <Label htmlFor="mute" className="flex items-center gap-2 font-normal text-xs">
-                      <Switch id="mute" aria-label="Mute thread" /> Mute this thread
-                    </Label>
-                    <Button onClick={(e) => e.preventDefault()} size="sm" className="ml-auto">
-                      Send
+
+            {mail.attachments?.length ? (
+              <>
+                <Collapsible defaultOpen>
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "group p-0 font-normal text-muted-foreground",
+                        "hover:bg-transparent hover:text-muted-foreground dark:hover:bg-transparent",
+                        "data-[state=open]:bg-transparent data-[state=open]:text-muted-foreground",
+                      )}
+                    >
+                      Attachments ({mail.attachments.length})
+                      <ChevronDown className="group-data-[state=open]:rotate-180" />
                     </Button>
-                  </div>
-                </div>
-              </form>
+                  </CollapsibleTrigger>
+
+                  <CollapsibleContent>
+                    <div className="flex flex-wrap gap-2">
+                      {mail.attachments.map((attachment) => (
+                        <Button size="xs" variant="secondary" key={attachment.id}>
+                          <SimpleIcon icon={attachment.icon} className="size-3 fill-current" />
+                          <span className="font-normal">{attachment.name}</span>
+                          <span className="font-normal text-muted-foreground">{attachment.size}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                <Separator className="my-2" />
+              </>
+            ) : null}
+
+            <div className="flex-1 whitespace-pre-wrap text-sm">{mail.body}</div>
+
+            <div className="mt-auto flex flex-col gap-3">
+              <Separator />
+              <InputGroup>
+                <InputGroupAddon align="inline-start">
+                  <Reply />
+                </InputGroupAddon>
+                <InputGroupInput placeholder={`Reply ${mail.from.name}...`} />
+                <InputGroupAddon className="gap-1" align="inline-end">
+                  <InputGroupButton variant="ghost">
+                    <Smile />
+                  </InputGroupButton>
+                  <InputGroupButton variant="ghost">
+                    <Paperclip />
+                  </InputGroupButton>
+                  <InputGroupButton variant="ghost">
+                    <Send />
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
             </div>
           </div>
         ) : (
