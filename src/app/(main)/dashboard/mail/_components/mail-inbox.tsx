@@ -34,7 +34,9 @@ export function MailInbox({ mails }: MailInboxProps) {
         </div>
       </div>
 
-      <Separator className="mx-2 w-auto" />
+      <div className="px-2">
+        <Separator />
+      </div>
 
       <div className="px-2">
         <InputGroup className="w-full">
