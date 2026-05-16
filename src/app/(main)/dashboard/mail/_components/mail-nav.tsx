@@ -21,7 +21,7 @@ interface MailNavProps {
 
 export function MailNav({ links, isCollapsed }: MailNavProps) {
   return (
-    <div data-collapsed={isCollapsed} className="group flex flex-col gap-4 data-[collapsed=true]:py-2">
+    <div data-collapsed={isCollapsed} className="group flex flex-col gap-4 data-[collapsed=true]:py-0.5">
       <nav className="grid gap-1 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2">
         {links.map((link) =>
           isCollapsed ? (

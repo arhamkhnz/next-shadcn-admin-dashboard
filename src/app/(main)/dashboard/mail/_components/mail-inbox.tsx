@@ -39,8 +39,8 @@ export function MailInbox({ mails }: MailInboxProps) {
       </div>
 
       <div className="px-2">
-        <InputGroup className="w-full">
-          <InputGroupInput placeholder="Search..." />
+        <InputGroup className="h-7 w-full rounded-md">
+          <InputGroupInput className="h-7" placeholder="Search..." />
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
