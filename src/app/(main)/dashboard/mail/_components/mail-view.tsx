@@ -38,19 +38,28 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 
 import type { Mail } from "./data";
+import { useMail } from "./use-mail";
 
 interface MailDisplayProps {
   mail: Mail | null;
+  onClose?: () => void;
 }
 
-export function MailView({ mail }: MailDisplayProps) {
+export function MailView({ mail, onClose }: MailDisplayProps) {
+  const [, setMail] = useMail();
+
+  function handleClose() {
+    setMail({ selected: null });
+    onClose?.();
+  }
+
   return (
     <div className="flex h-full flex-col gap-3 px-2 py-3">
       <div className="flex items-center">
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Close message">
+              <Button variant="ghost" size="icon-sm" aria-label="Close message" onClick={handleClose}>
                 <X />
               </Button>
             </TooltipTrigger>

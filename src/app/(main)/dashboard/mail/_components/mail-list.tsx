@@ -17,9 +17,10 @@ type MailGroup = {
 
 interface MailListProps {
   groups: MailGroup[];
+  onSelectMail?: (mail: Mail) => void;
 }
 
-export function MailList({ groups }: MailListProps) {
+export function MailList({ groups, onSelectMail }: MailListProps) {
   const [mail, setMail] = useMail();
 
   return (
@@ -42,12 +43,13 @@ export function MailList({ groups }: MailListProps) {
                     mail.selected === item.id &&
                       "border-border bg-muted/70 before:absolute before:-inset-y-px before:left-0 before:w-0.5 before:bg-primary",
                   )}
-                  onClick={() =>
+                  onClick={() => {
                     setMail({
                       ...mail,
                       selected: item.id,
-                    })
-                  }
+                    });
+                    onSelectMail?.(item);
+                  }}
                 >
                   <div className="flex items-start gap-3">
                     <Avatar className="size-9 after:rounded-sm">

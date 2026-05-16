@@ -2,7 +2,9 @@
 
 import * as React from "react";
 
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { setClientCookie } from "@/lib/cookie.client";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +36,53 @@ interface MailProps {
 }
 
 export function MailComponent({
+  accounts,
+  mails,
+  defaultLayout = [...DEFAULT_MAIL_LAYOUT],
+  defaultCollapsed = DEFAULT_MAIL_COLLAPSED,
+}: MailProps) {
+  const isMobile = useIsMobile();
+
+  return isMobile ? (
+    <MailMobileLayout accounts={accounts} mails={mails} />
+  ) : (
+    <MailDesktopLayout
+      accounts={accounts}
+      mails={mails}
+      defaultLayout={defaultLayout}
+      defaultCollapsed={defaultCollapsed}
+    />
+  );
+}
+
+function MailMobileLayout({ accounts, mails }: Pick<MailProps, "accounts" | "mails">) {
+  const [mail] = useMail();
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isMailOpen, setIsMailOpen] = React.useState(false);
+  const selectedMail = mails.find((item) => item.id === mail.selected) || null;
+
+  return (
+    <>
+      <MailInbox mails={mails} onOpenSidebar={() => setIsSidebarOpen(true)} onSelectMail={() => setIsMailOpen(true)} />
+
+      <Drawer direction="left" open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+        <DrawerContent>
+          <DrawerTitle className="sr-only">Mail navigation</DrawerTitle>
+          <MailSidebar isCollapsed={false} accounts={accounts} />
+        </DrawerContent>
+      </Drawer>
+
+      <Drawer open={isMailOpen} onOpenChange={setIsMailOpen}>
+        <DrawerContent className="data-[vaul-drawer-direction=bottom]:h-svh data-[vaul-drawer-direction=bottom]:max-h-svh">
+          <DrawerTitle className="sr-only">Mail message</DrawerTitle>
+          <MailView mail={selectedMail} onClose={() => setIsMailOpen(false)} />
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}
+
+function MailDesktopLayout({
   accounts,
   mails,
   defaultLayout = [...DEFAULT_MAIL_LAYOUT],
