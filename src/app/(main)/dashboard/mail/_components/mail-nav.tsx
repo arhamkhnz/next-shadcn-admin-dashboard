@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import type { LucideIcon } from "lucide-react";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -27,44 +27,36 @@ export function MailNav({ links, isCollapsed }: MailNavProps) {
           isCollapsed ? (
             <Tooltip key={link.id} delayDuration={0}>
               <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className={cn(
-                    buttonVariants({ variant: link.variant, size: "icon" }),
-                    "size-9",
-                    link.variant === "default" &&
-                      "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white",
-                  )}
-                >
-                  <link.icon className="size-4" />
-                  <span className="sr-only">{link.title}</span>
-                </Link>
+                <Button asChild variant={link.variant} size="icon-sm">
+                  <Link href="#">
+                    <link.icon />
+                    <span className="sr-only">{link.title}</span>
+                  </Link>
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="right" className="flex items-center gap-4">
                 {link.title}
-                {link.label && <span className="ml-auto text-muted-foreground">{link.label}</span>}
+                {link.label && <span className="ml-auto">{link.label}</span>}
               </TooltipContent>
             </Tooltip>
           ) : (
-            <Link
+            <Button
               key={link.id}
-              href="#"
-              className={cn(
-                buttonVariants({ variant: link.variant, size: "sm" }),
-                link.variant === "default" && "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                "justify-start px-2",
-              )}
+              asChild
+              variant={link.variant}
+              size="sm"
+              className="justify-start gap-1.5 px-2 text-xs"
             >
-              <div className="flex items-center gap-1.5">
-                <link.icon className="size-3.5" />
-                <span className="font-medium text-xs">{link.title}</span>
-              </div>
-              {link.label && (
-                <span className={cn("ml-auto", link.variant === "default" && "text-background dark:text-white")}>
-                  {link.label}
-                </span>
-              )}
-            </Link>
+              <Link href="#">
+                <link.icon />
+                {link.title}
+                {link.label && (
+                  <span className={cn("ml-auto", link.variant === "default" && "text-background dark:text-white")}>
+                    {link.label}
+                  </span>
+                )}
+              </Link>
+            </Button>
           ),
         )}
       </nav>

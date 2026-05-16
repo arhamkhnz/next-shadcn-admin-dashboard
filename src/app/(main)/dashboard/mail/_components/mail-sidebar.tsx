@@ -111,9 +111,14 @@ export function MailSidebar({ isCollapsed, accounts }: AccountSwitcherProps) {
         </div>
       )}
 
-      <Button size="sm" variant="outline" className="w-full">
+      <Button
+        size={isCollapsed ? "icon-sm" : "sm"}
+        variant="outline"
+        className={cn(!isCollapsed && "w-full")}
+        aria-label={isCollapsed ? "New email" : undefined}
+      >
         <PenLine data-icon="inline-start" />
-        New email
+        {!isCollapsed && "New email"}
       </Button>
 
       <div className="flex flex-1 flex-col">
@@ -121,7 +126,9 @@ export function MailSidebar({ isCollapsed, accounts }: AccountSwitcherProps) {
           <MailNav isCollapsed={isCollapsed} links={quickMailNavLinks} />
 
           <div className="space-y-1.5">
-            <div className="mx-2.5 text-muted-foreground text-xs leading-none">Folders</div>
+            <div className={cn("mx-2.5 text-muted-foreground text-xs leading-none", isCollapsed && "hidden")}>
+              Folders
+            </div>
             <MailNav isCollapsed={isCollapsed} links={folderMailNavLinks} />
           </div>
         </div>
