@@ -5,6 +5,6 @@ export const MAIL_NAV_PANEL_ID = "mail-navigation-panel";
 export const MAIL_LIST_PANEL_ID = "mail-message-list-panel";
 export const MAIL_DETAIL_PANEL_ID = "mail-message-detail-panel";
 
-export const DEFAULT_MAIL_LAYOUT = [22, 32, 48] as const;
-export const DEFAULT_MAIL_COLLAPSED = true;
+export const DEFAULT_MAIL_LAYOUT = [22, 30, 48] as const;
+export const DEFAULT_MAIL_COLLAPSED = false;
 export const MAIL_SIDEBAR_COLLAPSED_SIZE = "50px";
