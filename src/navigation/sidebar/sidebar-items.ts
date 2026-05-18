@@ -99,8 +99,9 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Email",
-        url: "/dashboard/mail",
+        url: "/mail",
         icon: Mail,
+        newTab: true,
       },
       {
         title: "Chat",

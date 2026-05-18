@@ -1,4 +1,4 @@
-import { Archive, CircleHelp, File, Inbox, Keyboard, Send, Star, Trash2 } from "lucide-react";
+import { Archive, CircleHelp, File, Inbox, Keyboard, type LucideIcon, Send, Star, Trash2 } from "lucide-react";
 import { siFigma, siGoogledocs, siGooglephotos } from "simple-icons";
 
 const arhamKhan = {
@@ -43,6 +43,20 @@ export type Mail = {
   labels: string[];
   attachments?: Attachment[];
   messageCount?: number;
+};
+
+export type MailNavItem = {
+  id: string;
+  title: string;
+  label?: string;
+  icon: LucideIcon;
+  isActive: boolean;
+};
+
+type MailNavigation = {
+  navMain: MailNavItem[];
+  folders: MailNavItem[];
+  navFooter: MailNavItem[];
 };
 
 export const mails: Mail[] = [
@@ -393,70 +407,65 @@ export const mails: Mail[] = [
   },
 ];
 
-export const quickMailNavLinks = [
-  {
-    id: "inbox",
-    title: "Inbox",
-    label: "18",
-    icon: Inbox,
-    variant: "secondary",
-  },
-  {
-    id: "priority",
-    title: "Priority",
-    label: "3",
-    icon: Star,
-    variant: "ghost",
-  },
-] as const;
-
-export const folderMailNavLinks = [
-  {
-    id: "drafts",
-    title: "Drafts",
-    label: "9",
-    icon: File,
-    variant: "ghost",
-  },
-  {
-    id: "sent",
-    title: "Sent",
-    label: "",
-    icon: Send,
-    variant: "ghost",
-  },
-  {
-    id: "archive",
-    title: "Archive",
-    label: "",
-    icon: Archive,
-    variant: "ghost",
-  },
-  {
-    id: "trash",
-    title: "Trash",
-    label: "",
-    icon: Trash2,
-    variant: "ghost",
-  },
-] as const;
-
-export const footerMailNavLinks = [
-  {
-    id: "help-feedback",
-    title: "Help & feedback",
-    label: "",
-    icon: CircleHelp,
-    variant: "ghost",
-  },
-  {
-    id: "keyboard-shortcuts",
-    title: "Keyboard shortcuts",
-    label: "",
-    icon: Keyboard,
-    variant: "ghost",
-  },
-] as const;
+export const mailNavigation: MailNavigation = {
+  navMain: [
+    {
+      id: "inbox",
+      title: "Inbox",
+      label: "18",
+      icon: Inbox,
+      isActive: true,
+    },
+    {
+      id: "priority",
+      title: "Priority",
+      label: "3",
+      icon: Star,
+      isActive: false,
+    },
+  ],
+  folders: [
+    {
+      id: "drafts",
+      title: "Drafts",
+      label: "9",
+      icon: File,
+      isActive: false,
+    },
+    {
+      id: "sent",
+      title: "Sent",
+      icon: Send,
+      isActive: false,
+    },
+    {
+      id: "archive",
+      title: "Archive",
+      icon: Archive,
+      isActive: false,
+    },
+    {
+      id: "trash",
+      title: "Trash",
+      icon: Trash2,
+      isActive: false,
+    },
+  ],
+  navFooter: [
+    {
+      id: "help-feedback",
+      title: "Help & feedback",
+      icon: CircleHelp,
+      isActive: false,
+    },
+    {
+      id: "keyboard-shortcuts",
+      title: "Keyboard shortcuts",
+      icon: Keyboard,
+      isActive: false,
+    },
+  ],
+};
 
 export const accounts = [
   {
@@ -470,90 +479,3 @@ export const accounts = [
     email: "contact@weblabs.studio",
   },
 ];
-
-export type Account = (typeof accounts)[number];
-
-export const contacts = [
-  {
-    name: "Emma Johnson",
-    email: "emma.johnson@example.com",
-  },
-  {
-    name: "Liam Wilson",
-    email: "liam.wilson@example.com",
-  },
-  {
-    name: "Olivia Davis",
-    email: "olivia.davis@example.com",
-  },
-  {
-    name: "Noah Martinez",
-    email: "noah.martinez@example.com",
-  },
-  {
-    name: "Ava Taylor",
-    email: "ava.taylor@example.com",
-  },
-  {
-    name: "Lucas Brown",
-    email: "lucas.brown@example.com",
-  },
-  {
-    name: "Sophia Smith",
-    email: "sophia.smith@example.com",
-  },
-  {
-    name: "Ethan Wilson",
-    email: "ethan.wilson@example.com",
-  },
-  {
-    name: "Isabella Jackson",
-    email: "isabella.jackson@example.com",
-  },
-  {
-    name: "Mia Clark",
-    email: "mia.clark@example.com",
-  },
-  {
-    name: "Mason Lee",
-    email: "mason.lee@example.com",
-  },
-  {
-    name: "Layla Harris",
-    email: "layla.harris@example.com",
-  },
-  {
-    name: "William Anderson",
-    email: "william.anderson@example.com",
-  },
-  {
-    name: "Ella White",
-    email: "ella.white@example.com",
-  },
-  {
-    name: "James Thomas",
-    email: "james.thomas@example.com",
-  },
-  {
-    name: "Harper Lewis",
-    email: "harper.lewis@example.com",
-  },
-  {
-    name: "Benjamin Moore",
-    email: "benjamin.moore@example.com",
-  },
-  {
-    name: "Aria Hall",
-    email: "aria.hall@example.com",
-  },
-  {
-    name: "Henry Turner",
-    email: "henry.turner@example.com",
-  },
-  {
-    name: "Scarlett Adams",
-    email: "scarlett.adams@example.com",
-  },
-];
-
-export type Contact = (typeof contacts)[number];

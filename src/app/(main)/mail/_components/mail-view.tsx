@@ -54,7 +54,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
   }
 
   return (
-    <div className="flex h-full flex-col gap-3 px-2 py-3">
+    <div className="flex h-full min-h-0 flex-col gap-3 px-2 py-3">
       <div className="flex items-center">
         <div className="flex items-center gap-2">
           <Tooltip>
@@ -236,7 +236,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
               </>
             ) : null}
 
-            <div className="flex-1 whitespace-pre-wrap text-sm">{mail.body}</div>
+            <div className="scrollbar-none min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap text-sm">{mail.body}</div>
 
             <div className="mt-auto flex flex-col gap-3">
               <Separator />
@@ -244,7 +244,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                 <InputGroupAddon align="inline-start">
                   <Reply />
                 </InputGroupAddon>
-                <InputGroupInput placeholder={`Reply ${mail.from.name}...`} />
+                <InputGroupInput className="text-xs" placeholder={`Reply ${mail.from.name}...`} />
                 <InputGroupAddon className="gap-1" align="inline-end">
                   <InputGroupButton variant="ghost">
                     <Smile />
@@ -260,7 +260,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
             </div>
           </div>
         ) : (
-          <div className="p-8 text-center text-muted-foreground">No message selected</div>
+          <div className="grid h-full place-items-center text-muted-foreground text-sm">No email selected</div>
         )}
       </div>
     </div>

@@ -1,21 +1,21 @@
 "use client";
 
-import { Ellipsis, PanelLeftOpen, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
+import { Ellipsis, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import type { Mail } from "./data";
 import { MailList } from "./mail-list";
 
 interface MailInboxProps {
   mails: Mail[];
-  onOpenSidebar?: () => void;
   onSelectMail?: (mail: Mail) => void;
 }
 
-export function MailInbox({ mails, onOpenSidebar, onSelectMail }: MailInboxProps) {
+export function MailInbox({ mails, onSelectMail }: MailInboxProps) {
   const pinnedMails = mails.filter((mail) => mail.isPinned);
   const unpinnedMails = mails.filter((mail) => !mail.isPinned);
 
@@ -23,14 +23,8 @@ export function MailInbox({ mails, onOpenSidebar, onSelectMail }: MailInboxProps
     <div className="flex h-full min-h-0 flex-col gap-3 py-3">
       <div className="flex items-center justify-between gap-4 px-2">
         <div className="flex items-center">
-          {onOpenSidebar ? (
-            <>
-              <Button variant="ghost" size="icon-sm" aria-label="Open mailbox navigation" onClick={onOpenSidebar}>
-                <PanelLeftOpen />
-              </Button>
-              <Separator className="mr-3 ml-1 h-4 data-vertical:self-center" orientation="vertical" />
-            </>
-          ) : null}
+          <SidebarTrigger />
+          <Separator orientation="vertical" className="mr-2 ml-1 h-4 data-vertical:self-center" />
           <h1 className="font-medium text-xl leading-none">Inbox</h1>
         </div>
         <div className="flex items-center gap-2">
