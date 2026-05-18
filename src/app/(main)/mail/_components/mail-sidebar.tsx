@@ -183,8 +183,8 @@ function AccountMenuContent({
     <DropdownMenuContent className="w-56" {...props}>
       {showAccounts && (
         <>
-          <DropdownMenuLabel>Accounts</DropdownMenuLabel>
           <DropdownMenuGroup>
+            <DropdownMenuLabel>Accounts</DropdownMenuLabel>
             <DropdownMenuRadioGroup
               value={String(selectedAccountId)}
               onValueChange={(value) => {
