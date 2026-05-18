@@ -1,31 +1,27 @@
-import { getValueFromCookie } from "@/server/server-actions";
+import Link from "next/link";
 
-import { accounts, mails } from "./_components/data";
-import { MailComponent } from "./_components/mail";
-import {
-  DEFAULT_MAIL_COLLAPSED,
-  DEFAULT_MAIL_LAYOUT,
-  MAIL_COLLAPSED_COOKIE,
-  MAIL_LAYOUT_COOKIE,
-} from "./_components/mail-layout-config";
+import { ExternalLink } from "lucide-react";
 
-export default async function Page() {
-  const [layoutCookie, collapsedCookie] = await Promise.all([
-    getValueFromCookie(MAIL_LAYOUT_COOKIE),
-    getValueFromCookie(MAIL_COLLAPSED_COOKIE),
-  ]);
+import { Button } from "@/components/ui/button";
 
+export default function Page() {
   return (
-    <div
-      data-content-padding="false"
-      className="h-[calc(100svh-var(--dashboard-header-height))] min-h-0 overflow-hidden"
-    >
-      <MailComponent
-        accounts={accounts}
-        mails={mails}
-        defaultLayout={layoutCookie ? JSON.parse(layoutCookie) : [...DEFAULT_MAIL_LAYOUT]}
-        defaultCollapsed={collapsedCookie ? JSON.parse(collapsedCookie) : DEFAULT_MAIL_COLLAPSED}
-      />
+    <div className="flex h-full flex-col gap-2">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h1 className="font-medium text-sm leading-none">Mail preview</h1>
+          <p className="text-muted-foreground text-sm">
+            This iframe shows the standalone mail screen. Open it in full screen for a better view.
+          </p>
+        </div>
+        <Button asChild variant="ghost" size="icon-sm">
+          <Link href="/mail" target="_blank" rel="noreferrer" aria-label="Open mail in new tab">
+            <ExternalLink />
+          </Link>
+        </Button>
+      </div>
+
+      <iframe src="/mail" title="Mail preview" className="min-h-0 flex-1 rounded-lg border bg-background" />
     </div>
   );
 }

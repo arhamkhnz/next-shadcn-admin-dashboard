@@ -43,7 +43,9 @@ export function MailList({ groups, onSelectMail }: MailListProps) {
                     mail.selected === item.id &&
                       "border-border bg-muted/70 before:absolute before:-inset-y-px before:left-0 before:w-0.5 before:bg-primary",
                   )}
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.currentTarget.blur();
+
                     setMail({
                       ...mail,
                       selected: item.id,
