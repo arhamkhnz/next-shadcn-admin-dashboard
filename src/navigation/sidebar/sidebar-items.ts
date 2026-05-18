@@ -122,9 +122,8 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Invoice",
-        url: "/dashboard/coming-soon",
+        url: "/dashboard/invoice",
         icon: ReceiptText,
-        comingSoon: true,
       },
       {
         title: "Users",
