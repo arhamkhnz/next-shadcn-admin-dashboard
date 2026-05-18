@@ -7,7 +7,9 @@ import { type TransactionRow, transactionsSchema } from "./transactions-table/sc
 const transactions = transactionsSchema.parse(transactionsData);
 
 function thisMonth(row: TransactionRow) {
-  return row.date.startsWith("2026-05");
+  const now = new Date();
+  const prefix = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
+  return row.date.startsWith(prefix);
 }
 
 const monthRows = transactions.filter(thisMonth);

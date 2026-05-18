@@ -23,8 +23,10 @@ function deltaBadge(amount: number) {
 }
 
 export function AccountKpis() {
-  const largest = accounts.reduce((top, account) => (account.balance > top.balance ? account : top), accounts[0]);
-  const largestShare = totalBalance === 0 ? 0 : largest.balance / totalBalance;
+  const largest = accounts.length
+    ? accounts.reduce((top, account) => (account.balance > top.balance ? account : top), accounts[0])
+    : null;
+  const largestShare = !largest || totalBalance === 0 ? 0 : largest.balance / totalBalance;
   const breakdown = (Object.keys(accountTypeLabels) as Array<keyof typeof accountTypeLabels>)
     .map((type) => ({ type, count: getAccountsByType(type).length }))
     .filter((slice) => slice.count > 0);
@@ -73,10 +75,16 @@ export function AccountKpis() {
           <CardContent className="flex items-end justify-between">
             <div className="space-y-1">
               <div className="text-3xl tabular-nums leading-none tracking-tight">
-                {formatCurrency(largest.balance, { noDecimals: true })}
+                {largest ? formatCurrency(largest.balance, { noDecimals: true }) : "—"}
               </div>
               <p className="text-muted-foreground text-xs">
-                <span className="text-foreground">{largest.name}</span> · {Math.round(largestShare * 100)}% of total
+                {largest ? (
+                  <>
+                    <span className="text-foreground">{largest.name}</span> · {Math.round(largestShare * 100)}% of total
+                  </>
+                ) : (
+                  "No linked accounts"
+                )}
               </p>
             </div>
           </CardContent>

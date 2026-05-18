@@ -25,9 +25,9 @@ import { UpcomingInflows } from "./_components/upcoming-inflows";
 import { UpcomingTransactions } from "./_components/upcoming-transactions";
 import { Wallet } from "./_components/wallet";
 
-const DASHBOARD_TAB = "30-days";
-const ACCOUNTS_TAB = "12-months";
-const TRANSACTIONS_TAB = "custom";
+const DASHBOARD_TAB = "dashboard";
+const ACCOUNTS_TAB = "accounts";
+const TRANSACTIONS_TAB = "transactions";
 
 export default function Page() {
   const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");
