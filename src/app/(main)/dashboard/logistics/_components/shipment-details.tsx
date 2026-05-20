@@ -80,15 +80,15 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="flex items-center gap-2">
-          <h1 className="font-medium text-xl tabular-nums tracking-tight">#{shipment.id}</h1>
+          <h1 className="font-medium text-lg tabular-nums tracking-tight sm:text-xl">#{shipment.id}</h1>
           <Button variant="ghost" size="icon-sm" aria-label="Copy shipment ID">
             <Copy />
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-xs sm:text-sm">
           <Badge variant="outline" className={cn("gap-1.5", statusBadgeClasses[shipment.status])}>
             <span className={cn("size-1.5 rounded-full bg-current", progressRingClasses[shipment.status])} />
             {shipment.status}
@@ -140,53 +140,62 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
           </Button>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="grid grid-cols-[1.35fr_1fr_1.1fr_1fr_1fr] gap-x-4">
-            <div />
-            <div className="text-muted-foreground text-sm leading-none">Total weight</div>
-            <div className="text-muted-foreground text-sm leading-none">Transport mode</div>
-            <div className="pl-6 text-muted-foreground text-sm leading-none">{transportNumberLabel}</div>
-            <div className="text-right text-muted-foreground text-sm leading-none">Status</div>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-[1.35fr_1fr_1.1fr_1.15fr_1fr]">
+          <div className="col-span-2 flex flex-col gap-1 md:col-span-1 md:gap-2">
+            <div className="text-muted-foreground text-xs leading-none md:invisible md:text-sm">Cargo</div>
+            <div className="whitespace-nowrap text-sm leading-none">{shipment.cargo}</div>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <div className="grid grid-cols-[1.35fr_1fr_1.1fr_1fr_1fr] gap-x-4">
-              <div className="whitespace-nowrap text-sm leading-none">{shipment.cargo}</div>
-              <div className="text-sm leading-none">{shipment.weight}</div>
-              <div className="text-sm capitalize leading-none">
-                {shipment.mode} · {shipment.routeType}
-              </div>
-              <div className="pl-6 text-sm leading-none">{shipment.transportNumber}</div>
-              <div className="text-right text-sm leading-none">{shipment.progress}% complete</div>
+          <div className="flex flex-col gap-2">
+            <div className="text-muted-foreground text-xs leading-none md:text-sm">Total weight</div>
+            <div className="text-sm leading-none">{shipment.weight}</div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="text-muted-foreground text-xs leading-none md:text-sm">Transport mode</div>
+            <div className="text-sm capitalize leading-none">
+              {shipment.mode} · {shipment.routeType}
             </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="text-muted-foreground text-xs leading-none md:text-sm">{transportNumberLabel}</div>
+            <div className="text-sm leading-none">{shipment.transportNumber}</div>
+          </div>
+
+          <div className="flex flex-col gap-2 md:text-right">
+            <div className="text-muted-foreground text-xs leading-none md:text-sm">Status</div>
+            <div className="text-sm leading-none">{shipment.progress}% complete</div>
           </div>
         </div>
-
-        <Alert className="border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
-          <AlertTriangleIcon />
-          <AlertTitle>{shipment.handling.label}</AlertTitle>
-          <AlertDescription className="space-y-2">
-            <div className="border-amber-900 text-amber-900 leading-none dark:border-amber-50 dark:text-amber-50">
-              {shipment.handling.note}
-            </div>
-
-            <Separator className="bg-amber-800 dark:bg-amber-50" />
-
-            <div className="flex flex-wrap gap-2">
-              {shipment.handling.tags.map(({ icon: TagIcon, label }) => (
-                <Badge
-                  className="rounded-sm border-amber-200 bg-background/50 text-amber-900 dark:border-amber-900 dark:text-amber-50"
-                  key={label}
-                  variant="outline"
-                >
-                  <TagIcon data-icon="inline-start" />
-                  {label}
-                </Badge>
-              ))}
-            </div>
-          </AlertDescription>
-        </Alert>
       </div>
+
+      <Separator />
+
+      <Alert className="border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
+        <AlertTriangleIcon />
+        <AlertTitle>{shipment.handling.label}</AlertTitle>
+        <AlertDescription className="space-y-2">
+          <div className="border-amber-900 text-amber-900 leading-none dark:border-amber-50 dark:text-amber-50">
+            {shipment.handling.note}
+          </div>
+
+          <Separator className="bg-amber-800 dark:bg-amber-50" />
+
+          <div className="flex flex-wrap gap-2">
+            {shipment.handling.tags.map(({ icon: TagIcon, label }) => (
+              <Badge
+                className="rounded-sm border-amber-200 bg-background/50 text-amber-900 dark:border-amber-900 dark:text-amber-50"
+                key={label}
+                variant="outline"
+              >
+                <TagIcon data-icon="inline-start" />
+                {label}
+              </Badge>
+            ))}
+          </div>
+        </AlertDescription>
+      </Alert>
     </div>
   );
 }
@@ -194,7 +203,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
 export function ShipmentDetails({ shipment }: ShipmentDetailsProps) {
   if (!shipment) {
     return (
-      <div className="grid h-full min-h-0 grid-rows-[420px_1fr] overflow-hidden">
+      <div className="grid h-full min-h-0 grid-rows-[320px_1fr] overflow-hidden lg:grid-rows-[420px_1fr]">
         <div className="min-h-0 overflow-hidden">
           <ShipmentRouteMap shipment={null} />
         </div>
@@ -206,14 +215,17 @@ export function ShipmentDetails({ shipment }: ShipmentDetailsProps) {
   }
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-[420px_1fr] overflow-hidden">
+    <div className="grid h-full min-h-0 grid-rows-[320px_1fr] overflow-hidden lg:grid-rows-[420px_1fr]">
       <div className="min-h-0 overflow-hidden">
         <ShipmentRouteMap shipment={shipment} />
       </div>
       <div className="min-h-0 overflow-hidden">
         <div className="h-full min-h-0 py-2">
           <Tabs defaultValue="overview" className="h-full gap-0">
-            <TabsList className="w-full justify-start gap-4 border-b px-4" variant="line">
+            <TabsList
+              className="w-full justify-start gap-2 border-b px-4 **:data-[slot=tabs-trigger]:text-xs sm:gap-4 sm:**:data-[slot=tabs-trigger]:text-sm"
+              variant="line"
+            >
               <TabsTrigger className="flex-none" value="overview">
                 Overview
               </TabsTrigger>
