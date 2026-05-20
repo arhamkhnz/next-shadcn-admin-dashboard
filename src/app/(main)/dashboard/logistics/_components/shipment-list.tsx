@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-import type { Shipment } from "./data";
+import type { Shipment } from "./shipment-data";
 
 const modeIcons = {
   air: Plane,
@@ -38,7 +38,7 @@ type ShipmentCardProps = {
   shipment: Shipment;
 };
 
-type ShipmentsPanelProps = {
+type ShipmentListProps = {
   onSelectShipment: (shipmentId: Shipment["id"]) => void;
   selectedShipmentId: Shipment["id"] | null;
   shipments: Shipment[];
@@ -129,7 +129,7 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
   );
 }
 
-export function ShipmentsPanel({ shipments, selectedShipmentId, onSelectShipment }: ShipmentsPanelProps) {
+export function ShipmentList({ shipments, selectedShipmentId, onSelectShipment }: ShipmentListProps) {
   return (
     <Card className="h-full rounded-none ring-0">
       <CardHeader>

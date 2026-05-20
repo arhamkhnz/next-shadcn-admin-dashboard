@@ -1,4 +1,24 @@
-import { BriefcaseBusiness, Package, ThermometerSun, Truck, Weight } from "lucide-react";
+import {
+  AlertTriangleIcon,
+  ArrowUp,
+  Ban,
+  BriefcaseBusiness,
+  CheckCircle2,
+  Droplets,
+  Flame,
+  Forklift,
+  type LucideIcon,
+  Package,
+  PackageCheck,
+  PenLine,
+  ShieldCheck,
+  Snowflake,
+  Star,
+  Thermometer,
+  ThermometerSun,
+  Truck,
+  Weight,
+} from "lucide-react";
 
 export type ShipmentStatus =
   | "Scheduled"
@@ -11,6 +31,7 @@ export type ShipmentStatus =
 
 export type TransportMode = "land" | "air" | "sea";
 export type RouteType = "road" | "flight" | "ship";
+export type CustomerTier = "Priority" | "Standard" | "Non-priority";
 
 export type GeoCoordinate = [longitude: number, latitude: number];
 
@@ -21,12 +42,32 @@ export type ShipmentLocation = {
   countryCode: string;
 };
 
+export type ShipmentCustomer = {
+  name: string;
+  initials: string;
+  id: string;
+  tier: CustomerTier;
+  tierLabel: string;
+};
+
+export type HandlingTag = {
+  label: string;
+  icon: LucideIcon;
+};
+
+export type ShipmentHandling = {
+  label: string;
+  note: string;
+  tags: HandlingTag[];
+};
+
 export type Shipment = {
   id: string;
+  customer: ShipmentCustomer;
   origin: ShipmentLocation;
   destination: ShipmentLocation;
   cargo: string;
-  handling: string;
+  handling: ShipmentHandling;
   weight: string;
   eta: string;
   etaMeta: string;
@@ -37,9 +78,97 @@ export type Shipment = {
   transportNumber: string;
 };
 
+const customerAccounts = {
+  techCorp: {
+    name: "TechCorp",
+    initials: "TC",
+    id: "SDA-1001-2401-01",
+    tier: "Priority",
+    tierLabel: "Top 1% by shipment volume",
+  },
+  regionalRoadExpress: {
+    name: "Regional Road Express",
+    initials: "RR",
+    id: "SDA-1002-2402-02",
+    tier: "Priority",
+    tierLabel: "Top 1% by shipment volume",
+  },
+  sendWell: {
+    name: "SendWell B.V.",
+    initials: "SW",
+    id: "SDA-1003-2403-03",
+    tier: "Priority",
+    tierLabel: "Top 1% by shipment volume",
+  },
+  sourceDay: {
+    name: "SourceDay",
+    initials: "SD",
+    id: "SDA-1004-2404-04",
+    tier: "Standard",
+    tierLabel: "Recurring shipment account",
+  },
+  shippingEasy: {
+    name: "ShippingEasy",
+    initials: "SE",
+    id: "SDA-1005-2405-05",
+    tier: "Standard",
+    tierLabel: "Recurring shipment account",
+  },
+  freightView: {
+    name: "FreightView",
+    initials: "FV",
+    id: "SDA-1006-2406-06",
+    tier: "Priority",
+    tierLabel: "Top 1% by shipment volume",
+  },
+  logisticsPlus: {
+    name: "Logistics Plus",
+    initials: "LP",
+    id: "SDA-1007-2407-07",
+    tier: "Standard",
+    tierLabel: "Managed freight account",
+  },
+  transvirtual: {
+    name: "Transvirtual",
+    initials: "TV",
+    id: "SDA-1008-2408-08",
+    tier: "Standard",
+    tierLabel: "Managed freight account",
+  },
+  skyTrack: {
+    name: "SkyTrack",
+    initials: "ST",
+    id: "SDA-1009-2409-09",
+    tier: "Non-priority",
+    tierLabel: "Occasional shipment account",
+  },
+  maersk: {
+    name: "Maersk",
+    initials: "MK",
+    id: "SDA-1010-2410-10",
+    tier: "Priority",
+    tierLabel: "Top 1% by shipment volume",
+  },
+  flexport: {
+    name: "Flexport",
+    initials: "FX",
+    id: "SDA-1011-2411-11",
+    tier: "Priority",
+    tierLabel: "Top 1% by shipment volume",
+  },
+  piedPiper: {
+    name: "Pied Piper",
+    initials: "PP",
+    id: "SDA-1012-2412-12",
+    tier: "Non-priority",
+    tierLabel: "Occasional shipment account",
+  },
+} satisfies Record<string, ShipmentCustomer>;
+
 export const shipments: Shipment[] = [
   {
     id: "SDA-01-2401",
+    customer: customerAccounts.techCorp,
     origin: {
       display: "CGK Airport",
       country: "Indonesia",
@@ -53,7 +182,15 @@ export const shipments: Shipment[] = [
       coordinates: [103.9949824, 1.3510921],
     },
     cargo: "Consumer Electronics",
-    handling: "Fragile electronics",
+    handling: {
+      label: "Fragile electronics",
+      note: "Keep package sealed until handoff.",
+      tags: [
+        { label: "Do not stack", icon: Ban },
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Signature required", icon: PenLine },
+      ],
+    },
     weight: "2,450 kg",
     eta: "08:45 AM",
     etaMeta: "Today",
@@ -65,6 +202,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-02-2402",
+    customer: customerAccounts.regionalRoadExpress,
     origin: {
       display: "Surabaya",
       country: "Indonesia",
@@ -78,7 +216,15 @@ export const shipments: Shipment[] = [
       coordinates: [110.4229104, -6.9903988],
     },
     cargo: "Industrial Machinery",
-    handling: "Heavy machinery",
+    handling: {
+      label: "Heavy machinery",
+      note: "Secure machinery to pallet base before road dispatch.",
+      tags: [
+        { label: "Forklift only", icon: Forklift },
+        { label: "Secure load", icon: ShieldCheck },
+        { label: "Do not tip", icon: Ban },
+      ],
+    },
     weight: "8,120 kg",
     eta: "11:20 AM",
     etaMeta: "Tomorrow",
@@ -90,6 +236,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-03-2403",
+    customer: customerAccounts.sendWell,
     origin: {
       display: "Tanjung Priok Port",
       country: "Indonesia",
@@ -103,7 +250,15 @@ export const shipments: Shipment[] = [
       coordinates: [103.7566, 1.2788],
     },
     cargo: "Frozen Seafood",
-    handling: "Temperature controlled",
+    handling: {
+      label: "Temperature controlled",
+      note: "Maintain frozen chain at or below -18°C until port handoff.",
+      tags: [
+        { label: "Temperature log", icon: Thermometer },
+        { label: "Keep frozen", icon: Snowflake },
+        { label: "Seal intact", icon: ShieldCheck },
+      ],
+    },
     weight: "19,800 kg",
     eta: "09:15 PM",
     etaMeta: "Delivered Yesterday",
@@ -115,6 +270,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-04-2404",
+    customer: customerAccounts.maersk,
     origin: {
       display: "KUL Airport",
       country: "Malaysia",
@@ -128,7 +284,15 @@ export const shipments: Shipment[] = [
       coordinates: [100.7485803, 13.6818767],
     },
     cargo: "Pharmaceutical Kits",
-    handling: "Temperature controlled",
+    handling: {
+      label: "Temperature controlled",
+      note: "Maintain controlled temperature and verify hold clearance before release.",
+      tags: [
+        { label: "Temperature log", icon: Thermometer },
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Signature required", icon: PenLine },
+      ],
+    },
     weight: "540 kg",
     eta: "06:10 PM",
     etaMeta: "Today",
@@ -140,6 +304,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-05-2405",
+    customer: customerAccounts.sourceDay,
     origin: {
       display: "Bandung",
       country: "Indonesia",
@@ -153,7 +318,15 @@ export const shipments: Shipment[] = [
       coordinates: [110.3672845, -7.7953473],
     },
     cargo: "Textiles",
-    handling: "Standard freight",
+    handling: {
+      label: "Standard freight",
+      note: "Keep cartons dry and away from direct sunlight.",
+      tags: [
+        { label: "Keep dry", icon: Droplets },
+        { label: "Do not crush", icon: Ban },
+        { label: "Standard handoff", icon: PackageCheck },
+      ],
+    },
     weight: "1,380 kg",
     eta: "09:30 AM",
     etaMeta: "Friday",
@@ -165,6 +338,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-06-2406",
+    customer: customerAccounts.logisticsPlus,
     origin: {
       display: "Port Klang",
       country: "Malaysia",
@@ -178,7 +352,15 @@ export const shipments: Shipment[] = [
       coordinates: [100.8994177, 13.0734119],
     },
     cargo: "Construction Materials",
-    handling: "Heavy bulk cargo",
+    handling: {
+      label: "Heavy bulk cargo",
+      note: "Load with heavy-lift equipment and secure against shifting.",
+      tags: [
+        { label: "Heavy lift", icon: Forklift },
+        { label: "Secure load", icon: ShieldCheck },
+        { label: "Do not stack", icon: Ban },
+      ],
+    },
     weight: "27,400 kg",
     eta: "03:40 PM",
     etaMeta: "Departing Today",
@@ -190,6 +372,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-07-2407",
+    customer: customerAccounts.flexport,
     origin: {
       display: "HKG Airport",
       country: "Hong Kong",
@@ -203,7 +386,15 @@ export const shipments: Shipment[] = [
       coordinates: [121.0219223, 14.5122467],
     },
     cargo: "Medical Devices",
-    handling: "Sensitive medical equipment",
+    handling: {
+      label: "Sensitive medical equipment",
+      note: "Keep medical devices sealed until customs inspection is complete.",
+      tags: [
+        { label: "Seal intact", icon: ShieldCheck },
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Signature required", icon: PenLine },
+      ],
+    },
     weight: "860 kg",
     eta: "Pending",
     etaMeta: "Customs",
@@ -215,6 +406,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-08-2408",
+    customer: customerAccounts.shippingEasy,
     origin: {
       display: "Jakarta",
       country: "Indonesia",
@@ -228,7 +420,15 @@ export const shipments: Shipment[] = [
       coordinates: [107.6070833, -6.9218457],
     },
     cargo: "Retail Apparel",
-    handling: "Standard freight",
+    handling: {
+      label: "Standard freight",
+      note: "Keep cartons dry and call receiver before final delivery.",
+      tags: [
+        { label: "Keep dry", icon: Droplets },
+        { label: "Call before delivery", icon: Truck },
+        { label: "Standard handoff", icon: PackageCheck },
+      ],
+    },
     weight: "620 kg",
     eta: "02:15 PM",
     etaMeta: "Today",
@@ -240,6 +440,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-09-2409",
+    customer: customerAccounts.freightView,
     origin: {
       display: "Shanghai Port",
       country: "China",
@@ -253,7 +454,15 @@ export const shipments: Shipment[] = [
       coordinates: [129.0492086, 35.1177052],
     },
     cargo: "Auto Parts",
-    handling: "Industrial parts",
+    handling: {
+      label: "Industrial parts",
+      note: "Secure pallets and protect machined surfaces from moisture.",
+      tags: [
+        { label: "Secure load", icon: ShieldCheck },
+        { label: "Keep dry", icon: Droplets },
+        { label: "Forklift only", icon: Forklift },
+      ],
+    },
     weight: "12,200 kg",
     eta: "05:50 PM",
     etaMeta: "Wednesday",
@@ -265,6 +474,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-10-2410",
+    customer: customerAccounts.techCorp,
     origin: {
       display: "NRT Airport",
       country: "Japan",
@@ -278,7 +488,15 @@ export const shipments: Shipment[] = [
       coordinates: [126.4417093, 37.4634593],
     },
     cargo: "Semiconductor Wafers",
-    handling: "High-value fragile cargo",
+    handling: {
+      label: "High-value fragile cargo",
+      note: "Keep wafers sealed in shock-protected packaging until signed handoff.",
+      tags: [
+        { label: "Do not stack", icon: Ban },
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Signature required", icon: PenLine },
+      ],
+    },
     weight: "320 kg",
     eta: "08:30 PM",
     etaMeta: "Delivered Yesterday",
@@ -290,6 +508,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-11-2411",
+    customer: customerAccounts.sourceDay,
     origin: {
       display: "Kuala Lumpur",
       country: "Malaysia",
@@ -303,7 +522,15 @@ export const shipments: Shipment[] = [
       coordinates: [100.3287352, 5.4141619],
     },
     cargo: "Food Ingredients",
-    handling: "Food-grade handling",
+    handling: {
+      label: "Food-grade handling",
+      note: "Keep food-grade seals intact and avoid cross-contamination.",
+      tags: [
+        { label: "Food grade", icon: PackageCheck },
+        { label: "Seal intact", icon: ShieldCheck },
+        { label: "Keep dry", icon: Droplets },
+      ],
+    },
     weight: "3,950 kg",
     eta: "01:05 PM",
     etaMeta: "Today",
@@ -315,6 +542,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-12-2412",
+    customer: customerAccounts.transvirtual,
     origin: {
       display: "Cebu Port",
       country: "Philippines",
@@ -328,7 +556,15 @@ export const shipments: Shipment[] = [
       coordinates: [125.6627111, 7.1265272],
     },
     cargo: "Agricultural Produce",
-    handling: "Perishable goods",
+    handling: {
+      label: "Perishable goods",
+      note: "Prioritize ventilation and inspect produce condition at port handoff.",
+      tags: [
+        { label: "Perishable", icon: Thermometer },
+        { label: "Ventilated hold", icon: PackageCheck },
+        { label: "Inspect on arrival", icon: CheckCircle2 },
+      ],
+    },
     weight: "6,700 kg",
     eta: "09:40 AM",
     etaMeta: "Friday",
@@ -340,6 +576,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-13-2413",
+    customer: customerAccounts.flexport,
     origin: {
       display: "SIN Airport",
       country: "Singapore",
@@ -353,7 +590,15 @@ export const shipments: Shipment[] = [
       coordinates: [115.1673704, -8.746515],
     },
     cargo: "Luxury Retail Goods",
-    handling: "High-value cargo",
+    handling: {
+      label: "High-value cargo",
+      note: "Keep cartons sealed; release only to authorized receiving contact.",
+      tags: [
+        { label: "High value", icon: Star },
+        { label: "Do not stack", icon: Ban },
+        { label: "Signature required", icon: PenLine },
+      ],
+    },
     weight: "210 kg",
     eta: "07:15 AM",
     etaMeta: "Monday",
@@ -365,6 +610,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-14-2414",
+    customer: customerAccounts.sendWell,
     origin: {
       display: "Port of Manila",
       country: "Philippines",
@@ -378,7 +624,15 @@ export const shipments: Shipment[] = [
       coordinates: [106.8805674, -6.1045642],
     },
     cargo: "Paper Rolls",
-    handling: "Moisture-sensitive cargo",
+    handling: {
+      label: "Moisture-sensitive cargo",
+      note: "Keep rolls dry and avoid edge impact during unloading.",
+      tags: [
+        { label: "Keep dry", icon: Droplets },
+        { label: "Do not tip", icon: Ban },
+        { label: "Forklift only", icon: Forklift },
+      ],
+    },
     weight: "15,900 kg",
     eta: "Awaiting Release",
     etaMeta: "Warehouse",
@@ -390,6 +644,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-15-2415",
+    customer: customerAccounts.skyTrack,
     origin: {
       display: "Medan",
       country: "Indonesia",
@@ -403,7 +658,15 @@ export const shipments: Shipment[] = [
       coordinates: [101.4515727, 0.5262455],
     },
     cargo: "Beverage Stock",
-    handling: "Standard palletized freight",
+    handling: {
+      label: "Standard palletized freight",
+      note: "Keep pallets upright and prevent carton crush during road transfer.",
+      tags: [
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Do not stack", icon: Ban },
+        { label: "Standard handoff", icon: PackageCheck },
+      ],
+    },
     weight: "4,500 kg",
     eta: "03:30 PM",
     etaMeta: "Today",
@@ -415,6 +678,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-16-2416",
+    customer: customerAccounts.regionalRoadExpress,
     origin: {
       display: "BOM Airport",
       country: "India",
@@ -428,7 +692,15 @@ export const shipments: Shipment[] = [
       coordinates: [77.0847985, 28.5553942],
     },
     cargo: "Auto Components",
-    handling: "Industrial parts",
+    handling: {
+      label: "Industrial parts",
+      note: "Secure crates and inspect pallet straps before final handoff.",
+      tags: [
+        { label: "Secure load", icon: ShieldCheck },
+        { label: "Forklift only", icon: Forklift },
+        { label: "Inspect on arrival", icon: CheckCircle2 },
+      ],
+    },
     weight: "780 kg",
     eta: "04:10 PM",
     etaMeta: "Today",
@@ -440,6 +712,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-17-2417",
+    customer: customerAccounts.logisticsPlus,
     origin: {
       display: "Rotterdam Port",
       country: "Netherlands",
@@ -453,7 +726,15 @@ export const shipments: Shipment[] = [
       coordinates: [9.9118353, 53.5279971],
     },
     cargo: "Packaging Materials",
-    handling: "Standard freight",
+    handling: {
+      label: "Standard freight",
+      note: "Keep pallets dry and verify pallet count at discharge.",
+      tags: [
+        { label: "Keep dry", icon: Droplets },
+        { label: "Count on arrival", icon: CheckCircle2 },
+        { label: "Standard handoff", icon: PackageCheck },
+      ],
+    },
     weight: "21,300 kg",
     eta: "Next Week",
     etaMeta: "Tuesday",
@@ -465,6 +746,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-18-2418",
+    customer: customerAccounts.transvirtual,
     origin: {
       display: "Ho Chi Minh City",
       country: "Vietnam",
@@ -478,7 +760,15 @@ export const shipments: Shipment[] = [
       coordinates: [108.212, 16.068],
     },
     cargo: "Household Appliances",
-    handling: "Fragile bulky goods",
+    handling: {
+      label: "Fragile bulky goods",
+      note: "Use two-person handling and keep appliances upright until delivery.",
+      tags: [
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Do not stack", icon: Ban },
+        { label: "Two-person lift", icon: Truck },
+      ],
+    },
     weight: "2,060 kg",
     eta: "11:40 AM",
     etaMeta: "Delivered Today",
@@ -490,6 +780,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-19-2419",
+    customer: customerAccounts.maersk,
     origin: {
       display: "DXB Airport",
       country: "United Arab Emirates",
@@ -503,7 +794,15 @@ export const shipments: Shipment[] = [
       coordinates: [39.1634852, 21.6839754],
     },
     cargo: "Temperature Controlled Goods",
-    handling: "Temperature controlled",
+    handling: {
+      label: "Temperature controlled",
+      note: "Maintain temperature range and escalate delay exceptions immediately.",
+      tags: [
+        { label: "Temperature log", icon: Thermometer },
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Escalate delay", icon: AlertTriangleIcon },
+      ],
+    },
     weight: "1,120 kg",
     eta: "10:50 PM",
     etaMeta: "Tonight",
@@ -515,6 +814,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-20-2420",
+    customer: customerAccounts.freightView,
     origin: {
       display: "Nhava Sheva Port",
       country: "India",
@@ -528,7 +828,15 @@ export const shipments: Shipment[] = [
       coordinates: [79.8564409, 6.9646289],
     },
     cargo: "Steel Coils",
-    handling: "Heavy bulk cargo",
+    handling: {
+      label: "Heavy bulk cargo",
+      note: "Use coil cradles and confirm lashings before release.",
+      tags: [
+        { label: "Heavy lift", icon: Forklift },
+        { label: "Secure load", icon: ShieldCheck },
+        { label: "Do not tip", icon: Ban },
+      ],
+    },
     weight: "31,800 kg",
     eta: "06:00 AM",
     etaMeta: "Thursday",
@@ -540,6 +848,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-21-2421",
+    customer: customerAccounts.piedPiper,
     origin: {
       display: "Chiang Mai",
       country: "Thailand",
@@ -553,7 +862,15 @@ export const shipments: Shipment[] = [
       coordinates: [100.4935089, 13.7524938],
     },
     cargo: "Furniture",
-    handling: "Fragile bulky goods",
+    handling: {
+      label: "Fragile bulky goods",
+      note: "Use blanket wrap and avoid stacking on finished surfaces.",
+      tags: [
+        { label: "Do not stack", icon: Ban },
+        { label: "Keep dry", icon: Droplets },
+        { label: "Two-person lift", icon: Truck },
+      ],
+    },
     weight: "5,240 kg",
     eta: "08:20 AM",
     etaMeta: "Tomorrow",
@@ -565,6 +882,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-22-2422",
+    customer: customerAccounts.techCorp,
     origin: {
       display: "KIX Airport",
       country: "Japan",
@@ -578,7 +896,15 @@ export const shipments: Shipment[] = [
       coordinates: [121.2345977, 25.0793174],
     },
     cargo: "Precision Tools",
-    handling: "High-value precision cargo",
+    handling: {
+      label: "High-value precision cargo",
+      note: "Keep locked case sealed pending security clearance.",
+      tags: [
+        { label: "Security hold", icon: ShieldCheck },
+        { label: "Seal intact", icon: ShieldCheck },
+        { label: "Signature required", icon: PenLine },
+      ],
+    },
     weight: "430 kg",
     eta: "Pending",
     etaMeta: "Security",
@@ -590,6 +916,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-23-2423",
+    customer: customerAccounts.maersk,
     origin: {
       display: "Port of Singapore",
       country: "Singapore",
@@ -603,7 +930,15 @@ export const shipments: Shipment[] = [
       coordinates: [101.3913589, 2.9996963],
     },
     cargo: "Chemicals",
-    handling: "Hazardous materials review",
+    handling: {
+      label: "Hazardous materials review",
+      note: "Hold pending hazardous materials review and port clearance.",
+      tags: [
+        { label: "Hazmat review", icon: Flame },
+        { label: "Keep upright", icon: ArrowUp },
+        { label: "Restricted handling", icon: ShieldCheck },
+      ],
+    },
     weight: "18,600 kg",
     eta: "Departing",
     etaMeta: "02:50 PM",
@@ -615,6 +950,7 @@ export const shipments: Shipment[] = [
   },
   {
     id: "SDA-24-2424",
+    customer: customerAccounts.shippingEasy,
     origin: {
       display: "Bandar Lampung",
       country: "Indonesia",
@@ -628,7 +964,15 @@ export const shipments: Shipment[] = [
       coordinates: [106.827168, -6.1754049],
     },
     cargo: "Fresh Produce",
-    handling: "Perishable goods",
+    handling: {
+      label: "Perishable goods",
+      note: "Prioritize same-day handoff and keep produce ventilated.",
+      tags: [
+        { label: "Perishable", icon: Thermometer },
+        { label: "Ventilated hold", icon: PackageCheck },
+        { label: "Inspect on arrival", icon: CheckCircle2 },
+      ],
+    },
     weight: "970 kg",
     eta: "06:20 PM",
     etaMeta: "Delivered Today",

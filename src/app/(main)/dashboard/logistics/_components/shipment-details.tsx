@@ -1,13 +1,15 @@
-import { Copy, Plane, Ship, Truck } from "lucide-react";
+import { AlertTriangleIcon, Copy, Plane, Ship, Star, Truck } from "lucide-react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
-import type { Shipment } from "./data";
-import { RouteMap } from "./route-map";
+import type { Shipment } from "./shipment-data";
+import { ShipmentRouteMap } from "./shipment-route-map";
 
 const modeIcons = {
   air: Plane,
@@ -15,7 +17,27 @@ const modeIcons = {
   sea: Ship,
 } as const;
 
-type MainPanelProps = {
+const progressRingClasses: Record<Shipment["status"], string> = {
+  Scheduled: "text-muted-foreground",
+  "In Transit": "text-primary",
+  "Out for Delivery": "text-primary",
+  Delivered: "text-green-600",
+  Delayed: "text-destructive",
+  "On Hold": "text-amber-500",
+  "Customs Hold": "text-amber-500",
+};
+
+const statusBadgeClasses: Record<Shipment["status"], string> = {
+  Scheduled: "border-muted bg-muted/50 text-muted-foreground",
+  "In Transit": "border-primary/20 bg-primary/10 text-primary",
+  "Out for Delivery": "border-primary/20 bg-primary/10 text-primary",
+  Delivered: "border-green-600/20 bg-green-600/10 text-green-600",
+  Delayed: "border-destructive/20 bg-destructive/10 text-destructive",
+  "On Hold": "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  "Customs Hold": "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+};
+
+type ShipmentDetailsProps = {
   shipment: Shipment | null;
 };
 
@@ -67,12 +89,15 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
         </div>
 
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">{shipment.status}</span>
+          <Badge variant="outline" className={cn("gap-1.5", statusBadgeClasses[shipment.status])}>
+            <span className={cn("size-1.5 rounded-full bg-current", progressRingClasses[shipment.status])} />
+            {shipment.status}
+          </Badge>
           <span className="text-muted-foreground">·</span>
-          <span className="text-muted-foreground">{shipment.progress}% complete</span>
+          <span className="text-foreground tabular-nums">{shipment.progress}% complete</span>
           <span className="text-muted-foreground">·</span>
-          <span className="text-muted-foreground">
-            ETA {shipment.eta} {shipment.etaMeta}
+          <span className="text-foreground tabular-nums">
+            ETA: {shipment.eta} {shipment.etaMeta}
           </span>
         </div>
       </div>
@@ -82,21 +107,24 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="size-9 after:rounded-sm">
-            <AvatarFallback className="rounded-sm">A</AvatarFallback>
+            <AvatarFallback className="rounded-sm">{shipment.customer.initials}</AvatarFallback>
           </Avatar>
 
           <div className="flex flex-col gap-1">
-            <div className="font-medium text-sm leading-none">Arham Khan</div>
+            <div className="font-medium text-sm leading-none">{shipment.customer.name}</div>
             <div className="flex items-center gap-2 text-muted-foreground">
-              <span className="text-xs tabular-nums leading-none tracking-tight">SDA-XXXX-XXXXX-XX</span>{" "}
+              <span className="text-xs tabular-nums leading-none tracking-tight">{shipment.customer.id}</span>{" "}
               <Copy className="size-3" />
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary">Priority account</Badge>
-          <Badge variant="outline">Call before delivery</Badge>
+        <div className="flex flex-col items-end gap-1">
+          <Badge variant="secondary">
+            <Star />
+            {shipment.customer.tier}
+          </Badge>
+          <div className="text-muted-foreground text-xs leading-none">{shipment.customer.tierLabel}</div>
         </div>
       </div>
 
@@ -134,23 +162,41 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-[1.35fr_1fr_1.1fr_1fr_1fr] gap-x-4 pt-2">
-          <div className="whitespace-nowrap text-sm leading-none">Handling instructions</div>
-          <div className="col-span-4 text-muted-foreground text-sm leading-none">
-            {shipment.handling}. Keep package sealed until handoff.
-          </div>
-        </div>
+        <Alert className="border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
+          <AlertTriangleIcon />
+          <AlertTitle>{shipment.handling.label}</AlertTitle>
+          <AlertDescription className="space-y-2">
+            <div className="border-amber-900 text-amber-900 leading-none dark:border-amber-50 dark:text-amber-50">
+              {shipment.handling.note}
+            </div>
+
+            <Separator className="bg-amber-800 dark:bg-amber-50" />
+
+            <div className="flex flex-wrap gap-2">
+              {shipment.handling.tags.map(({ icon: TagIcon, label }) => (
+                <Badge
+                  className="rounded-sm border-amber-200 bg-background/50 text-amber-900 dark:border-amber-900 dark:text-amber-50"
+                  key={label}
+                  variant="outline"
+                >
+                  <TagIcon data-icon="inline-start" />
+                  {label}
+                </Badge>
+              ))}
+            </div>
+          </AlertDescription>
+        </Alert>
       </div>
     </div>
   );
 }
 
-export function MainPanel({ shipment }: MainPanelProps) {
+export function ShipmentDetails({ shipment }: ShipmentDetailsProps) {
   if (!shipment) {
     return (
-      <div className="grid h-full min-h-0 grid-rows-2 overflow-hidden">
+      <div className="grid h-full min-h-0 grid-rows-[420px_1fr] overflow-hidden">
         <div className="min-h-0 overflow-hidden">
-          <RouteMap shipment={null} />
+          <ShipmentRouteMap shipment={null} />
         </div>
         <div className="min-h-0 overflow-hidden p-4">
           <EmptyShipmentOverview />
@@ -160,9 +206,9 @@ export function MainPanel({ shipment }: MainPanelProps) {
   }
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-2 overflow-hidden">
+    <div className="grid h-full min-h-0 grid-rows-[420px_1fr] overflow-hidden">
       <div className="min-h-0 overflow-hidden">
-        <RouteMap shipment={shipment} />
+        <ShipmentRouteMap shipment={shipment} />
       </div>
       <div className="min-h-0 overflow-hidden">
         <div className="h-full min-h-0 py-2">

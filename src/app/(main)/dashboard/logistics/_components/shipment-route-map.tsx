@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { type GeoPermissibleObjects, geoMercator, geoPath } from "d3-geo";
 import { feature, mesh } from "topojson-client";
 
-import type { GeoCoordinate, Shipment } from "./data";
+import type { GeoCoordinate, Shipment } from "./shipment-data";
 
 type WorldTopology = {
   objects: {
@@ -74,11 +74,11 @@ function createSnapshotFrame(shipment: Shipment): GeoJSON.LineString {
   };
 }
 
-type RouteMapProps = {
+type ShipmentRouteMapProps = {
   shipment: Shipment | null;
 };
 
-export function RouteMap({ shipment }: RouteMapProps) {
+export function ShipmentRouteMap({ shipment }: ShipmentRouteMapProps) {
   const [borders, setBorders] = useState<GeoJSON.MultiLineString | null>(null);
   const [land, setLand] = useState<GeoJSON.FeatureCollection | null>(null);
 
