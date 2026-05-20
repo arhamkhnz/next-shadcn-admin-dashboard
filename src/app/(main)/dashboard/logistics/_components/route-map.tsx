@@ -2,55 +2,115 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { type GeoPermissibleObjects, geoEqualEarth, geoGraticule, geoInterpolate, geoPath } from "d3-geo";
-import { ArrowRight, Expand, LocateFixed, RefreshCw, SlidersHorizontal } from "lucide-react";
-import { feature } from "topojson-client";
+import { type GeoPermissibleObjects, geoMercator, geoPath } from "d3-geo";
+import { feature, mesh } from "topojson-client";
 
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-
-import { StatusBadge } from "./status-badge";
+import type { GeoCoordinate, Shipment } from "./data";
 
 type WorldTopology = {
-  type: "Topology";
   objects: {
     countries: unknown;
+    land: unknown;
   };
+  type: "Topology";
 };
 
+type RoutePoint = {
+  coordinates: GeoCoordinate;
+  country: string;
+  label: string;
+};
+
+type ProjectedRoutePoint = RoutePoint & {
+  point: [number, number] | null;
+};
+
+const WORLD_ATLAS_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 const WIDTH = 1000;
 const HEIGHT = 520;
-const origin: [number, number] = [106.8456, -6.2088];
-const destination: [number, number] = [103.8198, 1.3521];
+const SNAPSHOT_PADDING = 72;
+const ROUTE_CONTEXT_SCALE = 1.85;
+const MIN_LONGITUDE_SPAN = 10;
+const MIN_LATITUDE_SPAN = 8;
 
-function createRoutePoints(from: [number, number], to: [number, number], steps = 48) {
-  const interpolate = geoInterpolate(from, to);
-  return Array.from({ length: steps + 1 }, (_, index) => interpolate(index / steps));
+function roundCoordinate(value: number) {
+  return Number(value.toFixed(3));
 }
 
-function SmallMetric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="px-4 first:pl-0 last:pr-0">
-      <div className="text-muted-foreground text-sm">{label}</div>
-      <div className="mt-1 font-medium tabular-nums">{value}</div>
-    </div>
+function createRouteLine(shipment: Shipment): GeoJSON.LineString {
+  return {
+    type: "LineString",
+    coordinates: [shipment.origin.coordinates, shipment.destination.coordinates],
+  };
+}
+
+function createSnapshotFrame(shipment: Shipment): GeoJSON.LineString {
+  const [originLongitude, originLatitude] = shipment.origin.coordinates;
+  const [destinationLongitude, destinationLatitude] = shipment.destination.coordinates;
+  const centerLongitude = (originLongitude + destinationLongitude) / 2;
+  const centerLatitude = (originLatitude + destinationLatitude) / 2;
+  const longitudeSpan = Math.max(
+    Math.abs(destinationLongitude - originLongitude) * ROUTE_CONTEXT_SCALE,
+    MIN_LONGITUDE_SPAN,
   );
+  const latitudeSpan = Math.max(
+    Math.abs(destinationLatitude - originLatitude) * ROUTE_CONTEXT_SCALE,
+    MIN_LATITUDE_SPAN,
+  );
+  const west = centerLongitude - longitudeSpan / 2;
+  const east = centerLongitude + longitudeSpan / 2;
+  const south = centerLatitude - latitudeSpan / 2;
+  const north = centerLatitude + latitudeSpan / 2;
+
+  return {
+    type: "LineString",
+    coordinates: [
+      [west, south],
+      [east, south],
+      [east, north],
+      [west, north],
+      [west, south],
+    ],
+  };
 }
 
-export function RouteMap() {
-  const [countries, setCountries] = useState<GeoJSON.Feature[]>([]);
+type RouteMapProps = {
+  shipment: Shipment | null;
+};
+
+export function RouteMap({ shipment }: RouteMapProps) {
+  const [borders, setBorders] = useState<GeoJSON.MultiLineString | null>(null);
+  const [land, setLand] = useState<GeoJSON.FeatureCollection | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     async function loadMap() {
-      const response = await fetch("/features.json");
-      const topology = (await response.json()) as WorldTopology;
-      const collection = feature(
-        topology as unknown as Parameters<typeof feature>[0],
-        topology.objects.countries as unknown as Parameters<typeof feature>[1],
-      ) as GeoJSON.FeatureCollection;
-      if (!cancelled) setCountries(collection.features);
+      try {
+        const response = await fetch(WORLD_ATLAS_URL);
+
+        if (!response.ok) {
+          throw new Error(`Failed to load world atlas: ${response.status}`);
+        }
+
+        const topology = (await response.json()) as WorldTopology;
+        const landCollection = feature(
+          topology as unknown as Parameters<typeof feature>[0],
+          topology.objects.land as unknown as Parameters<typeof feature>[1],
+        ) as GeoJSON.FeatureCollection;
+        const countryBorders = mesh(
+          topology as unknown as Parameters<typeof mesh>[0],
+          topology.objects.countries as unknown as Parameters<typeof mesh>[1],
+          (a, b) => a !== b,
+        ) as GeoJSON.MultiLineString;
+
+        if (!cancelled) {
+          setBorders(countryBorders);
+          setLand(landCollection);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     void loadMap();
@@ -60,88 +120,101 @@ export function RouteMap() {
     };
   }, []);
 
-  const { graticulePath, path, projectedDestination, projectedOrigin, routePath } = useMemo(() => {
-    const projection = geoEqualEarth()
-      .scale(1020)
-      .center([107, -2.5])
-      .translate([WIDTH / 2, HEIGHT / 2]);
+  const { path, routePath, routePoints } = useMemo(() => {
+    const routeLine = shipment ? createRouteLine(shipment) : null;
+    const projection = geoMercator();
+
+    if (shipment) {
+      projection.fitExtent(
+        [
+          [SNAPSHOT_PADDING, SNAPSHOT_PADDING],
+          [WIDTH - SNAPSHOT_PADDING, HEIGHT - SNAPSHOT_PADDING],
+        ],
+        createSnapshotFrame(shipment) as GeoPermissibleObjects,
+      );
+    } else {
+      projection
+        .center([102, 17])
+        .scale(760)
+        .translate([WIDTH / 2, HEIGHT / 2]);
+    }
+
     const pathGenerator = geoPath(projection);
-    const route = {
-      type: "LineString",
-      coordinates: createRoutePoints(origin, destination),
-    } satisfies GeoJSON.LineString;
+
+    function projectPoint(routePoint: RoutePoint): ProjectedRoutePoint {
+      const point = projection(routePoint.coordinates);
+
+      return {
+        ...routePoint,
+        point: point ? [roundCoordinate(point[0]), roundCoordinate(point[1])] : null,
+      };
+    }
 
     return {
-      graticulePath: pathGenerator(geoGraticule().step([2, 2])()) ?? "",
       path: pathGenerator,
-      projectedDestination: projection(destination),
-      projectedOrigin: projection(origin),
-      routePath: pathGenerator(route) ?? "",
+      routePath: routeLine ? pathGenerator(routeLine as GeoPermissibleObjects) : null,
+      routePoints: shipment
+        ? [
+            projectPoint({
+              coordinates: shipment.origin.coordinates,
+              country: shipment.origin.country,
+              label: "Origin",
+            }),
+            projectPoint({
+              coordinates: shipment.destination.coordinates,
+              country: shipment.destination.country,
+              label: "Destination",
+            }),
+          ]
+        : [],
     };
-  }, []);
+  }, [shipment]);
 
   return (
-    <div className="relative h-full overflow-hidden bg-muted/20">
+    <div className="size-full min-h-0 overflow-hidden bg-[#d4dadc] dark:bg-[#2C353C]">
       <svg
-        aria-label="Shipment route map"
-        className="absolute inset-0 size-full"
+        aria-label="Southeast Asia shipment region map"
+        className="block size-full bg-[#d4dadc] dark:bg-[#2C353C]"
         role="img"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+        preserveAspectRatio="xMidYMid meet"
       >
-        <path d={graticulePath} fill="none" stroke="var(--border)" strokeWidth={0.7} />
-        {countries.map((country) => (
+        <rect height={HEIGHT} width={WIDTH} className="fill-[#d4dadc] dark:fill-[#2C353C]" />
+        {land && (
           <path
-            key={String(country.id ?? country.properties?.name)}
-            d={path(country as GeoPermissibleObjects) ?? undefined}
-            fill="var(--muted)"
-            stroke="var(--background)"
-            strokeWidth={0.55}
+            d={path(land as GeoPermissibleObjects) ?? undefined}
+            className="fill-[#fafaf8] dark:fill-[#0e0e0e]"
+            stroke="#f0dddd"
+            strokeWidth={0.8}
           />
-        ))}
-        <path d={routePath} fill="none" stroke="var(--primary)" strokeLinecap="round" strokeWidth={5} />
-        {[projectedOrigin, projectedDestination].map((point, index) =>
+        )}
+        {borders && (
+          <path
+            d={path(borders as GeoPermissibleObjects) ?? undefined}
+            className="fill-none stroke-[#ebd6d8] dark:stroke-[#2C353C]"
+          />
+        )}
+        {routePath && (
+          <path
+            d={routePath}
+            className="fill-none stroke-primary"
+            strokeDasharray="8 8"
+            strokeLinecap="round"
+            strokeWidth={3}
+          />
+        )}
+        {routePoints.map(({ country, label, point }) =>
           point ? (
-            <g key={index === 0 ? "origin" : "destination"} transform={`translate(${point[0]}, ${point[1]})`}>
-              <circle r={24} fill="var(--primary)" opacity={0.12} />
-              <circle r={9} fill="var(--background)" stroke="var(--primary)" strokeWidth={3} />
+            <g key={label} transform={`translate(${point[0]}, ${point[1]})`}>
+              <circle className="fill-background stroke-primary" r={8} strokeWidth={3} />
+              <circle className="fill-primary" r={3} />
+              <text className="fill-foreground font-medium text-[10px]" dy={-14} textAnchor="middle">
+                {country}
+              </text>
             </g>
           ) : null,
         )}
       </svg>
-      <div className="absolute top-8 left-8 w-92 rounded-xl border bg-card p-4 shadow-xl">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="font-medium text-xl tracking-tight">NXR-2026-0712</div>
-            <div className="mt-2 text-muted-foreground text-sm">
-              Jakarta, IDN <ArrowRight className="inline size-3" /> Singapore, SGP
-            </div>
-          </div>
-          <StatusBadge status="In Transit" />
-        </div>
-        <Separator className="my-4" />
-        <div className="grid grid-cols-3 divide-x">
-          <SmallMetric label="Distance" value="1,128 km" />
-          <SmallMetric label="Progress" value="65%" />
-          <SmallMetric label="ETA" value="08:45 AM" />
-        </div>
-      </div>
-      <div className="absolute top-8 right-8 flex items-center gap-2">
-        <Button variant="outline">Live Updates</Button>
-        <Button size="icon" variant="outline">
-          <RefreshCw />
-        </Button>
-        <Button size="icon" variant="outline">
-          <SlidersHorizontal />
-        </Button>
-        <Button size="icon" variant="outline">
-          <Expand />
-        </Button>
-      </div>
-      <div className="absolute top-32 right-8 flex flex-col overflow-hidden rounded-xl border bg-card">
-        <Button size="icon" variant="ghost" className="rounded-none">
-          <LocateFixed />
-        </Button>
-      </div>
     </div>
   );
 }

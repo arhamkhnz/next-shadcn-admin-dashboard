@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-import { type Shipment, shipments } from "./data";
+import type { Shipment } from "./data";
 
 const modeIcons = {
   air: Plane,
@@ -32,12 +32,36 @@ function getProgressRingClass(status: Shipment["status"]) {
   );
 }
 
-function ShipmentCard({ shipment, active }: { shipment: Shipment; active?: boolean }) {
+type ShipmentCardProps = {
+  active?: boolean;
+  onSelectShipment: (shipmentId: Shipment["id"]) => void;
+  shipment: Shipment;
+};
+
+type ShipmentsPanelProps = {
+  onSelectShipment: (shipmentId: Shipment["id"]) => void;
+  selectedShipmentId: Shipment["id"] | null;
+  shipments: Shipment[];
+};
+
+function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps) {
   const angle = (shipment.progress / 100) * 360;
   const Icon = modeIcons[shipment.mode];
 
   return (
-    <div className={cn("flex flex-col gap-5 rounded-xl border p-3", active && "border-2 border-primary bg-muted/50")}>
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={(event) => {
+        event.currentTarget.blur();
+        onSelectShipment(shipment.id);
+      }}
+      className={cn(
+        "flex w-full flex-col gap-5 rounded-xl border p-3 text-left transition-colors",
+        "hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        active && "border-primary bg-muted/50",
+      )}
+    >
       <div className="flex items-center justify-between">
         <div>#{shipment.id}</div>
 
@@ -56,7 +80,7 @@ function ShipmentCard({ shipment, active }: { shipment: Shipment; active?: boole
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <div className={cn(`flag:${shipment.origin.countryCode.toUpperCase()}`, "rounded-xs text-3xl")} />
+          <div className={cn(`flag:${shipment.origin.countryCode.toUpperCase()}`, "rounded-xs text-3xl outline")} />
           <div className="flex flex-col gap-0.5">
             <div className="font-medium text-xs leading-none">{shipment.origin.country},</div>
             <div className="text-muted-foreground text-xs">{shipment.origin.display}</div>
@@ -68,7 +92,9 @@ function ShipmentCard({ shipment, active }: { shipment: Shipment; active?: boole
             <div className="font-medium text-xs leading-none">{shipment.destination.country},</div>
             <div className="text-muted-foreground text-xs">{shipment.destination.display}</div>
           </div>
-          <div className={cn(`flag:${shipment.destination.countryCode.toUpperCase()}`, "rounded-xs text-3xl")} />
+          <div
+            className={cn(`flag:${shipment.destination.countryCode.toUpperCase()}`, "rounded-xs text-3xl outline")}
+          />
         </div>
       </div>
 
@@ -77,7 +103,7 @@ function ShipmentCard({ shipment, active }: { shipment: Shipment; active?: boole
           className="h-px min-w-0 border-foreground border-t border-dashed"
           style={{ flexGrow: shipment.progress, flexBasis: 0 }}
         />
-        <Icon className="size-3.5" />
+        <Icon className={cn("size-3.5", shipment.mode === "air" && "rotate-45")} />
         <span
           className="h-px min-w-0 border-border border-t border-dashed"
           style={{ flexGrow: 100 - shipment.progress, flexBasis: 0 }}
@@ -99,11 +125,11 @@ function ShipmentCard({ shipment, active }: { shipment: Shipment; active?: boole
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 
-export function ShipmentsPanel() {
+export function ShipmentsPanel({ shipments, selectedShipmentId, onSelectShipment }: ShipmentsPanelProps) {
   return (
     <Card className="h-full rounded-none ring-0">
       <CardHeader>
@@ -143,8 +169,13 @@ export function ShipmentsPanel() {
 
         <ScrollArea className="h-0 flex-1">
           <div className="flex flex-col gap-4 px-4">
-            {shipments.map((shipment, index) => (
-              <ShipmentCard active={index === 0} key={shipment.id} shipment={shipment} />
+            {shipments.map((shipment) => (
+              <ShipmentCard
+                active={shipment.id === selectedShipmentId}
+                key={shipment.id}
+                shipment={shipment}
+                onSelectShipment={onSelectShipment}
+              />
             ))}
           </div>
         </ScrollArea>
