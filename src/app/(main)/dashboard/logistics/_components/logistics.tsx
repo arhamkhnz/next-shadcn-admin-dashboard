@@ -21,14 +21,6 @@ export function Logistics() {
     }
   }
 
-  function handleDetailsOpenChange(open: boolean) {
-    setDetailsOpen(open);
-
-    if (!open) {
-      setSelectedShipmentId(null);
-    }
-  }
-
   return (
     <>
       <div
@@ -47,7 +39,7 @@ export function Logistics() {
         </div>
       </div>
 
-      <Sheet open={detailsOpen} onOpenChange={handleDetailsOpenChange}>
+      <Sheet open={detailsOpen} onOpenChange={setDetailsOpen}>
         <SheetContent
           side="right"
           className="gap-0 p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-none data-[side=right]:md:w-3/4"
