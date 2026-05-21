@@ -108,7 +108,7 @@ export function UsersTable({ table }: { table: TableType<UserRow> }) {
             </Select>
           </div>
           <span>
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+            Page {table.getState().pagination.pageIndex + 1} of {pageCount}
           </span>
         </div>
 
