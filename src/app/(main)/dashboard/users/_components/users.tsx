@@ -33,6 +33,7 @@ export function Users({ users }: { users: UserRow[] }) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     search: false,
+    team: false,
   });
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
@@ -64,7 +65,16 @@ export function Users({ users }: { users: UserRow[] }) {
   });
 
   const searchQuery = (table.getColumn("search")?.getFilterValue() as string) ?? "";
+  const roleFilter = (table.getColumn("role")?.getFilterValue() as string) ?? filters.role[0];
+  const teamFilter = (table.getColumn("team")?.getFilterValue() as string) ?? filters.team[0];
+  const statusFilter = (table.getColumn("status")?.getFilterValue() as string) ?? filters.status[0];
+  const workspaceFilter = (table.getColumn("workspace")?.getFilterValue() as string) ?? filters.workspace[0];
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+
+  function setColumnSelectFilter(columnId: string, value: string) {
+    table.getColumn(columnId)?.setFilterValue(value === "All" ? undefined : value);
+    table.setPageIndex(0);
+  }
 
   return (
     <Card>
@@ -106,7 +116,7 @@ export function Users({ users }: { users: UserRow[] }) {
       <CardContent className="flex flex-col gap-4 px-0">
         <div className="flex flex-wrap items-center justify-between gap-3 px-4">
           <div className="flex flex-wrap items-center gap-3">
-            <Select defaultValue={filters.role[0]}>
+            <Select value={roleFilter} onValueChange={(value) => setColumnSelectFilter("role", value)}>
               <SelectTrigger size="sm">
                 <span className="text-muted-foreground">Role:</span>
                 <SelectValue />
@@ -122,7 +132,7 @@ export function Users({ users }: { users: UserRow[] }) {
               </SelectContent>
             </Select>
 
-            <Select defaultValue={filters.team[0]}>
+            <Select value={teamFilter} onValueChange={(value) => setColumnSelectFilter("team", value)}>
               <SelectTrigger size="sm">
                 <span className="text-muted-foreground">Team:</span>
                 <SelectValue />
@@ -138,7 +148,7 @@ export function Users({ users }: { users: UserRow[] }) {
               </SelectContent>
             </Select>
 
-            <Select defaultValue={filters.status[0]}>
+            <Select value={statusFilter} onValueChange={(value) => setColumnSelectFilter("status", value)}>
               <SelectTrigger size="sm">
                 <span className="text-muted-foreground">Status:</span>
                 <SelectValue />
@@ -155,7 +165,7 @@ export function Users({ users }: { users: UserRow[] }) {
             </Select>
           </div>
 
-          <Select defaultValue={filters.workspace[0]}>
+          <Select value={workspaceFilter} onValueChange={(value) => setColumnSelectFilter("workspace", value)}>
             <SelectTrigger size="sm">
               <span className="text-muted-foreground">Workspace:</span>
               <SelectValue />

@@ -141,8 +141,7 @@ export const usersColumns: ColumnDef<UserRow>[] = [
   },
   {
     id: "search",
-    accessorFn: (row) =>
-      `${row.name} ${row.email} ${row.role} ${row.team} ${row.status} ${row.workspace.join(" ")} ${row.joinedDate} ${row.lastActive}`,
+    accessorFn: (row) => `${row.name} ${row.email}`,
     filterFn: "includesString",
     enableHiding: true,
   },
@@ -162,16 +161,25 @@ export const usersColumns: ColumnDef<UserRow>[] = [
   {
     accessorKey: "role",
     header: "Role / Team",
+    filterFn: "equalsString",
     cell: ({ row }) => <RoleCell role={row.original.role} team={row.original.team} />,
+  },
+  {
+    accessorKey: "team",
+    header: "Team",
+    filterFn: "equalsString",
+    cell: ({ row }) => <div className="text-sm">{row.original.team}</div>,
   },
   {
     accessorKey: "workspace",
     header: "Workspace",
+    filterFn: "arrIncludes",
     cell: ({ row }) => <WorkspaceCell workspaces={row.original.workspace} />,
   },
   {
     accessorKey: "status",
     header: "Status",
+    filterFn: "equalsString",
     cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
