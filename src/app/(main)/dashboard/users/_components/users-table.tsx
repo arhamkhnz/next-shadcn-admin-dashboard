@@ -1,9 +1,10 @@
-import { ArrowUpDown, Grid2x2, List, MoreHorizontal, SlidersHorizontal } from "lucide-react";
+"use client";
+"use no memo";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import type { MouseEvent } from "react";
+
+import { flexRender, type Table as TableType } from "@tanstack/react-table";
+
 import {
   Pagination,
   PaginationContent,
@@ -13,211 +14,151 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { cn, getInitials } from "@/lib/utils";
 
-import { roleMeta, statusMeta, twoFaMeta, type UserRow } from "./users-data";
+import type { UserRow } from "./data";
 
-function RoleCell({ role }: { role: string }) {
-  const meta = roleMeta[role] ?? { className: "text-muted-foreground", icon: roleMeta["Project Manager"].icon };
-  const Icon = meta.icon;
-
-  return (
-    <span className="inline-flex items-center gap-2 whitespace-nowrap">
-      <Icon className={cn("size-4", meta.className)} />
-      {role}
-    </span>
-  );
+function preventPaginationNavigation(event: MouseEvent<HTMLAnchorElement>) {
+  event.preventDefault();
 }
 
-function StatusBadge({ status }: { status: UserRow["status"] }) {
-  const meta = statusMeta[status];
+function getPageNumbers(currentPage: number, pageCount: number) {
+  if (pageCount <= 3) {
+    return Array.from({ length: pageCount }, (_, index) => index + 1);
+  }
 
-  return (
-    <Badge className={cn("gap-1.5 border px-3 py-1 font-medium", meta.badgeClass)} variant="outline">
-      <span className={cn("size-1.5 rounded-full", meta.dotClass)} />
-      {status}
-    </Badge>
-  );
+  if (currentPage <= 2) return [1, 2, 3];
+  if (currentPage >= pageCount - 1) return [pageCount - 2, pageCount - 1, pageCount];
+
+  return [currentPage - 1, currentPage, currentPage + 1];
 }
 
-function TwoFaBadge({ enabled }: { enabled: boolean }) {
-  const meta = enabled ? twoFaMeta.enabled : twoFaMeta.disabled;
-  const Icon = meta.icon;
+export function UsersTable({ table }: { table: TableType<UserRow> }) {
+  const pageCount = Math.max(table.getPageCount(), 1);
+  const currentPage = Math.min(table.getState().pagination.pageIndex + 1, pageCount);
+  const pageNumbers = getPageNumbers(currentPage, pageCount);
+  const rowsPerPage = `${table.getState().pagination.pageSize}`;
 
   return (
-    <Badge className={cn("gap-1.5 border px-3 py-1 font-medium", meta.badgeClass)} variant="outline">
-      <Icon className="size-3.5" />
-      {enabled ? "Enabled" : "Disabled"}
-    </Badge>
-  );
-}
-
-function AvatarCell({ name, tone }: { name: string; tone: string }) {
-  return (
-    <Avatar className="size-10 rounded-full ring-1 ring-white/10">
-      <AvatarFallback className={cn("rounded-full font-medium text-sm", tone)}>{getInitials(name)}</AvatarFallback>
-    </Avatar>
-  );
-}
-
-export function UsersTable({ rows }: { rows: readonly UserRow[] }) {
-  return (
-    <div className="flex flex-1 flex-col">
-      <div className="flex items-center justify-between gap-3 px-5 py-4 md:px-6">
-        <div className="text-muted-foreground text-sm">0 selected</div>
-
-        <div className="inline-flex items-center rounded-lg border border-border/70 bg-background/40 p-1">
-          <button
-            type="button"
-            className="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
-            aria-label="Filter view"
-          >
-            <SlidersHorizontal className="size-4" />
-          </button>
-          <button
-            type="button"
-            className="inline-flex size-8 items-center justify-center rounded-md bg-muted text-foreground transition-colors"
-            aria-label="List view"
-          >
-            <List className="size-4" />
-          </button>
-          <button
-            type="button"
-            className="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
-            aria-label="Grid view"
-          >
-            <Grid2x2 className="size-4" />
-          </button>
-        </div>
-      </div>
-
-      <div className="px-2 md:px-3">
-        <Table className="border-separate border-spacing-0">
-          <TableHeader>
-            <TableRow className="border-border/60 hover:bg-transparent">
-              <TableHead className="w-12 px-3 py-4">
-                <Checkbox aria-label="Select all users" />
-              </TableHead>
-              <TableHead className="px-3 py-4 font-normal text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  Full name
-                  <ArrowUpDown className="size-3.5 text-muted-foreground/80" />
-                </span>
-              </TableHead>
-              <TableHead className="px-3 py-4 font-normal text-muted-foreground">Email</TableHead>
-              <TableHead className="px-3 py-4 font-normal text-muted-foreground">Role</TableHead>
-              <TableHead className="px-3 py-4 font-normal text-muted-foreground">Status</TableHead>
-              <TableHead className="px-3 py-4 font-normal text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  Joined date
-                  <ArrowUpDown className="size-3.5 text-muted-foreground/80" />
-                </span>
-              </TableHead>
-              <TableHead className="px-3 py-4 font-normal text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  Last active
-                  <ArrowUpDown className="size-3.5 text-muted-foreground/80" />
-                </span>
-              </TableHead>
-              <TableHead className="px-3 py-4 font-normal text-muted-foreground">2FA</TableHead>
-              <TableHead className="px-3 py-4 text-right font-normal text-muted-foreground">Actions</TableHead>
-            </TableRow>
+    <div className="flex flex-1 flex-col gap-4">
+      <div>
+        <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4">
+          <TableHeader className="[&_tr]:border-t">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="py-4 font-normal">
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
           </TableHeader>
 
           <TableBody>
-            {rows.map((user) => (
-              <TableRow key={user.email} className="border-border/60 hover:bg-white/[0.025]">
-                <TableCell className="px-3 py-4 align-middle">
-                  <Checkbox aria-label={`Select ${user.name}`} />
-                </TableCell>
-                <TableCell className="px-3 py-4 align-middle">
-                  <div className="flex items-center gap-3">
-                    <AvatarCell name={user.name} tone={user.avatarTone} />
-                    <div className="min-w-0">
-                      <div className="truncate font-medium text-foreground text-sm">{user.name}</div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell className="px-3 py-4 align-middle text-muted-foreground text-sm">{user.email}</TableCell>
-                <TableCell className="px-3 py-4 align-middle text-foreground text-sm">
-                  <RoleCell role={user.role} />
-                </TableCell>
-                <TableCell className="px-3 py-4 align-middle">
-                  <StatusBadge status={user.status} />
-                </TableCell>
-                <TableCell className="px-3 py-4 align-middle text-foreground text-sm">{user.joinedDate}</TableCell>
-                <TableCell className="px-3 py-4 align-middle text-foreground text-sm">
-                  <span className="inline-flex items-center gap-2">
-                    <span className={cn("size-1.5 rounded-full", statusMeta[user.status].dotClass)} />
-                    {user.lastActive}
-                  </span>
-                </TableCell>
-                <TableCell className="px-3 py-4 align-middle">
-                  <TwoFaBadge enabled={user.twoFa} />
-                </TableCell>
-                <TableCell className="px-3 py-4 text-right align-middle">
-                  <Button
-                    aria-label={`Open actions for ${user.name}`}
-                    className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
-                    size="icon-sm"
-                    variant="ghost"
-                  >
-                    <MoreHorizontal className="size-4" />
-                  </Button>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  className="border-border/60 hover:bg-white/2.5"
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="px-3 py-4 align-middle">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
+                  No results.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
 
-      <div className="mt-auto flex flex-col gap-4 border-border/60 border-t px-5 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+      <Separator />
+
+      <div className="flex items-center justify-between px-4">
         <div className="flex items-center gap-4 text-muted-foreground text-sm">
           <div className="flex items-center gap-2">
             <span>Rows per page</span>
-            <Button
-              className="h-9 min-w-20 justify-between rounded-lg border-border/70 bg-background/40 px-3 shadow-none hover:bg-muted/50"
-              size="sm"
-              variant="outline"
+            <Select
+              value={`${table.getState().pagination.pageSize}`}
+              onValueChange={(value) => table.setPageSize(Number(value))}
             >
-              25
-              <span className="text-muted-foreground">⌄</span>
-            </Button>
+              <SelectTrigger size="sm" className="w-20" id="users-rows-per-page">
+                <SelectValue placeholder={rowsPerPage} />
+              </SelectTrigger>
+              <SelectContent side="top">
+                <SelectGroup>
+                  {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <SelectItem key={pageSize} value={`${pageSize}`}>
+                      {pageSize}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
-          <span>1-25 of 342 users</span>
+          <span>
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </span>
         </div>
 
         <Pagination className="mx-0 w-auto justify-start md:justify-end">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" text="" />
+              <PaginationPrevious
+                href="#"
+                text=""
+                className={!table.getCanPreviousPage() ? "pointer-events-none opacity-50" : undefined}
+                onClick={(event) => {
+                  preventPaginationNavigation(event);
+                  table.previousPage();
+                }}
+              />
             </PaginationItem>
+            {pageNumbers[0] > 1 ? (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            ) : null}
+            {pageNumbers.map((pageNumber) => (
+              <PaginationItem key={`page-${pageNumber}`}>
+                <PaginationLink
+                  href="#"
+                  isActive={table.getState().pagination.pageIndex === pageNumber - 1}
+                  onClick={(event) => {
+                    preventPaginationNavigation(event);
+                    table.setPageIndex(pageNumber - 1);
+                  }}
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            {pageNumbers[pageNumbers.length - 1] < pageCount ? (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            ) : null}
             <PaginationItem>
-              <PaginationLink href="#" isActive size="icon">
-                1
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" size="icon">
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" size="icon">
-                3
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" size="icon">
-                14
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" text="" />
+              <PaginationNext
+                href="#"
+                text=""
+                className={!table.getCanNextPage() ? "pointer-events-none opacity-50" : undefined}
+                onClick={(event) => {
+                  preventPaginationNavigation(event);
+                  table.nextPage();
+                }}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
