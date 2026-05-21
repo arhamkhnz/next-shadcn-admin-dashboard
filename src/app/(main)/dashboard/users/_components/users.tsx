@@ -78,11 +78,13 @@ export function Users({ users }: { users: UserRow[] }) {
 
   return (
     <Card>
-      <CardHeader className="border-b">
+      <CardHeader className="border-b has-data-[slot=card-action]:grid-cols-1 md:has-data-[slot=card-action]:grid-cols-[1fr_auto]">
         <CardTitle className="text-xl leading-none">Users</CardTitle>
-        <CardDescription className="leading-none">Manage your organization members and their access.</CardDescription>
-        <CardAction className="flex gap-2">
-          <InputGroup className="h-7">
+        <CardDescription className="max-w-sm leading-snug">
+          Manage your organization members and their access.
+        </CardDescription>
+        <CardAction className="col-start-1 row-start-auto flex w-full flex-wrap justify-start gap-2 justify-self-stretch md:col-start-2 md:row-span-2 md:row-start-1 md:w-auto md:flex-nowrap md:justify-end md:justify-self-end">
+          <InputGroup className="h-7 w-full md:w-64">
             <InputGroupAddon align="inline-start">
               <Search className="size-3.5" />
             </InputGroupAddon>
