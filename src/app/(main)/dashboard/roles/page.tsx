@@ -1,5 +1,9 @@
-import { RolesDashboard } from "./_components/roles-dashboard";
+import { Roles } from "./_components/roles";
 
 export default function Page() {
-  return <RolesDashboard />;
+  return (
+    <div data-content-padding="false">
+      <Roles />
+    </div>
+  );
 }

@@ -7,17 +7,17 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AccessBadge, PermissionStatus } from "./role-ui";
 import { selectedPermissions, selectedRole } from "./roles-data";
 
-export function RoleDetailsPanel() {
+export function RoleDetailsSheetContent({ onClose }: { onClose: () => void }) {
   return (
-    <aside className="bg-card/30">
-      <div className="sticky top-[var(--dashboard-header-height)] flex flex-col gap-5 p-4 md:p-6">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="font-medium text-lg">Role Details</h2>
-          <Button aria-label="Close role details" size="icon-sm" variant="ghost">
-            <X />
-          </Button>
-        </div>
+    <div className="flex h-full flex-col bg-card/30">
+      <div className="flex flex-row items-center justify-between border-b px-4 py-4 md:px-6">
+        <h2 className="font-medium text-lg">Role Details</h2>
+        <Button aria-label="Close role details" size="icon-sm" variant="ghost" onClick={onClose}>
+          <X />
+        </Button>
+      </div>
 
+      <div className="flex flex-1 flex-col gap-5 overflow-y-auto p-4 md:p-6">
         <div className="flex items-center gap-4">
           <div className="grid size-14 place-items-center rounded-lg bg-primary/15 text-primary">
             <Shield className="size-7" />
@@ -96,7 +96,7 @@ export function RoleDetailsPanel() {
           Archive Role
         </Button>
       </div>
-    </aside>
+    </div>
   );
 }
 
