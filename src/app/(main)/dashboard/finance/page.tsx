@@ -115,25 +115,13 @@ export default function Page() {
         <TabsContent value={ACCOUNTS_TAB} className="flex flex-col gap-4">
           <AccountKpis />
 
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-            <div className="xl:col-span-5">
-              <AllocationByType />
-            </div>
-            <div className="xl:col-span-7">
-              <AccountsList onSelectAccount={handleAccountSelect} />
-            </div>
-          </div>
+          <AccountsList onSelectAccount={handleAccountSelect} />
 
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-            <div className="xl:col-span-4">
-              <RecentAccountActivity />
-            </div>
-            <div className="xl:col-span-4">
-              <UpcomingInflows />
-            </div>
-            <div className="xl:col-span-4">
-              <AddAccountCard />
-            </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <AllocationByType />
+            <RecentAccountActivity />
+            <UpcomingInflows />
+            <AddAccountCard />
           </div>
         </TabsContent>
 

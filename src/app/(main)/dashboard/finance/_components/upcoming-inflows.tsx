@@ -25,11 +25,11 @@ const total = inflows.reduce((sum, inflow) => sum + inflow.amount, 0);
 
 export function UpcomingInflows() {
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="font-normal">Upcoming inflows</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-1 flex-col gap-3">
         <div className="flex flex-col gap-1">
           <h2 className="flex items-baseline text-3xl tabular-nums leading-none tracking-tight">
             <span className="font-normal">{formatCurrency(total, { noDecimals: true })}</span>

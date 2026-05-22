@@ -22,12 +22,12 @@ const activity: ActivityEntry[] = [
 
 export function RecentAccountActivity() {
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="font-normal">Recent activity</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-3">
+      <CardContent className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col gap-3">
           {activity.map((entry) => {
             const account = accounts.find((candidate) => candidate.id === entry.accountId);
             if (!account) return null;
