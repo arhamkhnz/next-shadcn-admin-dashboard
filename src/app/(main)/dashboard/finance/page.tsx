@@ -30,7 +30,11 @@ const ACCOUNTS_TAB = "accounts";
 const TRANSACTIONS_TAB = "transactions";
 
 export default function Page() {
-  const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");
+  const [now, setNow] = React.useState<Date | null>(null);
+  React.useEffect(() => {
+    setNow(new Date());
+  }, []);
+  const formattedDate = now ? format(now, "EEEE, do MMMM yyyy") : " ";
   const [activeTab, setActiveTab] = React.useState<string>(DASHBOARD_TAB);
   const [accountFilterSeed, setAccountFilterSeed] = React.useState<string | undefined>(undefined);
   const transactionsTriggerRef = React.useRef<HTMLButtonElement>(null);
