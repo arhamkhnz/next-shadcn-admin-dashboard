@@ -1,8 +1,9 @@
 "use client";
 
-import { ChevronRight, EllipsisVertical, FileText, Plus, Sparkles } from "lucide-react";
+import { ChevronRight, EllipsisVertical, FileText, Plus, Search, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Progress } from "@/components/ui/progress";
 import {
   Sidebar,
@@ -35,12 +36,20 @@ export function ChatSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>
+          <SidebarMenu className="gap-2">
             <SidebarMenuItem>
               <SidebarMenuButton size="sm">
                 <Plus />
                 New Chat
               </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <InputGroup className="h-7 rounded-md">
+                <InputGroupAddon>
+                  <Search />
+                </InputGroupAddon>
+                <InputGroupInput className="h-7" placeholder="Search chats..." />
+              </InputGroup>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
