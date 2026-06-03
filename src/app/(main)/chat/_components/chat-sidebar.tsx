@@ -59,7 +59,9 @@ export function ChatSidebar() {
                     onClick={() => setChat({ selected: item.id })}
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <p className="truncate text-sm group-data-[active=true]/menu-button:font-medium">{item.title}</p>
+                      <p className="truncate text-foreground/85 text-sm group-data-[active=true]/menu-button:text-foreground">
+                        {item.title}
+                      </p>
                       <span className="shrink-0 text-muted-foreground text-xs">{item.time}</span>
                     </div>
                     <p className="truncate text-muted-foreground text-sm">{item.description}</p>
