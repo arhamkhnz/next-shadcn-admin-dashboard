@@ -1,9 +1,6 @@
 import { Roles } from "./_components/roles";
+import { roles } from "./_components/roles-table/data";
 
 export default function Page() {
-  return (
-    <div data-content-padding="false">
-      <Roles />
-    </div>
-  );
+  return <Roles roles={roles} />;
 }

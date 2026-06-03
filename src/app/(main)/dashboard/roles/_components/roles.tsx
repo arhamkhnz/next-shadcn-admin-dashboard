@@ -1,136 +1,201 @@
 "use client";
+"use no memo";
 
 import { useState } from "react";
 
-import { ListFilter, Plus, Search, SlidersHorizontal } from "lucide-react";
+import {
+  type ColumnFiltersState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  type PaginationState,
+  useReactTable,
+} from "@tanstack/react-table";
+import { AlertTriangle, ChevronRight, FileUp, Search } from "lucide-react";
 
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { RoleDetailsSheetContent } from "./role-details-panel";
-import { RolesTable } from "./roles-table";
+import { rolesColumns } from "./roles-table/columns";
+import type { Role } from "./roles-table/data";
+import { RolesTable } from "./roles-table/table";
 
-export function Roles() {
-  const [detailsOpen, setDetailsOpen] = useState(true);
+export function Roles({ roles }: { roles: Role[] }) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 12,
+  });
+
+  const table = useReactTable({
+    data: roles,
+    columns: rolesColumns,
+    defaultColumn: {
+      size: 140,
+      minSize: 80,
+      maxSize: 420,
+    },
+    state: { columnFilters, pagination },
+    onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    autoResetPageIndex: false,
+    initialState: {
+      columnVisibility: { group: false, search: false },
+    },
+  });
+
+  const search = (table.getColumn("search")?.getFilterValue() as string) ?? "";
+  const groupFilter = (table.getColumn("group")?.getFilterValue() as string) ?? "";
+  const typeFilter = groupFilter === "System roles" ? "System" : groupFilter === "Custom roles" ? "Custom" : "All";
+  const ownerFilter = (table.getColumn("owner")?.getFilterValue() as string) ?? "All";
+  const statusFilter = (table.getColumn("status")?.getFilterValue() as string) ?? "All";
 
   return (
-    <div className="space-y-6 py-4">
-      <div className="flex flex-col gap-4 px-4 xl:flex-row xl:items-start xl:justify-between">
+    <div className="flex h-full flex-col gap-4">
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
         <div className="flex flex-col gap-1">
-          <h1 className="font-medium text-2xl leading-none tracking-tight">Roles</h1>
-          <p className="text-muted-foreground text-sm leading-none">
-            Manage roles and their permissions across the platform.
-          </p>
+          <h1 className="text-3xl tracking-tight">Roles & Permissions</h1>
+          <p className="text-muted-foreground text-sm">Manage access roles and permissions across your organization.</p>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <InputGroup className="h-7 sm:w-80 lg:w-96">
-            <InputGroupAddon>
-              <Search className="size-3.5" />
-            </InputGroupAddon>
-            <InputGroupInput className="h-7" placeholder="Search roles..." />
-          </InputGroup>
+        <div className="flex items-center gap-2">
           <Button size="sm" variant="outline">
-            <ListFilter data-icon="inline-start" />
-            Filter
+            <FileUp data-icon="inline-start" />
+            Import JSON
           </Button>
-          <Button size="sm">
-            <Plus data-icon="inline-start" />
-            Create Role
-          </Button>
+          <Button size="sm">Create role</Button>
         </div>
       </div>
 
-      <Separator className="mb-0" />
-
-      <div className="grid xl:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="flex flex-col gap-4">
-          <Tabs defaultValue="all">
-            <TabsList
-              variant="line"
-              className="w-full justify-start gap-4 border-b px-4 *:data-[slot=tabs-trigger]:flex-none"
-            >
-              <TabsTrigger value="all">All Roles</TabsTrigger>
-              <TabsTrigger value="system">System</TabsTrigger>
-              <TabsTrigger value="custom">Custom</TabsTrigger>
-              <TabsTrigger value="archived">Archived</TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          <div className="flex items-center justify-between gap-6 px-4">
-            <div className="flex items-center gap-2">
-              <Select defaultValue="All">
-                <SelectTrigger size="sm">
-                  <span className="text-muted-foreground">Access Level:</span>
-                  <SelectValue placeholder="All" />
-                </SelectTrigger>
-                <SelectContent position="popper" align="start">
-                  <SelectGroup>
-                    <SelectItem value="All">All</SelectItem>
-                    <SelectItem value="Full Access">Full Access</SelectItem>
-                    <SelectItem value="High">High</SelectItem>
-                    <SelectItem value="Medium">Medium</SelectItem>
-                    <SelectItem value="Low">Low</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select defaultValue="All">
-                <SelectTrigger size="sm">
-                  <span className="text-muted-foreground">Role Type:</span>
-                  <SelectValue placeholder="All" />
-                </SelectTrigger>
-                <SelectContent position="popper" align="start">
-                  <SelectGroup>
-                    <SelectItem value="All">All</SelectItem>
-                    <SelectItem value="System">System</SelectItem>
-                    <SelectItem value="Custom">Custom</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select defaultValue="Active">
-                <SelectTrigger size="sm">
-                  <span className="text-muted-foreground">Status:</span>
-                  <SelectValue placeholder="Active" />
-                </SelectTrigger>
-                <SelectContent position="popper" align="start">
-                  <SelectGroup>
-                    <SelectItem value="Active">Active</SelectItem>
-                    <SelectItem value="Archived">Archived</SelectItem>
-                    <SelectItem value="Draft">Draft</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Button size="sm" variant="outline" onClick={() => setDetailsOpen((value) => !value)}>
-                {detailsOpen ? "Close role details" : "Open role details"}
-              </Button>
-            </div>
-
-            <Button size="sm" variant="outline">
-              <SlidersHorizontal data-icon="inline-start" />
-              More Filters
-            </Button>
-          </div>
-
-          <div className="px-4">
-            <RolesTable />
-          </div>
-        </div>
-
-        <aside
-          className={cn(
-            "overflow-hidden border-border border-l transition-[width] duration-200 ease-out",
-            detailsOpen ? "w-full xl:w-100" : "w-0 border-l-0",
-          )}
+      <Tabs className="h-full" defaultValue="roles">
+        <TabsList
+          variant="line"
+          className="w-full justify-start gap-2 border-b ps-0 *:data-[slot=tabs-trigger]:flex-none"
         >
-          <div className="w-full xl:w-100">
-            <RoleDetailsSheetContent onClose={() => setDetailsOpen(false)} />
+          <TabsTrigger value="roles">Roles</TabsTrigger>
+          <TabsTrigger value="permission-sets">Permission sets</TabsTrigger>
+          <TabsTrigger value="access-reviews">Access reviews</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="roles">
+          <div className="flex flex-col gap-4">
+            <Alert className="border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
+              <AlertTriangle className="size-4" />
+              <AlertTitle>Review required</AlertTitle>
+              <AlertDescription>3 roles have unreviewed permission changes.</AlertDescription>
+              <AlertAction>
+                <Button size="sm" variant="link">
+                  Review changes
+                  <ChevronRight data-icon="inline-end" />
+                </Button>
+              </AlertAction>
+            </Alert>
+
+            <div className="overflow-hidden rounded-xl border border-border/70 bg-background">
+              <div className="flex flex-col items-stretch gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                <InputGroup className="h-7 w-full rounded-md sm:w-82">
+                  <InputGroupAddon>
+                    <Search />
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    className="h-7"
+                    placeholder="Search roles..."
+                    value={search}
+                    onChange={(e) => {
+                      table.getColumn("search")?.setFilterValue(e.target.value || undefined);
+                      table.setPageIndex(0);
+                    }}
+                  />
+                </InputGroup>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <Select
+                    value={typeFilter}
+                    onValueChange={(v) => {
+                      table
+                        .getColumn("group")
+                        ?.setFilterValue(v === "All" ? undefined : v === "System" ? "System roles" : "Custom roles");
+                      table.setPageIndex(0);
+                    }}
+                  >
+                    <SelectTrigger size="sm">
+                      <span className="text-muted-foreground">Type:</span>
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent position="popper" align="start">
+                      <SelectGroup>
+                        <SelectItem value="All">All</SelectItem>
+                        <SelectItem value="System">System</SelectItem>
+                        <SelectItem value="Custom">Custom</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  <Select
+                    value={ownerFilter}
+                    onValueChange={(v) => {
+                      table.getColumn("owner")?.setFilterValue(v === "All" ? undefined : v);
+                      table.setPageIndex(0);
+                    }}
+                  >
+                    <SelectTrigger size="sm">
+                      <span className="text-muted-foreground">Owner:</span>
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent position="popper" align="start">
+                      <SelectGroup>
+                        <SelectItem value="All">All</SelectItem>
+                        <SelectItem value="System">System</SelectItem>
+                        <SelectItem value="Jane Doe">Jane Doe</SelectItem>
+                        <SelectItem value="Alex Kim">Alex Kim</SelectItem>
+                        <SelectItem value="Chris Lee">Chris Lee</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  <Select
+                    value={statusFilter}
+                    onValueChange={(v) => {
+                      table.getColumn("status")?.setFilterValue(v === "All" ? undefined : v);
+                      table.setPageIndex(0);
+                    }}
+                  >
+                    <SelectTrigger size="sm">
+                      <span className="text-muted-foreground">Status:</span>
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent position="popper" align="start">
+                      <SelectGroup>
+                        <SelectItem value="All">All</SelectItem>
+                        <SelectItem value="Active">Active</SelectItem>
+                        <SelectItem value="Needs review">Needs review</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <RolesTable table={table} />
+            </div>
           </div>
-        </aside>
-      </div>
+        </TabsContent>
+        <TabsContent value="permission-sets">
+          <div className="flex h-full items-center justify-center rounded-md border border-dashed text-muted-foreground text-sm">
+            Permission Sets Coming Soon
+          </div>
+        </TabsContent>
+        <TabsContent value="access-reviews">
+          <div className="flex h-full items-center justify-center rounded-md border border-dashed text-muted-foreground text-sm">
+            Access Reviews Coming Soon
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
