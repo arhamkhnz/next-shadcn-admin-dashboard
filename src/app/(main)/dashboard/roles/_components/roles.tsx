@@ -73,7 +73,7 @@ export function Roles({ roles }: { roles: Role[] }) {
         </div>
       </div>
 
-      <Tabs className="h-full" defaultValue="roles">
+      <Tabs className="h-full gap-4" defaultValue="roles">
         <TabsList
           variant="line"
           className="w-full justify-start gap-2 border-b ps-0 *:data-[slot=tabs-trigger]:flex-none"
