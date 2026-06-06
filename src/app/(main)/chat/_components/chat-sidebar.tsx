@@ -1,124 +1,136 @@
 "use client";
 
-import { ChevronRight, EllipsisVertical, FileText, Plus, Search, Sparkles } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { siFacebook, siInstagram, siWhatsapp } from "simple-icons";
 
+import { SimpleIcon } from "@/components/simple-icon";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Progress } from "@/components/ui/progress";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
-  SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { cn, getInitials } from "@/lib/utils";
 
-import { chatHistory, savedPrompts } from "./data";
-import { useChat } from "./use-chat";
+import { channelItems, currentUser, navItems, viewItems } from "./data";
+
+const channelBrandIcons = {
+  whatsapp: siWhatsapp,
+  instagram: siInstagram,
+  facebook: siFacebook,
+} as const;
 
 export function ChatSidebar() {
-  const [chat, setChat] = useChat();
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   return (
-    <Sidebar className="**:data-[sidebar=sidebar]:bg-background">
-      <SidebarHeader>
-        <SidebarMenuButton>
-          <Sparkles />
-          <span className="font-medium text-base">Studio AI</span>
-        </SidebarMenuButton>
-      </SidebarHeader>
-
+    <Sidebar
+      collapsible="offcanvas"
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]! **:data-[sidebar=sidebar]:bg-background"
+    >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="gap-2">
-            <SidebarMenuItem>
-              <SidebarMenuButton size="sm">
-                <Plus />
-                New Chat
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <InputGroup className="h-7 rounded-md">
-                <InputGroupAddon>
-                  <Search />
-                </InputGroupAddon>
-                <InputGroupInput className="h-7" placeholder="Search chats..." />
-              </InputGroup>
-            </SidebarMenuItem>
+          <SidebarMenu className="gap-1">
+            {navItems.map((item) => (
+              <SidebarMenuItem key={item.id}>
+                <SidebarMenuButton className="[&_svg]:size-3.5" size="sm" isActive={item.isActive} tooltip={item.title}>
+                  <item.icon />
+                  <span className="font-medium">{item.title}</span>
+                </SidebarMenuButton>
+                {item.label && <SidebarMenuBadge className="font-medium">{item.label}</SidebarMenuBadge>}
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
+
         <SidebarGroup>
-          <SidebarGroupLabel>Chat History</SidebarGroupLabel>
-          <SidebarGroupAction className="[&>svg]:size-3">
-            <EllipsisVertical /> <span className="sr-only">Add Project</span>
-          </SidebarGroupAction>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
-              {chatHistory.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    className="flex h-auto flex-col items-stretch gap-1 data-[active=true]:font-normal"
-                    isActive={chat?.selected === item.id}
-                    onClick={() => setChat({ selected: item.id })}
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="truncate text-foreground/85 text-sm group-data-[active=true]/menu-button:text-foreground">
-                        {item.title}
-                      </p>
-                      <span className="shrink-0 text-muted-foreground text-xs">{item.time}</span>
-                    </div>
-                    <p className="truncate text-muted-foreground text-sm">{item.description}</p>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarGroupLabel className="font-normal">Channels</SidebarGroupLabel>
+          <SidebarMenu className="gap-1">
+            {channelItems.map((item) => (
+              <SidebarMenuItem key={item.id}>
+                <SidebarMenuButton className="[&_svg]:size-3.5" size="sm" isActive={item.isActive} tooltip={item.title}>
+                  {item.id in channelBrandIcons ? (
+                    <SimpleIcon icon={channelBrandIcons[item.id as keyof typeof channelBrandIcons]} />
+                  ) : (
+                    <item.icon />
+                  )}
+                  <span className="font-medium">{item.title}</span>
+                </SidebarMenuButton>
+                {item.label && <SidebarMenuBadge className="font-medium">{item.label}</SidebarMenuBadge>}
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Saved Prompts</SidebarGroupLabel>
-          <SidebarGroupAction className="[&>svg]:size-3">
-            <Plus /> <span className="sr-only">Add Project</span>
-          </SidebarGroupAction>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
-              {savedPrompts.map((prompt) => (
-                <SidebarMenuItem key={prompt}>
-                  <SidebarMenuButton>
-                    <FileText />
-                    <span className="truncate">{prompt}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-
-              <SidebarMenuItem>
-                <SidebarMenuButton className="text-muted-foreground">
-                  <span>View all saved prompts</span>
-                  <ChevronRight className="ml-auto" />
+          <SidebarGroupLabel className="font-normal">Views</SidebarGroupLabel>
+          <SidebarMenu className="gap-1">
+            {viewItems.map((item) => (
+              <SidebarMenuItem key={item.id}>
+                <SidebarMenuButton className="[&_svg]:size-3.5" size="sm" isActive={item.isActive} tooltip={item.title}>
+                  <item.icon />
+                  <span className="font-medium">{item.title}</span>
                 </SidebarMenuButton>
+                {item.label && <SidebarMenuBadge className="font-medium">{item.label}</SidebarMenuBadge>}
               </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <p className="text-muted-foreground text-sm">8k of 20K messages used</p>
-            <Progress value={40} />
-          </div>
-
-          <Button variant="outline" size="sm" className="w-full">
-            Manage Plan
-          </Button>
-        </div>
+      <SidebarFooter>
+        <Separator />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn("h-auto w-full justify-start gap-3 p-2", isCollapsed && "justify-center")}
+            >
+              <Avatar className="size-9">
+                <AvatarFallback className="bg-background text-xs">{getInitials(currentUser.name)}</AvatarFallback>
+              </Avatar>
+              {!isCollapsed && (
+                <>
+                  <div className="flex-1 text-left">
+                    <div className="truncate font-semibold text-sm">{currentUser.name}</div>
+                    <div className="truncate text-muted-foreground text-xs">{currentUser.company}</div>
+                  </div>
+                  <ChevronDown className="size-4 text-muted-foreground" />
+                </>
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-56">
+            <DropdownMenuLabel>
+              <div className="font-semibold">{currentUser.name}</div>
+              <div className="text-muted-foreground text-xs">{currentUser.company}</div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Sign out</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
   );

@@ -1,9 +1,6 @@
-import { ChatComponent } from "./_components/chat";
+import { Chat } from "./_components/chat";
+import { activeContact, conversations, messages } from "./_components/data";
 
-export default function Page() {
-  return (
-    <div className="h-dvh min-h-0 overflow-hidden">
-      <ChatComponent />
-    </div>
-  );
+export default async function Page() {
+  return <Chat conversations={conversations} contact={activeContact} messages={messages} />;
 }

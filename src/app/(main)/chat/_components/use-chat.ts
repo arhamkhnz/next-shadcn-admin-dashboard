@@ -1,10 +1,9 @@
 import { create } from "zustand";
 
-import type { ChatHistoryItem } from "./data";
-import { chatHistory } from "./data";
+import { type Conversation, conversations } from "./data";
 
 type Config = {
-  selected: ChatHistoryItem["id"] | null;
+  selected: Conversation["id"] | null;
 };
 
 type ChatStore = {
@@ -14,7 +13,7 @@ type ChatStore = {
 
 const useChatStore = create<ChatStore>((set) => ({
   chat: {
-    selected: chatHistory[0].id,
+    selected: conversations.find((c) => c.isActive)?.id ?? conversations[0].id,
   },
   setChat: (chat) => set({ chat }),
 }));
