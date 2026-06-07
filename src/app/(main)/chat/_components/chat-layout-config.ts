@@ -1,1 +1,0 @@
-export const CHAT_CONTACT_PANEL_BREAKPOINT = "xl";

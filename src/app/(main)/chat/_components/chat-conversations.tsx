@@ -1,12 +1,14 @@
 "use client";
 
-import { Filter, Search } from "lucide-react";
+import { ChevronDown, Filter, PanelRightClose, PanelRightOpen, Pin } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useSidebar } from "@/components/ui/sidebar";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, getInitials } from "@/lib/utils";
 
 import type { Conversation } from "./data";
@@ -17,20 +19,38 @@ interface ChatConversationsProps {
   onSelectConversation?: (conversation: Conversation) => void;
 }
 
-const tabs = [
-  { id: "all", label: "All", count: 24 },
-  { id: "open", label: "Open", count: 18 },
-  { id: "snoozed", label: "Snoozed", count: 2 },
-  { id: "closed", label: "Closed" },
-];
-
 export function ChatConversations({ conversations, onSelectConversation }: ChatConversationsProps) {
   const [chat, setChat] = useChat();
+  const { state, toggleSidebar } = useSidebar();
+  const isCollapsed = state === "collapsed";
+
+  const conversationGroups = conversations.reduce<
+    Array<{ group: Conversation["group"]; conversations: Conversation[] }>
+  >((groups, conversation) => {
+    const group = groups.find((item) => item.group === conversation.group);
+    if (group) {
+      group.conversations.push(conversation);
+    } else {
+      groups.push({ group: conversation.group, conversations: [conversation] });
+    }
+    return groups;
+  }, []);
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3 py-3">
-      <div className="flex items-center justify-between gap-4 px-2">
-        <h1 className="font-medium text-xl leading-none">Inbox</h1>
+    <div className="flex h-full flex-col gap-3 py-3">
+      <div className="flex items-center justify-between gap-4 px-2 py-0.5">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={toggleSidebar}
+            className="[&_svg]:transition-transform [&_svg]:duration-300"
+          >
+            {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
+          </Button>
+          <Separator orientation="vertical" className="mr-1.5 h-4 data-vertical:self-center" />
+          <h1 className="font-medium text-xl leading-none">Inbox</h1>
+        </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon-sm">
             <Filter />
@@ -38,86 +58,101 @@ export function ChatConversations({ conversations, onSelectConversation }: ChatC
         </div>
       </div>
 
-      <div className="px-2">
-        <Separator />
-      </div>
+      <Separator />
 
-      <div className="px-2">
-        <InputGroup className="h-7 w-full rounded-md">
-          <InputGroupInput className="h-7" placeholder="Search conversations..." />
-          <InputGroupAddon>
-            <Search />
-          </InputGroupAddon>
-        </InputGroup>
-      </div>
-
-      <div className="flex gap-1 px-2">
-        {tabs.map((tab, index) => (
-          <button
-            key={tab.id}
-            type="button"
-            className={cn(
-              "rounded-md px-3 py-1.5 font-medium text-sm transition-colors",
-              index === 0 ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
-            )}
-          >
-            {tab.label}
-            {tab.count && <span className="ml-1.5 text-xs opacity-70">{tab.count}</span>}
-          </button>
-        ))}
-      </div>
+      <Tabs defaultValue="all">
+        <TabsList variant="line" className="w-full border-b px-0 **:data-[slot=tabs-trigger]:border-x-0">
+          <TabsTrigger value="all">
+            All
+            <span className="text-muted-foreground text-xs">(24)</span>
+          </TabsTrigger>
+          <TabsTrigger value="open">
+            Open
+            <span className="text-muted-foreground text-xs">(18)</span>
+          </TabsTrigger>
+          <TabsTrigger value="snoozed">
+            Snoozed
+            <span className="text-muted-foreground text-xs">(2)</span>
+          </TabsTrigger>
+          <TabsTrigger value="closed">Closed</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       <div className="flex min-h-0 flex-1 flex-col">
-        <ScrollArea className="min-h-0 flex-1">
-          <div className="flex flex-col gap-1 pt-0">
-            {conversations.map((conversation) => (
-              <button
-                key={conversation.id}
-                type="button"
-                className={cn(
-                  "group relative w-full border-transparent border-y p-3 text-left transition-colors",
-                  "hover:bg-muted/60",
-                  chat.selected === conversation.id &&
-                    "border-border bg-muted/70 before:absolute before:-inset-y-px before:left-0 before:w-0.5 before:bg-primary",
-                )}
-                onClick={(event) => {
-                  event.currentTarget.blur();
-                  setChat({ selected: conversation.id });
-                  onSelectConversation?.(conversation);
-                }}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="relative">
-                    <Avatar className="size-10">
-                      <AvatarFallback className="bg-background text-xs">
-                        {getInitials(conversation.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="absolute -right-0.5 -bottom-0.5 size-3 rounded-full border-2 border-background bg-emerald-500" />
-                  </div>
+        <ScrollArea
+          type="hover"
+          className="h-full min-h-0 flex-1 overflow-hidden [&_[data-orientation=vertical][data-slot=scroll-area-scrollbar]]:w-1.5"
+        >
+          <div className="flex flex-col gap-3 pt-0">
+            {conversationGroups.map(({ group, conversations }) => (
+              <Collapsible key={group} defaultOpen>
+                <CollapsibleTrigger className="flex w-full items-center justify-between gap-1 px-3 py-2 font-medium text-muted-foreground text-xs hover:text-foreground [&[data-state=open]>svg]:rotate-180">
+                  {group}
+                  <ChevronDown className="size-3 transition-transform" />
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <div className="flex flex-col gap-1 px-2">
+                    {conversations.map((conversation) => {
+                      const isSelected = chat.selected === conversation.id;
 
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="truncate font-semibold text-sm">{conversation.name}</span>
-                          {conversation.isUnread && <span className="size-2 shrink-0 rounded-full bg-blue-600" />}
-                        </div>
-                        <div
+                      return (
+                        <button
+                          key={conversation.id}
+                          type="button"
                           className={cn(
-                            "truncate font-medium text-sm",
-                            conversation.isUnread ? "text-foreground" : "text-muted-foreground",
+                            "w-full overflow-hidden rounded-lg px-2.5 py-2.5 text-left ring-inset transition-colors",
+                            isSelected ? "bg-muted ring-1 ring-border" : "hover:bg-muted/75",
                           )}
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            setChat({ selected: conversation.id });
+                            onSelectConversation?.(conversation);
+                          }}
                         >
-                          {conversation.subject}
-                        </div>
-                      </div>
-                      <span className="shrink-0 text-muted-foreground text-xs">{conversation.time}</span>
-                    </div>
-                    <p className="truncate text-muted-foreground text-xs">{conversation.preview}</p>
+                          <div className="flex min-w-0 items-start gap-2.5">
+                            <Avatar className="shrink-0 **:data-[slot=avatar-badge]:size-2">
+                              <AvatarFallback
+                                className={cn(
+                                  "text-foreground text-xs transition-colors duration-400",
+                                  isSelected && "bg-background/50",
+                                )}
+                              >
+                                {getInitials(conversation.name)}
+                              </AvatarFallback>
+                              {conversation.isOnline && <AvatarBadge className="bg-green-600 dark:bg-green-800" />}
+                            </Avatar>
+
+                            <div className="w-0 flex-1 overflow-hidden">
+                              <div className="flex w-full items-center justify-between gap-2">
+                                <div className="truncate font-medium text-sm leading-5">{conversation.name}</div>
+                                <span className="text-nowrap text-muted-foreground text-xs leading-5">
+                                  {conversation.time}
+                                </span>
+                              </div>
+                              <div className="flex min-w-0 items-end gap-2">
+                                <div className="w-0 flex-1 overflow-hidden">
+                                  <div className="truncate font-medium text-foreground/90 text-xs leading-4">
+                                    {conversation.subject}
+                                  </div>
+                                  <div className="truncate text-muted-foreground text-xs leading-4">
+                                    {conversation.preview}
+                                  </div>
+                                </div>
+
+                                {conversation.group === "Pinned" && (
+                                  <div className="grid size-5 place-items-center">
+                                    <Pin className="size-3 fill-current opacity-70" />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                </div>
-              </button>
+                </CollapsibleContent>
+              </Collapsible>
             ))}
           </div>
         </ScrollArea>

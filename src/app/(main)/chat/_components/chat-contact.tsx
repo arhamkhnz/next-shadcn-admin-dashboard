@@ -1,5 +1,7 @@
 "use client";
 
+import { X } from "lucide-react";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -9,16 +11,24 @@ import type { Contact } from "./data";
 
 interface ChatContactProps {
   contact: Contact;
+  onClose?: () => void;
 }
 
-export function ChatContact({ contact }: ChatContactProps) {
+export function ChatContact({ contact, onClose }: ChatContactProps) {
   return (
     <div className="flex h-full min-h-0 flex-col gap-6 overflow-y-auto p-6">
+      <div className="flex items-center justify-between">
+        <h2 className="font-semibold text-sm">Profile</h2>
+        <Button variant="ghost" size="icon-sm" aria-label="Close profile" onClick={onClose}>
+          <X />
+        </Button>
+      </div>
+
       <div className="flex flex-col items-center text-center">
         <Avatar className="size-16">
           <AvatarFallback className="bg-background">{getInitials(contact.name)}</AvatarFallback>
         </Avatar>
-        <h2 className="mt-3 font-semibold text-lg">{contact.name}</h2>
+        <h3 className="mt-3 font-semibold text-lg">{contact.name}</h3>
         <p className="text-muted-foreground text-sm">{contact.role}</p>
         <p className="text-muted-foreground text-sm">{contact.company}</p>
       </div>

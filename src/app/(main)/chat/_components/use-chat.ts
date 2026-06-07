@@ -13,7 +13,7 @@ type ChatStore = {
 
 const useChatStore = create<ChatStore>((set) => ({
   chat: {
-    selected: conversations.find((c) => c.isActive)?.id ?? conversations[0].id,
+    selected: conversations[0].id,
   },
   setChat: (chat) => set({ chat }),
 }));

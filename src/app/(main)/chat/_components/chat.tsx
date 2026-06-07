@@ -25,16 +25,11 @@ export function Chat({ conversations, contact, messages }: ChatProps) {
         gridTemplateColumns: showContact ? "22.5rem minmax(0, 1fr) 20rem" : "22.5rem minmax(0, 1fr) 0rem",
       }}
     >
-      <div className="min-h-0 border-r">
+      <div className="min-h-0 min-w-0 border-r">
         <ChatConversations conversations={conversations} />
       </div>
       <div className="min-h-0 min-w-0">
-        <ChatView
-          contact={contact}
-          messages={messages}
-          isContactOpen={showContact}
-          onToggleContact={() => setShowContact((value) => !value)}
-        />
+        <ChatView contact={contact} messages={messages} onOpenContact={() => setShowContact(true)} />
       </div>
       <div
         aria-hidden={!showContact}
@@ -49,7 +44,7 @@ export function Chat({ conversations, contact, messages }: ChatProps) {
             showContact ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
           )}
         >
-          <ChatContact contact={contact} />
+          <ChatContact contact={contact} onClose={() => setShowContact(false)} />
         </div>
       </div>
     </div>
