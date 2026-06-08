@@ -225,7 +225,7 @@ function MessageComposer({ placeholder }: { placeholder: string }) {
           <Button variant="ghost" size="icon-sm" aria-label="Insert link">
             <Link />
           </Button>
-          <Button variant="outline" size="icon-sm" aria-label="Insert link">
+          <Button variant="outline" size="icon-sm" aria-label="AI assist">
             <Sparkles />
           </Button>
         </div>
