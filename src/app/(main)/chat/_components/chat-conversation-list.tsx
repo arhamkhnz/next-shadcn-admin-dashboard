@@ -14,12 +14,12 @@ import { cn, getInitials } from "@/lib/utils";
 import type { Conversation } from "./data";
 import { useChat } from "./use-chat";
 
-interface ChatConversationsProps {
+interface ChatConversationListProps {
   conversations: Conversation[];
   onSelectConversation?: (conversation: Conversation) => void;
 }
 
-export function ChatConversations({ conversations, onSelectConversation }: ChatConversationsProps) {
+export function ChatConversationList({ conversations, onSelectConversation }: ChatConversationListProps) {
   const [chat, setChat] = useChat();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
@@ -110,7 +110,7 @@ export function ChatConversations({ conversations, onSelectConversation }: ChatC
                           }}
                         >
                           <div className="flex min-w-0 items-start gap-2.5">
-                            <Avatar className="shrink-0 **:data-[slot=avatar-badge]:size-2">
+                            <Avatar className="shrink-0 **:data-[slot=avatar-badge]:size-2.5">
                               <AvatarFallback
                                 className={cn(
                                   "text-foreground text-xs transition-colors duration-400",
@@ -139,11 +139,19 @@ export function ChatConversations({ conversations, onSelectConversation }: ChatC
                                   </div>
                                 </div>
 
-                                {conversation.group === "Pinned" && (
-                                  <div className="grid size-5 place-items-center">
-                                    <Pin className="size-3 fill-current opacity-70" />
-                                  </div>
-                                )}
+                                <div className="flex items-center gap-1">
+                                  {conversation.group === "Pinned" && (
+                                    <div className="grid size-5 place-items-center">
+                                      <Pin className="size-3 fill-current opacity-70" />
+                                    </div>
+                                  )}
+
+                                  {conversation.isUnread && (
+                                    <div className="grid size-5 place-items-center rounded-full bg-primary/90 text-primary-foreground text-xs">
+                                      {conversation.unreadCount}
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>

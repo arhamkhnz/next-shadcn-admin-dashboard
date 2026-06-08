@@ -1,6 +1,6 @@
 import { Chat } from "./_components/chat";
-import { activeContact, conversations, messages } from "./_components/data";
+import { conversations } from "./_components/data";
 
-export default async function Page() {
-  return <Chat conversations={conversations} contact={activeContact} messages={messages} />;
+export default function Page() {
+  return <Chat conversations={conversations} />;
 }

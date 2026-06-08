@@ -4,37 +4,39 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { ChatContact } from "./chat-contact";
-import { ChatConversations } from "./chat-conversations";
-import { ChatView } from "./chat-view";
-import type { Contact, Conversation, Message } from "./data";
+import { ChatConversationList } from "./chat-conversation-list";
+import { ChatProfileDetails } from "./chat-profile-details";
+import { ChatThread } from "./chat-thread";
+import type { Conversation } from "./data";
+import { useChat } from "./use-chat";
 
 interface ChatProps {
   conversations: Conversation[];
-  contact: Contact;
-  messages: Message[];
 }
 
-export function Chat({ conversations, contact, messages }: ChatProps) {
+export function Chat({ conversations }: ChatProps) {
+  const [chat] = useChat();
   const [showContact, setShowContact] = useState(true);
+
+  const activeConversation = conversations.find((c) => c.id === chat.selected) ?? conversations[0];
 
   return (
     <div
-      className="grid h-[calc(100svh-var(--header-height))] min-h-0 min-w-0 flex-1 overflow-hidden shadow-sm transition-[grid-template-columns] duration-300 ease-out"
+      className="grid h-[calc(100svh-var(--header-height))] min-h-0 min-w-0 flex-1 overflow-hidden shadow-sm transition-[grid-template-columns] duration-300 ease-out *:min-h-0 *:min-w-0 *:first:border-r"
       style={{
         gridTemplateColumns: showContact ? "22.5rem minmax(0, 1fr) 20rem" : "22.5rem minmax(0, 1fr) 0rem",
       }}
     >
-      <div className="min-h-0 min-w-0 border-r">
-        <ChatConversations conversations={conversations} />
-      </div>
-      <div className="min-h-0 min-w-0">
-        <ChatView contact={contact} messages={messages} onOpenContact={() => setShowContact(true)} />
-      </div>
+      <ChatConversationList conversations={conversations} />
+      <ChatThread
+        contact={activeConversation.contact}
+        messages={activeConversation.messages}
+        onOpenContact={() => setShowContact(true)}
+      />
       <div
         aria-hidden={!showContact}
         className={cn(
-          "min-h-0 min-w-0 overflow-hidden border-l transition-colors duration-300",
+          "overflow-hidden border-l transition-colors duration-300",
           !showContact && "pointer-events-none border-l-transparent",
         )}
       >
@@ -44,7 +46,7 @@ export function Chat({ conversations, contact, messages }: ChatProps) {
             showContact ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
           )}
         >
-          <ChatContact contact={contact} onClose={() => setShowContact(false)} />
+          <ChatProfileDetails contact={activeConversation.contact} onClose={() => setShowContact(false)} />
         </div>
       </div>
     </div>
