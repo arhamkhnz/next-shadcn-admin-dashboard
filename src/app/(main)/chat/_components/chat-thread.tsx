@@ -2,6 +2,7 @@
 
 import {
   AlarmClock,
+  ArrowLeft,
   Copy,
   Flag,
   Link,
@@ -39,14 +40,28 @@ interface ChatThreadProps {
   contact: Contact;
   messages: Message[];
   onOpenContact?: () => void;
+  onBack?: () => void;
+  showBackButton?: boolean;
+  className?: string;
 }
 
-export function ChatThread({ contact, messages, onOpenContact }: ChatThreadProps) {
+export function ChatThread({ contact, messages, onOpenContact, onBack, showBackButton, className }: ChatThreadProps) {
   return (
-    <div className="flex h-full flex-col py-3">
+    <div className={cn("flex h-full flex-col py-3", className)}>
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-4 px-2">
           <div className="flex items-center gap-3">
+            {showBackButton && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="md:hidden"
+                aria-label="Back to conversations"
+                onClick={onBack}
+              >
+                <ArrowLeft />
+              </Button>
+            )}
             <Avatar className="size-8">
               <AvatarFallback className="bg-background text-foreground">{getInitials(contact.name)}</AvatarFallback>
               <AvatarBadge className="bg-green-600 dark:bg-green-800" />

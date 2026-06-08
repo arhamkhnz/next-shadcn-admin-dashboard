@@ -17,9 +17,10 @@ import { useChat } from "./use-chat";
 interface ChatConversationListProps {
   conversations: Conversation[];
   onSelectConversation?: (conversation: Conversation) => void;
+  className?: string;
 }
 
-export function ChatConversationList({ conversations, onSelectConversation }: ChatConversationListProps) {
+export function ChatConversationList({ conversations, onSelectConversation, className }: ChatConversationListProps) {
   const [chat, setChat] = useChat();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
@@ -37,7 +38,7 @@ export function ChatConversationList({ conversations, onSelectConversation }: Ch
   }, []);
 
   return (
-    <div className="flex h-full flex-col gap-3 py-3">
+    <div className={cn("flex h-full flex-col gap-3 py-3", className)}>
       <div className="flex items-center justify-between gap-4 px-2 py-0.5">
         <div className="flex items-center gap-2">
           <Button
