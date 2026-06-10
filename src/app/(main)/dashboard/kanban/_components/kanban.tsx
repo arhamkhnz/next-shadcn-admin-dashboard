@@ -16,14 +16,36 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import {
+  ArrowUpDown,
+  Bot,
+  ChevronDown,
+  Kanban as KanbanIcon,
+  LayoutTemplate,
+  List,
+  Plus,
+  Search,
+  SlidersHorizontal,
+  Table2,
+  Upload,
+} from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { DealCard } from "./deal-card";
 import { KanbanColumn } from "./kanban-column";
-import { KanbanToolbar } from "./kanban-toolbar";
 import type { BoardState, ColumnId, Deal } from "./types";
 import { columns } from "./types";
 import { findColumnId, findDeal } from "./utils";
-import { ViewTabs } from "./view-tabs";
 
 interface KanbanProps {
   initialBoard: BoardState;
@@ -122,36 +144,92 @@ export function Kanban({ initialBoard }: KanbanProps) {
   }
 
   return (
-    <div
-      data-content-padding="false"
-      className="flex h-[calc(100dvh-var(--dashboard-header-height))] min-h-[680px] flex-col overflow-hidden bg-muted/25"
-    >
-      <div className="border-b bg-background">
-        <div className="flex flex-col gap-3 px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-6">
-          <ViewTabs />
-          <KanbanToolbar />
+    <div className="flex h-[calc(100dvh-var(--dashboard-header-height))] min-h-0 min-w-0 flex-col overflow-hidden">
+      <div className="flex shrink-0 items-center justify-between gap-3 border-b px-6 py-3">
+        <Tabs defaultValue="board">
+          <TabsList>
+            <TabsTrigger value="board" className="gap-2">
+              <KanbanIcon />
+              Board
+            </TabsTrigger>
+            <TabsTrigger value="list" className="gap-2">
+              <List />
+              List
+            </TabsTrigger>
+            <TabsTrigger value="table" className="gap-2">
+              <Table2 />
+              Table
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
+          <InputGroup className="min-w-0 sm:w-48">
+            <InputGroupInput type="search" placeholder="Search deals" />
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
+          </InputGroup>
+          <Button variant="outline">
+            <SlidersHorizontal data-icon="inline-start" />
+            Filter
+          </Button>
+          <Button variant="outline">
+            <ArrowUpDown data-icon="inline-start" />
+            Sort
+          </Button>
+          <ButtonGroup>
+            <Button>
+              <Plus data-icon="inline-start" />
+              Add deal
+            </Button>
+            <ButtonGroupSeparator />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button aria-label="Open add deal menu">
+                  <ChevronDown />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem>
+                  <Upload />
+                  Import CSV
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LayoutTemplate />
+                  Add from template
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Bot />
+                  Create automation
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </ButtonGroup>
         </div>
       </div>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-        onDragCancel={handleDragCancel}
-      >
-        <div className="flex-1 overflow-x-auto overflow-y-hidden p-4 lg:p-5">
-          <div className="grid h-full min-w-[1420px] grid-cols-5 gap-4">
-            {columns.map((column) => (
-              <KanbanColumn key={column.id} column={column} deals={board[column.id]} />
-            ))}
+      <div className="min-h-0 min-w-0 flex-1 overflow-hidden">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          onDragCancel={handleDragCancel}
+        >
+          <div className="h-full min-w-0 overflow-x-auto overflow-y-hidden p-4 lg:p-5">
+            <div className="grid h-full min-w-[1420px] grid-cols-5 gap-4">
+              {columns.map((column) => (
+                <KanbanColumn key={column.id} column={column} deals={board[column.id]} />
+              ))}
+            </div>
           </div>
-        </div>
-        <DragOverlay dropAnimation={null}>
-          {activeDeal ? <DealCard deal={activeDeal} columnId={activeColumnId ?? undefined} isOverlay /> : null}
-        </DragOverlay>
-      </DndContext>
+          <DragOverlay dropAnimation={null}>
+            {activeDeal ? <DealCard deal={activeDeal} columnId={activeColumnId ?? undefined} isOverlay /> : null}
+          </DragOverlay>
+        </DndContext>
+      </div>
     </div>
   );
 }
