@@ -1,23 +1,21 @@
 "use client";
 
-import { useDroppable } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { MoreHorizontal, Plus } from "lucide-react";
+import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { GripVertical, MoreVertical, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
-import { SortableDealCard } from "./sortable-deal-card";
-import type { columns, Deal } from "./types";
-import { getColumnTotal } from "./utils";
+import { SortableTaskCard } from "./sortable-task-card";
+import type { columns, Task } from "./types";
 
 interface KanbanColumnProps {
   column: (typeof columns)[number];
-  deals: Deal[];
+  tasks: Task[];
 }
 
-export function KanbanColumn({ column, deals }: KanbanColumnProps) {
-  const { setNodeRef, isOver } = useDroppable({
+export function KanbanColumn({ column, tasks }: KanbanColumnProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver } = useSortable({
     id: column.id,
     data: { type: "column", columnId: column.id },
   });
@@ -25,50 +23,50 @@ export function KanbanColumn({ column, deals }: KanbanColumnProps) {
   return (
     <section
       ref={setNodeRef}
+      style={{
+        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+        transition,
+      }}
       className={cn(
-        "flex min-h-0 flex-col rounded-xl border bg-background/70 transition-colors",
+        "flex min-h-0 flex-col rounded-t-xl border bg-muted/50 transition-colors",
         isOver && "bg-muted/70",
+        isDragging && "opacity-60",
       )}
     >
       <div className="flex items-start justify-between gap-3 px-4 pt-4 pb-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h2 className={cn("truncate font-semibold text-base", column.accent)}>{column.title}</h2>
-            <span
-              className={cn(
-                "inline-flex size-6 items-center justify-center rounded-full font-medium text-xs",
-                column.countTone,
-              )}
+        <div className="min-w-0 space-y-1">
+          <div className="flex items-center gap-0.5">
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className="-ml-2 cursor-grab text-foreground/70 active:cursor-grabbing"
+              aria-label={`Drag ${column.title} column`}
+              {...attributes}
+              {...listeners}
             >
-              {deals.length}
-            </span>
+              <GripVertical />
+            </Button>
+            <h2 className={cn("truncate font-medium text-base leading-none", column.accent)}>{column.title}</h2>
           </div>
-          <p className="mt-2 font-medium text-muted-foreground text-sm">
-            {formatCurrency(getColumnTotal(deals), { noDecimals: true })}
+          <p className="text-muted-foreground text-sm tabular-nums leading-none">
+            {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
           </p>
         </div>
-        <div className="flex items-center gap-1 text-muted-foreground">
-          <Button variant="ghost" size="icon-sm" aria-label={`Add deal to ${column.title}`}>
+        <div className="-mr-2 flex items-center gap-0.5 text-muted-foreground">
+          <Button variant="ghost" size="icon-sm" aria-label={`Add task to ${column.title}`}>
             <Plus />
           </Button>
           <Button variant="ghost" size="icon-sm" aria-label={`${column.title} column actions`}>
-            <MoreHorizontal />
+            <MoreVertical />
           </Button>
         </div>
       </div>
 
-      <SortableContext items={deals.map((deal) => deal.id)} strategy={verticalListSortingStrategy}>
-        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3">
-          {deals.map((deal) => (
-            <SortableDealCard key={deal.id} deal={deal} columnId={column.id} />
+      <SortableContext items={tasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
+        <div className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3 [scrollbar-color:var(--border)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1">
+          {tasks.map((task) => (
+            <SortableTaskCard key={task.id} task={task} columnId={column.id} />
           ))}
-          <Button
-            variant="outline"
-            className="h-12 shrink-0 border-dashed bg-background/40 text-muted-foreground hover:bg-muted/70"
-          >
-            <Plus data-icon="inline-start" />
-            Add deal
-          </Button>
         </div>
       </SortableContext>
     </section>

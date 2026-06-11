@@ -1,4 +1,4 @@
-import type { BoardState, ColumnId, Deal } from "./types";
+import type { BoardState, ColumnId } from "./types";
 import { columnIds } from "./types";
 
 export function isColumnId(id: string): id is ColumnId {
@@ -7,17 +7,13 @@ export function isColumnId(id: string): id is ColumnId {
 
 export function findColumnId(board: BoardState, id: string): ColumnId | undefined {
   if (isColumnId(id)) return id;
-  return columnIds.find((columnId) => board[columnId].some((deal) => deal.id === id));
+  return columnIds.find((columnId) => board[columnId].some((task) => task.id === id));
 }
 
-export function findDeal(board: BoardState, id: string) {
+export function findTask(board: BoardState, id: string) {
   for (const columnId of columnIds) {
-    const deal = board[columnId].find((item) => item.id === id);
-    if (deal) return deal;
+    const task = board[columnId].find((item) => item.id === id);
+    if (task) return task;
   }
   return undefined;
-}
-
-export function getColumnTotal(deals: Deal[]) {
-  return deals.reduce((total, deal) => total + deal.amount, 0);
 }

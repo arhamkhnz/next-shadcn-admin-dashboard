@@ -4,13 +4,13 @@ import { useSortable } from "@dnd-kit/sortable";
 
 import { cn } from "@/lib/utils";
 
-import { DealCard } from "./deal-card";
-import type { ColumnId, Deal } from "./types";
+import { TaskCard } from "./task-card";
+import type { ColumnId, Task } from "./types";
 
-export function SortableDealCard({ deal, columnId }: { deal: Deal; columnId: ColumnId }) {
+export function SortableTaskCard({ task, columnId }: { task: Task; columnId: ColumnId }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: deal.id,
-    data: { type: "deal", deal },
+    id: task.id,
+    data: { type: "task", task },
   });
 
   return (
@@ -24,7 +24,7 @@ export function SortableDealCard({ deal, columnId }: { deal: Deal; columnId: Col
       {...attributes}
       {...listeners}
     >
-      <DealCard deal={deal} columnId={columnId} />
+      <TaskCard task={task} columnId={columnId} />
     </div>
   );
 }

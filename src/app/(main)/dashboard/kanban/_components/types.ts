@@ -1,53 +1,55 @@
 export const columns = [
-  { id: "lead", title: "Lead", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
-  { id: "qualified", title: "Qualified", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
-  { id: "proposal", title: "Proposal", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
-  { id: "negotiation", title: "Negotiation", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
+  { id: "ideas", title: "Ideas", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
+  { id: "planned", title: "Planned", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
+  { id: "building", title: "Building", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
+  { id: "qa", title: "QA", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
   {
-    id: "won",
-    title: "Won",
-    accent: "text-emerald-700 dark:text-emerald-300",
-    countTone: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    id: "shipped",
+    title: "Shipped",
+    accent: "text-foreground",
+    countTone: "bg-muted text-muted-foreground",
   },
 ] as const;
 
 export type ColumnId = (typeof columns)[number]["id"];
 
-export type DealTag =
-  | "Analytics"
-  | "Automation"
-  | "Branding"
-  | "Consulting"
-  | "CRM"
+export type TaskTeam =
+  | "Backend"
+  | "Data"
   | "Design"
-  | "Dev"
-  | "E-commerce"
-  | "Enterprise"
-  | "Growth"
-  | "Integration"
-  | "IT"
-  | "Marketing"
-  | "Mobile"
+  | "Docs"
+  | "Finance Ops"
   | "Platform"
-  | "Software"
-  | "Web";
+  | "Product"
+  | "QA"
+  | "Security";
 
-export type Deal = {
-  id: string;
-  company: string;
-  description: string;
-  amount: number;
-  date: string;
-  tags: DealTag[];
-  comments: number;
-  files: number;
-  logo: string;
-  logoTone: string;
-  assignee: string;
-  assigneeTone: string;
-  won?: boolean;
+export type TaskPriority = "High" | "Medium" | "Low";
+
+export type TaskInsightLabel = "Attachments" | "Comments" | "Documents";
+
+export type TaskInsight = {
+  label: TaskInsightLabel;
+  count: number;
 };
 
-export type BoardState = Record<ColumnId, Deal[]>;
+export type TaskOwnerProfile = {
+  name: string;
+  tone: string;
+};
+
+export type Task = {
+  id: string;
+  title: string;
+  description: string;
+  priority: TaskPriority;
+  dueDate: string;
+  progress: number;
+  owner: TaskOwnerProfile;
+  team: TaskTeam;
+  insights: TaskInsight[];
+};
+
+export type BoardState = Record<ColumnId, Task[]>;
 
 export const columnIds = columns.map((column) => column.id) as ColumnId[];

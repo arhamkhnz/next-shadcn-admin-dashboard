@@ -15,7 +15,12 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  horizontalListSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
 import {
   ArrowUpDown,
   Bot,
@@ -41,11 +46,11 @@ import {
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { DealCard } from "./deal-card";
 import { KanbanColumn } from "./kanban-column";
-import type { BoardState, ColumnId, Deal } from "./types";
-import { columns } from "./types";
-import { findColumnId, findDeal } from "./utils";
+import { TaskCard } from "./task-card";
+import type { BoardState, ColumnId, Task } from "./types";
+import { columnIds, columns } from "./types";
+import { findColumnId, findTask } from "./utils";
 
 interface KanbanProps {
   initialBoard: BoardState;
@@ -53,9 +58,11 @@ interface KanbanProps {
 
 export function Kanban({ initialBoard }: KanbanProps) {
   const [board, setBoard] = React.useState<BoardState>(initialBoard);
-  const [activeDeal, setActiveDeal] = React.useState<Deal | null>(null);
+  const [columnOrder, setColumnOrder] = React.useState<ColumnId[]>(columnIds);
+  const [activeTask, setActiveTask] = React.useState<Task | null>(null);
   const [activeColumnId, setActiveColumnId] = React.useState<ColumnId | null>(null);
   const boardBeforeDrag = React.useRef<BoardState | null>(null);
+  const orderedColumns = columnOrder.flatMap((columnId) => columns.find((column) => column.id === columnId) ?? []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -64,9 +71,11 @@ export function Kanban({ initialBoard }: KanbanProps) {
   );
 
   function handleDragStart(event: DragStartEvent) {
+    if (event.active.data.current?.type === "column") return;
+
     boardBeforeDrag.current = board;
-    const deal = findDeal(board, String(event.active.id));
-    setActiveDeal(deal ?? null);
+    const task = findTask(board, String(event.active.id));
+    setActiveTask(task ?? null);
     setActiveColumnId(findColumnId(board, String(event.active.id)) ?? null);
   }
 
@@ -75,13 +84,14 @@ export function Kanban({ initialBoard }: KanbanProps) {
       setBoard(boardBeforeDrag.current);
     }
     boardBeforeDrag.current = null;
-    setActiveDeal(null);
+    setActiveTask(null);
     setActiveColumnId(null);
   }
 
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event;
     if (!over) return;
+    if (active.data.current?.type === "column") return;
 
     const activeId = String(active.id);
     const overId = String(over.id);
@@ -96,16 +106,16 @@ export function Kanban({ initialBoard }: KanbanProps) {
 
       const activeItems = currentBoard[activeColId];
       const overItems = currentBoard[overColId];
-      const activeIndex = activeItems.findIndex((deal) => deal.id === activeId);
+      const activeIndex = activeItems.findIndex((task) => task.id === activeId);
       if (activeIndex === -1) return currentBoard;
 
-      const overIndex = overItems.findIndex((deal) => deal.id === overId);
+      const overIndex = overItems.findIndex((task) => task.id === overId);
       const nextIndex = overIndex >= 0 ? overIndex : overItems.length;
       const activeItem = activeItems[activeIndex];
 
       return {
         ...currentBoard,
-        [activeColId]: activeItems.filter((deal) => deal.id !== activeId),
+        [activeColId]: activeItems.filter((task) => task.id !== activeId),
         [overColId]: [...overItems.slice(0, nextIndex), activeItem, ...overItems.slice(nextIndex)],
       };
     });
@@ -113,10 +123,27 @@ export function Kanban({ initialBoard }: KanbanProps) {
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
+    const activeType = active.data.current?.type;
     const snapshot = boardBeforeDrag.current;
     boardBeforeDrag.current = null;
-    setActiveDeal(null);
+    setActiveTask(null);
     setActiveColumnId(null);
+
+    if (activeType === "column") {
+      if (!over) return;
+
+      const activeColumnId = String(active.id) as ColumnId;
+      const overColumnId = findColumnId(board, String(over.id));
+      if (!overColumnId || activeColumnId === overColumnId) return;
+
+      setColumnOrder((currentOrder) => {
+        const activeIndex = currentOrder.indexOf(activeColumnId);
+        const overIndex = currentOrder.indexOf(overColumnId);
+        if (activeIndex === -1 || overIndex === -1) return currentOrder;
+        return arrayMove(currentOrder, activeIndex, overIndex);
+      });
+      return;
+    }
 
     if (!over) {
       if (snapshot) setBoard(snapshot);
@@ -131,14 +158,14 @@ export function Kanban({ initialBoard }: KanbanProps) {
       const overColumnId = findColumnId(currentBoard, overId);
       if (!activeColumnId || !overColumnId || activeColumnId !== overColumnId) return currentBoard;
 
-      const columnDeals = currentBoard[activeColumnId];
-      const activeIndex = columnDeals.findIndex((deal) => deal.id === activeId);
-      const overIndex = columnDeals.findIndex((deal) => deal.id === overId);
+      const columnTasks = currentBoard[activeColumnId];
+      const activeIndex = columnTasks.findIndex((task) => task.id === activeId);
+      const overIndex = columnTasks.findIndex((task) => task.id === overId);
       if (activeIndex === -1 || overIndex === -1 || activeIndex === overIndex) return currentBoard;
 
       return {
         ...currentBoard,
-        [activeColumnId]: arrayMove(columnDeals, activeIndex, overIndex),
+        [activeColumnId]: arrayMove(columnTasks, activeIndex, overIndex),
       };
     });
   }
@@ -165,7 +192,7 @@ export function Kanban({ initialBoard }: KanbanProps) {
 
         <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
           <InputGroup className="min-w-0 sm:w-48">
-            <InputGroupInput type="search" placeholder="Search deals" />
+            <InputGroupInput type="search" placeholder="Search tasks" />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
@@ -181,12 +208,12 @@ export function Kanban({ initialBoard }: KanbanProps) {
           <ButtonGroup>
             <Button>
               <Plus data-icon="inline-start" />
-              Add deal
+              Add task
             </Button>
             <ButtonGroupSeparator />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open add deal menu">
+                <Button aria-label="Open add task menu">
                   <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
@@ -209,27 +236,28 @@ export function Kanban({ initialBoard }: KanbanProps) {
         </div>
       </div>
 
-      <div className="min-h-0 min-w-0 flex-1 overflow-hidden">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}
-          onDragCancel={handleDragCancel}
-        >
-          <div className="h-full min-w-0 overflow-x-auto overflow-y-hidden p-4 lg:p-5">
-            <div className="grid h-full min-w-[1420px] grid-cols-5 gap-4">
-              {columns.map((column) => (
-                <KanbanColumn key={column.id} column={column} deals={board[column.id]} />
+      <DndContext
+        id="kanban-board"
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+      >
+        <div className="scrollbar-thin min-h-0 min-w-0 flex-1 overflow-x-auto overflow-y-hidden bg-muted/25 px-4 pt-4 pb-0 [scrollbar-color:var(--border)_transparent] lg:px-5 lg:pt-5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
+          <div className="inline-grid h-full min-w-full grid-cols-[repeat(5,minmax(20rem,1fr))] gap-4">
+            <SortableContext items={columnOrder} strategy={horizontalListSortingStrategy}>
+              {orderedColumns.map((column) => (
+                <KanbanColumn key={column.id} column={column} tasks={board[column.id]} />
               ))}
-            </div>
+            </SortableContext>
           </div>
-          <DragOverlay dropAnimation={null}>
-            {activeDeal ? <DealCard deal={activeDeal} columnId={activeColumnId ?? undefined} isOverlay /> : null}
-          </DragOverlay>
-        </DndContext>
-      </div>
+        </div>
+        <DragOverlay dropAnimation={null}>
+          {activeTask ? <TaskCard task={activeTask} columnId={activeColumnId ?? undefined} isOverlay /> : null}
+        </DragOverlay>
+      </DndContext>
     </div>
   );
 }
