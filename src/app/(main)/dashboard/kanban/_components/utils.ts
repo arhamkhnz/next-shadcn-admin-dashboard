@@ -1,5 +1,5 @@
+import { columnIds } from "./data";
 import type { BoardState, ColumnId } from "./types";
-import { columnIds } from "./types";
 
 export function isColumnId(id: string): id is ColumnId {
   return columnIds.includes(id as ColumnId);

@@ -1,4 +1,14 @@
-import type { BoardState, TaskOwnerProfile, TaskTeam } from "./types";
+import type { BoardState, Column, TaskOwnerProfile, TaskTeam } from "./types";
+
+export const columns = [
+  { id: "ideas", title: "Ideas" },
+  { id: "planned", title: "Planned" },
+  { id: "building", title: "Building" },
+  { id: "qa", title: "QA" },
+  { id: "shipped", title: "Shipped" },
+] as const satisfies readonly Column[];
+
+export const columnIds = columns.map((column) => column.id);
 
 export const tagTones: Record<TaskTeam, string> = {
   Backend: "bg-blue-500/10 text-blue-700 dark:text-blue-300",

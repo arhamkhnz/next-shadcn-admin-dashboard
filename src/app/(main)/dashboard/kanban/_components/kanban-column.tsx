@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { SortableTaskCard } from "./sortable-task-card";
-import type { columns, Task } from "./types";
+import type { Column, Task } from "./types";
 
 interface KanbanColumnProps {
-  column: (typeof columns)[number];
+  column: Column;
   tasks: Task[];
 }
 
@@ -46,7 +46,7 @@ export function KanbanColumn({ column, tasks }: KanbanColumnProps) {
             >
               <GripVertical />
             </Button>
-            <h2 className={cn("truncate font-medium text-base leading-none", column.accent)}>{column.title}</h2>
+            <h2 className="truncate font-medium text-base leading-none">{column.title}</h2>
           </div>
           <p className="text-muted-foreground text-sm tabular-nums leading-none">
             {tasks.length} {tasks.length === 1 ? "task" : "tasks"}

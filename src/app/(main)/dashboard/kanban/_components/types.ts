@@ -1,17 +1,9 @@
-export const columns = [
-  { id: "ideas", title: "Ideas", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
-  { id: "planned", title: "Planned", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
-  { id: "building", title: "Building", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
-  { id: "qa", title: "QA", accent: "text-foreground", countTone: "bg-muted text-muted-foreground" },
-  {
-    id: "shipped",
-    title: "Shipped",
-    accent: "text-foreground",
-    countTone: "bg-muted text-muted-foreground",
-  },
-] as const;
+export type ColumnId = "ideas" | "planned" | "building" | "qa" | "shipped";
 
-export type ColumnId = (typeof columns)[number]["id"];
+export type Column = {
+  id: ColumnId;
+  title: string;
+};
 
 export type TaskTeam =
   | "Backend"
@@ -51,5 +43,3 @@ export type Task = {
 };
 
 export type BoardState = Record<ColumnId, Task[]>;
-
-export const columnIds = columns.map((column) => column.id) as ColumnId[];

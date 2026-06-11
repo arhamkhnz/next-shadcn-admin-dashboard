@@ -46,10 +46,10 @@ import {
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { columnIds, columns } from "./data";
 import { KanbanColumn } from "./kanban-column";
 import { TaskCard } from "./task-card";
 import type { BoardState, ColumnId, Task } from "./types";
-import { columnIds, columns } from "./types";
 import { findColumnId, findTask } from "./utils";
 
 interface KanbanProps {
@@ -172,9 +172,9 @@ export function Kanban({ initialBoard }: KanbanProps) {
 
   return (
     <div className="flex h-[calc(100dvh-var(--dashboard-header-height))] min-h-0 min-w-0 flex-col overflow-hidden">
-      <div className="flex shrink-0 items-center justify-between gap-3 border-b px-6 py-3">
-        <Tabs defaultValue="board">
-          <TabsList>
+      <div className="flex shrink-0 flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-6">
+        <Tabs defaultValue="board" className="min-w-0">
+          <TabsList className="w-full *:data-[slot=tabs-trigger]:flex-1 sm:w-fit sm:*:data-[slot=tabs-trigger]:flex-none">
             <TabsTrigger value="board" className="gap-2">
               <KanbanIcon />
               Board
@@ -190,23 +190,23 @@ export function Kanban({ initialBoard }: KanbanProps) {
           </TabsList>
         </Tabs>
 
-        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
-          <InputGroup className="min-w-0 sm:w-48">
+        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center 2xl:justify-end">
+          <InputGroup className="min-w-0 sm:w-64 2xl:w-48">
             <InputGroupInput type="search" placeholder="Search tasks" />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
           </InputGroup>
-          <Button variant="outline">
+          <Button variant="outline" className="w-full sm:w-auto">
             <SlidersHorizontal data-icon="inline-start" />
             Filter
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" className="w-full sm:w-auto">
             <ArrowUpDown data-icon="inline-start" />
             Sort
           </Button>
-          <ButtonGroup>
-            <Button>
+          <ButtonGroup className="w-full sm:w-fit">
+            <Button className="flex-1 sm:flex-none">
               <Plus data-icon="inline-start" />
               Add task
             </Button>
