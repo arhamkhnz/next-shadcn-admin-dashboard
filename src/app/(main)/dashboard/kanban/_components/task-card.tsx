@@ -133,14 +133,12 @@ export function TaskCard({
 
             <div className="flex items-center justify-between gap-3">
               <span className="text-muted-foreground text-sm">Team</span>
-              {task.team ? (
-                <Badge
-                  variant="secondary"
-                  className={cn("rounded-md border-transparent px-2 font-medium", tagTones[task.team])}
-                >
-                  {task.team}
-                </Badge>
-              ) : null}
+              <Badge
+                variant="secondary"
+                className={cn("rounded-md border-transparent px-2 font-medium", tagTones[task.team])}
+              >
+                {task.team}
+              </Badge>
             </div>
           </div>
         </div>
