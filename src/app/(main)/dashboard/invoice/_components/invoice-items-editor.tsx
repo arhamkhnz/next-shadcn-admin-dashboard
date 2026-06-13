@@ -9,7 +9,6 @@ import {
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
@@ -17,28 +16,24 @@ import {
 } from "@dnd-kit/sortable";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { UseFormRegister } from "react-hook-form";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
-import { formatMoney, getLineAmount, type InvoiceFormValues, type InvoiceLineItem } from "./data";
-
-const ITEM_IDS = ["item1", "item2", "item3"] as const;
-
-type InvoiceItemId = (typeof ITEM_IDS)[number];
-
-function isInvoiceItemId(id: unknown): id is InvoiceItemId {
-  return ITEM_IDS.includes(id as InvoiceItemId);
-}
+import { getLineAmount, type InvoiceFormValues, type InvoiceLineItem } from "./data";
 
 export function InvoiceItemsEditor() {
-  const { control, getValues, register, setValue } = useFormContext<InvoiceFormValues>();
-  const item1 = useWatch({ control, name: "item1" });
-  const item2 = useWatch({ control, name: "item2" });
-  const item3 = useWatch({ control, name: "item3" });
+  const { control, register } = useFormContext<InvoiceFormValues>();
+  const { append, fields, move, remove } = useFieldArray({
+    control,
+    name: "items",
+    keyName: "fieldKey",
+  });
+  const items = useWatch({ control, name: "items" }) ?? [];
+  const sortableItemIds = fields.map((field) => field.id);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -47,19 +42,12 @@ export function InvoiceItemsEditor() {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-    if (!isInvoiceItemId(active.id) || !isInvoiceItemId(over.id)) return;
 
-    const oldIndex = ITEM_IDS.indexOf(active.id);
-    const newIndex = ITEM_IDS.indexOf(over.id);
-    const items = ITEM_IDS.map((id) => getValues(id));
-    const reorderedItems = arrayMove(items, oldIndex, newIndex);
+    const oldIndex = fields.findIndex((field) => field.id === active.id);
+    const newIndex = fields.findIndex((field) => field.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
 
-    ITEM_IDS.forEach((id, index) => {
-      setValue(id, reorderedItems[index], {
-        shouldDirty: true,
-        shouldTouch: true,
-      });
-    });
+    move(oldIndex, newIndex);
   }
 
   return (
@@ -82,42 +70,30 @@ export function InvoiceItemsEditor() {
         modifiers={[restrictToVerticalAxis]}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={ITEM_IDS} strategy={verticalListSortingStrategy}>
+        <SortableContext items={sortableItemIds} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col gap-3">
-            <SortableInvoiceItemRow
-              id="item1"
-              item={item1}
-              register={register}
-              descriptionLabel="First item description"
-              quantityLabel="First item quantity"
-              unitPriceLabel="First item unit price"
-              removeLabel="Remove first item"
-            />
-            <SortableInvoiceItemRow
-              id="item2"
-              item={item2}
-              register={register}
-              descriptionLabel="Second item description"
-              quantityLabel="Second item quantity"
-              unitPriceLabel="Second item unit price"
-              removeLabel="Remove second item"
-            />
-            <SortableInvoiceItemRow
-              id="item3"
-              item={item3}
-              register={register}
-              descriptionLabel="Third item description"
-              quantityLabel="Third item quantity"
-              unitPriceLabel="Third item unit price"
-              removeLabel="Remove third item"
-            />
+            {fields.map((field, index) => (
+              <SortableInvoiceItemRow
+                key={field.id}
+                id={field.id}
+                index={index}
+                item={items[index]}
+                register={register}
+                onRemove={() => remove(index)}
+              />
+            ))}
           </div>
         </SortableContext>
       </DndContext>
 
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-3">
         <Separator />
-        <Button type="button" variant="outline" className="text-primary">
+        <Button
+          type="button"
+          variant="outline"
+          className="text-primary"
+          onClick={() => append({ id: `item-${Date.now()}`, description: "", quantity: 1, unitPrice: 0 })}
+        >
           <Plus data-icon="inline-start" />
           Add Item
         </Button>
@@ -129,20 +105,16 @@ export function InvoiceItemsEditor() {
 
 function SortableInvoiceItemRow({
   id,
+  index,
   item,
   register,
-  descriptionLabel,
-  quantityLabel,
-  unitPriceLabel,
-  removeLabel,
+  onRemove,
 }: {
-  id: InvoiceItemId;
+  id: string;
+  index: number;
   item?: InvoiceLineItem;
   register: UseFormRegister<InvoiceFormValues>;
-  descriptionLabel: string;
-  quantityLabel: string;
-  unitPriceLabel: string;
-  removeLabel: string;
+  onRemove: () => void;
 }) {
   const { attributes, isDragging, listeners, setActivatorNodeRef, setNodeRef, transform, transition } = useSortable({
     id,
@@ -172,25 +144,38 @@ function SortableInvoiceItemRow({
       >
         <GripVertical />
       </Button>
-      <Input className="h-10 min-w-0 text-sm" aria-label={descriptionLabel} {...register(`${id}.description`)} />
+      <Input
+        className="h-10 min-w-0 text-sm"
+        aria-label={`Item ${index + 1} description`}
+        {...register(`items.${index}.description` as const)}
+      />
       <Input
         type="number"
         step="1"
         className="h-10 text-center text-sm"
-        aria-label={quantityLabel}
-        {...register(`${id}.quantity`, { valueAsNumber: true })}
+        aria-label={`Item ${index + 1} quantity`}
+        {...register(`items.${index}.quantity` as const, { valueAsNumber: true })}
       />
       <Input
         type="number"
         step="0.01"
         className="h-10 text-right text-sm"
-        aria-label={unitPriceLabel}
-        {...register(`${id}.unitPrice`, { valueAsNumber: true })}
+        aria-label={`Item ${index + 1} unit price`}
+        {...register(`items.${index}.unitPrice` as const, { valueAsNumber: true })}
       />
-      <div className="min-w-0 text-right font-medium text-sm max-md:text-left">{formatMoney(getLineAmount(item))}</div>
-      <Button type="button" variant="ghost" size="icon-sm" aria-label={removeLabel}>
+      <div className="min-w-0 text-right font-medium text-sm max-md:text-left">
+        {formatInvoiceCurrency(getLineAmount(item))}
+      </div>
+      <Button type="button" variant="ghost" size="icon-sm" aria-label={`Remove item ${index + 1}`} onClick={onRemove}>
         <Trash2 />
       </Button>
     </div>
   );
+}
+
+function formatInvoiceCurrency(value: number) {
+  return formatCurrency(Number.isFinite(value) ? value : 0, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }

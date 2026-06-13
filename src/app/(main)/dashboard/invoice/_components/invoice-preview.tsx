@@ -6,50 +6,14 @@ import { FileText, Mail, Printer } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import type { InvoiceFormValues } from "./data";
+import { INVOICE_PAPER_HEIGHT, INVOICE_PAPER_SCALE, INVOICE_PAPER_WIDTH, type InvoiceFormValues } from "./data";
 import { InvoicePaper } from "./invoice-paper";
+import { useVisibleCenterPosition } from "./use-visible-center-position";
 
 export function InvoicePreview({ invoice }: { invoice: InvoiceFormValues }) {
   const previewBodyRef = React.useRef<HTMLDivElement>(null);
   const invoicePaperRef = React.useRef<HTMLDivElement>(null);
-  const [paperTop, setPaperTop] = React.useState<number | null>(null);
-
-  React.useEffect(() => {
-    function updatePaperTop() {
-      const previewBody = previewBodyRef.current;
-      const invoicePaper = invoicePaperRef.current;
-      if (!previewBody || !invoicePaper) return;
-
-      const bodyRect = previewBody.getBoundingClientRect();
-      const visibleTop = Math.max(bodyRect.top, 0);
-      const visibleBottom = Math.min(bodyRect.bottom, window.innerHeight);
-      const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-      const visibleCenter =
-        visibleHeight > 0 ? visibleTop + visibleHeight / 2 - bodyRect.top : previewBody.clientHeight / 2;
-      const padding = 16;
-      const maxTop = Math.max(padding, previewBody.clientHeight - invoicePaper.offsetHeight - padding);
-
-      const nextTop = Math.min(Math.max(visibleCenter - invoicePaper.offsetHeight / 2, padding), maxTop);
-
-      if (process.env.NODE_ENV === "development") {
-        console.log("Invoice preview spacing", {
-          above: Math.round(nextTop),
-          below: Math.round(previewBody.clientHeight - nextTop - invoicePaper.offsetHeight),
-        });
-      }
-
-      setPaperTop(nextTop);
-    }
-
-    updatePaperTop();
-    window.addEventListener("scroll", updatePaperTop, { passive: true });
-    window.addEventListener("resize", updatePaperTop);
-
-    return () => {
-      window.removeEventListener("scroll", updatePaperTop);
-      window.removeEventListener("resize", updatePaperTop);
-    };
-  }, []);
+  const paperTop = useVisibleCenterPosition(previewBodyRef, invoicePaperRef);
 
   return (
     <div className="flex flex-col rounded-xl border bg-card">
@@ -75,15 +39,23 @@ export function InvoicePreview({ invoice }: { invoice: InvoiceFormValues }) {
         ref={previewBodyRef}
         className="@container/preview relative min-h-[calc(100svh-15rem)] flex-1 rounded-b-xl bg-stone-200 p-4 dark:bg-stone-800"
       >
+        {paperTop === null ? (
+          <div className="absolute inset-0 grid place-items-center text-muted-foreground text-sm">Loading Preview</div>
+        ) : null}
         <div
           ref={invoicePaperRef}
           style={{
+            height: INVOICE_PAPER_HEIGHT * INVOICE_PAPER_SCALE,
             top: paperTop ?? "50%",
             transform: paperTop === null ? "translate(-50%, -50%)" : "translateX(-50%)",
+            width: INVOICE_PAPER_WIDTH * INVOICE_PAPER_SCALE,
           }}
-          className="absolute left-1/2 @2xl/preview:h-[686px] @lg/preview:h-[581px] @md/preview:h-[528px] @sm/preview:h-[475px] @xl/preview:h-[634px] h-[422px] @2xl/preview:w-[530px] @lg/preview:w-[449px] @md/preview:w-[408px] @sm/preview:w-[367px] @xl/preview:w-[490px] w-[326px]"
+          className="absolute left-1/2 opacity-0 data-[ready=true]:opacity-100"
+          data-ready={paperTop !== null}
         >
-          <InvoicePaper invoice={invoice} />
+          <div style={{ transform: `scale(${INVOICE_PAPER_SCALE})` }} className="origin-top-left">
+            <InvoicePaper invoice={invoice} />
+          </div>
         </div>
       </div>
     </div>

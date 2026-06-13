@@ -8,8 +8,7 @@ import type { InvoiceFormValues } from "./data";
 
 export function ClientSelector() {
   const { watch } = useFormContext<InvoiceFormValues>();
-  const clientName = watch("clientName");
-  const clientEmail = watch("clientEmail");
+  const client = watch("to");
 
   return (
     <section className="flex flex-col gap-4">
@@ -31,8 +30,8 @@ export function ClientSelector() {
             <span className="block size-6 -skew-x-12 bg-foreground" />
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate font-medium">{clientName}</span>
-            <span className="block truncate text-muted-foreground">{clientEmail}</span>
+            <span className="block truncate font-medium">{client.name}</span>
+            <span className="block truncate text-muted-foreground">{client.email}</span>
           </span>
           <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
         </button>
