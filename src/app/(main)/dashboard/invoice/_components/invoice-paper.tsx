@@ -21,16 +21,17 @@ export function InvoicePaper({ invoice }: { invoice: InvoiceFormValues }) {
   return (
     <article
       style={{ width: INVOICE_PAPER_WIDTH, height: INVOICE_PAPER_HEIGHT }}
+      data-print-paper
       className="relative flex flex-col gap-24 bg-neutral-50 px-12.25 py-11 font-mono text-neutral-950"
     >
       <header className="flex flex-col gap-10">
         <div className="grid grid-cols-2 items-start gap-14">
-          <div className="grid size-12 grid-cols-2 gap-1">
-            <span className="rounded-sm bg-current" />
-            <span className="rounded-sm bg-current" />
-            <span className="rounded-sm bg-current" />
-            <span className="rounded-sm bg-current" />
-          </div>
+          <svg className="size-12" viewBox="0 0 48 48" aria-hidden="true">
+            <rect width="20" height="20" rx="3" fill="currentColor" />
+            <rect x="28" width="20" height="20" rx="3" fill="currentColor" />
+            <rect y="28" width="20" height="20" rx="3" fill="currentColor" />
+            <rect x="28" y="28" width="20" height="20" rx="3" fill="currentColor" />
+          </svg>
           <h2 className="text-4xl uppercase tracking-widest">Invoice</h2>
         </div>
 
