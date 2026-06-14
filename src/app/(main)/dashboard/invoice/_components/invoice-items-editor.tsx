@@ -20,7 +20,6 @@ import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { cn, formatCurrency } from "@/lib/utils";
 
 import { getLineAmount, type InvoiceFormValues, type InvoiceLineItem } from "./data";
@@ -50,9 +49,19 @@ export function InvoiceItemsEditor() {
     move(oldIndex, newIndex);
   }
 
+  function handleAddItem() {
+    append({ id: `item-${Date.now()}`, description: "", quantity: 1, unitPrice: 0 });
+  }
+
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="font-semibold text-xl tracking-tight">Invoice Items</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="font-medium tracking-tight">Invoice Items</h2>
+        <Button type="button" variant="ghost" size="sm" onClick={handleAddItem}>
+          <Plus data-icon="inline-start" />
+          Add Item
+        </Button>
+      </div>
 
       <div className="hidden items-center gap-2 px-1 font-medium text-muted-foreground text-xs md:grid md:grid-cols-[24px_minmax(0,1fr)_64px_112px_112px_32px]">
         <span />
@@ -85,20 +94,6 @@ export function InvoiceItemsEditor() {
           </div>
         </SortableContext>
       </DndContext>
-
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-3">
-        <Separator />
-        <Button
-          type="button"
-          variant="outline"
-          className="text-primary"
-          onClick={() => append({ id: `item-${Date.now()}`, description: "", quantity: 1, unitPrice: 0 })}
-        >
-          <Plus data-icon="inline-start" />
-          Add Item
-        </Button>
-        <Separator />
-      </div>
     </section>
   );
 }

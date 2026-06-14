@@ -1,9 +1,11 @@
 import { formatCurrency } from "@/lib/utils";
 
 import {
+  getInvoiceDiscount,
   getInvoiceItems,
   getInvoiceSubtotal,
   getInvoiceTax,
+  getInvoiceTaxOption,
   getInvoiceTotal,
   getLineAmount,
   INVOICE_PAPER_HEIGHT,
@@ -12,6 +14,10 @@ import {
 } from "./data";
 
 export function InvoicePaper({ invoice }: { invoice: InvoiceFormValues }) {
+  const taxOption = getInvoiceTaxOption(invoice);
+  const discountValue = Number.isFinite(invoice.discountValue) ? invoice.discountValue : 0;
+  const discountLabel = invoice.discountType === "percent" ? `Discount ${discountValue}%` : "Discount";
+
   return (
     <article
       style={{ width: INVOICE_PAPER_WIDTH, height: INVOICE_PAPER_HEIGHT }}
@@ -30,13 +36,13 @@ export function InvoicePaper({ invoice }: { invoice: InvoiceFormValues }) {
 
         <section className="grid grid-cols-2 gap-14 text-sm leading-relaxed">
           <div>
-            <p>Reference: {invoice.invoiceNumber}</p>
-            <p>Issued: {invoice.issueDate}</p>
-            <p>Payment due: {invoice.dueDate}</p>
+            <p>Reference: {invoice.referenceNumber}</p>
+            <p>Issued: {invoice.issuedDate}</p>
+            <p>Payment due: {invoice.paymentDueDate}</p>
           </div>
           <div>
             <p>Payment account</p>
-            <p>{invoice.from.bankName}</p>
+            <p>{invoice.from.paymentAccountName}</p>
             <p>Routing no. {invoice.from.routingNumber}</p>
           </div>
         </section>
@@ -90,7 +96,13 @@ export function InvoicePaper({ invoice }: { invoice: InvoiceFormValues }) {
                 <span>{formatInvoiceCurrency(getInvoiceSubtotal(invoice))}</span>
               </div>
               <div className="flex justify-between gap-8">
-                <span>Sales tax {invoice.taxRate}%</span>
+                <span>{discountLabel}</span>
+                <span>{formatInvoiceCurrency(getInvoiceDiscount(invoice))}</span>
+              </div>
+              <div className="flex justify-between gap-8">
+                <span>
+                  {taxOption.name} {taxOption.rate}%
+                </span>
                 <span>{formatInvoiceCurrency(getInvoiceTax(invoice))}</span>
               </div>
             </div>

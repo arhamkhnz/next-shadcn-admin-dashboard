@@ -1,50 +1,79 @@
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import { Field, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import type { InvoiceFormValues } from "./data";
+import { type InvoiceFormValues, invoiceTaxOptions } from "./data";
 
 export function TaxDiscountFields() {
-  const { register } = useFormContext<InvoiceFormValues>();
+  const { control, register } = useFormContext<InvoiceFormValues>();
+  const discountType = useWatch({ control, name: "discountType" });
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_1.1fr]">
-      <Field>
-        <FieldLabel>Tax</FieldLabel>
-        <InputGroup className="h-12">
-          <InputGroupInput
-            type="number"
-            step="0.01"
-            className="text-center"
-            aria-label="Tax rate"
-            {...register("taxRate", { valueAsNumber: true })}
+    <section className="flex flex-col gap-4">
+      <h2 className="font-medium tracking-tight">Adjustments</h2>
+
+      <div className="grid gap-5 lg:grid-cols-[1fr_1.1fr]">
+        <Controller
+          control={control}
+          name="taxId"
+          render={({ field }) => (
+            <Field className="gap-1">
+              <FieldLabel className="font-normal">Tax</FieldLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="h-10 w-full">
+                  <SelectValue placeholder="Select tax" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {invoiceTaxOptions.map((taxOption) => (
+                      <SelectItem key={taxOption.id} value={taxOption.id}>
+                        {taxOption.name} ({taxOption.rate}%)
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+        />
+
+        <div className="grid grid-cols-[1fr_112px] gap-4">
+          <Controller
+            control={control}
+            name="discountType"
+            render={({ field }) => (
+              <Field className="gap-1">
+                <FieldLabel className="font-normal">Discount</FieldLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="h-10 w-full">
+                    <SelectValue placeholder="Discount type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="fixed">Fixed amount</SelectItem>
+                      <SelectItem value="percent">Percent</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+            )}
           />
-          <InputGroupAddon align="inline-end">%</InputGroupAddon>
-        </InputGroup>
-      </Field>
-      <div className="grid grid-cols-[1fr_96px] gap-4">
-        <Field>
-          <FieldLabel>Discount</FieldLabel>
-          <InputGroup className="h-12">
-            <InputGroupAddon align="inline-start">$</InputGroupAddon>
-            <InputGroupInput
-              type="number"
-              step="0.01"
-              className="text-center"
-              aria-label="Discount amount"
-              {...register("discount", { valueAsNumber: true })}
-            />
-          </InputGroup>
-        </Field>
-        <Field>
-          <FieldLabel className="opacity-0">Discount Percent</FieldLabel>
-          <InputGroup className="h-12">
-            <InputGroupInput value="0" readOnly className="text-center" aria-label="Discount percent" tabIndex={-1} />
-            <InputGroupAddon align="inline-end">%</InputGroupAddon>
-          </InputGroup>
-        </Field>
+          <Field className="gap-1">
+            <FieldLabel className="opacity-0">Value</FieldLabel>
+            <InputGroup>
+              <InputGroupInput
+                type="number"
+                step="0.01"
+                aria-label="Discount value"
+                {...register("discountValue", { valueAsNumber: true })}
+              />
+              <InputGroupAddon align="inline-end">{discountType === "fixed" ? "$" : "%"}</InputGroupAddon>
+            </InputGroup>
+          </Field>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

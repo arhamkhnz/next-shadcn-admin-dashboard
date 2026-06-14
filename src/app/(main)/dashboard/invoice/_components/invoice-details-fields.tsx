@@ -16,10 +16,12 @@ export function InvoiceDetailsFields() {
   return (
     <section className="flex flex-col gap-3">
       <FieldGroup>
-        <Field>
-          <FieldLabel htmlFor="invoice-number">Invoice Number</FieldLabel>
+        <Field className="gap-1">
+          <FieldLabel className="font-normal" htmlFor="reference-number">
+            Reference Number
+          </FieldLabel>
           <InputGroup>
-            <InputGroupInput id="invoice-number" {...register("invoiceNumber")} />
+            <InputGroupInput id="reference-number" {...register("referenceNumber")} />
             <InputGroupAddon align="inline-end">
               <Hash />
             </InputGroupAddon>
@@ -29,13 +31,20 @@ export function InvoiceDetailsFields() {
         <div className="grid gap-5 md:grid-cols-2">
           <Controller
             control={control}
-            name="issueDate"
+            name="issuedDate"
             render={({ field }) => (
-              <Field>
-                <FieldLabel htmlFor="issue-date">Issue Date</FieldLabel>
+              <Field className="gap-1">
+                <FieldLabel className="font-normal" htmlFor="issued-date">
+                  Issued Date
+                </FieldLabel>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button id="issue-date" type="button" variant="outline" className="h-8 justify-between font-normal">
+                    <Button
+                      id="issued-date"
+                      type="button"
+                      variant="outline"
+                      className="h-8 justify-between font-normal"
+                    >
                       {formatDateLabel(field.value)}
                       <CalendarDays data-icon="inline-end" />
                     </Button>
@@ -55,13 +64,20 @@ export function InvoiceDetailsFields() {
           />
           <Controller
             control={control}
-            name="dueDate"
+            name="paymentDueDate"
             render={({ field }) => (
-              <Field>
-                <FieldLabel htmlFor="due-date">Due Date</FieldLabel>
+              <Field className="gap-1">
+                <FieldLabel className="font-normal" htmlFor="payment-due-date">
+                  Due Date
+                </FieldLabel>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button id="due-date" type="button" variant="outline" className="h-8 justify-between font-normal">
+                    <Button
+                      id="payment-due-date"
+                      type="button"
+                      variant="outline"
+                      className="h-8 justify-between font-normal"
+                    >
                       {formatDateLabel(field.value)}
                       <CalendarDays data-icon="inline-end" />
                     </Button>

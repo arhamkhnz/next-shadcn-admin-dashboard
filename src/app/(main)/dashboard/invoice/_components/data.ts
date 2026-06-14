@@ -5,6 +5,14 @@ export interface InvoiceLineItem {
   unitPrice: number;
 }
 
+export interface InvoiceTaxOption {
+  id: string;
+  name: string;
+  rate: number;
+}
+
+export type InvoiceDiscountType = "fixed" | "percent";
+
 export const INVOICE_PAPER_WIDTH = 816;
 export const INVOICE_PAPER_HEIGHT = 1056;
 export const INVOICE_PAPER_SCALE = 0.6;
@@ -16,12 +24,13 @@ export interface InvoiceFromDetails {
   website: string;
   addressLines: string[];
   taxId: string;
-  bankName: string;
+  paymentAccountName: string;
   routingNumber: string;
   issuerName: string;
 }
 
 export interface InvoiceToDetails {
+  id: string;
   name: string;
   email: string;
   addressLines: string[];
@@ -29,20 +38,21 @@ export interface InvoiceToDetails {
 }
 
 export interface InvoiceFormValues {
-  invoiceNumber: string;
-  issueDate: string;
-  dueDate: string;
+  referenceNumber: string;
+  issuedDate: string;
+  paymentDueDate: string;
   from: InvoiceFromDetails;
   to: InvoiceToDetails;
-  taxRate: number;
-  discount: number;
+  taxId: string;
+  discountType: InvoiceDiscountType;
+  discountValue: number;
   items: InvoiceLineItem[];
 }
 
 export const defaultInvoiceValues: InvoiceFormValues = {
-  invoiceNumber: "FL-0425",
-  issueDate: "2025-05-12",
-  dueDate: "2025-05-26",
+  referenceNumber: "FL-0425",
+  issuedDate: "2025-05-12",
+  paymentDueDate: "2025-05-26",
   from: {
     name: "Weblabs Studio",
     email: "hello@weblabs.studio",
@@ -50,18 +60,20 @@ export const defaultInvoiceValues: InvoiceFormValues = {
     website: "weblabs.studio",
     addressLines: ["214 Pixel Avenue", "Austin, TX 78701"],
     taxId: "WS-1029384756",
-    bankName: "Mercury Business",
+    paymentAccountName: "Mercury Business",
     routingNumber: "084009519",
     issuerName: "Arham Khan",
   },
   to: {
+    id: "brightstone",
     name: "Brightstone Industries",
     email: "accounts@brightstone.com",
     addressLines: ["45 Evergreen Lane", "Brookfield, NY 11234"],
     taxId: "BR-0098123475",
   },
-  taxRate: 10,
-  discount: 0,
+  taxId: "vat",
+  discountType: "fixed",
+  discountValue: 0,
   items: [
     {
       id: "hosting",
@@ -84,6 +96,54 @@ export const defaultInvoiceValues: InvoiceFormValues = {
   ],
 };
 
+export const invoiceTaxOptions: InvoiceTaxOption[] = [
+  {
+    id: "gst",
+    name: "GST",
+    rate: 18,
+  },
+  {
+    id: "vat",
+    name: "VAT",
+    rate: 12,
+  },
+  {
+    id: "service-tax",
+    name: "Service Tax",
+    rate: 10,
+  },
+  {
+    id: "none",
+    name: "No Tax",
+    rate: 0,
+  },
+];
+
+export const invoiceClients: InvoiceToDetails[] = [
+  defaultInvoiceValues.to,
+  {
+    id: "northstar",
+    name: "Northstar Commerce",
+    email: "billing@northstar.co",
+    addressLines: ["128 Market Street", "Seattle, WA 98101"],
+    taxId: "NS-4477012389",
+  },
+  {
+    id: "atlas",
+    name: "Atlas Creative Labs",
+    email: "finance@atlaslabs.io",
+    addressLines: ["900 Mission Road", "San Francisco, CA 94103"],
+    taxId: "AT-7301982456",
+  },
+  {
+    id: "lumen",
+    name: "Lumen Ridge Health",
+    email: "ap@lumenridge.com",
+    addressLines: ["72 Greenway Plaza", "Denver, CO 80202"],
+    taxId: "LR-5581920473",
+  },
+];
+
 export function getLineAmount(item?: InvoiceLineItem) {
   if (!item) return 0;
 
@@ -101,14 +161,26 @@ export function getInvoiceSubtotal(invoice: InvoiceFormValues) {
   return getInvoiceItems(invoice).reduce((subtotal, item) => subtotal + getLineAmount(item), 0);
 }
 
-export function getInvoiceTax(invoice: InvoiceFormValues) {
-  const taxRate = Number.isFinite(invoice.taxRate) ? invoice.taxRate : 0;
+export function getInvoiceTaxOption(invoice: InvoiceFormValues) {
+  return invoiceTaxOptions.find((taxOption) => taxOption.id === invoice.taxId) ?? invoiceTaxOptions[0];
+}
 
-  return getInvoiceSubtotal(invoice) * (taxRate / 100);
+export function getInvoiceTax(invoice: InvoiceFormValues) {
+  const taxRate = getInvoiceTaxOption(invoice).rate;
+
+  return Math.max(getInvoiceSubtotal(invoice) - getInvoiceDiscount(invoice), 0) * (taxRate / 100);
+}
+
+export function getInvoiceDiscount(invoice: InvoiceFormValues) {
+  const discountValue = Number.isFinite(invoice.discountValue) ? invoice.discountValue : 0;
+
+  if (invoice.discountType === "percent") {
+    return getInvoiceSubtotal(invoice) * (discountValue / 100);
+  }
+
+  return discountValue;
 }
 
 export function getInvoiceTotal(invoice: InvoiceFormValues) {
-  const discount = Number.isFinite(invoice.discount) ? invoice.discount : 0;
-
-  return getInvoiceSubtotal(invoice) + getInvoiceTax(invoice) - discount;
+  return Math.max(getInvoiceSubtotal(invoice) - getInvoiceDiscount(invoice), 0) + getInvoiceTax(invoice);
 }
