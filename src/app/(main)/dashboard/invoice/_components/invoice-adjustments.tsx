@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 import { type InvoiceFormValues, invoiceTaxOptions } from "./data";
 
-export function TaxDiscountFields() {
+export function InvoiceAdjustments() {
   const { control, register } = useFormContext<InvoiceFormValues>();
   const discountType = useWatch({ control, name: "discountType" });
 
@@ -20,7 +20,7 @@ export function TaxDiscountFields() {
           name="taxId"
           render={({ field }) => (
             <Field className="gap-1">
-              <FieldLabel className="font-normal">Tax</FieldLabel>
+              <FieldLabel className="text-xs">Tax</FieldLabel>
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className="h-10 w-full">
                   <SelectValue placeholder="Select tax" />
@@ -45,7 +45,7 @@ export function TaxDiscountFields() {
             name="discountType"
             render={({ field }) => (
               <Field className="gap-1">
-                <FieldLabel className="font-normal">Discount</FieldLabel>
+                <FieldLabel className="text-xs">Discount</FieldLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="h-10 w-full">
                     <SelectValue placeholder="Discount type" />
@@ -61,7 +61,7 @@ export function TaxDiscountFields() {
             )}
           />
           <Field className="gap-1">
-            <FieldLabel className="opacity-0">Value</FieldLabel>
+            <FieldLabel className="text-xs opacity-0">Value</FieldLabel>
             <InputGroup>
               <InputGroupInput
                 type="number"

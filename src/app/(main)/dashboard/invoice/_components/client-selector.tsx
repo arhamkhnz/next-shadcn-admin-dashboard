@@ -1,9 +1,11 @@
 import { Plus } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { getInitials } from "@/lib/utils";
 
 import { type InvoiceFormValues, invoiceClients } from "./data";
 
@@ -23,41 +25,51 @@ export function ClientSelector() {
       <Controller
         control={control}
         name="to"
-        render={({ field }) => (
-          <Field className="gap-1">
-            <FieldLabel className="font-normal">Client</FieldLabel>
-            <Select
-              value={field.value.id}
-              onValueChange={(clientId) => {
-                const selectedClient = invoiceClients.find((item) => item.id === clientId);
+        render={({ field }) => {
+          const selectedClient = field.value;
 
-                if (selectedClient) {
-                  field.onChange(selectedClient);
-                }
-              }}
-            >
-              <SelectTrigger className="min-h-16 w-full gap-3 px-3 text-left">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-amber-400 text-foreground">
-                  <span className="block size-6 -skew-x-12 bg-foreground" />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium">{field.value.name}</span>
-                  <span className="block truncate text-muted-foreground">{field.value.email}</span>
-                </span>
-                <SelectValue className="sr-only" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {invoiceClients.map((clientOption) => (
-                    <SelectItem key={clientOption.id} value={clientOption.id}>
-                      {clientOption.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Field>
-        )}
+          return (
+            <Field className="gap-1">
+              <FieldLabel className="text-xs">Client</FieldLabel>
+              <Select
+                value={selectedClient.id}
+                onValueChange={(clientId) => {
+                  const nextClient = invoiceClients.find((item) => item.id === clientId);
+
+                  if (nextClient) {
+                    field.onChange(nextClient);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-full data-[size=default]:h-auto">
+                  <SelectValue placeholder="Select client">
+                    <div className="flex items-center gap-1.5">
+                      <Avatar className="after:rounded-md">
+                        <AvatarFallback className="rounded-md bg-card text-foreground">
+                          {getInitials(selectedClient.name).slice(0, 2)}
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className="text-left text-xs">
+                        <div>{selectedClient.name}</div>
+                        <div className="text-muted-foreground">{selectedClient.email}</div>
+                      </div>
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  <SelectGroup>
+                    {invoiceClients.map((clientOption) => (
+                      <SelectItem key={clientOption.id} value={clientOption.id}>
+                        {clientOption.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+          );
+        }}
       />
     </section>
   );

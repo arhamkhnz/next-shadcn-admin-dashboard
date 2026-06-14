@@ -24,7 +24,7 @@ import { cn, formatCurrency } from "@/lib/utils";
 
 import { getLineAmount, type InvoiceFormValues, type InvoiceLineItem } from "./data";
 
-export function InvoiceItemsEditor() {
+export function InvoiceItems() {
   const { control, register } = useFormContext<InvoiceFormValues>();
   const { append, fields, move, remove } = useFieldArray({
     control,
@@ -63,37 +63,39 @@ export function InvoiceItemsEditor() {
         </Button>
       </div>
 
-      <div className="hidden items-center gap-2 px-1 font-medium text-muted-foreground text-xs md:grid md:grid-cols-[24px_minmax(0,1fr)_64px_112px_112px_32px]">
-        <span />
-        <span>Item / Description</span>
-        <span className="text-center">Qty</span>
-        <span className="text-center">Unit Price</span>
-        <span className="text-right">Amount</span>
-        <span />
-      </div>
+      <div className="flex flex-col gap-2">
+        <div className="hidden items-center gap-2 px-1 font-medium text-muted-foreground text-xs md:grid md:grid-cols-[24px_minmax(0,1fr)_64px_112px_112px_32px]">
+          <span />
+          <span>Description</span>
+          <span className="px-2">Units</span>
+          <span className="px-2">Unit cost</span>
+          <span className="text-right">Line Total</span>
+          <span />
+        </div>
 
-      <DndContext
-        id="invoice-items"
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        modifiers={[restrictToVerticalAxis]}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext items={sortableItemIds} strategy={verticalListSortingStrategy}>
-          <div className="flex flex-col gap-3">
-            {fields.map((field, index) => (
-              <SortableInvoiceItemRow
-                key={field.id}
-                id={field.id}
-                index={index}
-                item={items[index]}
-                register={register}
-                onRemove={() => remove(index)}
-              />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
+        <DndContext
+          id="invoice-items"
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          modifiers={[restrictToVerticalAxis]}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={sortableItemIds} strategy={verticalListSortingStrategy}>
+            <div className="flex flex-col gap-3">
+              {fields.map((field, index) => (
+                <SortableInvoiceItemRow
+                  key={field.id}
+                  id={field.id}
+                  index={index}
+                  item={items[index]}
+                  register={register}
+                  onRemove={() => remove(index)}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      </div>
     </section>
   );
 }
@@ -132,7 +134,7 @@ function SortableInvoiceItemRow({
         type="button"
         variant="ghost"
         size="icon-sm"
-        className="cursor-grab text-muted-foreground active:cursor-grabbing"
+        className="-ml-2 cursor-grab text-muted-foreground active:cursor-grabbing"
         aria-label={`Reorder ${id}`}
         {...attributes}
         {...listeners}
@@ -140,21 +142,21 @@ function SortableInvoiceItemRow({
         <GripVertical />
       </Button>
       <Input
-        className="h-10 min-w-0 text-sm"
+        className="min-w-0 text-sm"
         aria-label={`Item ${index + 1} description`}
         {...register(`items.${index}.description` as const)}
       />
       <Input
         type="number"
         step="1"
-        className="h-10 text-center text-sm"
+        className="text-sm"
         aria-label={`Item ${index + 1} quantity`}
         {...register(`items.${index}.quantity` as const, { valueAsNumber: true })}
       />
       <Input
         type="number"
         step="0.01"
-        className="h-10 text-right text-sm"
+        className="text-sm"
         aria-label={`Item ${index + 1} unit price`}
         {...register(`items.${index}.unitPrice` as const, { valueAsNumber: true })}
       />
