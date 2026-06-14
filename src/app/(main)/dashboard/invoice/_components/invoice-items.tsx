@@ -125,7 +125,7 @@ function SortableInvoiceItemRow({
         transition,
       }}
       className={cn(
-        "grid min-w-0 items-center gap-2 rounded-lg md:grid-cols-[24px_minmax(0,1fr)_64px_112px_112px_32px]",
+        "grid min-w-0 grid-cols-[24px_minmax(0,0.8fr)_minmax(0,1fr)_32px] items-center gap-2 rounded-lg md:grid-cols-[24px_minmax(0,1fr)_64px_112px_112px_32px]",
         isDragging && "relative z-10 opacity-50",
       )}
     >
@@ -142,28 +142,36 @@ function SortableInvoiceItemRow({
         <GripVertical />
       </Button>
       <Input
-        className="min-w-0 text-sm"
+        className="min-w-0 text-sm max-md:col-span-3"
         aria-label={`Item ${index + 1} description`}
         {...register(`items.${index}.description` as const)}
       />
       <Input
         type="number"
         step="1"
-        className="text-sm"
+        className="text-sm max-md:col-start-2 max-md:row-start-2"
         aria-label={`Item ${index + 1} quantity`}
         {...register(`items.${index}.quantity` as const, { valueAsNumber: true })}
       />
       <Input
         type="number"
         step="0.01"
-        className="text-sm"
+        className="text-sm max-md:col-start-3 max-md:row-start-2"
         aria-label={`Item ${index + 1} unit price`}
         {...register(`items.${index}.unitPrice` as const, { valueAsNumber: true })}
       />
-      <div className="min-w-0 text-right font-medium text-sm max-md:text-left">
-        {formatInvoiceCurrency(getLineAmount(item))}
+      <div className="min-w-0 text-right font-medium text-sm max-md:col-span-3 max-md:col-start-2 max-md:row-start-3 max-md:flex max-md:items-center max-md:justify-between max-md:text-left">
+        <span className="hidden text-muted-foreground max-md:inline">Line total</span>
+        <span>{formatInvoiceCurrency(getLineAmount(item))}</span>
       </div>
-      <Button type="button" variant="ghost" size="icon-sm" aria-label={`Remove item ${index + 1}`} onClick={onRemove}>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        className="max-md:col-start-4 max-md:row-start-2"
+        aria-label={`Remove item ${index + 1}`}
+        onClick={onRemove}
+      >
         <Trash2 />
       </Button>
     </div>

@@ -1,3 +1,5 @@
+import { addDays, format } from "date-fns";
+
 export interface InvoiceLineItem {
   id: string;
   description: string;
@@ -49,10 +51,12 @@ export interface InvoiceFormValues {
   items: InvoiceLineItem[];
 }
 
+const today = new Date();
+
 export const defaultInvoiceValues: InvoiceFormValues = {
   referenceNumber: "FL-0425",
-  issuedDate: "2025-05-12",
-  paymentDueDate: "2025-05-26",
+  issuedDate: format(today, "yyyy-MM-dd"),
+  paymentDueDate: format(addDays(today, 14), "yyyy-MM-dd"),
   from: {
     name: "Weblabs Studio",
     email: "hello@weblabs.studio",
@@ -65,15 +69,15 @@ export const defaultInvoiceValues: InvoiceFormValues = {
     issuerName: "Arham Khan",
   },
   to: {
-    id: "brightstone",
-    name: "Brightstone Industries",
-    email: "accounts@brightstone.com",
-    addressLines: ["45 Evergreen Lane", "Brookfield, NY 11234"],
-    taxId: "BR-0098123475",
+    id: "aiy-cap",
+    name: "AIY Cap",
+    email: "finance@aiycap.com",
+    addressLines: ["One BKC, Bandra Kurla Complex", "Mumbai, Maharashtra 400051"],
+    taxId: "GSTIN-27AAICA9102K1Z7",
   },
   taxId: "vat",
   discountType: "fixed",
-  discountValue: 0,
+  discountValue: 40,
   items: [
     {
       id: "hosting",
@@ -120,27 +124,20 @@ export const invoiceTaxOptions: InvoiceTaxOption[] = [
 ];
 
 export const invoiceClients: InvoiceToDetails[] = [
+  {
+    id: "bright-enterprises",
+    name: "Bright Enterprises",
+    email: "billing@brightenterprises.com",
+    addressLines: ["450 Park Avenue South", "New York, NY 10016", "United States"],
+    taxId: "US-EIN-84-2938475",
+  },
   defaultInvoiceValues.to,
   {
-    id: "northstar",
-    name: "Northstar Commerce",
-    email: "billing@northstar.co",
-    addressLines: ["128 Market Street", "Seattle, WA 98101"],
-    taxId: "NS-4477012389",
-  },
-  {
-    id: "atlas",
-    name: "Atlas Creative Labs",
-    email: "finance@atlaslabs.io",
-    addressLines: ["900 Mission Road", "San Francisco, CA 94103"],
-    taxId: "AT-7301982456",
-  },
-  {
-    id: "lumen",
-    name: "Lumen Ridge Health",
-    email: "ap@lumenridge.com",
-    addressLines: ["72 Greenway Plaza", "Denver, CO 80202"],
-    taxId: "LR-5581920473",
+    id: "northline-gmbh",
+    name: "Northline GmbH",
+    email: "ap@northline.de",
+    addressLines: ["Kastanienallee 32", "10435 Berlin", "Germany"],
+    taxId: "DE-VAT-219384756",
   },
 ];
 
