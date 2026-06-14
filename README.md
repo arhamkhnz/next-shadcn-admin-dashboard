@@ -67,12 +67,12 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 - Users Management  
 - Roles Management  
 - Kanban Board  
+- Invoice Page  
 - Authentication (4 screens)  
 - Legacy: Default v1, CRM v1, Finance v1, Analytics v1
 
 ### Coming Soon
 - Calendar Page  
-- Invoice Page  
 
 ## Colocation File System Architecture
 
