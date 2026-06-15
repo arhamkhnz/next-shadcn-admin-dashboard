@@ -1,0 +1,307 @@
+import type { BoardState, Column, TaskOwnerProfile, TaskTeam } from "./types";
+
+export const columns = [
+  { id: "ideas", title: "Ideas" },
+  { id: "planned", title: "Planned" },
+  { id: "building", title: "Building" },
+  { id: "qa", title: "QA" },
+  { id: "shipped", title: "Shipped" },
+] as const satisfies readonly Column[];
+
+export const columnIds = columns.map((column) => column.id);
+
+export const tagTones: Record<TaskTeam, string> = {
+  Backend: "bg-blue-500/10 text-blue-700 dark:text-blue-300",
+  Data: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+  Design: "bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300",
+  Docs: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300",
+  "Finance Ops": "bg-teal-500/10 text-teal-700 dark:text-teal-300",
+  Platform: "bg-cyan-500/10 text-cyan-700 dark:text-cyan-300",
+  Product: "bg-orange-500/10 text-orange-700 dark:text-orange-300",
+  QA: "bg-red-500/10 text-red-700 dark:text-red-300",
+  Security: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
+};
+
+export const taskOwners = {
+  arham: {
+    name: "Arham Khan",
+    tone: "[&_[data-slot=avatar-fallback]]:bg-zinc-100 [&_[data-slot=avatar-fallback]]:text-zinc-700 after:border-zinc-200 dark:[&_[data-slot=avatar-fallback]]:bg-zinc-500/15 dark:[&_[data-slot=avatar-fallback]]:text-zinc-300 dark:after:border-zinc-500/20",
+  },
+  junaid: {
+    name: "Ethan Brooks",
+    tone: "[&_[data-slot=avatar-fallback]]:bg-lime-100 [&_[data-slot=avatar-fallback]]:text-lime-700 after:border-lime-200 dark:[&_[data-slot=avatar-fallback]]:bg-lime-500/15 dark:[&_[data-slot=avatar-fallback]]:text-lime-300 dark:after:border-lime-500/20",
+  },
+  maya: {
+    name: "Hannah Reed",
+    tone: "[&_[data-slot=avatar-fallback]]:bg-indigo-100 [&_[data-slot=avatar-fallback]]:text-indigo-700 after:border-indigo-200 dark:[&_[data-slot=avatar-fallback]]:bg-indigo-500/15 dark:[&_[data-slot=avatar-fallback]]:text-indigo-300 dark:after:border-indigo-500/20",
+  },
+  meera: {
+    name: "Rohan Iyer",
+    tone: "[&_[data-slot=avatar-fallback]]:bg-fuchsia-100 [&_[data-slot=avatar-fallback]]:text-fuchsia-700 after:border-fuchsia-200 dark:[&_[data-slot=avatar-fallback]]:bg-fuchsia-500/15 dark:[&_[data-slot=avatar-fallback]]:text-fuchsia-300 dark:after:border-fuchsia-500/20",
+  },
+  nisha: {
+    name: "Nora Bennett",
+    tone: "[&_[data-slot=avatar-fallback]]:bg-violet-100 [&_[data-slot=avatar-fallback]]:text-violet-700 after:border-violet-200 dark:[&_[data-slot=avatar-fallback]]:bg-violet-500/15 dark:[&_[data-slot=avatar-fallback]]:text-violet-300 dark:after:border-violet-500/20",
+  },
+  rahul: {
+    name: "Vikram Menon",
+    tone: "[&_[data-slot=avatar-fallback]]:bg-pink-100 [&_[data-slot=avatar-fallback]]:text-pink-700 after:border-pink-200 dark:[&_[data-slot=avatar-fallback]]:bg-pink-500/15 dark:[&_[data-slot=avatar-fallback]]:text-pink-300 dark:after:border-pink-500/20",
+  },
+  sara: {
+    name: "Clara Hughes",
+    tone: "[&_[data-slot=avatar-fallback]]:bg-sky-100 [&_[data-slot=avatar-fallback]]:text-sky-700 after:border-sky-200 dark:[&_[data-slot=avatar-fallback]]:bg-sky-500/15 dark:[&_[data-slot=avatar-fallback]]:text-sky-300 dark:after:border-sky-500/20",
+  },
+} satisfies Record<string, TaskOwnerProfile>;
+
+export const initialBoard: BoardState = {
+  ideas: [
+    {
+      id: "tender-workflow-map",
+      title: "Tender workflow map",
+      description: "Model Tender, Award/L1, Work Order, allocation, salary, and documents.",
+      priority: "High",
+      dueDate: "Jun 14",
+      progress: 10,
+      owner: taskOwners.arham,
+      team: "Product",
+      insights: [
+        { label: "Comments", count: 7 },
+        { label: "Documents", count: 3 },
+      ],
+    },
+    {
+      id: "license-strategy-research",
+      title: "License strategy research",
+      description: "Compare private MVP, open core, GPL, AGPL, and commercial modules.",
+      priority: "Medium",
+      dueDate: "Jun 16",
+      progress: 20,
+      owner: taskOwners.rahul,
+      team: "Finance Ops",
+      insights: [
+        { label: "Attachments", count: 2 },
+        { label: "Comments", count: 5 },
+      ],
+    },
+    {
+      id: "backup-restore-plan",
+      title: "Backup and restore plan",
+      description: "Define local database backup, restore, and exported document recovery.",
+      priority: "Medium",
+      dueDate: "Jun 18",
+      progress: 15,
+      owner: taskOwners.maya,
+      team: "Platform",
+      insights: [
+        { label: "Attachments", count: 1 },
+        { label: "Comments", count: 4 },
+      ],
+    },
+    {
+      id: "work-order-allocation-model",
+      title: "Work order allocation model",
+      description: "Sketch how awarded work orders connect to employee allocations and salary months.",
+      priority: "Medium",
+      dueDate: "Jun 19",
+      progress: 5,
+      owner: taskOwners.meera,
+      team: "Product",
+      insights: [
+        { label: "Comments", count: 3 },
+        { label: "Documents", count: 1 },
+      ],
+    },
+    {
+      id: "future-sync-notes",
+      title: "Future sync notes",
+      description: "Capture local-first sync assumptions before deciding on cloud PostgreSQL and file storage.",
+      priority: "Low",
+      dueDate: "Jun 21",
+      progress: 0,
+      owner: taskOwners.arham,
+      team: "Platform",
+      insights: [{ label: "Comments", count: 2 }],
+    },
+  ],
+  planned: [
+    {
+      id: "electron-app-shell",
+      title: "Electron app shell",
+      description: "Create local-first desktop shell with React, Tailwind, and shadcn/ui.",
+      priority: "High",
+      dueDate: "Jun 20",
+      progress: 25,
+      owner: taskOwners.arham,
+      team: "Platform",
+      insights: [
+        { label: "Attachments", count: 4 },
+        { label: "Comments", count: 9 },
+        { label: "Documents", count: 2 },
+      ],
+    },
+    {
+      id: "secure-preload-api",
+      title: "Secure preload API",
+      description: "Expose renderer-safe methods for imports, records, PDFs, and backups.",
+      priority: "High",
+      dueDate: "Jun 22",
+      progress: 20,
+      owner: taskOwners.nisha,
+      team: "Backend",
+      insights: [
+        { label: "Attachments", count: 2 },
+        { label: "Comments", count: 6 },
+        { label: "Documents", count: 1 },
+      ],
+    },
+    {
+      id: "party-employee-records",
+      title: "Party and employee records",
+      description: "Create local records for clients, contractors, employees, and identifiers.",
+      priority: "Medium",
+      dueDate: "Jun 24",
+      progress: 15,
+      owner: taskOwners.meera,
+      team: "Product",
+      insights: [
+        { label: "Comments", count: 5 },
+        { label: "Documents", count: 2 },
+      ],
+    },
+    {
+      id: "generated-documents-index",
+      title: "Generated documents index",
+      description: "Plan filters for generated PDFs by party, salary month, employee, and import batch.",
+      priority: "Medium",
+      dueDate: "Jun 25",
+      progress: 10,
+      owner: taskOwners.maya,
+      team: "Docs",
+      insights: [
+        { label: "Attachments", count: 2 },
+        { label: "Comments", count: 4 },
+      ],
+    },
+  ],
+  building: [
+    {
+      id: "sqlite-drizzle-schema",
+      title: "SQLite and Drizzle schema",
+      description: "Model parties, employees, tenders, work orders, salary imports, and documents.",
+      priority: "High",
+      dueDate: "Jun 26",
+      progress: 65,
+      owner: taskOwners.arham,
+      team: "Data",
+      insights: [
+        { label: "Attachments", count: 5 },
+        { label: "Comments", count: 11 },
+        { label: "Documents", count: 4 },
+      ],
+    },
+    {
+      id: "salary-excel-import",
+      title: "Salary Excel import",
+      description: "Read salary sheets with SheetJS and persist import batches locally.",
+      priority: "High",
+      dueDate: "Jun 28",
+      progress: 45,
+      owner: taskOwners.junaid,
+      team: "Data",
+      insights: [
+        { label: "Attachments", count: 3 },
+        { label: "Comments", count: 8 },
+        { label: "Documents", count: 2 },
+      ],
+    },
+    {
+      id: "column-mapping-builder",
+      title: "Column mapping builder",
+      description: "Map Excel columns to salary fields with reusable templates per party.",
+      priority: "Medium",
+      dueDate: "Jul 1",
+      progress: 30,
+      owner: taskOwners.sara,
+      team: "Design",
+      insights: [
+        { label: "Comments", count: 6 },
+        { label: "Documents", count: 2 },
+      ],
+    },
+  ],
+  qa: [
+    {
+      id: "salary-row-validation",
+      title: "Salary row validation",
+      description: "Flag missing employee IDs, invalid amounts, duplicate rows, and unmapped fields.",
+      priority: "High",
+      dueDate: "Jul 4",
+      progress: 75,
+      owner: taskOwners.nisha,
+      team: "QA",
+      insights: [
+        { label: "Attachments", count: 4 },
+        { label: "Comments", count: 10 },
+      ],
+    },
+    {
+      id: "payslip-preview",
+      title: "Payslip preview",
+      description: "Preview generated payslips before bulk PDF export and document history.",
+      priority: "Medium",
+      dueDate: "Jul 6",
+      progress: 60,
+      owner: taskOwners.junaid,
+      team: "Finance Ops",
+      insights: [
+        { label: "Attachments", count: 3 },
+        { label: "Comments", count: 7 },
+        { label: "Documents", count: 3 },
+      ],
+    },
+  ],
+  shipped: [
+    {
+      id: "architecture-rule",
+      title: "Architecture rule locked",
+      description: "Renderer stays UI-only; preload, IPC, services, and database stay separated.",
+      priority: "High",
+      dueDate: "Jun 8",
+      progress: 100,
+      owner: taskOwners.arham,
+      team: "Backend",
+      insights: [
+        { label: "Comments", count: 6 },
+        { label: "Documents", count: 3 },
+      ],
+    },
+    {
+      id: "private-mvp-scope",
+      title: "Private MVP scope",
+      description: "Start private source first, then revisit open-core after workflow validation.",
+      priority: "Medium",
+      dueDate: "Jun 10",
+      progress: 100,
+      owner: taskOwners.rahul,
+      team: "Finance Ops",
+      insights: [
+        { label: "Attachments", count: 2 },
+        { label: "Comments", count: 4 },
+      ],
+    },
+    {
+      id: "mvp-module-priorities",
+      title: "MVP module priorities",
+      description: "Payslip generation is first, but data model supports wider tender operations.",
+      priority: "Medium",
+      dueDate: "Jun 12",
+      progress: 100,
+      owner: taskOwners.meera,
+      team: "Finance Ops",
+      insights: [
+        { label: "Comments", count: 5 },
+        { label: "Documents", count: 2 },
+      ],
+    },
+  ],
+};

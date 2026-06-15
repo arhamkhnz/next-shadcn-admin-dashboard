@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -49,7 +49,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "correctness": {
         "noUndeclaredVariables": "error",
         "noNestedComponentDefinitions": "error",
@@ -58,7 +58,6 @@
       "nursery": {
         "useSortedClasses": "on",
         "useNullishCoalescing": "error",
-        "noUnnecessaryConditions": "warn",
         "noFloatingPromises": "error",
         "noMisusedPromises": "error"
       },
@@ -81,7 +80,8 @@
         "noConstantBinaryExpressions": "error",
         "noEmptyBlockStatements": "error",
         "noUnknownAtRules": "off",
-        "noImportCycles": "error"
+        "noImportCycles": "error",
+        "noUnnecessaryConditions": "warn"
       },
       "complexity": {
         "noImportantStyles": "off"
