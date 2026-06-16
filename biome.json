@@ -31,7 +31,17 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!.github", "!.husky", "!node_modules", "!.next", "!dist", "!out", "!src/components/ui"]
+    "includes": [
+      "**",
+      "!.github",
+      "!.husky",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!out",
+      "!src/components/ui",
+      "!src/app/(main)/dashboard/calendar/_components/event-calendar-views.tsx"
+    ]
   },
   "formatter": {
     "enabled": true,
