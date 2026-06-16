@@ -97,7 +97,7 @@ export function Calendar() {
                 controller.changeView(value);
               }}
             >
-              <SelectTrigger className="w-32">
+              <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent align="end">
