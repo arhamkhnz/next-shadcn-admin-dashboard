@@ -8,11 +8,11 @@ export interface InfrastructureEnvironment {
     icon: SimpleIcon;
   };
   environment: "Expired" | "Production" | "Staging";
-  status: "Online";
+  status: "Online" | "Unhealthy";
   latency: string;
   uptime: string;
   server: string;
-  countryCode: "DE";
+  countryCode: string;
   plan: string;
   resources: {
     cpu: number;
@@ -39,7 +39,7 @@ export const infrastructureGroups: InfrastructureGroup[] = [
           icon: siNextdotjs,
         },
         environment: "Expired",
-        status: "Online",
+        status: "Unhealthy",
         latency: "86ms",
         uptime: "8d 23h",
         server: "Hetzner Cloud",
@@ -63,9 +63,9 @@ export const infrastructureGroups: InfrastructureGroup[] = [
         status: "Online",
         latency: "246ms",
         uptime: "9d 23h",
-        server: "Hetzner Cloud",
-        countryCode: "DE",
-        plan: "CX51, Nuremberg",
+        server: "AWS",
+        countryCode: "NL",
+        plan: "eu-west-1, Amsterdam",
         resources: { cpu: 49, ram: 42, disk: 44 },
       },
       {
@@ -78,9 +78,9 @@ export const infrastructureGroups: InfrastructureGroup[] = [
         status: "Online",
         latency: "110ms",
         uptime: "9d 23h",
-        server: "Hetzner Cloud",
-        countryCode: "DE",
-        plan: "CX41, Nuremberg",
+        server: "Azure",
+        countryCode: "EE",
+        plan: "North Europe, Tallinn",
         resources: { cpu: 37, ram: 46, disk: 64 },
       },
     ],
