@@ -24,7 +24,6 @@ export interface InfrastructureEnvironment {
 export interface InfrastructureGroup {
   name: string;
   organization: string;
-  online: number;
   rows: InfrastructureEnvironment[];
 }
 
@@ -32,7 +31,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
   {
     name: "Admin Console",
     organization: "Weblabs Studio",
-    online: 1,
     rows: [
       {
         domain: "next-shadcn-admin-dashboard.vercel.app/dashboard",
@@ -54,7 +52,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
   {
     name: "Analytics",
     organization: "Aiy Cap",
-    online: 2,
     rows: [
       {
         domain: "next-shadcn-admin-dashboard.vercel.app/analytics",
@@ -91,7 +88,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
   {
     name: "Kanban",
     organization: "Storeframe",
-    online: 1,
     rows: [
       {
         domain: "next-shadcn-admin-dashboard.vercel.app/kanban",
@@ -113,7 +109,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
   {
     name: "Inbox",
     organization: "Acme Corp",
-    online: 0,
     rows: [],
   },
 ];
