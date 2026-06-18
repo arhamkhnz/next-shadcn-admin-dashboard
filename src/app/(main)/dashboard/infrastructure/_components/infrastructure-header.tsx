@@ -9,24 +9,26 @@ export function InfrastructureHeader() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <div className="flex items-start justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="font-medium text-3xl leading-none tracking-tight">Infrastructure Overview</h1>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 flex-col gap-1">
+            <h1 className="font-medium text-2xl leading-tight tracking-tight sm:text-3xl sm:leading-none">
+              Infrastructure Overview
+            </h1>
             <p className="text-muted-foreground text-sm">
               Monitor environments, server health, uptime, and resource usage across every project.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
+            <span className="whitespace-nowrap text-muted-foreground text-sm">Last updated: 30s ago</span>
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground text-sm">Last updated: 30s ago</span>
               <Button variant="outline" size="icon-sm">
                 <RefreshCw />
               </Button>
+              <Button variant="outline" size="icon-sm">
+                <Settings data-icon="inline-start" />
+              </Button>
             </div>
-            <Button variant="outline" size="icon-sm">
-              <Settings data-icon="inline-start" />
-            </Button>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">

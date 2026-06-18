@@ -12,6 +12,7 @@ export interface InfrastructureEnvironment {
   latency: string;
   uptime: string;
   server: string;
+  countryCode: "DE";
   plan: string;
   resources: {
     cpu: number;
@@ -24,7 +25,6 @@ export interface InfrastructureGroup {
   name: string;
   organization: string;
   online: number;
-  defaultOpen: boolean;
   rows: InfrastructureEnvironment[];
 }
 
@@ -33,7 +33,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
     name: "Admin Console",
     organization: "Weblabs Studio",
     online: 1,
-    defaultOpen: true,
     rows: [
       {
         domain: "next-shadcn-admin-dashboard.vercel.app/dashboard",
@@ -46,6 +45,7 @@ export const infrastructureGroups: InfrastructureGroup[] = [
         latency: "86ms",
         uptime: "8d 23h",
         server: "Hetzner Cloud",
+        countryCode: "DE",
         plan: "CX33, Falkenstein",
         resources: { cpu: 60, ram: 73, disk: 41 },
       },
@@ -55,7 +55,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
     name: "Analytics",
     organization: "Aiy Cap",
     online: 2,
-    defaultOpen: true,
     rows: [
       {
         domain: "next-shadcn-admin-dashboard.vercel.app/analytics",
@@ -68,6 +67,7 @@ export const infrastructureGroups: InfrastructureGroup[] = [
         latency: "246ms",
         uptime: "9d 23h",
         server: "Hetzner Cloud",
+        countryCode: "DE",
         plan: "CX51, Nuremberg",
         resources: { cpu: 49, ram: 42, disk: 44 },
       },
@@ -82,6 +82,7 @@ export const infrastructureGroups: InfrastructureGroup[] = [
         latency: "110ms",
         uptime: "9d 23h",
         server: "Hetzner Cloud",
+        countryCode: "DE",
         plan: "CX41, Nuremberg",
         resources: { cpu: 37, ram: 46, disk: 64 },
       },
@@ -91,7 +92,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
     name: "Kanban",
     organization: "Storeframe",
     online: 1,
-    defaultOpen: false,
     rows: [
       {
         domain: "next-shadcn-admin-dashboard.vercel.app/kanban",
@@ -104,6 +104,7 @@ export const infrastructureGroups: InfrastructureGroup[] = [
         latency: "25ms",
         uptime: "10d 23h",
         server: "Bare Metal / Custom",
+        countryCode: "DE",
         plan: "EX101, Falkenstein",
         resources: { cpu: 1, ram: 21, disk: 4 },
       },
@@ -113,7 +114,6 @@ export const infrastructureGroups: InfrastructureGroup[] = [
     name: "Inbox",
     organization: "Acme Corp",
     online: 0,
-    defaultOpen: true,
     rows: [],
   },
 ];
