@@ -35,6 +35,14 @@ const IsComingSoon = () => (
   <span className="ml-auto rounded-md bg-gray-200 px-2 py-1 text-xs dark:text-gray-800">Soon</span>
 );
 
+function CollapsedIconFallback({ title }: { title: string }) {
+  return (
+    <span className="flex size-4 shrink-0 items-center justify-center rounded-xs font-medium text-[10px] outline">
+      {title.slice(0, 1)}
+    </span>
+  );
+}
+
 const NavItemExpanded = ({
   item,
   isActive,
@@ -112,7 +120,7 @@ const NavItemCollapsed = ({
             tooltip={item.title}
             isActive={isActive(item.url, item.subItems)}
           >
-            {item.icon && <item.icon />}
+            {item.icon ? <item.icon /> : <CollapsedIconFallback title={item.title} />}
             <span>{item.title}</span>
             <ChevronRight />
           </SidebarMenuButton>
@@ -199,7 +207,7 @@ export function NavMain({ items }: NavMainProps) {
                           isActive={isItemActive(item.url)}
                         >
                           <Link prefetch={false} href={item.url} target={item.newTab ? "_blank" : undefined}>
-                            {item.icon && <item.icon />}
+                            {item.icon ? <item.icon /> : <CollapsedIconFallback title={item.title} />}
                             <span>{item.title}</span>
                           </Link>
                         </SidebarMenuButton>

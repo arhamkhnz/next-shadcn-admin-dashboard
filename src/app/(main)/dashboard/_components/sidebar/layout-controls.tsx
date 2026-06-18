@@ -157,6 +157,7 @@ export function LayoutControls() {
               <Label className="font-medium text-xs">Theme Mode</Label>
               <ToggleGroup
                 size="sm"
+                spacing={0}
                 variant="outline"
                 type="single"
                 value={themeMode}
@@ -178,6 +179,7 @@ export function LayoutControls() {
               <Label className="font-medium text-xs">Page Layout</Label>
               <ToggleGroup
                 size="sm"
+                spacing={0}
                 variant="outline"
                 type="single"
                 value={contentLayout}
@@ -196,6 +198,7 @@ export function LayoutControls() {
               <Label className="font-medium text-xs">Navbar Behavior</Label>
               <ToggleGroup
                 size="sm"
+                spacing={0}
                 variant="outline"
                 type="single"
                 value={navbarStyle}
@@ -214,6 +217,7 @@ export function LayoutControls() {
               <Label className="font-medium text-xs">Sidebar Style</Label>
               <ToggleGroup
                 size="sm"
+                spacing={0}
                 variant="outline"
                 type="single"
                 value={variant}
@@ -235,6 +239,7 @@ export function LayoutControls() {
               <Label className="font-medium text-xs">Sidebar Collapse Mode</Label>
               <ToggleGroup
                 size="sm"
+                spacing={0}
                 variant="outline"
                 type="single"
                 value={collapsible}
