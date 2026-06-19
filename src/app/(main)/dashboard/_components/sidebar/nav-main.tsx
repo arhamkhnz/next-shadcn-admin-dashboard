@@ -28,31 +28,38 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import type { NavBadge, NavGroup, NavMainItem } from "@/navigation/sidebar/sidebar-items";
+import type {
+  NavBadge,
+  NavGroup,
+  NavMainItem,
+  NavMainLinkItem,
+  NavMainParentItem,
+} from "@/navigation/sidebar/sidebar-items";
 
 interface NavMainProps {
   readonly items: readonly NavGroup[];
 }
 interface NavItemProps {
   readonly item: NavMainItem;
-  readonly isActive: (url: string, subItems?: NavMainItem["subItems"]) => boolean;
-  readonly isSubmenuOpen: (subItems?: NavMainItem["subItems"]) => boolean;
+  readonly isItemActive: (item: NavMainItem) => boolean;
+  readonly isSubItemActive: (url: string) => boolean;
+  readonly isSubmenuOpen: (item: NavMainParentItem) => boolean;
 }
 
 interface NavLinkItemProps {
-  readonly item: NavMainItem;
+  readonly item: NavMainLinkItem;
   readonly isActive: boolean;
   readonly showIconFallback: boolean;
 }
 
 interface NavDropdownItemProps {
-  readonly item: NavMainItem;
+  readonly item: NavMainParentItem;
   readonly isActive: boolean;
   readonly isSubItemActive: (url: string) => boolean;
 }
 
 interface NavCollapsibleItemProps {
-  readonly item: NavMainItem;
+  readonly item: NavMainParentItem;
   readonly isActive: boolean;
   readonly defaultOpen: boolean;
   readonly isSubItemActive: (url: string) => boolean;
@@ -66,18 +73,27 @@ function CollapsedIconFallback({ title }: { title: string }) {
   );
 }
 
+function hasSubItems(item: NavMainItem): item is NavMainParentItem {
+  return Boolean(item.subItems?.length);
+}
+
 export function NavMain({ items }: NavMainProps) {
   const path = usePathname();
 
-  const isItemActive = (url: string, subItems?: NavMainItem["subItems"]) => {
-    if (subItems?.length) {
-      return subItems.some((sub) => path.startsWith(sub.url));
+  const isItemActive = (item: NavMainItem) => {
+    if (hasSubItems(item)) {
+      return item.subItems.some((sub) => path.startsWith(sub.url));
     }
+
+    return path === item.url;
+  };
+
+  const isSubItemActive = (url: string) => {
     return path === url;
   };
 
-  const isSubmenuOpen = (subItems?: NavMainItem["subItems"]) => {
-    return subItems?.some((sub) => path.startsWith(sub.url)) ?? false;
+  const isSubmenuOpen = (item: NavMainParentItem) => {
+    return item.subItems.some((sub) => path.startsWith(sub.url));
   };
 
   return (
@@ -115,7 +131,13 @@ export function NavMain({ items }: NavMainProps) {
           <SidebarGroupContent>
             <SidebarMenu>
               {group.items.map((item) => (
-                <NavItem key={item.url} item={item} isActive={isItemActive} isSubmenuOpen={isSubmenuOpen} />
+                <NavItem
+                  key={item.id}
+                  item={item}
+                  isItemActive={isItemActive}
+                  isSubItemActive={isSubItemActive}
+                  isSubmenuOpen={isSubmenuOpen}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -125,31 +147,24 @@ export function NavMain({ items }: NavMainProps) {
   );
 }
 
-function NavItem({ item, isActive, isSubmenuOpen }: NavItemProps) {
+function NavItem({ item, isItemActive, isSubItemActive, isSubmenuOpen }: NavItemProps) {
   const { state, isMobile } = useSidebar();
-  const hasSubItems = Boolean(item.subItems?.length);
   const isCollapsedDesktop = state === "collapsed" && !isMobile;
 
-  if (!hasSubItems) {
-    return <NavLinkItem item={item} isActive={isActive(item.url)} showIconFallback={isCollapsedDesktop} />;
+  if (!hasSubItems(item)) {
+    return <NavLinkItem item={item} isActive={isItemActive(item)} showIconFallback={isCollapsedDesktop} />;
   }
 
   if (isCollapsedDesktop) {
-    return (
-      <NavDropdownItem
-        item={item}
-        isActive={isActive(item.url, item.subItems)}
-        isSubItemActive={(url) => isActive(url)}
-      />
-    );
+    return <NavDropdownItem item={item} isActive={isItemActive(item)} isSubItemActive={isSubItemActive} />;
   }
 
   return (
     <NavCollapsibleItem
       item={item}
-      isActive={isActive(item.url, item.subItems)}
-      defaultOpen={isSubmenuOpen(item.subItems)}
-      isSubItemActive={(url) => isActive(url)}
+      isActive={isItemActive(item)}
+      defaultOpen={isSubmenuOpen(item)}
+      isSubItemActive={isSubItemActive}
     />
   );
 }
@@ -190,11 +205,11 @@ function NavDropdownItem({ item, isActive, isSubItemActive }: NavDropdownItemPro
 
         <DropdownMenuContent side="right" align="start" sideOffset={12} className="w-48">
           <DropdownMenuGroup>
-            {item.subItems?.map((subItem) => {
+            {item.subItems.map((subItem) => {
               const SubIcon = subItem.icon;
 
               return (
-                <DropdownMenuItem key={subItem.url} asChild disabled={subItem.disabled}>
+                <DropdownMenuItem key={subItem.id} asChild disabled={subItem.disabled}>
                   <Link
                     prefetch={false}
                     href={subItem.url}
@@ -233,11 +248,11 @@ function NavCollapsibleItem({ item, isActive, defaultOpen, isSubItemActive }: Na
 
         <CollapsibleContent>
           <SidebarMenuSub>
-            {item.subItems?.map((subItem) => {
+            {item.subItems.map((subItem) => {
               const SubIcon = subItem.icon;
 
               return (
-                <SidebarMenuSubItem key={subItem.url}>
+                <SidebarMenuSubItem key={subItem.id}>
                   <SidebarMenuSubButton
                     asChild
                     aria-disabled={subItem.disabled}
@@ -271,10 +286,10 @@ function NavItemBadge({ badge }: { badge?: NavBadge }) {
   return (
     <SidebarMenuBadge
       className={cn(
-        "rounded-sm border",
-        badge === "New" &&
+        "rounded-sm border capitalize",
+        badge === "new" &&
           "border-green-600 text-green-600 peer-hover/menu-button:text-green-600 peer-data-active/menu-button:text-green-600",
-        badge === "Soon" && "border-muted-foreground text-muted-foreground",
+        badge === "soon" && "border-muted-foreground text-muted-foreground",
       )}
     >
       {badge}

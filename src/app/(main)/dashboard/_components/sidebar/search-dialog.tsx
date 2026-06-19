@@ -21,6 +21,7 @@ import type { NavMainItem } from "@/navigation/sidebar/sidebar-items";
 import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
 
 type SearchItem = {
+  id: string;
   group: string;
   label: string;
   url: string;
@@ -39,6 +40,7 @@ const searchItems: SearchItem[] = sidebarItems.flatMap((group) =>
   group.items.flatMap((item) => {
     if (item.subItems) {
       return item.subItems.map((sub) => ({
+        id: sub.id,
         group: getSubItemGroup(group.label, item.title),
         label: sub.title,
         url: sub.url,
@@ -49,6 +51,7 @@ const searchItems: SearchItem[] = sidebarItems.flatMap((group) =>
     }
     return [
       {
+        id: item.id,
         group: group.label ?? "Other",
         label: item.title,
         url: item.url,
@@ -113,7 +116,7 @@ export function SearchDialog() {
           {groupItems.map((item) => (
             <CommandItem
               disabled={item.disabled}
-              key={`${group}-${item.url}-${item.label}`}
+              key={`${group}-${item.id}`}
               value={`${item.group} ${item.label}`}
               onSelect={() => handleSelect(item)}
             >
