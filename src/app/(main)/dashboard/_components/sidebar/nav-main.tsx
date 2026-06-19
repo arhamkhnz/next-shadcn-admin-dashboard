@@ -27,7 +27,8 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import type { NavGroup, NavMainItem } from "@/navigation/sidebar/sidebar-items";
+import { cn } from "@/lib/utils";
+import type { NavBadge, NavGroup, NavMainItem } from "@/navigation/sidebar/sidebar-items";
 
 interface NavMainProps {
   readonly items: readonly NavGroup[];
@@ -41,6 +42,7 @@ interface NavItemProps {
 interface NavLinkItemProps {
   readonly item: NavMainItem;
   readonly isActive: boolean;
+  readonly showIconFallback: boolean;
 }
 
 interface NavDropdownItemProps {
@@ -105,7 +107,11 @@ export function NavMain({ items }: NavMainProps) {
       </SidebarGroup>
       {items.map((group) => (
         <SidebarGroup key={group.id}>
-          {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+          {group.label && (
+            <SidebarGroupLabel className="group-data-[collapsible=icon]:pointer-events-none">
+              {group.label}
+            </SidebarGroupLabel>
+          )}
           <SidebarGroupContent>
             <SidebarMenu>
               {group.items.map((item) => (
@@ -122,12 +128,13 @@ export function NavMain({ items }: NavMainProps) {
 function NavItem({ item, isActive, isSubmenuOpen }: NavItemProps) {
   const { state, isMobile } = useSidebar();
   const hasSubItems = Boolean(item.subItems?.length);
+  const isCollapsedDesktop = state === "collapsed" && !isMobile;
 
   if (!hasSubItems) {
-    return <NavLinkItem item={item} isActive={isActive(item.url)} />;
+    return <NavLinkItem item={item} isActive={isActive(item.url)} showIconFallback={isCollapsedDesktop} />;
   }
 
-  if (state === "collapsed" && !isMobile) {
+  if (isCollapsedDesktop) {
     return (
       <NavDropdownItem
         item={item}
@@ -147,23 +154,23 @@ function NavItem({ item, isActive, isSubmenuOpen }: NavItemProps) {
   );
 }
 
-function NavLinkItem({ item, isActive }: NavLinkItemProps) {
+function NavLinkItem({ item, isActive, showIconFallback }: NavLinkItemProps) {
   const Icon = item.icon;
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild aria-disabled={item.comingSoon} tooltip={item.title} isActive={isActive}>
+      <SidebarMenuButton asChild aria-disabled={item.disabled} tooltip={item.title} isActive={isActive}>
         <Link
           prefetch={false}
           href={item.url}
           target={item.newTab ? "_blank" : undefined}
           rel={item.newTab ? "noreferrer" : undefined}
         >
-          {Icon ? <Icon /> : <CollapsedIconFallback title={item.title} />}
+          {Icon ? <Icon /> : showIconFallback ? <CollapsedIconFallback title={item.title} /> : null}
           <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>
-      {item.comingSoon && <SidebarMenuBadge className="border border-sidebar-foreground">Soon</SidebarMenuBadge>}
+      <NavItemBadge badge={item.badge} />
     </SidebarMenuItem>
   );
 }
@@ -175,7 +182,7 @@ function NavDropdownItem({ item, isActive, isSubItemActive }: NavDropdownItemPro
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton tooltip={item.title} isActive={isActive} disabled={item.comingSoon}>
+          <SidebarMenuButton tooltip={item.title} isActive={isActive} disabled={item.disabled}>
             {Icon ? <Icon /> : <CollapsedIconFallback title={item.title} />}
             <span>{item.title}</span>
           </SidebarMenuButton>
@@ -187,7 +194,7 @@ function NavDropdownItem({ item, isActive, isSubItemActive }: NavDropdownItemPro
               const SubIcon = subItem.icon;
 
               return (
-                <DropdownMenuItem key={subItem.url} asChild disabled={subItem.comingSoon}>
+                <DropdownMenuItem key={subItem.url} asChild disabled={subItem.disabled}>
                   <Link
                     prefetch={false}
                     href={subItem.url}
@@ -216,12 +223,13 @@ function NavCollapsibleItem({ item, isActive, defaultOpen, isSubItemActive }: Na
     <Collapsible asChild defaultOpen={defaultOpen} className="group/collapsible">
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={item.title} isActive={isActive} disabled={item.comingSoon}>
-            {Icon ? <Icon /> : <CollapsedIconFallback title={item.title} />}
+          <SidebarMenuButton tooltip={item.title} isActive={isActive} disabled={item.disabled}>
+            {Icon && <Icon />}
             <span>{item.title}</span>
             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
         </CollapsibleTrigger>
+        <NavItemBadge badge={item.badge} />
 
         <CollapsibleContent>
           <SidebarMenuSub>
@@ -232,7 +240,7 @@ function NavCollapsibleItem({ item, isActive, defaultOpen, isSubItemActive }: Na
                 <SidebarMenuSubItem key={subItem.url}>
                   <SidebarMenuSubButton
                     asChild
-                    aria-disabled={subItem.comingSoon}
+                    aria-disabled={subItem.disabled}
                     isActive={isSubItemActive(subItem.url)}
                   >
                     <Link
@@ -252,5 +260,24 @@ function NavCollapsibleItem({ item, isActive, defaultOpen, isSubItemActive }: Na
         </CollapsibleContent>
       </SidebarMenuItem>
     </Collapsible>
+  );
+}
+
+function NavItemBadge({ badge }: { badge?: NavBadge }) {
+  if (!badge) {
+    return null;
+  }
+
+  return (
+    <SidebarMenuBadge
+      className={cn(
+        "rounded-sm border",
+        badge === "New" &&
+          "border-green-600 text-green-600 peer-hover/menu-button:text-green-600 peer-data-active/menu-button:text-green-600",
+        badge === "Soon" && "border-muted-foreground text-muted-foreground",
+      )}
+    >
+      {badge}
+    </SidebarMenuBadge>
   );
 }

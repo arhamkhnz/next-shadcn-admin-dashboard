@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 import { Search } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -44,7 +43,7 @@ const searchItems: SearchItem[] = sidebarItems.flatMap((group) =>
         label: sub.title,
         url: sub.url,
         icon: item.icon,
-        disabled: sub.comingSoon,
+        disabled: sub.disabled,
         newTab: sub.newTab,
       }));
     }
@@ -54,7 +53,7 @@ const searchItems: SearchItem[] = sidebarItems.flatMap((group) =>
         label: item.title,
         url: item.url,
         icon: item.icon,
-        disabled: item.comingSoon,
+        disabled: item.disabled,
         newTab: item.newTab,
       },
     ];
@@ -118,14 +117,10 @@ export function SearchDialog() {
               value={`${item.group} ${item.label}`}
               onSelect={() => handleSelect(item)}
             >
-              {item.icon && <item.icon />}
-              <span>{item.label}</span>
-
-              {item.disabled && (
-                <Badge variant="outline" className="text-xs">
-                  Soon
-                </Badge>
-              )}
+              <span className="flex min-w-0 items-center gap-2">
+                {item.icon && <item.icon />}
+                <span className="truncate">{item.label}</span>
+              </span>
             </CommandItem>
           ))}
         </CommandGroup>

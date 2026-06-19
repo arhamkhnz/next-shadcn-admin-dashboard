@@ -20,13 +20,15 @@ import {
   Users,
 } from "lucide-react";
 
+export type NavBadge = "New" | "Soon";
+
 export interface NavSubItem {
   title: string;
   url: string;
   icon?: LucideIcon;
-  comingSoon?: boolean;
+  badge?: NavBadge;
+  disabled?: boolean;
   newTab?: boolean;
-  isNew?: boolean;
 }
 
 export interface NavMainItem {
@@ -34,9 +36,9 @@ export interface NavMainItem {
   url: string;
   icon?: LucideIcon;
   subItems?: NavSubItem[];
-  comingSoon?: boolean;
+  badge?: NavBadge;
+  disabled?: boolean;
   newTab?: boolean;
-  isNew?: boolean;
 }
 
 export interface NavGroup {
@@ -84,7 +86,6 @@ export const sidebarItems: NavGroup[] = [
         title: "Academy",
         url: "/dashboard/academy",
         icon: GraduationCap,
-        isNew: true,
       },
       {
         title: "Logistics",
@@ -95,6 +96,7 @@ export const sidebarItems: NavGroup[] = [
         title: "Infrastructure",
         url: "/dashboard/infrastructure",
         icon: Server,
+        badge: "New",
       },
     ],
   },
@@ -174,7 +176,8 @@ export const sidebarItems: NavGroup[] = [
         title: "Others",
         url: "/dashboard/coming-soon",
         icon: SquareArrowUpRight,
-        comingSoon: true,
+        badge: "Soon",
+        disabled: true,
       },
     ],
   },
