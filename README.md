@@ -68,6 +68,7 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 - Users Management  
 - Roles Management  
 - Kanban Board  
+- Tasks Page  
 - Invoice Page  
 - Calendar Page  
 - Authentication (4 screens)  
