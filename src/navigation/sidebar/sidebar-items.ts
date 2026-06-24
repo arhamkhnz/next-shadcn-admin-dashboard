@@ -2,6 +2,7 @@ import {
   Banknote,
   Calendar,
   ChartBar,
+  CheckSquare,
   Fingerprint,
   Forklift,
   Gauge,
@@ -147,6 +148,13 @@ export const sidebarItems: NavGroup[] = [
         title: "Kanban",
         url: "/dashboard/kanban",
         icon: Kanban,
+      },
+      {
+        id: "tasks",
+        title: "Tasks",
+        url: "/dashboard/tasks",
+        icon: CheckSquare,
+        badge: "new",
       },
       {
         id: "invoice",
