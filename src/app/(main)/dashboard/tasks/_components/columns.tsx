@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-import { labels, priorities, statuses, type Task, taskSchema } from "./data";
+import { labels, priorities, statuses, type Task } from "./data";
 
 const statusStyles: Record<string, string> = {
   backlog: "border-muted-foreground/20 bg-muted text-muted-foreground",
@@ -157,7 +157,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const task = taskSchema.parse(row.original);
+      const task = row.original as Task;
 
       return (
         <div className="text-right">
