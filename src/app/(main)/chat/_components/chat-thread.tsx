@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
+import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,18 +28,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from "@/components/ui/input-group";
+import { Marker, MarkerContent } from "@/components/ui/marker";
+import { Message, MessageAvatar, MessageContent, MessageFooter } from "@/components/ui/message";
+import {
+  MessageScroller,
+  MessageScrollerButton,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerProvider,
+  MessageScrollerViewport,
+} from "@/components/ui/message-scroller";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn, getInitials } from "@/lib/utils";
 
-import { type Contact, currentUser, type Message } from "./data";
+import { type Message as ChatMessage, type Contact, currentUser } from "./data";
 
 interface ChatThreadProps {
   contact: Contact;
-  messages: Message[];
+  messages: ChatMessage[];
   onOpenContact?: () => void;
   onBack?: () => void;
   showBackButton?: boolean;
@@ -130,58 +140,58 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
         <Separator />
       </div>
 
-      <ScrollArea
-        type="hover"
-        className="min-h-0 flex-1 [&_[data-orientation=vertical][data-slot=scroll-area-scrollbar]]:w-1.5"
-      >
-        <div className="flex flex-col gap-6 px-2 py-8">
-          <div className="flex items-center gap-2">
-            <div className="h-px flex-1 bg-border" />
-            <span className="rounded-full bg-muted px-3 py-1 text-muted-foreground text-xs">May 6, 2026</span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+      <MessageScrollerProvider autoScroll>
+        <MessageScroller className="min-h-0 flex-1">
+          <MessageScrollerViewport>
+            <MessageScrollerContent className="gap-6 px-2 py-8">
+              <Marker variant="separator">
+                <MarkerContent>May 6, 2026</MarkerContent>
+              </Marker>
 
-          {messages.map((message) => {
-            const isOutbound = message.side === "out";
-            const senderName = isOutbound ? currentUser.name : contact.name;
+              {messages.map((message) => {
+                const isOutbound = message.align === "end";
+                const senderName = isOutbound ? currentUser.name : contact.name;
 
-            return (
-              <div key={message.id} className={cn("flex items-end gap-2", isOutbound && "flex-row-reverse")}>
-                <Avatar className="shrink-0">
-                  <AvatarFallback
-                    className={cn(
-                      "bg-muted text-foreground text-xs",
-                      isOutbound && "bg-primary text-primary-foreground",
-                    )}
+                return (
+                  <MessageScrollerItem
+                    key={message.id}
+                    messageId={String(message.id)}
+                    scrollAnchor={message.align === "end"}
                   >
-                    {getInitials(senderName)}
-                  </AvatarFallback>
-                </Avatar>
+                    <Message align={message.align}>
+                      <MessageAvatar>
+                        <Avatar>
+                          <AvatarFallback
+                            className={cn(
+                              "bg-muted text-foreground text-xs",
+                              isOutbound && "bg-primary text-primary-foreground",
+                            )}
+                          >
+                            {getInitials(senderName)}
+                          </AvatarFallback>
+                        </Avatar>
+                      </MessageAvatar>
 
-                <div
-                  className={cn(
-                    "flex max-w-md flex-col gap-2 rounded-xl px-4 py-3 text-sm",
-                    isOutbound ? "bg-primary text-primary-foreground" : "bg-muted",
-                  )}
-                >
-                  <p className="leading-relaxed">{message.text}</p>
-                  <div
-                    className={cn(
-                      "text-muted-foreground/75 text-xs",
-                      isOutbound && "text-right text-primary-foreground/75",
-                    )}
-                  >
-                    {message.time}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </ScrollArea>
+                      <MessageContent>
+                        <BubbleGroup>
+                          <Bubble variant={isOutbound ? "default" : "muted"}>
+                            <BubbleContent>{message.text}</BubbleContent>
+                          </Bubble>
+                        </BubbleGroup>
+                        <MessageFooter>{message.time}</MessageFooter>
+                      </MessageContent>
+                    </Message>
+                  </MessageScrollerItem>
+                );
+              })}
+            </MessageScrollerContent>
+          </MessageScrollerViewport>
+          <MessageScrollerButton />
+        </MessageScroller>
+      </MessageScrollerProvider>
 
       <div className="px-2">
-        <Tabs defaultValue="reply" className="rounded-md border">
+        <Tabs defaultValue="reply" className="gap-0 rounded-md border">
           <TabsList
             variant="line"
             className="w-full justify-start gap-2 border-b px-3 **:data-[slot=tabs-trigger]:border-x-0 **:data-[slot=tabs-trigger]:px-6 group-data-horizontal/tabs:h-10"
@@ -208,32 +218,39 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
 
 function MessageComposer({ placeholder }: { placeholder: string }) {
   return (
-    <div className="flex flex-col gap-4 px-3 pb-2">
-      <Textarea placeholder={placeholder} className="border-0 px-0 py-0.5 text-sm shadow-none focus-visible:ring-0" />
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon-sm" aria-label="Format">
+    <form
+      className="w-full"
+      onSubmit={(event) => {
+        event.preventDefault();
+      }}
+    >
+      <InputGroup className="border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-0 has-[[data-slot][aria-invalid=true]]:border-0 has-[[data-slot=input-group-control]:focus-visible]:ring-0 has-[[data-slot][aria-invalid=true]]:ring-0 dark:bg-transparent dark:has-[[data-slot][aria-invalid=true]]:ring-0">
+        <InputGroupTextarea
+          placeholder={placeholder}
+          className="min-h-14 px-3 py-2.5 text-sm ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:aria-invalid:ring-0"
+        />
+        <InputGroupAddon align="block-end">
+          <InputGroupButton aria-label="Format" type="button" size="icon-sm">
             <Type />
-          </Button>
-          <Button variant="ghost" size="icon-sm" aria-label="Emoji">
+          </InputGroupButton>
+          <InputGroupButton aria-label="Emoji" type="button" size="icon-sm">
             <Smile />
-          </Button>
-          <Button variant="ghost" size="icon-sm" aria-label="Attach file">
+          </InputGroupButton>
+          <InputGroupButton aria-label="Attach file" type="button" size="icon-sm">
             <Paperclip />
-          </Button>
-          <Button variant="ghost" size="icon-sm" aria-label="Insert link">
+          </InputGroupButton>
+          <InputGroupButton aria-label="Insert link" type="button" size="icon-sm">
             <Link />
-          </Button>
-          <Button variant="outline" size="icon-sm" aria-label="AI assist">
+          </InputGroupButton>
+          <InputGroupButton aria-label="AI assist" type="button" size="icon-sm" variant="outline">
             <Sparkles />
-          </Button>
-        </div>
-
-        <Button size="icon-sm">
-          <Send />
-        </Button>
-      </div>
-    </div>
+          </InputGroupButton>
+          <InputGroupButton type="submit" variant="default" size="icon-sm" className="ml-auto">
+            <Send />
+            <span className="sr-only">Send</span>
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </form>
   );
 }

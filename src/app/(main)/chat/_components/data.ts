@@ -17,7 +17,7 @@ export type Conversation = {
 
 export type Message = {
   id: number;
-  side: "in" | "out";
+  align: "start" | "end";
   text: string;
   time: string;
 };
@@ -96,29 +96,29 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 101,
-        side: "in",
+        align: "start",
         text: "We're seeing 502s on staging right after the latest build. We rolled back, but the health checks are still red.",
         time: "10 min ago",
       },
       {
         id: 102,
-        side: "out",
+        align: "end",
         text: "Thanks, Olivia. I'm checking the deploy logs and upstream gateway config now.",
         time: "8 min ago",
       },
       {
         id: 103,
-        side: "in",
+        align: "start",
         text: "The weird part is API traffic looks fine, but the web container is failing readiness probes.",
         time: "5 min ago",
       },
       {
         id: 104,
-        side: "out",
+        align: "end",
         text: "Found a mismatch in the staging environment variables. I'm applying the fix and will confirm once the probes recover.",
         time: "3 min ago",
       },
-      { id: 105, side: "in", text: "Great. Keep me posted, this is blocking our QA pass.", time: "1 min ago" },
+      { id: 105, align: "start", text: "Great. Keep me posted, this is blocking our QA pass.", time: "1 min ago" },
     ],
   },
   {
@@ -147,29 +147,29 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 201,
-        side: "in",
+        align: "start",
         text: "I was charged twice for order #8823. One payment cleared on the 3rd and the duplicate posted this morning.",
         time: "5 min ago",
       },
       {
         id: 202,
-        side: "out",
+        align: "end",
         text: "Thanks for flagging it, Phoenix. I can see both transactions and I'm checking which one was attached to the invoice.",
         time: "4 min ago",
       },
       {
         id: 203,
-        side: "in",
+        align: "start",
         text: "Please reverse the duplicate if possible. Our finance team is closing the week today.",
         time: "3 min ago",
       },
       {
         id: 204,
-        side: "out",
+        align: "end",
         text: "The duplicate was a retry from the old payment method. I've started the refund and sent the receipt to your billing email.",
         time: "2 min ago",
       },
-      { id: 205, side: "in", text: "Perfect, thanks. I'll let finance know to expect it.", time: "1 min ago" },
+      { id: 205, align: "start", text: "Perfect, thanks. I'll let finance know to expect it.", time: "1 min ago" },
     ],
   },
   {
@@ -198,29 +198,29 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 301,
-        side: "in",
+        align: "start",
         text: "I'm getting a 403 on the analytics dashboard since yesterday's role update. Clearing cache did not change anything.",
         time: "8 min ago",
       },
       {
         id: 302,
-        side: "out",
+        align: "end",
         text: "Thanks, Lana. I'll compare your new role against the dashboard permission set.",
         time: "7 min ago",
       },
       {
         id: 303,
-        side: "in",
+        align: "start",
         text: "I still have access to exports, just not the dashboard views. Other admins on my team can open them.",
         time: "5 min ago",
       },
       {
         id: 304,
-        side: "out",
+        align: "end",
         text: "Looks like the Analytics Viewer permission was dropped from your custom role. I've reattached it for your workspace.",
         time: "3 min ago",
       },
-      { id: 305, side: "in", text: "That fixed it. Thanks for the quick help.", time: "1 min ago" },
+      { id: 305, align: "start", text: "That fixed it. Thanks for the quick help.", time: "1 min ago" },
     ],
   },
   // Today
@@ -250,29 +250,29 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 501,
-        side: "in",
+        align: "start",
         text: "Hi, we're preparing board materials and need your latest ESG disclosure, especially the carbon footprint section.",
         time: "10:42 AM",
       },
       {
         id: 502,
-        side: "out",
+        align: "end",
         text: "Hi Demi. I can share the 2025 report and the carbon accounting appendix. Do you need the raw emissions data too?",
         time: "10:44 AM",
       },
       {
         id: 503,
-        side: "in",
+        align: "start",
         text: "Yes, raw Scope 3 data would help. Our board packet needs supply-chain numbers, not just the summary.",
         time: "10:47 AM",
       },
       {
         id: 504,
-        side: "out",
+        align: "end",
         text: "Got it. I'll send the executive summary, Scope 3 CSV, and the methodology note in one bundle.",
         time: "10:49 AM",
       },
-      { id: 505, side: "in", text: "Perfect. That should cover everything for Thursday.", time: "10:50 AM" },
+      { id: 505, align: "start", text: "Perfect. That should cover everything for Thursday.", time: "10:50 AM" },
     ],
   },
   {
@@ -301,25 +301,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 601,
-        side: "in",
+        align: "start",
         text: "The bulk export keeps timing out. It reaches about 60 percent and then throws a gateway error.",
         time: "10:15 AM",
       },
       {
         id: 602,
-        side: "out",
+        align: "end",
         text: "Thanks, Candice. Is this for the full shipment history export or a filtered date range?",
         time: "10:12 AM",
       },
       {
         id: 603,
-        side: "in",
+        align: "start",
         text: "Full history. We need it for a warehouse migration, so the file is pretty large.",
         time: "10:09 AM",
       },
       {
         id: 604,
-        side: "out",
+        align: "end",
         text: "I'll queue it as an async export and email the download link once it finishes. That avoids the gateway timeout.",
         time: "10:06 AM",
       },
@@ -351,25 +351,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 701,
-        side: "in",
+        align: "start",
         text: "Invoice INV-4821 still shows unpaid even though our bank transfer cleared last Friday.",
         time: "9:58 AM",
       },
       {
         id: 702,
-        side: "out",
+        align: "end",
         text: "Thanks, Natali. Can you send the transfer reference so I can match it against our payment processor records?",
         time: "9:54 AM",
       },
       {
         id: 703,
-        side: "in",
+        align: "start",
         text: "Just attached the confirmation screenshot. The reference ends in 9147.",
         time: "9:50 AM",
       },
       {
         id: 704,
-        side: "out",
+        align: "end",
         text: "Found it. The payment was received but not reconciled to the invoice. I've marked INV-4821 as paid.",
         time: "9:46 AM",
       },
@@ -401,25 +401,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 801,
-        side: "in",
+        align: "start",
         text: "We have a backend developer starting Monday. What's the best onboarding path for repo access and environment setup?",
         time: "9:32 AM",
       },
       {
         id: 802,
-        side: "out",
+        align: "end",
         text: "Hi Drew. I'll send the standard engineering checklist and invite link for the developer workspace.",
         time: "9:28 AM",
       },
       {
         id: 803,
-        side: "in",
+        align: "start",
         text: "Great. Please include staging credentials and any branch naming rules if those are documented.",
         time: "9:24 AM",
       },
       {
         id: 804,
-        side: "out",
+        align: "end",
         text: "Will do. I'll add the staging access request and our repository conventions to the same thread.",
         time: "9:20 AM",
       },
@@ -451,25 +451,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 901,
-        side: "in",
+        align: "start",
         text: "We're winding down the current project and need to downgrade from Enterprise to Pro at the end of the quarter.",
         time: "9:12 AM",
       },
       {
         id: 902,
-        side: "out",
+        align: "end",
         text: "Understood, Orlando. I can walk through the downgrade path and confirm whether any contract terms apply.",
         time: "9:08 AM",
       },
       {
         id: 903,
-        side: "in",
+        align: "start",
         text: "Main question is whether there is an early termination fee or if we can switch at renewal.",
         time: "9:04 AM",
       },
       {
         id: 904,
-        side: "out",
+        align: "end",
         text: "Your agreement allows downgrade at renewal with 30 days notice. I'll send the date and feature impact summary.",
         time: "9:00 AM",
       },
@@ -501,25 +501,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1001,
-        side: "in",
+        align: "start",
         text: "Our batch jobs are hitting 429s every few minutes during peak hours. We need a temporary rate limit bump.",
         time: "8:47 AM",
       },
       {
         id: 1002,
-        side: "out",
+        align: "end",
         text: "Thanks, Andi. Which API keys are affected and what peak window are you seeing?",
         time: "8:43 AM",
       },
       {
         id: 1003,
-        side: "in",
+        align: "start",
         text: "Mostly invoice-sync and customer-import, between 9 and 11 AM Dublin time.",
         time: "8:39 AM",
       },
       {
         id: 1004,
-        side: "out",
+        align: "end",
         text: "I can raise the limit for those keys for seven days while we review your long-term quota.",
         time: "8:35 AM",
       },
@@ -551,25 +551,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1101,
-        side: "in",
+        align: "start",
         text: "Our custom domain started showing certificate warnings overnight. Users cannot complete checkout.",
         time: "8:05 AM",
       },
       {
         id: 1102,
-        side: "out",
+        align: "end",
         text: "Thanks, Kate. I'm checking the certificate renewal job and DNS validation now.",
         time: "8:01 AM",
       },
       {
         id: 1103,
-        side: "in",
+        align: "start",
         text: "DNS has not changed on our side. The warning says the certificate expired at midnight.",
         time: "7:57 AM",
       },
       {
         id: 1104,
-        side: "out",
+        align: "end",
         text: "The renewal job failed on CAA validation. I've reissued the certificate manually and it's propagating.",
         time: "7:53 AM",
       },
@@ -601,25 +601,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1201,
-        side: "in",
+        align: "start",
         text: "We're ready to move to annual billing. Is there a discount if we commit for the full year?",
         time: "7:38 AM",
       },
       {
         id: 1202,
-        side: "out",
+        align: "end",
         text: "Hi Alec. Yes, annual billing includes a discount. I can send a quote with the annual terms today.",
         time: "7:34 AM",
       },
       {
         id: 1203,
-        side: "in",
+        align: "start",
         text: "Please include the media team seats and the analytics add-on in the quote.",
         time: "7:30 AM",
       },
       {
         id: 1204,
-        side: "out",
+        align: "end",
         text: "Done. I'll include both and mark the quote for annual prepay so procurement can review it quickly.",
         time: "7:26 AM",
       },
@@ -651,25 +651,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1301,
-        side: "in",
+        align: "start",
         text: "The report date picker is off by one. Selecting June 5 exports June 4 in the CSV.",
         time: "6:52 AM",
       },
       {
         id: 1302,
-        side: "out",
+        align: "end",
         text: "Thanks, Ariana. Does the UI show the right date before export, or is it wrong there too?",
         time: "6:48 AM",
       },
       {
         id: 1303,
-        side: "in",
+        align: "start",
         text: "The UI looks correct. Only the CSV output is shifted.",
         time: "6:44 AM",
       },
       {
         id: 1304,
-        side: "out",
+        align: "end",
         text: "That points to timezone conversion in the export job. I'll attach your screenshot to the bug ticket.",
         time: "6:40 AM",
       },
@@ -701,25 +701,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1401,
-        side: "in",
+        align: "start",
         text: "Zapier webhook delivery is failing intermittently with 500s. It started around 2 AM UTC.",
         time: "6:10 AM",
       },
       {
         id: 1402,
-        side: "out",
+        align: "end",
         text: "Thanks, Steven. Can you share one failed delivery ID and the endpoint path?",
         time: "6:06 AM",
       },
       {
         id: 1403,
-        side: "in",
+        align: "start",
         text: "Delivery ID wh_72a9. Endpoint is /hooks/zapier/customer-created.",
         time: "6:02 AM",
       },
       {
         id: 1404,
-        side: "out",
+        align: "end",
         text: "I found retries backing up on that endpoint. We're increasing worker capacity and replaying the failed deliveries.",
         time: "5:58 AM",
       },
@@ -751,25 +751,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1501,
-        side: "in",
+        align: "start",
         text: "Our team leads need read-only production access but full write permissions in staging. Can RBAC support that split?",
         time: "5:44 AM",
       },
       {
         id: 1502,
-        side: "out",
+        align: "end",
         text: "Yes, Lori. You can separate environment scope from permission level. I'll send the policy example.",
         time: "5:40 AM",
       },
       {
         id: 1503,
-        side: "in",
+        align: "start",
         text: "Great. We also need audit logs to show who changed staging configs.",
         time: "5:36 AM",
       },
       {
         id: 1504,
-        side: "out",
+        align: "end",
         text: "That is included. I'll add the audit log filters to the example so your leads can test it.",
         time: "5:32 AM",
       },
@@ -801,25 +801,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1601,
-        side: "in",
+        align: "start",
         text: "Our Android users on version 14 are seeing crashes right after the splash screen. Firebase shows three affected devices so far.",
         time: "5:18 AM",
       },
       {
         id: 1602,
-        side: "out",
+        align: "end",
         text: "Thanks for reporting this, Koray. Can you share the Firebase crashlytics link? I'll get the mobile team on it.",
         time: "5:05 AM",
       },
       {
         id: 1603,
-        side: "in",
+        align: "start",
         text: "Sure, linked the stack trace in the ticket. Looks like a null pointer in the payment module init.",
         time: "4:52 AM",
       },
       {
         id: 1604,
-        side: "out",
+        align: "end",
         text: "Found it — there's an edge case when Google Play Services isn't updated. We're pushing a hotfix now.",
         time: "4:40 AM",
       },
@@ -852,25 +852,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1701,
-        side: "in",
+        align: "start",
         text: "We're expanding into Mexico and Brazil next quarter and want to explore a reseller partnership.",
         time: "Yesterday",
       },
       {
         id: 1702,
-        side: "out",
+        align: "end",
         text: "Thanks, Josh. That sounds aligned with our LATAM plans. Do you already have target customer segments in mind?",
         time: "Yesterday",
       },
       {
         id: 1703,
-        side: "in",
+        align: "start",
         text: "Mostly mid-market logistics and retail teams. We can bring initial pipeline if the reseller terms work.",
         time: "Yesterday",
       },
       {
         id: 1704,
-        side: "out",
+        align: "end",
         text: "I'll introduce you to our partnerships lead and share the reseller tier overview before Friday.",
         time: "Yesterday",
       },
@@ -902,25 +902,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1801,
-        side: "in",
+        align: "start",
         text: "Our compliance audit starts next week. We need activity logs for all May workspace events.",
         time: "Yesterday",
       },
       {
         id: 1802,
-        side: "out",
+        align: "end",
         text: "Hi Mollie. We can export admin activity, login events, and file access logs. Do auditors need CSV or JSON?",
         time: "Yesterday",
       },
       {
         id: 1803,
-        side: "in",
+        align: "start",
         text: "CSV is fine, but it needs user IDs and timestamps in UTC.",
         time: "Yesterday",
       },
       {
         id: 1804,
-        side: "out",
+        align: "end",
         text: "Understood. I'll prepare the May export with UTC timestamps and send it through the secure file link.",
         time: "Yesterday",
       },
@@ -952,25 +952,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 1901,
-        side: "in",
+        align: "start",
         text: "We have five reseller partners asking whether the dashboard can be white-labeled.",
         time: "Yesterday",
       },
       {
         id: 1902,
-        side: "out",
+        align: "end",
         text: "Hi Rene. White-labeling is available on the partner tier. Are they asking about custom domain, logo, or full theme control?",
         time: "Yesterday",
       },
       {
         id: 1903,
-        side: "in",
+        align: "start",
         text: "All three, ideally. They want their own domain and branded reports for clients.",
         time: "Yesterday",
       },
       {
         id: 1904,
-        side: "out",
+        align: "end",
         text: "That is supported. I'll send the partner tier doc and a sample branded report template.",
         time: "Yesterday",
       },
@@ -1002,25 +1002,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 2001,
-        side: "in",
+        align: "start",
         text: "Our security team has questions about the MFA enforcement rollout. Is SMS fallback still supported?",
         time: "Yesterday",
       },
       {
         id: 2002,
-        side: "out",
+        align: "end",
         text: "Hi Rylee. SMS fallback remains available, but we recommend authenticator apps or security keys for admins.",
         time: "Yesterday",
       },
       {
         id: 2003,
-        side: "in",
+        align: "start",
         text: "Can we enforce security keys for admins and allow SMS only for contractors?",
         time: "Yesterday",
       },
       {
         id: 2004,
-        side: "out",
+        align: "end",
         text: "Yes. You can configure that by user group. I'll send the policy setup steps.",
         time: "Yesterday",
       },
@@ -1052,25 +1052,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 2101,
-        side: "in",
+        align: "start",
         text: "The January invoice CSV is missing three line items. The PDF invoice looks correct.",
         time: "Yesterday",
       },
       {
         id: 2102,
-        side: "out",
+        align: "end",
         text: "Thanks, Sienna. Are the missing line items discounts, usage charges, or taxes?",
         time: "Yesterday",
       },
       {
         id: 2103,
-        side: "in",
+        align: "start",
         text: "Two are usage charges and one is a tax adjustment. They all appear in the PDF.",
         time: "Yesterday",
       },
       {
         id: 2104,
-        side: "out",
+        align: "end",
         text: "I found an export filter excluding adjusted usage lines. We'll patch it and regenerate the January CSV for you.",
         time: "Yesterday",
       },
@@ -1102,25 +1102,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 2201,
-        side: "in",
+        align: "start",
         text: "Could we schedule a 30-minute demo for our procurement and finance leads this Friday?",
         time: "Yesterday",
       },
       {
         id: 2202,
-        side: "out",
+        align: "end",
         text: "Absolutely, Noah. Should the walkthrough focus on vendor onboarding, approvals, or reporting?",
         time: "Yesterday",
       },
       {
         id: 2203,
-        side: "in",
+        align: "start",
         text: "Vendor onboarding and approval routing are the priority. Reporting can be a quick overview.",
         time: "Yesterday",
       },
       {
         id: 2204,
-        side: "out",
+        align: "end",
         text: "Great. I'll send a Friday slot with an agenda tailored to those two workflows.",
         time: "Yesterday",
       },
@@ -1152,25 +1152,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 2301,
-        side: "in",
+        align: "start",
         text: "We're moving from Okta to Azure AD and need to understand the SSO setup timeline.",
         time: "Yesterday",
       },
       {
         id: 2302,
-        side: "out",
+        align: "end",
         text: "Hi Eve. Typical Azure AD SSO setup takes one to two business days once metadata is exchanged.",
         time: "Yesterday",
       },
       {
         id: 2303,
-        side: "in",
+        align: "start",
         text: "We can share metadata today. Will there be downtime during the switch?",
         time: "Yesterday",
       },
       {
         id: 2304,
-        side: "out",
+        align: "end",
         text: "No downtime if we test with a pilot group first. I'll send the Azure AD checklist and rollout plan.",
         time: "Yesterday",
       },
@@ -1202,25 +1202,25 @@ export const conversations: Conversation[] = [
     messages: [
       {
         id: 2401,
-        side: "in",
+        align: "start",
         text: "Our ops lead Jamal resigned last week and he was the only account owner. I need ownership transferred to me before we can proceed with anything.",
         time: "Yesterday",
       },
       {
         id: 2402,
-        side: "out",
+        align: "end",
         text: "Hi Zahir, I can help with that. We'll need verification — can you confirm your role and provide a copy of Jamal's resignation notice?",
         time: "Yesterday",
       },
       {
         id: 2403,
-        side: "in",
+        align: "start",
         text: "Absolutely. I'm the Operations Director. I've attached his signed notice and HR confirmation.",
         time: "Yesterday",
       },
       {
         id: 2404,
-        side: "out",
+        align: "end",
         text: "Verified. I've initiated the ownership transfer. It takes about 2 hours to propagate. You'll get a confirmation email once it's done.",
         time: "Yesterday",
       },
