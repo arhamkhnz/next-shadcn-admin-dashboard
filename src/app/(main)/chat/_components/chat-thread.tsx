@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
-import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble";
+import { Bubble, BubbleContent, BubbleGroup, BubbleReactions } from "@/components/ui/bubble";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -150,6 +150,7 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
 
               {messages.map((message) => {
                 const isOutbound = message.align === "end";
+                const reactionAlign = isOutbound ? "start" : "end";
                 const senderName = isOutbound ? currentUser.name : contact.name;
 
                 return (
@@ -174,8 +175,13 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
 
                       <MessageContent>
                         <BubbleGroup>
-                          <Bubble variant={isOutbound ? "default" : "muted"}>
+                          <Bubble variant={isOutbound ? "default" : "muted"} align={message.align}>
                             <BubbleContent>{message.text}</BubbleContent>
+                            {message.reaction ? (
+                              <BubbleReactions aria-label={`Reaction: ${message.reaction}`} align={reactionAlign}>
+                                <span>{message.reaction}</span>
+                              </BubbleReactions>
+                            ) : null}
                           </Bubble>
                         </BubbleGroup>
                         <MessageFooter>{message.time}</MessageFooter>

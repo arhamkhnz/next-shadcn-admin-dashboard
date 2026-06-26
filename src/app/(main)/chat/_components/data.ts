@@ -20,6 +20,7 @@ export type Message = {
   align: "start" | "end";
   text: string;
   time: string;
+  reaction?: string;
 };
 
 export type Contact = {
@@ -117,8 +118,15 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "Found a mismatch in the staging environment variables. I'm applying the fix and will confirm once the probes recover.",
         time: "3 min ago",
+        reaction: "👍",
       },
-      { id: 105, align: "start", text: "Great. Keep me posted, this is blocking our QA pass.", time: "1 min ago" },
+      {
+        id: 105,
+        align: "start",
+        text: "Great. Keep me posted, this is blocking our QA pass.",
+        time: "1 min ago",
+        reaction: "👀",
+      },
     ],
   },
   {
@@ -168,8 +176,15 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "The duplicate was a retry from the old payment method. I've started the refund and sent the receipt to your billing email.",
         time: "2 min ago",
+        reaction: "👍",
       },
-      { id: 205, align: "start", text: "Perfect, thanks. I'll let finance know to expect it.", time: "1 min ago" },
+      {
+        id: 205,
+        align: "start",
+        text: "Perfect, thanks. I'll let finance know to expect it.",
+        time: "1 min ago",
+        reaction: "✅",
+      },
     ],
   },
   {
@@ -219,8 +234,15 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "Looks like the Analytics Viewer permission was dropped from your custom role. I've reattached it for your workspace.",
         time: "3 min ago",
+        reaction: "🙌",
       },
-      { id: 305, align: "start", text: "That fixed it. Thanks for the quick help.", time: "1 min ago" },
+      {
+        id: 305,
+        align: "start",
+        text: "That fixed it. Thanks for the quick help.",
+        time: "1 min ago",
+        reaction: "🎉",
+      },
     ],
   },
   // Today
@@ -271,6 +293,7 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "Got it. I'll send the executive summary, Scope 3 CSV, and the methodology note in one bundle.",
         time: "10:49 AM",
+        reaction: "👍",
       },
       { id: 505, align: "start", text: "Perfect. That should cover everything for Thursday.", time: "10:50 AM" },
     ],
@@ -322,6 +345,7 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "I'll queue it as an async export and email the download link once it finishes. That avoids the gateway timeout.",
         time: "10:06 AM",
+        reaction: "✅",
       },
     ],
   },
@@ -372,6 +396,7 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "Found it. The payment was received but not reconciled to the invoice. I've marked INV-4821 as paid.",
         time: "9:46 AM",
+        reaction: "🙏",
       },
     ],
   },
@@ -422,6 +447,7 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "Will do. I'll add the staging access request and our repository conventions to the same thread.",
         time: "9:20 AM",
+        reaction: "👍",
       },
     ],
   },
@@ -572,6 +598,7 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "The renewal job failed on CAA validation. I've reissued the certificate manually and it's propagating.",
         time: "7:53 AM",
+        reaction: "⚡",
       },
     ],
   },
@@ -622,6 +649,7 @@ export const conversations: Conversation[] = [
         align: "end",
         text: "Done. I'll include both and mark the quote for annual prepay so procurement can review it quickly.",
         time: "7:26 AM",
+        reaction: "✅",
       },
     ],
   },
