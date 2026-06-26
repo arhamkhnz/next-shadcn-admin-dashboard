@@ -20,7 +20,7 @@ export function MailInbox({ mails, onSelectMail }: MailInboxProps) {
   const unpinnedMails = mails.filter((mail) => !mail.isPinned);
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3 py-3">
+    <div className="flex h-full min-h-0 flex-col gap-3 pt-3">
       <div className="flex items-center justify-between gap-4 px-2">
         <div className="flex items-center">
           <SidebarTrigger />

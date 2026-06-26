@@ -24,7 +24,7 @@ export function MailList({ groups, onSelectMail }: MailListProps) {
   const [mail, setMail] = useMail();
 
   return (
-    <ScrollArea className="min-h-0 flex-1">
+    <ScrollArea className="**:data-[slot=scroll-area-viewport]:scroll-fade min-h-0 flex-1">
       <div className="flex flex-col gap-1.5 pt-0">
         {groups.map((group) => (
           <section key={group.id} className="flex flex-col gap-1.5">
