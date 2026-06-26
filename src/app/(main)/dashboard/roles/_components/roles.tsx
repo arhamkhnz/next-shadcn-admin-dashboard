@@ -23,6 +23,30 @@ import { rolesColumns } from "./roles-table/columns";
 import type { Role } from "./roles-table/data";
 import { RolesTable } from "./roles-table/table";
 
+function getRoleTypeFilter(groupFilter: string) {
+  if (groupFilter === "System roles") {
+    return "System";
+  }
+
+  if (groupFilter === "Custom roles") {
+    return "Custom";
+  }
+
+  return "All";
+}
+
+function getRoleGroupFilterValue(typeFilter: string) {
+  if (typeFilter === "System") {
+    return "System roles";
+  }
+
+  if (typeFilter === "Custom") {
+    return "Custom roles";
+  }
+
+  return undefined;
+}
+
 export function Roles({ roles }: { roles: Role[] }) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -52,7 +76,7 @@ export function Roles({ roles }: { roles: Role[] }) {
 
   const search = (table.getColumn("search")?.getFilterValue() as string) ?? "";
   const groupFilter = (table.getColumn("group")?.getFilterValue() as string) ?? "";
-  const typeFilter = groupFilter === "System roles" ? "System" : groupFilter === "Custom roles" ? "Custom" : "All";
+  const typeFilter = getRoleTypeFilter(groupFilter);
   const ownerFilter = (table.getColumn("owner")?.getFilterValue() as string) ?? "All";
   const statusFilter = (table.getColumn("status")?.getFilterValue() as string) ?? "All";
 
@@ -118,9 +142,7 @@ export function Roles({ roles }: { roles: Role[] }) {
                   <Select
                     value={typeFilter}
                     onValueChange={(v) => {
-                      table
-                        .getColumn("group")
-                        ?.setFilterValue(v === "All" ? undefined : v === "System" ? "System roles" : "Custom roles");
+                      table.getColumn("group")?.setFilterValue(getRoleGroupFilterValue(v));
                       table.setPageIndex(0);
                     }}
                   >

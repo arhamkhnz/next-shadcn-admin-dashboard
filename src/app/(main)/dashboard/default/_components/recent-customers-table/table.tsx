@@ -67,6 +67,12 @@ const sortOptions = [
   { value: "name-asc", label: "Name A-Z" },
   { value: "name-desc", label: "Name Z-A" },
 ] as const;
+const sortOptionState = {
+  newest: [{ id: "joined", desc: true }],
+  oldest: [{ id: "joined", desc: false }],
+  "name-asc": [{ id: "name", desc: false }],
+  "name-desc": [{ id: "name", desc: true }],
+} satisfies Record<(typeof sortOptions)[number]["value"], SortingState>;
 
 export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -217,16 +223,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               <DropdownMenuRadioGroup
                 value={sortValue}
                 onValueChange={(value) => {
-                  const nextSorting: SortingState =
-                    value === "oldest"
-                      ? [{ id: "joined", desc: false }]
-                      : value === "name-asc"
-                        ? [{ id: "name", desc: false }]
-                        : value === "name-desc"
-                          ? [{ id: "name", desc: true }]
-                          : [{ id: "joined", desc: true }];
-
-                  table.setSorting(nextSorting);
+                  table.setSorting(sortOptionState[value as keyof typeof sortOptionState] ?? sortOptionState.newest);
                   table.setPageIndex(0);
                 }}
               >

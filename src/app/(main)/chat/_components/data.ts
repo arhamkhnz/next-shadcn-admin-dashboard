@@ -44,10 +44,6 @@ export type NavItem = {
   isActive: boolean;
 };
 
-export type ChannelItem = NavItem;
-
-export type ViewItem = NavItem;
-
 export const navItems: NavItem[] = [
   { id: "inbox", title: "Inbox", label: "24", icon: Inbox, isActive: true },
   { id: "mentions", title: "Mentions", label: "3", icon: Mail, isActive: false },
@@ -57,7 +53,7 @@ export const navItems: NavItem[] = [
   { id: "unassigned", title: "Unassigned", label: "7", icon: User, isActive: false },
 ];
 
-export const channelItems: ChannelItem[] = [
+export const channelItems: NavItem[] = [
   { id: "email", title: "Email", label: "18", icon: Mail, isActive: false },
   { id: "chat", title: "Chat", label: "5", icon: MessageCircle, isActive: false },
   { id: "whatsapp", title: "WhatsApp", label: "1", icon: Phone, isActive: false },
@@ -66,7 +62,7 @@ export const channelItems: ChannelItem[] = [
   { id: "phone", title: "Phone", label: "0", icon: Phone, isActive: false },
 ];
 
-export const viewItems: ViewItem[] = [
+export const viewItems: NavItem[] = [
   { id: "vip", title: "VIP Customers", label: "8", icon: Star, isActive: false },
   { id: "orders", title: "Orders & Returns", label: "6", icon: Inbox, isActive: false },
   { id: "feedback", title: "Product Feedback", label: "2", icon: MessageCircle, isActive: false },

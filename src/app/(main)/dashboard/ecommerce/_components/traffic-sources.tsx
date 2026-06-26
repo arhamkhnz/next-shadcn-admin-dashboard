@@ -63,6 +63,9 @@ type IconLabelProps = {
 
 type SourceLabelProps = LabelProps & {
   index?: number;
+};
+
+type SourceChangeLabelProps = LabelProps & {
   value?: number | string;
 };
 
@@ -128,7 +131,7 @@ function TrafficSourceNameLabel({ height, index, x, y }: SourceLabelProps) {
   );
 }
 
-function TrafficSourceChangeLabel({ height, value, y }: SourceLabelProps) {
+function TrafficSourceChangeLabel({ height, value, y }: SourceChangeLabelProps) {
   const yValue = getNumber(y);
   const heightValue = getNumber(height);
 

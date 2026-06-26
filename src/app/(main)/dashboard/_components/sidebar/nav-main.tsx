@@ -52,6 +52,11 @@ interface NavLinkItemProps {
   readonly showIconFallback: boolean;
 }
 
+interface NavLinkIconProps {
+  readonly item: NavMainLinkItem;
+  readonly showFallback: boolean;
+}
+
 interface NavDropdownItemProps {
   readonly item: NavMainParentItem;
   readonly isActive: boolean;
@@ -170,8 +175,6 @@ function NavItem({ item, isItemActive, isSubItemActive, isSubmenuOpen }: NavItem
 }
 
 function NavLinkItem({ item, isActive, showIconFallback }: NavLinkItemProps) {
-  const Icon = item.icon;
-
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild aria-disabled={item.disabled} tooltip={item.title} isActive={isActive}>
@@ -181,13 +184,27 @@ function NavLinkItem({ item, isActive, showIconFallback }: NavLinkItemProps) {
           target={item.newTab ? "_blank" : undefined}
           rel={item.newTab ? "noreferrer" : undefined}
         >
-          {Icon ? <Icon /> : showIconFallback ? <CollapsedIconFallback title={item.title} /> : null}
+          <NavLinkIcon item={item} showFallback={showIconFallback} />
           <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>
       <NavItemBadge badge={item.badge} />
     </SidebarMenuItem>
   );
+}
+
+function NavLinkIcon({ item, showFallback }: NavLinkIconProps) {
+  const Icon = item.icon;
+
+  if (Icon) {
+    return <Icon />;
+  }
+
+  if (showFallback) {
+    return <CollapsedIconFallback title={item.title} />;
+  }
+
+  return null;
 }
 
 function NavDropdownItem({ item, isActive, isSubItemActive }: NavDropdownItemProps) {

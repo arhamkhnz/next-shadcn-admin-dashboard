@@ -31,19 +31,25 @@ const statusStyles: Record<string, string> = {
   canceled: "border-muted-foreground/20 bg-muted text-muted-foreground",
 };
 
+function SortIcon({ sortDirection }: { sortDirection: false | "asc" | "desc" }) {
+  if (sortDirection === "desc") {
+    return <ArrowDown data-icon="inline-end" />;
+  }
+
+  if (sortDirection === "asc") {
+    return <ArrowUp data-icon="inline-end" />;
+  }
+
+  return <ArrowUpDown data-icon="inline-end" />;
+}
+
 function TitleColumnHeader({ column }: { column: Column<Task, unknown> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="-ml-3 text-muted-foreground data-[state=open]:bg-accent">
           Title
-          {column.getIsSorted() === "desc" ? (
-            <ArrowDown data-icon="inline-end" />
-          ) : column.getIsSorted() === "asc" ? (
-            <ArrowUp data-icon="inline-end" />
-          ) : (
-            <ArrowUpDown data-icon="inline-end" />
-          )}
+          <SortIcon sortDirection={column.getIsSorted()} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">

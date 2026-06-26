@@ -255,21 +255,30 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
 function ResourceMeter({ label, value }: { label: string; value: number }) {
   const isCritical = value >= 70;
   const isWarning = value >= 55;
-  const meterClass = isCritical ? "bg-destructive" : isWarning ? "bg-amber-500" : "bg-emerald-500";
-  const valueClass = isCritical
-    ? "text-destructive"
-    : isWarning
-      ? "text-amber-600 dark:text-amber-400"
-      : "text-emerald-600 dark:text-emerald-400";
 
   return (
     <span className="min-w-0 space-y-1">
       <span className="flex items-baseline justify-between gap-2 text-xs">
         <span className="font-medium text-muted-foreground">{label}</span>
-        <span className={cn("font-medium tabular-nums", valueClass)}>{value}%</span>
+        <span
+          className={cn(
+            "font-medium text-emerald-600 tabular-nums dark:text-emerald-400",
+            isWarning && "text-amber-600 dark:text-amber-400",
+            isCritical && "text-destructive",
+          )}
+        >
+          {value}%
+        </span>
       </span>
       <span className="block h-1.5 overflow-hidden rounded-full bg-muted-foreground/20">
-        <span className={cn("block h-full rounded-full", meterClass)} style={{ width: `${value}%` }} />
+        <span
+          className={cn(
+            "block h-full rounded-full bg-emerald-500",
+            isWarning && "bg-amber-500",
+            isCritical && "bg-destructive",
+          )}
+          style={{ width: `${value}%` }}
+        />
       </span>
     </span>
   );

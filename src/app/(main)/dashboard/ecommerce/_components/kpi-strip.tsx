@@ -8,6 +8,7 @@ import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle }
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 const revenueBucketRanges = ["01-05", "06-10", "11-15", "16-20", "21-25", "26-31"] as const;
+const profitMultipliers = [0.24, 0.28, 0.26] as const;
 
 const revenueBucketValues = [
   [4820, 5150, 5060, 5520, 5990, 6880],
@@ -44,7 +45,7 @@ function getRollingRevenueBuckets() {
 const revenueOverviewData = getRollingRevenueBuckets().flatMap(({ month, values }) =>
   values.map((revenue, index) => ({
     period: `${month} ${revenueBucketRanges[index]}`,
-    profit: Math.round(revenue * (index % 3 === 0 ? 0.24 : index % 3 === 1 ? 0.28 : 0.26)),
+    profit: Math.round(revenue * profitMultipliers[index % profitMultipliers.length]),
     revenue,
   })),
 );

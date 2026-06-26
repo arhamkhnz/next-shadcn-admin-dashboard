@@ -13,10 +13,21 @@ const availablePercent = Math.round((chartData[0]["in-stock"] / totalUnits) * 10
 const gaugeSegmentCount = 32;
 const inStockSegments = Math.round((chartData[0]["in-stock"] / totalUnits) * gaugeSegmentCount);
 const lowStockSegments = Math.round((chartData[0]["low-stock"] / totalUnits) * gaugeSegmentCount);
-const gaugeSegments = Array.from({ length: gaugeSegmentCount }, (_, index) => {
-  const status =
-    index < inStockSegments ? "in-stock" : index < inStockSegments + lowStockSegments ? "low-stock" : "out-of-stock";
 
+function getGaugeSegmentStatus(index: number) {
+  if (index < inStockSegments) {
+    return "in-stock";
+  }
+
+  if (index < inStockSegments + lowStockSegments) {
+    return "low-stock";
+  }
+
+  return "out-of-stock";
+}
+
+const gaugeSegments = Array.from({ length: gaugeSegmentCount }, (_, index) => {
+  const status = getGaugeSegmentStatus(index);
   return {
     fill: `var(--color-${status})`,
     id: `segment-${index + 1}`,

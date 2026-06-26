@@ -80,6 +80,7 @@
         "noNamespace": "error",
         "useAsConstAssertion": "error",
         "useSelfClosingElements": "error",
+        "noNestedTernary": "warn",
         "noParameterAssign": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error",

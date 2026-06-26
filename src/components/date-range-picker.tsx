@@ -22,6 +22,15 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
     return { from, to };
   });
   const dateRange = value ?? internalDateRange;
+  let dateRangeLabel = "Select date";
+
+  if (dateRange?.from) {
+    dateRangeLabel = format(dateRange.from, "d MMM yyyy");
+  }
+
+  if (dateRange?.from && dateRange.to) {
+    dateRangeLabel = `${format(dateRange.from, "d MMM yyyy")} - ${format(dateRange.to, "d MMM yyyy")}`;
+  }
 
   const handleDateChange = (nextValue: DateRange | undefined) => {
     if (!value) {
@@ -34,11 +43,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" id="date" className="font-normal">
-          {dateRange?.from
-            ? dateRange.to
-              ? `${format(dateRange.from, "d MMM yyyy")} - ${format(dateRange.to, "d MMM yyyy")}`
-              : format(dateRange.from, "d MMM yyyy")
-            : "Select date"}
+          {dateRangeLabel}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto overflow-hidden p-0" align="end">
