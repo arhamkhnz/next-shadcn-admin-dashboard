@@ -12,6 +12,10 @@ import { InvoicePaper } from "./invoice-paper";
 import { PrintInvoice } from "./print-invoice";
 import { useVisibleCenterPosition } from "./use-visible-center-position";
 
+function handlePrint() {
+  window.print();
+}
+
 export function InvoicePreview({ invoice }: { invoice: InvoiceFormValues }) {
   const previewBodyRef = React.useRef<HTMLDivElement>(null);
   const paperLayout = useVisibleCenterPosition(previewBodyRef, {
@@ -19,10 +23,6 @@ export function InvoicePreview({ invoice }: { invoice: InvoiceFormValues }) {
     maxScale: INVOICE_PAPER_SCALE,
     width: INVOICE_PAPER_WIDTH,
   });
-
-  function handlePrint() {
-    window.print();
-  }
 
   return (
     <>

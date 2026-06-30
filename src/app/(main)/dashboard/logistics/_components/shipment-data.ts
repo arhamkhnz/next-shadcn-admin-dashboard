@@ -2,22 +2,18 @@ import {
   AlertTriangleIcon,
   ArrowUp,
   Ban,
-  BriefcaseBusiness,
   CheckCircle2,
   Droplets,
   Flame,
   Forklift,
   type LucideIcon,
-  Package,
   PackageCheck,
   PenLine,
   ShieldCheck,
   Snowflake,
   Star,
   Thermometer,
-  ThermometerSun,
   Truck,
-  Weight,
 } from "lucide-react";
 
 export type ShipmentStatus =
@@ -983,19 +979,3 @@ export const shipments: Shipment[] = [
     transportNumber: "BE 1745 YU",
   },
 ];
-
-export const shipmentDetails = [
-  { icon: Package, label: "Cargo", value: "Electronics" },
-  { icon: Weight, label: "Weight", value: "2,450 kg" },
-  { icon: BriefcaseBusiness, label: "Container", value: "40ft HC" },
-  { icon: Truck, label: "Reference", value: "PO-88472" },
-  { icon: ThermometerSun, label: "Temperature", value: "18°C" },
-] as const;
-
-export const shipmentTimeline = [
-  { label: "Booked", time: "May 12, 07:20 AM", place: "Jakarta, IDN", done: true, active: false },
-  { label: "Packed", time: "May 12, 07:30 AM", place: "Cirebon, IDN", done: true, active: false },
-  { label: "Transit", time: "May 12, 09:15 AM", place: "Semarang, IDN", done: false, active: true },
-  { label: "Ground", time: "May 12, 12:10 PM", place: "Singapore, SGP", done: false, active: false },
-  { label: "Delivered", time: "-", place: "Singapore, SGP", done: false, active: false },
-] as const;

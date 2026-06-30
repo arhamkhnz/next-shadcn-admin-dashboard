@@ -22,7 +22,7 @@ export const tagTones: Record<TaskTeam, string> = {
   Security: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
 };
 
-export const taskOwners = {
+const taskOwners = {
   arham: {
     name: "Arham Khan",
     tone: "[&_[data-slot=avatar-fallback]]:bg-zinc-100 [&_[data-slot=avatar-fallback]]:text-zinc-700 after:border-zinc-200 dark:[&_[data-slot=avatar-fallback]]:bg-zinc-500/15 dark:[&_[data-slot=avatar-fallback]]:text-zinc-300 dark:after:border-zinc-500/20",

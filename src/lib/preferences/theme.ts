@@ -1,4 +1,4 @@
-export const THEME_MODE_OPTIONS = [
+const THEME_MODE_OPTIONS = [
   { label: "Light", value: "light" },
   { label: "Dark", value: "dark" },
   { label: "System", value: "system" },

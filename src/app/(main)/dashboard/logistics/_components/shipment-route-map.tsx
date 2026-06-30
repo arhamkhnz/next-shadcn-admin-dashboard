@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { type GeoPermissibleObjects, geoMercator, geoPath } from "d3-geo";
 import { feature, mesh } from "topojson-client";
@@ -78,6 +78,56 @@ type ShipmentRouteMapProps = {
   shipment: Shipment | null;
 };
 
+function buildMapGeometry(shipment: Shipment | null) {
+  const routeLine = shipment ? createRouteLine(shipment) : null;
+  const projection = geoMercator();
+
+  if (shipment) {
+    projection.fitExtent(
+      [
+        [SNAPSHOT_PADDING, SNAPSHOT_PADDING],
+        [WIDTH - SNAPSHOT_PADDING, HEIGHT - SNAPSHOT_PADDING],
+      ],
+      createSnapshotFrame(shipment) as GeoPermissibleObjects,
+    );
+  } else {
+    projection
+      .center([102, 17])
+      .scale(760)
+      .translate([WIDTH / 2, HEIGHT / 2]);
+  }
+
+  const pathGenerator = geoPath(projection);
+
+  function projectPoint(routePoint: RoutePoint): ProjectedRoutePoint {
+    const point = projection(routePoint.coordinates);
+
+    return {
+      ...routePoint,
+      point: point ? [roundCoordinate(point[0]), roundCoordinate(point[1])] : null,
+    };
+  }
+
+  return {
+    path: pathGenerator,
+    routePath: routeLine ? pathGenerator(routeLine as GeoPermissibleObjects) : null,
+    routePoints: shipment
+      ? [
+          projectPoint({
+            coordinates: shipment.origin.coordinates,
+            country: shipment.origin.country,
+            label: "Origin",
+          }),
+          projectPoint({
+            coordinates: shipment.destination.coordinates,
+            country: shipment.destination.country,
+            label: "Destination",
+          }),
+        ]
+      : [],
+  };
+}
+
 export function ShipmentRouteMap({ shipment }: ShipmentRouteMapProps) {
   const [borders, setBorders] = useState<GeoJSON.MultiLineString | null>(null);
   const [land, setLand] = useState<GeoJSON.FeatureCollection | null>(null);
@@ -120,55 +170,7 @@ export function ShipmentRouteMap({ shipment }: ShipmentRouteMapProps) {
     };
   }, []);
 
-  const { path, routePath, routePoints } = useMemo(() => {
-    const routeLine = shipment ? createRouteLine(shipment) : null;
-    const projection = geoMercator();
-
-    if (shipment) {
-      projection.fitExtent(
-        [
-          [SNAPSHOT_PADDING, SNAPSHOT_PADDING],
-          [WIDTH - SNAPSHOT_PADDING, HEIGHT - SNAPSHOT_PADDING],
-        ],
-        createSnapshotFrame(shipment) as GeoPermissibleObjects,
-      );
-    } else {
-      projection
-        .center([102, 17])
-        .scale(760)
-        .translate([WIDTH / 2, HEIGHT / 2]);
-    }
-
-    const pathGenerator = geoPath(projection);
-
-    function projectPoint(routePoint: RoutePoint): ProjectedRoutePoint {
-      const point = projection(routePoint.coordinates);
-
-      return {
-        ...routePoint,
-        point: point ? [roundCoordinate(point[0]), roundCoordinate(point[1])] : null,
-      };
-    }
-
-    return {
-      path: pathGenerator,
-      routePath: routeLine ? pathGenerator(routeLine as GeoPermissibleObjects) : null,
-      routePoints: shipment
-        ? [
-            projectPoint({
-              coordinates: shipment.origin.coordinates,
-              country: shipment.origin.country,
-              label: "Origin",
-            }),
-            projectPoint({
-              coordinates: shipment.destination.coordinates,
-              country: shipment.destination.country,
-              label: "Destination",
-            }),
-          ]
-        : [],
-    };
-  }, [shipment]);
+  const { path, routePath, routePoints } = buildMapGeometry(shipment);
 
   return (
     <div className="size-full min-h-0 overflow-hidden bg-[#d4dadc] dark:bg-[#2C353C]">

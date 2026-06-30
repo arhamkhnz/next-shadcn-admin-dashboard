@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 export function CalendarPanel() {
   const today = startOfToday();
   const [date, setDate] = React.useState<Date | undefined>(today);
-  const [currentMonth, setCurrentMonth] = React.useState<Date>(startOfMonth(today));
+  const [currentMonth, setCurrentMonth] = React.useState<Date>(() => startOfMonth(today));
 
   return (
     <Card className="w-full" size="sm">

@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const recentCustomersSchema = z.object({
+const recentCustomersSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),

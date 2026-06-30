@@ -1,6 +1,3 @@
-import type { LucideIcon } from "lucide-react";
-import { BriefcaseBusiness, ShieldCheck, SquareUserRound, UserCog, UserRound } from "lucide-react";
-
 export type UserStatus = "Active" | "Pending invite" | "Deactivated" | "Locked" | "Suspended";
 
 const teamValues = [
@@ -295,17 +292,6 @@ export const filters = {
   team: ["All", ...teamValues],
   status: ["All", "Active", "Pending invite", "Deactivated", "Locked", "Suspended"],
   workspace: ["All", "Weblabs Studio", "Sandbox", "Internal Tools", "Acme Inc."],
-};
-
-export const roleMeta: Record<string, { className: string; icon: LucideIcon }> = {
-  "Workspace Owner": { className: "text-emerald-300", icon: SquareUserRound },
-  Admin: { className: "text-amber-300", icon: UserCog },
-  "Billing Admin": { className: "text-violet-300", icon: BriefcaseBusiness },
-  "Security Admin": { className: "text-orange-300", icon: ShieldCheck },
-  "Team Lead": { className: "text-fuchsia-300", icon: UserRound },
-  Contributor: { className: "text-rose-300", icon: UserRound },
-  Guest: { className: "text-muted-foreground", icon: UserRound },
-  "Read-only": { className: "text-muted-foreground", icon: UserRound },
 };
 
 export const statusMeta: Record<UserStatus, { badgeClass: string; dotClass: string }> = {

@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const opportunitySchema = z.object({
+const opportunitySchema = z.object({
   id: z.string(),
   account: z.string(),
   stage: z.string(),

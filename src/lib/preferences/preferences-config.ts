@@ -37,7 +37,7 @@ export type PreferenceKey = keyof PreferenceValueMap;
  * Layout-critical keys → these affect SSR UI (sidebar shape)
  * so they must be accessible on the server.
  */
-export const LAYOUT_CRITICAL_KEYS = ["sidebar_variant", "sidebar_collapsible"] as const;
+const LAYOUT_CRITICAL_KEYS = ["sidebar_variant", "sidebar_collapsible"] as const;
 export type LayoutCriticalKey = (typeof LAYOUT_CRITICAL_KEYS)[number];
 
 /**

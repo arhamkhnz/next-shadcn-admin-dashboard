@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const proposalSectionsSchema = z.object({
+const proposalSectionsSchema = z.object({
   id: z.number(),
   header: z.string(),
   type: z.string(),

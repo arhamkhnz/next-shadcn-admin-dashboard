@@ -44,25 +44,25 @@ const referrersData: TrafficSourceDatum[] = [
   { label: "3.6k", source: "Medium", visitors: 3600 },
 ];
 
+function renderValueLabel(props: LabelProps) {
+  const { height, value, y } = props;
+
+  return (
+    <text
+      className="fill-foreground"
+      dominantBaseline="middle"
+      dx={-6}
+      fontSize={14}
+      textAnchor="end"
+      x="100%"
+      y={Number(y) + Number(height) / 2}
+    >
+      {value}
+    </text>
+  );
+}
+
 function TrafficSourceBarChart({ data }: { data: TrafficSourceDatum[] }) {
-  const renderValueLabel = (props: LabelProps) => {
-    const { height, value, y } = props;
-
-    return (
-      <text
-        className="fill-foreground"
-        dominantBaseline="middle"
-        dx={-6}
-        fontSize={14}
-        textAnchor="end"
-        x="100%"
-        y={Number(y) + Number(height) / 2}
-      >
-        {value}
-      </text>
-    );
-  };
-
   return (
     <ChartContainer config={chartConfig} className="h-64 w-full">
       <BarChart

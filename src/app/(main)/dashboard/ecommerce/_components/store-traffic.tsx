@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState } from "react";
 
 import { format, subMinutes } from "date-fns";
 import { ArrowUpRight } from "lucide-react";
@@ -142,7 +142,7 @@ function formatTrafficTooltipLabel(value: string) {
 }
 
 export function StoreTraffic() {
-  const trafficData = useMemo(getTrafficData, []);
+  const [trafficData] = useState(() => getTrafficData());
   const firstTrafficTimestamp = trafficData[0].timestamp;
   const lastTrafficTimestamp = trafficData.at(-1)?.timestamp ?? "";
 

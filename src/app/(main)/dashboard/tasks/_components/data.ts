@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowRight, ArrowUp, CheckCircle, Circle, CircleOff, HelpCircle, Timer } from "lucide-react";
 import { z } from "zod";
 
-export const taskSchema = z.object({
+const taskSchema = z.object({
   id: z.string(),
   title: z.string(),
   status: z.string(),

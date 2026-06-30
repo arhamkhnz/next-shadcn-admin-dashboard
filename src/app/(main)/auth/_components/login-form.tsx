@@ -11,10 +11,20 @@ import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from "@/compo
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
+  email: z.email({ message: "Please enter a valid email address." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
   remember: z.boolean().optional(),
 });
+
+function onSubmit(data: z.infer<typeof formSchema>) {
+  toast("You submitted the following values", {
+    description: (
+      <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
+        <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+      </pre>
+    ),
+  });
+}
 
 export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -25,16 +35,6 @@ export function LoginForm() {
       remember: false,
     },
   });
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    toast("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  };
 
   return (
     <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
