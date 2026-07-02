@@ -9,6 +9,7 @@ import {
 } from "@/lib/preferences/preferences-config";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
 import type { ResolvedThemeMode } from "@/lib/preferences/theme";
+import { resolveThemeMode } from "@/lib/preferences/theme-utils";
 
 export type PreferencesState = {
   values: PreferenceValueMap;
@@ -18,13 +19,15 @@ export type PreferencesState = {
   resetPreferences: () => void;
 };
 
-export const createPreferencesStore = (initialValues: Partial<PreferenceValueMap> = {}) =>
-  createStore<PreferencesState>()((set) => ({
-    values: {
-      ...PREFERENCE_DEFAULTS,
-      ...initialValues,
-    },
-    resolvedThemeMode: initialValues.theme_mode === "dark" ? "dark" : "light",
+export const createPreferencesStore = (initialValues: Partial<PreferenceValueMap> = {}) => {
+  const values: PreferenceValueMap = {
+    ...PREFERENCE_DEFAULTS,
+    ...initialValues,
+  };
+
+  return createStore<PreferencesState>()((set) => ({
+    values,
+    resolvedThemeMode: resolveThemeMode(values.theme_mode),
     isSynced: false,
 
     setPreference: (key, value) => {
@@ -58,3 +61,4 @@ export const createPreferencesStore = (initialValues: Partial<PreferenceValueMap
       });
     },
   }));
+};

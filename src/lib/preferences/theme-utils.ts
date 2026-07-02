@@ -1,8 +1,8 @@
 import type { ResolvedThemeMode, ThemeMode } from "./theme";
 
-function resolveThemeMode(mode: ThemeMode): ResolvedThemeMode {
+export function resolveThemeMode(mode: ThemeMode): ResolvedThemeMode {
   if (mode === "system") {
-    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+    const prefersDark = typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
     return prefersDark ? "dark" : "light";
   }
   return mode === "dark" ? "dark" : "light";
