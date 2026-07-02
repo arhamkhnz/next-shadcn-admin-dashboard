@@ -80,8 +80,8 @@ export function OpportunitiesSection() {
     globalFilterFn: "includesString",
   });
   const searchQuery = table.getState().globalFilter ?? "";
-  const stageFilter = (table.getColumn("stage")?.getFilterValue() as string) ?? "all";
-  const healthFilter = (table.getColumn("health")?.getFilterValue() as string) ?? "all";
+  const stageFilter = (table.getColumn("stage")?.getFilterValue() as string | undefined) ?? "all";
+  const healthFilter = (table.getColumn("health")?.getFilterValue() as string | undefined) ?? "all";
   const currentPage = table.getState().pagination.pageIndex + 1;
   const pageCount = table.getPageCount();
   const filteredOpportunityCount = table.getFilteredRowModel().rows.length;

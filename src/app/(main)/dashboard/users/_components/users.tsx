@@ -64,11 +64,12 @@ export function Users({ users }: { users: UserRow[] }) {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const searchQuery = (table.getColumn("search")?.getFilterValue() as string) ?? "";
-  const roleFilter = (table.getColumn("role")?.getFilterValue() as string) ?? filters.role[0];
-  const teamFilter = (table.getColumn("team")?.getFilterValue() as string) ?? filters.team[0];
-  const statusFilter = (table.getColumn("status")?.getFilterValue() as string) ?? filters.status[0];
-  const workspaceFilter = (table.getColumn("workspace")?.getFilterValue() as string) ?? filters.workspace[0];
+  const searchQuery = (table.getColumn("search")?.getFilterValue() as string | undefined) ?? "";
+  const roleFilter = (table.getColumn("role")?.getFilterValue() as string | undefined) ?? filters.role[0];
+  const teamFilter = (table.getColumn("team")?.getFilterValue() as string | undefined) ?? filters.team[0];
+  const statusFilter = (table.getColumn("status")?.getFilterValue() as string | undefined) ?? filters.status[0];
+  const workspaceFilter =
+    (table.getColumn("workspace")?.getFilterValue() as string | undefined) ?? filters.workspace[0];
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
 
   function setColumnSelectFilter(columnId: string, value: string) {

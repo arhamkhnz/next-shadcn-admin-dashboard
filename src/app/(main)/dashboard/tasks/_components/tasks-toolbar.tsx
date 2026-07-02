@@ -26,7 +26,7 @@ interface TasksToolbarProps<TData> {
 
 export function TasksToolbar<TData>({ table }: TasksToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const searchValue = (table.getColumn("title")?.getFilterValue() as string) ?? "";
+  const searchValue = (table.getColumn("title")?.getFilterValue() as string | undefined) ?? "";
   const hideableColumns = table
     .getAllColumns()
     .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide());

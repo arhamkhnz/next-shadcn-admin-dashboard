@@ -109,10 +109,10 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const searchQuery = (table.getColumn("search")?.getFilterValue() as string) ?? "";
-  const statusFilter = (table.getColumn("status")?.getFilterValue() as string) ?? "all";
-  const billingFilter = (table.getColumn("billing")?.getFilterValue() as string) ?? "all";
-  const joinedDateFilter = (table.getColumn("joinedWindow")?.getFilterValue() as string) ?? "all";
+  const searchQuery = (table.getColumn("search")?.getFilterValue() as string | undefined) ?? "";
+  const statusFilter = (table.getColumn("status")?.getFilterValue() as string | undefined) ?? "all";
+  const billingFilter = (table.getColumn("billing")?.getFilterValue() as string | undefined) ?? "all";
+  const joinedDateFilter = (table.getColumn("joinedWindow")?.getFilterValue() as string | undefined) ?? "all";
   const sortValue = React.useMemo(() => {
     const currentSort = sorting[0];
 

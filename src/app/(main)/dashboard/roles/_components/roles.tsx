@@ -74,11 +74,11 @@ export function Roles({ roles }: { roles: Role[] }) {
     },
   });
 
-  const search = (table.getColumn("search")?.getFilterValue() as string) ?? "";
-  const groupFilter = (table.getColumn("group")?.getFilterValue() as string) ?? "";
+  const search = (table.getColumn("search")?.getFilterValue() as string | undefined) ?? "";
+  const groupFilter = (table.getColumn("group")?.getFilterValue() as string | undefined) ?? "";
   const typeFilter = getRoleTypeFilter(groupFilter);
-  const ownerFilter = (table.getColumn("owner")?.getFilterValue() as string) ?? "All";
-  const statusFilter = (table.getColumn("status")?.getFilterValue() as string) ?? "All";
+  const ownerFilter = (table.getColumn("owner")?.getFilterValue() as string | undefined) ?? "All";
+  const statusFilter = (table.getColumn("status")?.getFilterValue() as string | undefined) ?? "All";
 
   return (
     <div className="flex h-full flex-col gap-4">
