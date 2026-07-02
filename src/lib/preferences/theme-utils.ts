@@ -21,10 +21,6 @@ export function applyThemeMode(mode: ThemeMode): ResolvedThemeMode {
   return resolved;
 }
 
-export function applyThemePreset(value: string) {
-  document.documentElement.setAttribute("data-theme-preset", value);
-}
-
 export function subscribeToSystemTheme(onChange: (mode: ResolvedThemeMode) => void): () => void {
   if (typeof window === "undefined") return () => undefined;
   const media = window.matchMedia?.("(prefers-color-scheme: dark)");

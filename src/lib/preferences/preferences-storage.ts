@@ -4,9 +4,9 @@ import { setValueToCookie } from "@/server/server-actions";
 
 import { setClientCookie } from "../cookie.client";
 import { setLocalStorageValue } from "../local-storage.client";
-import { PREFERENCE_PERSISTENCE, type PreferenceKey } from "./preferences-config";
+import { PREFERENCE_PERSISTENCE, type PreferenceKey, type PreferenceValueMap } from "./preferences-config";
 
-export async function persistPreference(key: PreferenceKey, value: string) {
+export async function persistPreference<K extends PreferenceKey>(key: K, value: PreferenceValueMap[K]): Promise<void> {
   const mode = PREFERENCE_PERSISTENCE[key];
 
   switch (mode) {
@@ -23,9 +23,6 @@ export async function persistPreference(key: PreferenceKey, value: string) {
 
     case "localStorage":
       setLocalStorageValue(key, value);
-      return;
-
-    default:
       return;
   }
 }
