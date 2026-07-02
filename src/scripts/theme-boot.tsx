@@ -1,7 +1,6 @@
 /**
- * Boot script that reads user preference values (theme mode, theme preset,
- * content layout, navbar style) from cookies or localStorage based on the
- * configured persistence mode.
+ * Boot script that reads user preference values from cookies or localStorage
+ * based on the configured persistence mode.
  *
  * Runs early in <head> to apply the correct data attributes before hydration,
  * preventing layout or theme flicker and keeping RootLayout fully static.

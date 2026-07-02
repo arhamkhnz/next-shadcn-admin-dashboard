@@ -9,7 +9,6 @@ import {
 } from "@/lib/preferences/preferences-config";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
 import type { ResolvedThemeMode } from "@/lib/preferences/theme";
-import { resolveThemeMode } from "@/lib/preferences/theme-utils";
 
 export type PreferencesState = {
   values: PreferenceValueMap;
@@ -27,7 +26,7 @@ export const createPreferencesStore = (initialValues: Partial<PreferenceValueMap
 
   return createStore<PreferencesState>()((set) => ({
     values,
-    resolvedThemeMode: resolveThemeMode(values.theme_mode),
+    resolvedThemeMode: values.theme_mode === "dark" ? "dark" : "light",
     isSynced: false,
 
     setPreference: (key, value) => {

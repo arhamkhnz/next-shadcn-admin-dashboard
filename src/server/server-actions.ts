@@ -3,9 +3,9 @@
 import { cookies } from "next/headers";
 
 import {
+  getPreferencePersistence,
   PREFERENCE_REGISTRY,
   type PreferenceKey,
-  type PreferencePersistence,
   type PreferenceValueMap,
   parsePreference,
 } from "@/lib/preferences/preferences-config";
@@ -29,7 +29,7 @@ export async function setValueToCookie(
 
 export async function getPreference<K extends PreferenceKey>(key: K): Promise<PreferenceValueMap[K]> {
   const definition = PREFERENCE_REGISTRY[key];
-  const persistence: PreferencePersistence = definition.persistence;
+  const persistence = getPreferencePersistence(key);
 
   if (persistence !== "client-cookie" && persistence !== "server-cookie") {
     return definition.defaultValue as PreferenceValueMap[K];

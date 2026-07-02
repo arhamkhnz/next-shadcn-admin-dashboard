@@ -11,7 +11,7 @@
  * Others are flexible and can use any persistence.
  */
 
-import { fontRegistry } from "@/lib/fonts/registry";
+import { fontKeys } from "@/lib/fonts/registry";
 
 import {
   CONTENT_LAYOUT_VALUES,
@@ -44,15 +44,13 @@ function definePreference<
   return definition;
 }
 
-function defineLayoutPreference<
+function defineSSRPreference<
   const Values extends readonly string[],
   const Persistence extends LayoutPersistence,
   const Attribute extends `data-${string}`,
 >(definition: PreferenceDefinition<Values, Persistence, Attribute>) {
   return definition;
 }
-
-const FONT_VALUES = Object.keys(fontRegistry) as Array<keyof typeof fontRegistry>;
 
 export const PREFERENCE_REGISTRY = {
   theme_mode: definePreference({
@@ -70,7 +68,7 @@ export const PREFERENCE_REGISTRY = {
   }),
 
   font: definePreference({
-    values: FONT_VALUES,
+    values: fontKeys,
     defaultValue: "geist",
     persistence: "client-cookie",
     attribute: "data-font",
@@ -90,14 +88,14 @@ export const PREFERENCE_REGISTRY = {
     attribute: "data-navbar-style",
   }),
 
-  sidebar_variant: defineLayoutPreference({
+  sidebar_variant: defineSSRPreference({
     values: SIDEBAR_VARIANT_VALUES,
-    defaultValue: "inset",
+    defaultValue: "sidebar",
     persistence: "client-cookie",
     attribute: "data-sidebar-variant",
   }),
 
-  sidebar_collapsible: defineLayoutPreference({
+  sidebar_collapsible: defineSSRPreference({
     values: SIDEBAR_COLLAPSIBLE_VALUES,
     defaultValue: "icon",
     persistence: "client-cookie",
@@ -112,6 +110,10 @@ export type PreferenceValueMap = {
 };
 
 export const PREFERENCE_KEYS = Object.freeze(Object.keys(PREFERENCE_REGISTRY) as PreferenceKey[]);
+
+export function getPreferencePersistence(key: PreferenceKey): PreferencePersistence {
+  return PREFERENCE_REGISTRY[key].persistence;
+}
 
 export const PREFERENCE_DEFAULTS = Object.fromEntries(
   PREFERENCE_KEYS.map((key) => [key, PREFERENCE_REGISTRY[key].defaultValue]),
