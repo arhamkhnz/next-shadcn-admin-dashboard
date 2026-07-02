@@ -9,17 +9,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { type FontKey, fontOptions } from "@/lib/fonts/registry";
 import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "@/lib/preferences/layout";
-import {
-  applyContentLayout,
-  applyFont,
-  applyNavbarStyle,
-  applySidebarCollapsible,
-  applySidebarVariant,
-} from "@/lib/preferences/layout-utils";
+import { applyPreferenceAttribute } from "@/lib/preferences/preference-attributes";
 import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import { persistPreference } from "@/lib/preferences/preferences-storage";
 import { THEME_PRESET_OPTIONS, type ThemeMode, type ThemePreset } from "@/lib/preferences/theme";
-import { applyThemePreset } from "@/lib/preferences/theme-utils";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function LayoutControls() {
@@ -40,7 +33,7 @@ export function LayoutControls() {
   const setFont = usePreferencesStore((s) => s.setFont);
 
   const onThemePresetChange = (preset: ThemePreset) => {
-    applyThemePreset(preset);
+    applyPreferenceAttribute("theme_preset", preset);
     setThemePreset(preset);
     void persistPreference("theme_preset", preset);
   };
@@ -53,35 +46,35 @@ export function LayoutControls() {
 
   const onContentLayoutChange = (layout: ContentLayout | "") => {
     if (!layout) return;
-    applyContentLayout(layout);
+    applyPreferenceAttribute("content_layout", layout);
     setContentLayout(layout);
     void persistPreference("content_layout", layout);
   };
 
   const onNavbarStyleChange = (style: NavbarStyle | "") => {
     if (!style) return;
-    applyNavbarStyle(style);
+    applyPreferenceAttribute("navbar_style", style);
     setNavbarStyle(style);
     void persistPreference("navbar_style", style);
   };
 
   const onSidebarStyleChange = (value: SidebarVariant | "") => {
     if (!value) return;
+    applyPreferenceAttribute("sidebar_variant", value);
     setSidebarVariant(value);
-    applySidebarVariant(value);
     void persistPreference("sidebar_variant", value);
   };
 
   const onSidebarCollapseModeChange = (value: SidebarCollapsible | "") => {
     if (!value) return;
+    applyPreferenceAttribute("sidebar_collapsible", value);
     setSidebarCollapsible(value);
-    applySidebarCollapsible(value);
     void persistPreference("sidebar_collapsible", value);
   };
 
   const onFontChange = (value: FontKey | "") => {
     if (!value) return;
-    applyFont(value);
+    applyPreferenceAttribute("font", value);
     setFont(value);
     void persistPreference("font", value);
   };
