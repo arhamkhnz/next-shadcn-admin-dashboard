@@ -38,13 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       </head>
       <body className={`${fontVars} min-h-screen antialiased`}>
         <TooltipProvider>
-          <PreferencesStoreProvider
-            themeMode={theme_mode}
-            themePreset={theme_preset}
-            contentLayout={content_layout}
-            navbarStyle={navbar_style}
-            font={font}
-          >
+          <PreferencesStoreProvider initialValues={PREFERENCE_DEFAULTS}>
             {children}
             <Toaster />
           </PreferencesStoreProvider>

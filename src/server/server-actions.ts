@@ -2,6 +2,14 @@
 
 import { cookies } from "next/headers";
 
+import {
+  getPreferencePersistence,
+  PREFERENCE_REGISTRY,
+  type PreferenceKey,
+  type PreferenceValueMap,
+  parsePreference,
+} from "@/lib/preferences/preferences-config";
+
 export async function getValueFromCookie(key: string): Promise<string | undefined> {
   const cookieStore = await cookies();
   return cookieStore.get(key)?.value;
@@ -19,9 +27,14 @@ export async function setValueToCookie(
   });
 }
 
-export async function getPreference<T extends string>(key: string, allowed: readonly T[], fallback: T): Promise<T> {
+export async function getPreference<K extends PreferenceKey>(key: K): Promise<PreferenceValueMap[K]> {
+  const definition = PREFERENCE_REGISTRY[key];
+  const persistence = getPreferencePersistence(key);
+
+  if (persistence !== "client-cookie" && persistence !== "server-cookie") {
+    return definition.defaultValue as PreferenceValueMap[K];
+  }
+
   const cookieStore = await cookies();
-  const cookie = cookieStore.get(key);
-  const value = cookie ? cookie.value.trim() : undefined;
-  return allowed.includes(value as T) ? (value as T) : fallback;
+  return parsePreference(key, cookieStore.get(key)?.value.trim());
 }

@@ -2,7 +2,7 @@ import type { ResolvedThemeMode, ThemeMode } from "./theme";
 
 function resolveThemeMode(mode: ThemeMode): ResolvedThemeMode {
   if (mode === "system") {
-    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+    const prefersDark = typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
     return prefersDark ? "dark" : "light";
   }
   return mode === "dark" ? "dark" : "light";
@@ -19,10 +19,6 @@ export function applyThemeMode(mode: ThemeMode): ResolvedThemeMode {
     doc.classList.remove("disable-transitions");
   });
   return resolved;
-}
-
-export function applyThemePreset(value: string) {
-  document.documentElement.setAttribute("data-theme-preset", value);
 }
 
 export function subscribeToSystemTheme(onChange: (mode: ResolvedThemeMode) => void): () => void {
