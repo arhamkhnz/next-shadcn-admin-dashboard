@@ -63,8 +63,8 @@ const _data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { sidebarVariant, sidebarCollapsible, isSynced } = usePreferencesStore(
     useShallow((s) => ({
-      sidebarVariant: s.sidebarVariant,
-      sidebarCollapsible: s.sidebarCollapsible,
+      sidebarVariant: s.values.sidebar_variant,
+      sidebarCollapsible: s.values.sidebar_collapsible,
       isSynced: s.isSynced,
     })),
   );
