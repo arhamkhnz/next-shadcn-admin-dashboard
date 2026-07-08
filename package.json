@@ -36,7 +36,7 @@
     "lucide-react": "^1.23.0",
     "next": "^16.2.10",
     "next-themes": "^0.4.6",
-    "radix-ui": "^1.6.1",
+    "radix-ui": "^1.6.2",
     "react": "^19.2.7",
     "react-day-picker": "^10.0.1",
     "react-dom": "^19.2.7",
@@ -54,10 +54,10 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.2",
+    "@biomejs/biome": "^2.5.3",
     "@tailwindcss/postcss": "^4.3.2",
     "@types/d3-geo": "^3.1.0",
-    "@types/node": "^22.20.0",
+    "@types/node": "^22.20.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/topojson-client": "^3.1.5",
