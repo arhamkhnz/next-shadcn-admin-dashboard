@@ -11,7 +11,7 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 > [!NOTE]
 > Looking for the Base UI version? Check out [next-shadcn-admin-dashboard-baseui](https://github.com/arhamkhnz/next-shadcn-admin-dashboard-baseui).
 >
-> Looking for the TanStack Start version? Check out [arhamkhnz/tanstack-shadcn-admin-dashboard](https://github.com/arhamkhnz/tanstack-shadcn-admin-dashboard).
+> Looking for the TanStack Start version? Check out [tanstack-shadcn-admin-dashboard](https://github.com/arhamkhnz/tanstack-shadcn-admin-dashboard).
 
 > [!TIP]
 > I’m also working on Nuxt.js and Svelte versions of this dashboard. They’ll be live soon.
