@@ -85,7 +85,7 @@ export function PreferencesStoreProvider({
 }
 
 export function usePreferencesStore<T>(selector: (state: PreferencesState) => T): T {
-  const store = use(PreferencesStoreContext);
+  const store = use(PreferencesStoreContext) as StoreApi<PreferencesState> | null;
   if (!store) throw new Error("Missing PreferencesStoreProvider");
   return useStore(store, selector);
 }
