@@ -3,12 +3,12 @@ import packageJson from "../../package.json";
 const currentYear = new Date().getFullYear();
 
 export const APP_CONFIG = {
-  name: "Studio Admin",
+  name: "Le Gloire - Event Management",
   version: packageJson.version,
-  copyright: `© ${currentYear}, Studio Admin.`,
+  copyright: `© ${currentYear}, Le Gloire - Event Management.`,
   meta: {
-    title: "Studio Admin - Modern Next.js Dashboard Starter Template",
+    title: "Le Gloire - Event Management - Event Management and Registration System",
     description:
-      "Studio Admin is a modern, open-source dashboard starter template built with Next.js 16, Tailwind CSS v4, and shadcn/ui. Perfect for SaaS apps, admin panels, and internal tools—fully customizable and production-ready.",
+      "Le Gloire - Event Management is a comprehensive event management and registration system designed to streamline the planning, organization, and execution of events. With features for attendee registration, ticketing, scheduling, and analytics, it provides event organizers with the tools they need to create successful events.",
   },
 };
