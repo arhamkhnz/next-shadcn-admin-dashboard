@@ -117,7 +117,6 @@ export const sidebarItems: NavGroup[] = [
         title: "Infrastructure",
         url: "/dashboard/infrastructure",
         icon: Server,
-        badge: "new",
       },
     ],
   },
@@ -154,7 +153,6 @@ export const sidebarItems: NavGroup[] = [
         title: "Tasks",
         url: "/dashboard/tasks",
         icon: CheckSquare,
-        badge: "new",
       },
       {
         id: "invoice",
