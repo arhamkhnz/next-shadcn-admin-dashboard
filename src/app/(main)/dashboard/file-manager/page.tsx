@@ -18,7 +18,6 @@ interface PageProps {
 export default async function Page({ searchParams }: PageProps) {
   const { view } = await searchParams;
   const activeView: FileManagerView = view === "list" ? "list" : "grid";
-  const hasFiles = files.length > 0;
 
   return (
     <div className="flex flex-col gap-4">
@@ -45,21 +44,20 @@ export default async function Page({ searchParams }: PageProps) {
           <h2 className="font-medium text-lg">All files</h2>
           <ToggleGroup type="single" variant="outline" size="sm" spacing={0} value={activeView} aria-label="File view">
             <ToggleGroupItem value="grid" asChild>
-              <Link href="/dashboard/file-manager?view=grid" replace scroll={false}>
+              <Link href="?view=grid" replace scroll={false}>
                 <Grid2X2 />
                 Grid View
               </Link>
             </ToggleGroupItem>
             <ToggleGroupItem value="list" asChild>
-              <Link href="/dashboard/file-manager?view=list" replace scroll={false}>
+              <Link href="?view=list" replace scroll={false}>
                 <List />
                 List View
               </Link>
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
-        {hasFiles && activeView === "list" && <FileListView files={files} />}
-        {hasFiles && activeView === "grid" && <FileGridView files={files} />}
+        {activeView === "list" ? <FileListView files={files} /> : <FileGridView files={files} />}
       </div>
     </div>
   );
