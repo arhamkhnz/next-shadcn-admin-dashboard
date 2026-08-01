@@ -67,6 +67,7 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 - Academy Dashboard  
 - Logistics Dashboard  
 - Infrastructure Dashboard  
+- File Manager  
 - Chat Page  
 - Email Page  
 - Users Management  
