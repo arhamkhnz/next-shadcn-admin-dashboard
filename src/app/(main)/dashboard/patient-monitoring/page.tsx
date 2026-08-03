@@ -1,5 +1,7 @@
-import { Network, Volume2 } from "lucide-react";
+import { Network, Printer, Volume2 } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -34,6 +36,26 @@ export default function Page() {
       <Separator />
 
       <PatientMonitoring patients={patients} />
+
+      <Separator />
+      <footer className="flex flex-wrap gap-2 p-2 [&>button]:h-11 [&>button]:min-w-32 [&>button]:flex-1 [&>button]:rounded-none">
+        <Button variant="outline">Main screen</Button>
+        <Button variant="outline">Patient setup</Button>
+        <Button variant="outline">Alarm review</Button>
+        <Button variant="outline">Wave review</Button>
+        <Button variant="outline">Trends</Button>
+        <Button variant="outline">
+          <Printer data-icon="inline-start" />
+          Print
+        </Button>
+        <Button variant="outline">
+          <Volume2 data-icon="inline-start" />
+          Silence
+        </Button>
+        <Badge className="h-11 min-w-44 flex-1 rounded-none text-muted-foreground" variant="outline">
+          Device C04 connected
+        </Badge>
+      </footer>
     </div>
   );
 }

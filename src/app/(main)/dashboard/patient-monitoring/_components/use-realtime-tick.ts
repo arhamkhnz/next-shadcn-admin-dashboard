@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 
 import { createRealtimeTicker, MONITORING_SPEED } from "./realtime-utils";
 
-export const COMPACT_WAVEFORM_TICK_INTERVAL_MS = 250;
+export const COMPACT_WAVEFORM_TICK_INTERVAL_MS = 100;
 export const DETAIL_WAVEFORM_TICK_INTERVAL_MS = 100;
 
 const getInitialTick = () => 0;
