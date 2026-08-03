@@ -40,6 +40,11 @@ export default function Page() {
       </div>
       <Separator />
 
+      {/*
+        data.ts holds the patients and PatientMonitoring renders the screen.
+        use-patient-vital-series.ts repeats templates from waveform-data.ts,
+        while use-realtime-tick.ts and realtime-utils.ts move the charts.
+      */}
       <PatientMonitoring patients={patients} />
 
       <Separator />
