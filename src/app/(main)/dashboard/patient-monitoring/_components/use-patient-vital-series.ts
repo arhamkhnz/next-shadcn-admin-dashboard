@@ -7,7 +7,6 @@ import {
   useTrendTick,
   useWaveformTick,
 } from "./use-realtime-tick";
-import type { TrendKind, TrendPoint } from "./vital-trend-chart";
 import type { SignalPoint, WaveformKind } from "./vital-waveform";
 import {
   arterialTemplate,
@@ -18,6 +17,11 @@ import {
 } from "./waveform-data";
 
 export type EcgLead = "II" | "V5";
+export type TrendKind = "heart-rate" | "map" | "spo2";
+
+export interface TrendPoint {
+  value: number;
+}
 
 interface TrendDefinition {
   baseline: "arterialMap" | "heartRate" | "spo2";

@@ -38,7 +38,7 @@ export default function Page() {
       <PatientMonitoring patients={patients} />
 
       <Separator />
-      <footer className="flex flex-wrap gap-2 p-2 [&>button]:h-11 [&>button]:min-w-32 [&>button]:flex-1 [&>button]:rounded-none">
+      <footer className="flex flex-wrap gap-2 p-2 *:data-[slot=button]:h-11 *:data-[slot=button]:min-w-32 *:data-[slot=button]:flex-1 *:data-[slot=button]:rounded-none">
         <Button variant="outline">Main screen</Button>
         <Button variant="outline">Patient setup</Button>
         <Button variant="outline">Alarm review</Button>
