@@ -3,6 +3,7 @@ import { CartesianGrid, Line, LineChart, YAxis } from "recharts";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 
+import { getInnerVerticalGridCoordinates } from "./chart-grid";
 import type { PatientRecord } from "./data";
 import { type TrendKind, type TrendPoint, usePatientTrendSeries } from "./use-patient-vital-series";
 
@@ -15,6 +16,7 @@ interface VitalTrendChartProps {
   data: TrendPoint[];
   domain: [number, number];
   kind: TrendKind;
+  ticks: number[];
 }
 
 const trendChartConfig = {
@@ -30,17 +32,25 @@ const trendClasses: Record<TrendKind, string> = {
   spo2: "text-cyan-500 dark:text-cyan-400",
 };
 
-function VitalTrendChart({ ariaLabel, data, domain, kind }: VitalTrendChartProps) {
+function VitalTrendChart({ ariaLabel, data, domain, kind, ticks }: VitalTrendChartProps) {
   return (
     <ChartContainer
       aria-label={ariaLabel}
-      className={cn("aspect-auto h-12 w-full", trendClasses[kind])}
+      className={cn("aspect-auto h-full min-h-12 w-full border-current border-r", trendClasses[kind])}
       config={trendChartConfig}
       initialDimension={{ width: 600, height: 48 }}
       role="img"
     >
-      <LineChart accessibilityLayer data={data} margin={{ bottom: 1, left: 0, right: 0, top: 1 }}>
-        <CartesianGrid horizontal vertical stroke="var(--border)" strokeOpacity={0.55} />
+      <LineChart accessibilityLayer data={data} margin={{ bottom: 0, left: 0, right: 0, top: 0 }}>
+        <CartesianGrid
+          horizontal
+          horizontalValues={ticks.slice(1, -1)}
+          stroke="var(--border)"
+          strokeOpacity={0.65}
+          strokeWidth={0.75}
+          vertical
+          verticalCoordinatesGenerator={getInnerVerticalGridCoordinates}
+        />
         <YAxis allowDataOverflow domain={domain} hide width={0} />
         <Line
           dataKey="value"
@@ -77,18 +87,24 @@ function TrendStrip({
   );
 
   return (
-    <div className="grid grid-cols-[4rem_2rem_minmax(0,1fr)_2.5rem] items-center gap-1 border-border border-b">
-      <div className="px-2">
+    <div className="grid min-h-12 grid-cols-[4rem_2rem_minmax(0,1fr)_2.5rem] items-stretch gap-1 border-border border-b">
+      <div className="flex flex-col justify-start p-2">
         <div className={cn("font-medium text-xs", color)}>{label}</div>
         <div className="text-[10px] text-muted-foreground">{unit}</div>
       </div>
-      <div className="flex h-12 flex-col justify-between text-right text-[10px] text-muted-foreground tabular-nums">
+      <div className="flex h-full min-h-12 flex-col justify-between text-right text-[10px] text-muted-foreground tabular-nums">
         {scale.map((tick) => (
           <span key={tick}>{tick}</span>
         ))}
       </div>
-      <VitalTrendChart ariaLabel={series.ariaLabel} data={series.data} domain={series.domain} kind={kind} />
-      <div className={cn("pr-1 text-right font-medium text-sm tabular-nums", color)}>{value}</div>
+      <VitalTrendChart
+        ariaLabel={series.ariaLabel}
+        data={series.data}
+        domain={series.domain}
+        kind={kind}
+        ticks={series.ticks}
+      />
+      <div className={cn("self-end pr-1 text-right font-medium text-sm tabular-nums", color)}>{value}</div>
     </div>
   );
 }

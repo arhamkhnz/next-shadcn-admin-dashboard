@@ -36,7 +36,7 @@ function TraceRow({ calibration, kind, label, lead, patient }: TraceRowProps) {
         </span>
         {calibration && <span className="text-[10px] text-muted-foreground">{calibration}</span>}
       </div>
-      <VitalWaveform kind={kind} {...series} />
+      <VitalWaveform kind={kind} showGrid {...series} />
     </div>
   );
 }

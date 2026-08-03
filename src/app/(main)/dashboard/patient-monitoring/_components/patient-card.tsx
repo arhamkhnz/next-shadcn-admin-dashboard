@@ -43,7 +43,9 @@ export function PatientCard({ active, acknowledged, onSelect, patient }: Patient
         )}
       </div>
 
-      <VitalWaveform compact kind="ecg" {...waveformSeries} />
+      <div className="flex w-full flex-1 items-center">
+        <VitalWaveform compact kind="ecg" showGrid={false} {...waveformSeries} />
+      </div>
 
       <dl className="mt-auto grid grid-cols-2 divide-x divide-border tabular-nums">
         <div className="pr-2">

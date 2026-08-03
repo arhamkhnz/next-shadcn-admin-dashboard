@@ -53,7 +53,7 @@ export const patients = [
     heartRate: 72,
     id: "cardiac-01",
     map: 91,
-    name: "Rao",
+    name: "Ethan Brooks",
     nibp: "122/76",
     recentEvents: [
       { label: "NIBP 122/76", time: "01:24" },
@@ -79,7 +79,7 @@ export const patients = [
     heartRate: 68,
     id: "cardiac-02",
     map: 86,
-    name: "Mehta",
+    name: "Olivia Rhye",
     nibp: "118/70",
     recentEvents: [
       { label: "Rhythm strip saved", time: "01:09" },
@@ -105,7 +105,7 @@ export const patients = [
     heartRate: 76,
     id: "cardiac-03",
     map: 94,
-    name: "Shah",
+    name: "Nico Arendt",
     nibp: "128/77",
     recentEvents: [
       { label: "12-lead ECG complete", time: "01:15" },
@@ -133,7 +133,7 @@ export const patients = [
     heartRate: 104,
     id: "cardiac-04",
     map: 89,
-    name: "Joseph Thomas",
+    name: "Koray Okumus",
     nibp: "118/74",
     recentEvents: [
       { label: "HR > 100", time: "01:26" },
@@ -160,7 +160,7 @@ export const patients = [
     heartRate: 64,
     id: "cardiac-05",
     map: 83,
-    name: "Khan",
+    name: "Candice Wu",
     nibp: "110/70",
     recentEvents: [
       { label: "NIBP 110/70", time: "01:02" },
@@ -186,7 +186,7 @@ export const patients = [
     heartRate: 80,
     id: "cardiac-06",
     map: 90,
-    name: "Das",
+    name: "Noah Pierre",
     nibp: "124/72",
     recentEvents: [
       { label: "ST review complete", time: "01:11" },
@@ -212,7 +212,7 @@ export const patients = [
     heartRate: 71,
     id: "cardiac-07",
     map: 85,
-    name: "Nair",
+    name: "Lana Steiner",
     nibp: "116/68",
     recentEvents: [
       { label: "NIBP 116/68", time: "01:21" },
@@ -238,7 +238,7 @@ export const patients = [
     heartRate: 88,
     id: "cardiac-08",
     map: 88,
-    name: "Patel",
+    name: "Steven Tey",
     nibp: "120/72",
     recentEvents: [
       { label: "Access site checked", time: "01:16" },
@@ -264,7 +264,7 @@ export const patients = [
     heartRate: 74,
     id: "cardiac-09",
     map: 88,
-    name: "Verma",
+    name: "Mia Romberg",
     nibp: "119/71",
     recentEvents: [
       { label: "Pacing capture verified", time: "01:19" },
@@ -290,7 +290,7 @@ export const patients = [
     heartRate: 82,
     id: "cardiac-10",
     map: 92,
-    name: "Iyer",
+    name: "Alec Whitten",
     nibp: "126/74",
     recentEvents: [
       { label: "Cardiac enzymes reviewed", time: "01:13" },
