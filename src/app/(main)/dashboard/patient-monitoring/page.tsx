@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { Network, Printer, Volume2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +10,8 @@ import { patients } from "./_components/data";
 import { PatientMonitoring } from "./_components/patient-monitoring";
 
 export default function Page() {
+  const now = new Date();
+
   return (
     <div
       className="flex min-h-[calc(100svh-var(--dashboard-header-height))] min-w-0 flex-col"
@@ -18,7 +21,9 @@ export default function Page() {
         <div className="truncate lg:overflow-visible">CENTRAL PATIENT MONITORING</div>
         <div className="whitespace-nowrap">{patients.length} Patients</div>
         <div className="col-span-2 flex items-center justify-between gap-5 text-muted-foreground lg:col-span-1 lg:justify-end">
-          <span className="whitespace-nowrap tabular-nums">03 Aug 2026&nbsp;&nbsp;00:02:03</span>
+          <span className="whitespace-nowrap tabular-nums">
+            {format(now, "dd MMM yyyy")}&nbsp;&nbsp;{format(now, "HH:mm:ss")}
+          </span>
           <Tooltip>
             <TooltipTrigger aria-label="Alarm audio enabled" className="inline-flex" type="button">
               <Volume2 aria-hidden="true" className="size-4" />
