@@ -6,8 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 import type { PatientRecord } from "./data";
+import { type EcgLead, usePatientTrendSeries, usePatientWaveformSeries } from "./use-patient-vital-series";
 import { type TrendKind, VitalTrendChart } from "./vital-trend-chart";
-import { type EcgLead, VitalWaveform, type WaveformKind } from "./vital-waveform";
+import { VitalWaveform, type WaveformKind } from "./vital-waveform";
 
 interface PatientDetailProps {
   acknowledged: boolean;
@@ -24,6 +25,8 @@ interface TraceRowProps {
 }
 
 function TraceRow({ calibration, kind, label, lead, patient }: TraceRowProps) {
+  const series = usePatientWaveformSeries({ kind, lead, patient });
+
   return (
     <div className="grid min-h-16 grid-cols-[6.5rem_minmax(0,1fr)] border-border border-b">
       <div className="flex flex-col gap-0.5 px-3 py-2">
@@ -40,7 +43,7 @@ function TraceRow({ calibration, kind, label, lead, patient }: TraceRowProps) {
         </span>
         {calibration && <span className="text-[10px] text-muted-foreground">{calibration}</span>}
       </div>
-      <VitalWaveform kind={kind} lead={lead} patient={patient} />
+      <VitalWaveform kind={kind} {...series} />
     </div>
   );
 }
@@ -84,6 +87,7 @@ function TrendStrip({
   unit: string;
   value: number;
 }) {
+  const series = usePatientTrendSeries({ kind, patient });
   const color = cn(
     kind === "heart-rate" && "text-lime-500 dark:text-lime-400",
     kind === "spo2" && "text-cyan-500 dark:text-cyan-400",
@@ -96,7 +100,7 @@ function TrendStrip({
         <div className={cn("font-medium text-sm", color)}>{label}</div>
         <div className="text-[10px] text-muted-foreground">{unit}</div>
       </div>
-      <VitalTrendChart kind={kind} patient={patient} />
+      <VitalTrendChart kind={kind} {...series} />
       <div className={cn("pr-2 text-right font-medium text-base tabular-nums", color)}>{value}</div>
     </div>
   );

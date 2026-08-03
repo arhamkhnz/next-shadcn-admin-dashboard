@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 import type { PatientRecord } from "./data";
+import { usePatientWaveformSeries } from "./use-patient-vital-series";
 import { VitalWaveform } from "./vital-waveform";
 
 interface PatientCardProps {
@@ -13,6 +14,7 @@ interface PatientCardProps {
 
 export function PatientCard({ active, acknowledged, onSelect, patient }: PatientCardProps) {
   const hasActiveAlarm = patient.status === "alarm" && !acknowledged;
+  const waveformSeries = usePatientWaveformSeries({ compact: true, kind: "ecg", patient });
 
   return (
     <button
@@ -41,7 +43,7 @@ export function PatientCard({ active, acknowledged, onSelect, patient }: Patient
         )}
       </div>
 
-      <VitalWaveform compact kind="ecg" patient={patient} />
+      <VitalWaveform compact kind="ecg" {...waveformSeries} />
 
       <dl className="mt-auto grid grid-cols-2 divide-x divide-border tabular-nums">
         <div className="pr-2">
