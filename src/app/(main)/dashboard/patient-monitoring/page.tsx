@@ -17,7 +17,7 @@ export default function Page() {
       className="flex min-h-[calc(100svh-var(--dashboard-header-height))] min-w-0 flex-col"
       data-content-padding="false"
     >
-      <div className="grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 px-3 py-2 text-sm lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:py-0">
+      <div className="grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 px-2 py-2 text-sm lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:py-0">
         <div className="truncate lg:overflow-visible">CENTRAL PATIENT MONITORING</div>
         <div className="whitespace-nowrap">{patients.length} Patients</div>
         <div className="col-span-2 flex items-center justify-between gap-5 text-muted-foreground lg:col-span-1 lg:justify-end">
