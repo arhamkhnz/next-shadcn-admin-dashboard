@@ -2,7 +2,8 @@
 
 import { createContext, useContext } from "react";
 
-import { useSortable } from "@dnd-kit/sortable";
+import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
+import { useSortable } from "@dnd-kit/react/sortable";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { FlexRender, Subscribe } from "@tanstack/react-table";
 import { CircleCheckIcon, EllipsisVerticalIcon, GripVerticalIcon, LoaderIcon, TrendingUpIcon } from "lucide-react";
@@ -60,7 +61,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type SortableRowContextValue = Pick<ReturnType<typeof useSortable>, "attributes" | "listeners" | "setActivatorNodeRef">;
+type SortableRowContextValue = Pick<ReturnType<typeof useSortable>, "handleRef">;
 
 const SortableRowContext = createContext<SortableRowContextValue | null>(null);
 
@@ -71,17 +72,10 @@ function DragHandle() {
     return null;
   }
 
-  const { attributes, listeners, setActivatorNodeRef } = sortableRow;
+  const { handleRef } = sortableRow;
 
   return (
-    <Button
-      ref={setActivatorNodeRef}
-      {...attributes}
-      {...listeners}
-      variant="ghost"
-      size="icon"
-      className="size-7 text-muted-foreground hover:bg-transparent"
-    >
+    <Button ref={handleRef} variant="ghost" size="icon" className="size-7 text-muted-foreground hover:bg-transparent">
       <GripVerticalIcon />
       <span className="sr-only">Drag to reorder</span>
     </Button>
@@ -414,26 +408,29 @@ export const proposalSectionsColumns: ColumnDef<DataTableFeatures, ProposalSecti
 
 export function DraggableProposalSectionsRow({
   row,
+  index,
   isSelected,
 }: {
   row: Row<DataTableFeatures, ProposalSectionsRow>;
+  index: number;
   isSelected: boolean;
 }) {
-  const { attributes, listeners, setActivatorNodeRef, transform, transition, setNodeRef, isDragging } = useSortable({
+  const { handleRef, isDragging, ref } = useSortable({
     id: row.original.id,
+    index,
+    type: "proposal-section",
+    accept: "proposal-section",
+    group: "proposal-sections",
+    modifiers: [RestrictToVerticalAxis],
   });
 
   return (
-    <SortableRowContext.Provider value={{ attributes, listeners, setActivatorNodeRef }}>
+    <SortableRowContext.Provider value={{ handleRef }}>
       <TableRow
-        ref={setNodeRef}
+        ref={ref}
         data-state={isSelected && "selected"}
         data-dragging={isDragging}
         className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-        style={{
-          transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-          transition,
-        }}
       >
         {row.getVisibleCells().map((cell) => (
           <TableCell key={cell.id}>

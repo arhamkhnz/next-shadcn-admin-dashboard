@@ -2,26 +2,15 @@
 
 import * as React from "react";
 
+import { move } from "@dnd-kit/helpers";
 import {
-  closestCorners,
-  DndContext,
-  type DragCancelEvent,
+  DragDropProvider,
   type DragEndEvent,
   type DragOverEvent,
   DragOverlay,
   type DragStartEvent,
-  KeyboardSensor,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  horizontalListSortingStrategy,
-  SortableContext,
-  sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+} from "@dnd-kit/react";
+import { isSortable } from "@dnd-kit/react/sortable";
 import {
   ArrowUpDown,
   Bot,
@@ -51,122 +40,72 @@ import { columnIds, columns } from "./data";
 import { KanbanColumn } from "./kanban-column";
 import { TaskCard } from "./task-card";
 import type { BoardState, ColumnId, Task } from "./types";
-import { findColumnId, findTask } from "./utils";
 
 interface KanbanProps {
   initialBoard: BoardState;
 }
 
+type TaskDragData = {
+  type: "task";
+  task: Task;
+  columnId: ColumnId;
+};
+
+function isColumnId(value: unknown): value is ColumnId {
+  return typeof value === "string" && columnIds.includes(value as ColumnId);
+}
+
+function isTaskDragData(value: unknown): value is TaskDragData {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "type" in value &&
+    value.type === "task" &&
+    "task" in value &&
+    typeof value.task === "object" &&
+    value.task !== null &&
+    "columnId" in value &&
+    isColumnId(value.columnId)
+  );
+}
+
 export function Kanban({ initialBoard }: KanbanProps) {
   const [board, setBoard] = React.useState<BoardState>(initialBoard);
   const [columnOrder, setColumnOrder] = React.useState<ColumnId[]>(columnIds);
-  const [activeTask, setActiveTask] = React.useState<Task | null>(null);
-  const [activeColumnId, setActiveColumnId] = React.useState<ColumnId | null>(null);
   const boardBeforeDrag = React.useRef<BoardState>(initialBoard);
   const orderedColumns = columnOrder.flatMap((columnId) => columns.find((column) => column.id === columnId) ?? []);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  );
-
   function handleDragStart(event: DragStartEvent) {
-    if (event.active.data.current?.type === "column") return;
+    const { source } = event.operation;
 
-    boardBeforeDrag.current = board;
-    const task = findTask(board, String(event.active.id));
-    setActiveTask(task ?? null);
-    setActiveColumnId(findColumnId(board, String(event.active.id)) ?? null);
-  }
-
-  function handleDragCancel(event: DragCancelEvent) {
-    if (event.active.data.current?.type !== "column") {
-      setBoard(boardBeforeDrag.current);
+    if (source?.type === "task") {
+      boardBeforeDrag.current = board;
     }
-    setActiveTask(null);
-    setActiveColumnId(null);
   }
 
   function handleDragOver(event: DragOverEvent) {
-    const { active, over } = event;
-    if (!over) return;
-    if (active.data.current?.type === "column") return;
-
-    const activeId = String(active.id);
-    const overId = String(over.id);
-
-    setBoard((currentBoard) => {
-      const activeColId = findColumnId(currentBoard, activeId);
-      const overColId = findColumnId(currentBoard, overId);
-
-      if (overColId) setActiveColumnId(overColId);
-
-      if (!activeColId || !overColId || activeColId === overColId) return currentBoard;
-
-      const activeItems = currentBoard[activeColId];
-      const overItems = currentBoard[overColId];
-      const activeIndex = activeItems.findIndex((task) => task.id === activeId);
-      if (activeIndex === -1) return currentBoard;
-
-      const overIndex = overItems.findIndex((task) => task.id === overId);
-      const nextIndex = overIndex >= 0 ? overIndex : overItems.length;
-      const activeItem = activeItems[activeIndex];
-
-      return {
-        ...currentBoard,
-        [activeColId]: activeItems.filter((task) => task.id !== activeId),
-        [overColId]: [...overItems.slice(0, nextIndex), activeItem, ...overItems.slice(nextIndex)],
-      };
-    });
+    if (event.operation.source?.type === "task") {
+      setBoard((currentBoard) => move(currentBoard, event));
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    const activeType = active.data.current?.type;
-    const snapshot = boardBeforeDrag.current;
-    setActiveTask(null);
-    setActiveColumnId(null);
+    const { source } = event.operation;
 
-    if (activeType === "column") {
-      if (!over) return;
-
-      const activeColumnId = String(active.id) as ColumnId;
-      const overColumnId = findColumnId(board, String(over.id));
-      if (!overColumnId || activeColumnId === overColumnId) return;
-
-      setColumnOrder((currentOrder) => {
-        const activeIndex = currentOrder.indexOf(activeColumnId);
-        const overIndex = currentOrder.indexOf(overColumnId);
-        if (activeIndex === -1 || overIndex === -1) return currentOrder;
-        return arrayMove(currentOrder, activeIndex, overIndex);
-      });
+    if (!source) {
       return;
     }
 
-    if (!over) {
-      setBoard(snapshot);
+    if (event.canceled) {
+      if (source.type === "task") {
+        setBoard(boardBeforeDrag.current);
+      }
       return;
     }
 
-    const activeId = String(active.id);
-    const overId = String(over.id);
-
-    setBoard((currentBoard) => {
-      const activeColumnId = findColumnId(currentBoard, activeId);
-      const overColumnId = findColumnId(currentBoard, overId);
-      if (!activeColumnId || !overColumnId || activeColumnId !== overColumnId) return currentBoard;
-
-      const columnTasks = currentBoard[activeColumnId];
-      const activeIndex = columnTasks.findIndex((task) => task.id === activeId);
-      const overIndex = columnTasks.findIndex((task) => task.id === overId);
-      if (activeIndex === -1 || overIndex === -1 || activeIndex === overIndex) return currentBoard;
-
-      return {
-        ...currentBoard,
-        [activeColumnId]: arrayMove(columnTasks, activeIndex, overIndex),
-      };
-    });
+    if (source.type === "column") {
+      setColumnOrder((currentOrder) => move(currentOrder, event));
+    }
   }
 
   return (
@@ -235,28 +174,26 @@ export function Kanban({ initialBoard }: KanbanProps) {
         </div>
       </div>
 
-      <DndContext
-        id="kanban-board"
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-        onDragCancel={handleDragCancel}
-      >
+      <DragDropProvider onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
         <div className="scrollbar-thin min-h-0 min-w-0 flex-1 overflow-x-auto overflow-y-hidden bg-muted/25 px-4 pt-4 pb-0 [scrollbar-color:var(--border)_transparent] lg:px-5 lg:pt-5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
           <div className="inline-grid h-full min-w-full grid-cols-[repeat(5,minmax(20rem,1fr))] gap-4">
-            <SortableContext items={columnOrder} strategy={horizontalListSortingStrategy}>
-              {orderedColumns.map((column) => (
-                <KanbanColumn key={column.id} column={column} tasks={board[column.id]} />
-              ))}
-            </SortableContext>
+            {orderedColumns.map((column, index) => (
+              <KanbanColumn key={column.id} column={column} index={index} tasks={board[column.id]} />
+            ))}
           </div>
         </div>
         <DragOverlay dropAnimation={null}>
-          {activeTask ? <TaskCard task={activeTask} columnId={activeColumnId ?? undefined} isOverlay /> : null}
+          {(source) => {
+            if (source.type !== "task" || !isTaskDragData(source.data)) {
+              return null;
+            }
+
+            const columnId = isSortable(source) && isColumnId(source.group) ? source.group : source.data.columnId;
+
+            return <TaskCard task={source.data.task} columnId={columnId} isOverlay />;
+          }}
         </DragOverlay>
-      </DndContext>
+      </DragDropProvider>
     </div>
   );
 }

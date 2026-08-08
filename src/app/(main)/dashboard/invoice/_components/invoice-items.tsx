@@ -1,19 +1,6 @@
-import {
-  closestCenter,
-  DndContext,
-  type DragEndEvent,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
+import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
+import { isSortable, useSortable } from "@dnd-kit/react/sortable";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { UseFormRegister } from "react-hook-form";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
@@ -32,21 +19,14 @@ export function InvoiceItems() {
     keyName: "fieldKey",
   });
   const items = useWatch({ control, name: "items" }) ?? [];
-  const sortableItemIds = fields.map((field) => field.id);
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  );
-
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
+    const { source } = event.operation;
 
-    const oldIndex = fields.findIndex((field) => field.id === active.id);
-    const newIndex = fields.findIndex((field) => field.id === over.id);
-    if (oldIndex === -1 || newIndex === -1) return;
+    if (event.canceled || !isSortable(source) || source.initialIndex === source.index) {
+      return;
+    }
 
-    move(oldIndex, newIndex);
+    move(source.initialIndex, source.index);
   }
 
   function handleAddItem() {
@@ -73,28 +53,20 @@ export function InvoiceItems() {
           <span />
         </div>
 
-        <DndContext
-          id="invoice-items"
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          modifiers={[restrictToVerticalAxis]}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={sortableItemIds} strategy={verticalListSortingStrategy}>
-            <div className="flex flex-col gap-3">
-              {fields.map((field, index) => (
-                <SortableInvoiceItemRow
-                  key={field.id}
-                  id={field.id}
-                  index={index}
-                  item={items[index]}
-                  register={register}
-                  onRemove={() => remove(index)}
-                />
-              ))}
-            </div>
-          </SortableContext>
-        </DndContext>
+        <DragDropProvider onDragEnd={handleDragEnd}>
+          <div className="flex flex-col gap-3">
+            {fields.map((field, index) => (
+              <SortableInvoiceItemRow
+                key={field.id}
+                id={field.id}
+                index={index}
+                item={items[index]}
+                register={register}
+                onRemove={() => remove(index)}
+              />
+            ))}
+          </div>
+        </DragDropProvider>
       </div>
     </section>
   );
@@ -113,31 +85,30 @@ function SortableInvoiceItemRow({
   register: UseFormRegister<InvoiceFormValues>;
   onRemove: () => void;
 }) {
-  const { attributes, isDragging, listeners, setActivatorNodeRef, setNodeRef, transform, transition } = useSortable({
+  const { handleRef, isDragging, ref } = useSortable({
     id,
+    index,
+    type: "invoice-item",
+    accept: "invoice-item",
+    group: "invoice-items",
+    modifiers: [RestrictToVerticalAxis],
   });
 
   return (
     <div
-      ref={setNodeRef}
-      style={{
-        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-        transition,
-      }}
+      ref={ref}
       className={cn(
         "grid min-w-0 grid-cols-[24px_minmax(0,0.8fr)_minmax(0,1fr)_32px] items-center gap-2 rounded-lg md:grid-cols-[24px_minmax(0,1fr)_64px_112px_112px_32px]",
         isDragging && "relative z-10 opacity-50",
       )}
     >
       <Button
-        ref={setActivatorNodeRef}
+        ref={handleRef}
         type="button"
         variant="ghost"
         size="icon-sm"
         className="-ml-2 cursor-grab text-muted-foreground active:cursor-grabbing"
         aria-label={`Reorder ${id}`}
-        {...attributes}
-        {...listeners}
       >
         <GripVertical />
       </Button>
