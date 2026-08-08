@@ -1,6 +1,4 @@
 "use client";
-"use no memo";
-
 import type { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
 
@@ -14,10 +12,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { Role } from "./data";
 
-export const rolesColumns: ColumnDef<Role>[] = [
+export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
   {
     id: "group",
     accessorKey: "group",

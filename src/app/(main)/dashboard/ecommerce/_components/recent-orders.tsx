@@ -1,19 +1,7 @@
 "use client";
-"use no memo";
-
 import * as React from "react";
 
-import {
-  type ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  type PaginationState,
-  type SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
+import { type ColumnFiltersState, type PaginationState, type SortingState, useTable } from "@tanstack/react-table";
 import { ArrowUpDown, ArrowUpRight, Download, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -29,6 +17,7 @@ import {
 } from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { dataTableFeatures } from "@/lib/data-table-features";
 
 import { recentOrdersColumns } from "./recent-orders-table/columns";
 import recentOrdersData from "./recent-orders-table/data.json";
@@ -50,7 +39,8 @@ export function RecentOrders() {
     pageSize: 10,
   });
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data: recentOrders,
     columns: recentOrdersColumns,
     state: {
@@ -65,17 +55,13 @@ export function RecentOrders() {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   });
 
   const activeFilter = (table.getColumn("statusSummary")?.getFilterValue() as OrderFilter | undefined) ?? "All";
   const orderCount = table.getFilteredRowModel().rows.length;
   const selectedOrderCount = table.getSelectedRowModel().rows.length;
   const visibleOrderCount = table.getRowModel().rows.length;
-  const currentPage = table.getState().pagination.pageIndex + 1;
+  const currentPage = table.state.pagination.pageIndex + 1;
   const pageCount = table.getPageCount();
   const orderCountDescription =
     selectedOrderCount > 0 ? formatSelectedOrderCount(selectedOrderCount) : formatOrderCount(activeFilter, orderCount);
@@ -147,7 +133,7 @@ export function RecentOrders() {
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -156,9 +142,11 @@ export function RecentOrders() {
             <TableBody className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-cell']:px-4 **:data-[slot='table-cell']:py-3 **:data-[slot='table-row']:hover:bg-transparent">
               {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  <TableRow key={row.id} data-state={table.state.rowSelection[row.id] && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                      <TableCell key={cell.id}>
+                        <table.FlexRender cell={cell} />
+                      </TableCell>
                     ))}
                   </TableRow>
                 ))
@@ -199,7 +187,7 @@ export function RecentOrders() {
                 <PaginationItem key={`page-${pageNumber}`}>
                   <PaginationLink
                     href="#"
-                    isActive={table.getState().pagination.pageIndex === pageNumber - 1}
+                    isActive={table.state.pagination.pageIndex === pageNumber - 1}
                     onClick={(event) => {
                       preventPaginationNavigation(event);
                       table.setPageIndex(pageNumber - 1);

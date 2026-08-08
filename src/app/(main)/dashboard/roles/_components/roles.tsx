@@ -1,16 +1,7 @@
 "use client";
-"use no memo";
-
 import { useState } from "react";
 
-import {
-  type ColumnFiltersState,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  type PaginationState,
-  useReactTable,
-} from "@tanstack/react-table";
+import { type ColumnFiltersState, type PaginationState, useTable } from "@tanstack/react-table";
 import { AlertTriangle, ChevronRight, FileUp, Search } from "lucide-react";
 
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -18,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { dataTableFeatures } from "@/lib/data-table-features";
 
 import { rolesColumns } from "./roles-table/columns";
 import type { Role } from "./roles-table/data";
@@ -54,7 +46,8 @@ export function Roles({ roles }: { roles: Role[] }) {
     pageSize: 12,
   });
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data: roles,
     columns: rolesColumns,
     defaultColumn: {
@@ -65,9 +58,6 @@ export function Roles({ roles }: { roles: Role[] }) {
     state: { columnFilters, pagination },
     onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     autoResetPageIndex: false,
     initialState: {
       columnVisibility: { group: false, search: false },

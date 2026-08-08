@@ -1,19 +1,12 @@
 "use client";
-"use no memo";
-
 import * as React from "react";
 
 import {
   type ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
+  type ColumnVisibilityState,
   type PaginationState,
   type SortingState,
-  useReactTable,
-  type VisibilityState,
+  useTable,
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
@@ -39,6 +32,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dataTableFeatures } from "@/lib/data-table-features";
 
 import { recentCustomersColumns } from "./columns";
 import type { RecentCustomerRow } from "./schema";
@@ -78,7 +72,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([{ id: "joined", desc: true }]);
-  const [columnVisibility] = React.useState<VisibilityState>({
+  const [columnVisibility] = React.useState<ColumnVisibilityState>({
     search: false,
     joinedWindow: false,
   });
@@ -87,7 +81,8 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
     pageSize: 10,
   });
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data,
     columns: recentCustomersColumns,
     state: {
@@ -103,10 +98,6 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
     onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   });
 
   const searchQuery = (table.getColumn("search")?.getFilterValue() as string | undefined) ?? "";
@@ -245,7 +236,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id} colSpan={header.colSpan} className="h-11 p-3 font-medium">
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                   </TableHead>
                 ))}
               </TableRow>
@@ -254,10 +245,10 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow key={row.id} data-state={table.state.rowSelection[row.id] && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="p-3 align-middle">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      <table.FlexRender cell={cell} />
                     </TableCell>
                   ))}
                 </TableRow>
@@ -284,13 +275,13 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               Rows per page
             </Label>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={`${table.state.pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="recent-customers-rows-per-page">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                <SelectValue placeholder={table.state.pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side="top">
                 <SelectGroup>
@@ -304,7 +295,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center font-medium text-sm">
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+            Page {table.state.pagination.pageIndex + 1} of {table.getPageCount()}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button

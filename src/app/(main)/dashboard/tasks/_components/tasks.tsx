@@ -1,19 +1,12 @@
 "use client";
-"use no memo";
-
 import * as React from "react";
 
 import {
   type ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
+  type ColumnVisibilityState,
   type PaginationState,
   type SortingState,
-  useReactTable,
-  type VisibilityState,
+  useTable,
 } from "@tanstack/react-table";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
@@ -28,6 +21,7 @@ import {
 } from "@/components/ui/pagination";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dataTableFeatures } from "@/lib/data-table-features";
 import { cn } from "@/lib/utils";
 
 import { columns } from "./columns";
@@ -55,7 +49,7 @@ function getPageNumbers(currentPage: number, pageCount: number) {
 
 export function Tasks({ data }: TasksProps) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<ColumnVisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
@@ -63,7 +57,8 @@ export function Tasks({ data }: TasksProps) {
     pageSize: 10,
   });
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data,
     columns,
     state: {
@@ -73,18 +68,15 @@ export function Tasks({ data }: TasksProps) {
       columnFilters,
       pagination,
     },
+    getRowId: (row) => row.id,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   });
-  const pageIndex = table.getState().pagination.pageIndex;
+  const pageIndex = table.state.pagination.pageIndex;
   const pageCount = Math.max(table.getPageCount(), 1);
   const currentPage = Math.min(pageIndex + 1, pageCount);
   const pageNumbers = getPageNumbers(currentPage, pageCount);
@@ -102,7 +94,7 @@ export function Tasks({ data }: TasksProps) {
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
               {headerGroup.headers.map((header) => (
                 <TableHead key={header.id} className="h-11 font-medium text-muted-foreground" colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                 </TableHead>
               ))}
             </TableRow>
@@ -114,11 +106,11 @@ export function Tasks({ data }: TasksProps) {
               <TableRow
                 key={row.id}
                 className="border-border/60 hover:bg-muted/20"
-                data-state={row.getIsSelected() && "selected"}
+                data-state={table.state.rowSelection[row.id] && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="py-3 align-middle">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <table.FlexRender cell={cell} />
                   </TableCell>
                 ))}
               </TableRow>
@@ -141,13 +133,13 @@ export function Tasks({ data }: TasksProps) {
           <div className="flex items-center gap-2">
             <p className="font-medium text-muted-foreground text-sm">Rows per page</p>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={`${table.state.pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
               }}
             >
               <SelectTrigger className="h-8 w-18">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                <SelectValue placeholder={table.state.pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side="top">
                 <SelectGroup>

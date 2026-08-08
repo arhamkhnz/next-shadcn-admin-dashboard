@@ -1,17 +1,11 @@
 "use client";
-"use no memo";
-
 import * as React from "react";
 
 import {
   type ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
+  type ColumnVisibilityState,
   type PaginationState,
-  useReactTable,
-  type VisibilityState,
+  useTable,
 } from "@tanstack/react-table";
 import { ChevronDownIcon, ListFilter } from "lucide-react";
 
@@ -35,6 +29,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dataTableFeatures } from "@/lib/data-table-features";
 
 import { opportunitiesColumns } from "./opportunities-table/columns";
 import opportunitiesData from "./opportunities-table/data.json";
@@ -51,14 +46,15 @@ function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>)
 export function OpportunitiesSection() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility] = React.useState<VisibilityState>({});
+  const [columnVisibility] = React.useState<ColumnVisibilityState>({});
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data: opportunities,
     columns: opportunitiesColumns,
     state: {
@@ -74,15 +70,12 @@ export function OpportunitiesSection() {
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     globalFilterFn: "includesString",
   });
-  const searchQuery = table.getState().globalFilter ?? "";
+  const searchQuery = table.state.globalFilter ?? "";
   const stageFilter = (table.getColumn("stage")?.getFilterValue() as string | undefined) ?? "all";
   const healthFilter = (table.getColumn("health")?.getFilterValue() as string | undefined) ?? "all";
-  const currentPage = table.getState().pagination.pageIndex + 1;
+  const currentPage = table.state.pagination.pageIndex + 1;
   const pageCount = table.getPageCount();
   const filteredOpportunityCount = table.getFilteredRowModel().rows.length;
   const visibleOpportunityCount = table.getRowModel().rows.length;
@@ -175,7 +168,7 @@ export function OpportunitiesSection() {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableHead key={header.id} colSpan={header.colSpan}>
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                       </TableHead>
                     ))}
                   </TableRow>
@@ -184,9 +177,11 @@ export function OpportunitiesSection() {
               <TableBody className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-row']:hover:bg-transparent">
                 {table.getRowModel().rows.length ? (
                   table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    <TableRow key={row.id} data-state={table.state.rowSelection[row.id] && "selected"}>
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                        <TableCell key={cell.id}>
+                          <table.FlexRender cell={cell} />
+                        </TableCell>
                       ))}
                     </TableRow>
                   ))
@@ -226,7 +221,7 @@ export function OpportunitiesSection() {
                   <PaginationItem key={`page-${pageNumber}`}>
                     <PaginationLink
                       href="#"
-                      isActive={table.getState().pagination.pageIndex === pageNumber - 1}
+                      isActive={table.state.pagination.pageIndex === pageNumber - 1}
                       onClick={(event) => {
                         preventPaginationNavigation(event);
                         table.setPageIndex(pageNumber - 1);

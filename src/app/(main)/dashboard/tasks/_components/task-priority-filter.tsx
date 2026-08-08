@@ -1,7 +1,5 @@
 "use client";
-"use no memo";
-
-import type { Table } from "@tanstack/react-table";
+import type { ReactTable, RowData } from "@tanstack/react-table";
 import { ListFilter, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,15 +12,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 import { cn } from "@/lib/utils";
 
 import { priorities } from "./data";
 
-interface TaskPriorityFilterProps<TData> {
-  table: Table<TData>;
+interface TaskPriorityFilterProps<TData extends RowData> {
+  table: ReactTable<DataTableFeatures, TData>;
 }
 
-export function TaskPriorityFilter<TData>({ table }: TaskPriorityFilterProps<TData>) {
+export function TaskPriorityFilter<TData extends RowData>({ table }: TaskPriorityFilterProps<TData>) {
   const column = table.getColumn("priority");
 
   if (!column) {

@@ -2,19 +2,13 @@
 
 import * as React from "react";
 
-import {
-  type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  type SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
+import { type ColumnDef, type SortingState, useTable } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { type DataTableFeatures, dataTableFeatures } from "@/lib/data-table-features";
 import { cn, formatCurrency } from "@/lib/utils";
 
 type LedgerPriority = "Escalate" | "Coach" | "Reforecast" | null;
@@ -172,7 +166,7 @@ const priorityTone: Record<Exclude<LedgerPriority, null>, string> = {
   Reforecast: "border-amber-500/35 bg-amber-500/10 text-amber-700",
 };
 
-const ledgerColumns: ColumnDef<LedgerRow>[] = [
+const ledgerColumns: ColumnDef<DataTableFeatures, LedgerRow>[] = [
   {
     accessorKey: "account",
     header: "Account",
@@ -255,14 +249,13 @@ const ledgerColumns: ColumnDef<LedgerRow>[] = [
 export function ActionsRiskLedger() {
   const [sorting, setSorting] = React.useState<SortingState>([{ id: "riskScore", desc: true }]);
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data: LEDGER_ROWS,
     columns: ledgerColumns,
     getRowId: (row) => String(row.id),
     state: { sorting },
     onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -296,7 +289,7 @@ export function ActionsRiskLedger() {
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -306,7 +299,9 @@ export function ActionsRiskLedger() {
               {table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id}>
+                      <table.FlexRender cell={cell} />
+                    </TableCell>
                   ))}
                 </TableRow>
               ))}

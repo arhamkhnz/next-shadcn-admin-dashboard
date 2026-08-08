@@ -1,17 +1,11 @@
 "use client";
-"use no memo";
-
 import * as React from "react";
 
 import {
   type ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
+  type ColumnVisibilityState,
   type PaginationState,
-  useReactTable,
-  type VisibilityState,
+  useTable,
 } from "@tanstack/react-table";
 import {
   ChevronDownIcon,
@@ -37,6 +31,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dataTableFeatures } from "@/lib/data-table-features";
 
 import { recentLeadsColumns } from "./columns";
 import type { RecentLeadRow } from "./schema";
@@ -52,14 +47,15 @@ const COLUMN_LABELS: Record<string, string> = {
 
 export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<ColumnVisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data,
     columns: recentLeadsColumns,
     state: {
@@ -74,9 +70,6 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
     onColumnVisibilityChange: setColumnVisibility,
     onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -128,7 +121,7 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -137,9 +130,11 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
               {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  <TableRow key={row.id} data-state={table.state.rowSelection[row.id] && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                      <TableCell key={cell.id}>
+                        <table.FlexRender cell={cell} />
+                      </TableCell>
                     ))}
                   </TableRow>
                 ))
@@ -164,13 +159,13 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
                 Rows per page
               </Label>
               <Select
-                value={`${table.getState().pagination.pageSize}`}
+                value={`${table.state.pagination.pageSize}`}
                 onValueChange={(value) => {
                   table.setPageSize(Number(value));
                 }}
               >
                 <SelectTrigger size="sm" className="w-20" id="recent-leads-rows-per-page">
-                  <SelectValue placeholder={table.getState().pagination.pageSize} />
+                  <SelectValue placeholder={table.state.pagination.pageSize} />
                 </SelectTrigger>
                 <SelectContent side="top">
                   <SelectGroup>
@@ -184,7 +179,7 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
               </Select>
             </div>
             <div className="flex w-fit items-center justify-center font-medium text-sm">
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              Page {table.state.pagination.pageIndex + 1} of {table.getPageCount()}
             </div>
             <div className="ml-auto flex items-center gap-2 lg:ml-0">
               <Button

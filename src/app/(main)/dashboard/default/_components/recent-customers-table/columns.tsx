@@ -1,12 +1,12 @@
 "use client";
-"use no memo";
-
 import type { ColumnDef } from "@tanstack/react-table";
+import { Subscribe } from "@tanstack/react-table";
 import { addMinutes, differenceInCalendarDays, endOfToday, format, parseISO } from "date-fns";
 import { CircleAlertIcon, CircleCheckIcon, Clock3Icon, LoaderIcon, UserRound } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { RecentCustomerRow } from "./schema";
 
@@ -25,25 +25,39 @@ function billingIcon(billing: string) {
   }
 }
 
-export const recentCustomersColumns: ColumnDef<RecentCustomerRow>[] = [
+export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomerRow>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all customers on this page"
-        />
+        <Subscribe
+          source={table.atoms.rowSelection}
+          selector={() =>
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected() && "indeterminate")
+          }
+        >
+          {(checked) => (
+            <Checkbox
+              checked={checked}
+              onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+              aria-label="Select all customers on this page"
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label={`Select ${row.original.name}`}
-        />
+        <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
+          {(checked) => (
+            <Checkbox
+              checked={checked}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label={`Select ${row.original.name}`}
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     enableHiding: false,

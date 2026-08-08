@@ -1,9 +1,7 @@
 "use client";
-"use no memo";
-
 import type { MouseEvent } from "react";
 
-import { flexRender, type Table as TableType } from "@tanstack/react-table";
+import type { ReactTable } from "@tanstack/react-table";
 
 import {
   Pagination,
@@ -17,6 +15,7 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { UserRow } from "./data";
 
@@ -35,11 +34,11 @@ function getPageNumbers(currentPage: number, pageCount: number) {
   return [currentPage - 1, currentPage, currentPage + 1];
 }
 
-export function UsersTable({ table }: { table: TableType<UserRow> }) {
+export function UsersTable({ table }: { table: ReactTable<DataTableFeatures, UserRow> }) {
   const pageCount = Math.max(table.getPageCount(), 1);
-  const currentPage = Math.min(table.getState().pagination.pageIndex + 1, pageCount);
+  const currentPage = Math.min(table.state.pagination.pageIndex + 1, pageCount);
   const pageNumbers = getPageNumbers(currentPage, pageCount);
-  const rowsPerPage = `${table.getState().pagination.pageSize}`;
+  const rowsPerPage = `${table.state.pagination.pageSize}`;
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -50,7 +49,7 @@ export function UsersTable({ table }: { table: TableType<UserRow> }) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id} className="py-4 font-normal">
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                   </TableHead>
                 ))}
               </TableRow>
@@ -63,11 +62,11 @@ export function UsersTable({ table }: { table: TableType<UserRow> }) {
                 <TableRow
                   key={row.id}
                   className="border-border/60 hover:bg-white/2.5"
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={table.state.rowSelection[row.id] && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="px-3 py-4 align-middle">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      <table.FlexRender cell={cell} />
                     </TableCell>
                   ))}
                 </TableRow>
@@ -90,7 +89,7 @@ export function UsersTable({ table }: { table: TableType<UserRow> }) {
           <div className="flex items-center gap-2">
             <span>Rows per page</span>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={`${table.state.pagination.pageSize}`}
               onValueChange={(value) => table.setPageSize(Number(value))}
             >
               <SelectTrigger size="sm" className="w-20" id="users-rows-per-page">
@@ -134,7 +133,7 @@ export function UsersTable({ table }: { table: TableType<UserRow> }) {
               <PaginationItem key={`page-${pageNumber}`}>
                 <PaginationLink
                   href="#"
-                  isActive={table.getState().pagination.pageIndex === pageNumber - 1}
+                  isActive={table.state.pagination.pageIndex === pageNumber - 1}
                   onClick={(event) => {
                     preventPaginationNavigation(event);
                     table.setPageIndex(pageNumber - 1);

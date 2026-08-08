@@ -1,9 +1,10 @@
 "use client";
-"use no memo";
+
+import { createContext, useContext } from "react";
 
 import { useSortable } from "@dnd-kit/sortable";
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import { flexRender } from "@tanstack/react-table";
+import { FlexRender, Subscribe } from "@tanstack/react-table";
 import { CircleCheckIcon, EllipsisVerticalIcon, GripVerticalIcon, LoaderIcon, TrendingUpIcon } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { toast } from "sonner";
@@ -35,6 +36,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Separator } from "@/components/ui/separator";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useIsMobile } from "@/hooks/use-mobile";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { ProposalSectionsRow } from "./schema";
 
@@ -58,11 +60,22 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners } = useSortable({ id });
+type SortableRowContextValue = Pick<ReturnType<typeof useSortable>, "attributes" | "listeners" | "setActivatorNodeRef">;
+
+const SortableRowContext = createContext<SortableRowContextValue | null>(null);
+
+function DragHandle() {
+  const sortableRow = useContext(SortableRowContext);
+
+  if (!sortableRow) {
+    return null;
+  }
+
+  const { attributes, listeners, setActivatorNodeRef } = sortableRow;
 
   return (
     <Button
+      ref={setActivatorNodeRef}
       {...attributes}
       {...listeners}
       variant="ghost"
@@ -234,11 +247,11 @@ function createInlineSaveHandler(header: string) {
   };
 }
 
-export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
+export const proposalSectionsColumns: ColumnDef<DataTableFeatures, ProposalSectionsRow>[] = [
   {
     id: "drag",
     header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original.id} />,
+    cell: () => <DragHandle />,
     enableSorting: false,
     enableHiding: false,
   },
@@ -246,20 +259,34 @@ export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
     id: "select",
     header: ({ table }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
+        <Subscribe
+          source={table.atoms.rowSelection}
+          selector={() =>
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected() && "indeterminate")
+          }
+        >
+          {(checked) => (
+            <Checkbox
+              checked={checked}
+              onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+              aria-label="Select all"
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+        <Subscribe source={row.table.atoms.rowSelection} selector={(rowSelection) => Boolean(rowSelection?.[row.id])}>
+          {(checked) => (
+            <Checkbox
+              checked={checked}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select row"
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     enableSorting: false,
@@ -385,25 +412,35 @@ export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
   },
 ];
 
-export function DraggableProposalSectionsRow({ row }: { row: Row<ProposalSectionsRow> }) {
-  const { transform, transition, setNodeRef, isDragging } = useSortable({
+export function DraggableProposalSectionsRow({
+  row,
+  isSelected,
+}: {
+  row: Row<DataTableFeatures, ProposalSectionsRow>;
+  isSelected: boolean;
+}) {
+  const { attributes, listeners, setActivatorNodeRef, transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
   });
 
   return (
-    <TableRow
-      ref={setNodeRef}
-      data-state={row.getIsSelected() && "selected"}
-      data-dragging={isDragging}
-      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-      style={{
-        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-        transition,
-      }}
-    >
-      {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-      ))}
-    </TableRow>
+    <SortableRowContext.Provider value={{ attributes, listeners, setActivatorNodeRef }}>
+      <TableRow
+        ref={setNodeRef}
+        data-state={isSelected && "selected"}
+        data-dragging={isDragging}
+        className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+        style={{
+          transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+          transition,
+        }}
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell key={cell.id}>
+            <FlexRender cell={cell} />
+          </TableCell>
+        ))}
+      </TableRow>
+    </SortableRowContext.Provider>
   );
 }
