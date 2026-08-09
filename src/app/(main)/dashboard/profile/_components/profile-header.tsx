@@ -61,32 +61,32 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
               Verified
             </Badge>
             <Badge className="rounded-sm" variant="outline">
-              Contractor
+              {profile.employmentType}
             </Badge>
             <Badge className="rounded-sm" variant="outline">
-              Remote
+              {profile.workplace}
             </Badge>
             <Badge className="rounded-sm" variant="outline">
-              UTC+5:30
+              {profile.timezone}
             </Badge>
           </div>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        <Button asChild variant="outline">
+        <Button size="sm" asChild variant="outline">
           <a href={`mailto:${profile.workEmail}`}>
             <Mail data-icon="inline-start" />
             Email
           </a>
         </Button>
-        <Button>
+        <Button size="sm">
           <Pencil data-icon="inline-start" />
           Edit profile
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button aria-label="More profile actions" size="icon" variant="outline">
+            <Button aria-label="More profile actions" size="icon-sm" variant="outline">
               <Ellipsis />
             </Button>
           </DropdownMenuTrigger>
