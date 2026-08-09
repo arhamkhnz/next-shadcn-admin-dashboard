@@ -42,7 +42,7 @@ export default function Page() {
       </Breadcrumb>
       <ProfileHeader profile={profile} />
 
-      <Tabs defaultValue="overview">
+      <Tabs className="gap-0" defaultValue="overview">
         <TabsList
           className="w-full justify-start gap-4 border-y px-4 *:data-[slot=tabs-trigger]:flex-none"
           variant="line"
@@ -57,7 +57,7 @@ export default function Page() {
 
         <div className="px-4 md:px-6">
           <TabsContent value="overview">
-            <div className="grid gap-8 py-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
               <ProfileOverview profile={profile} />
               <ProfileStatusSidebar profile={profile} />
             </div>
