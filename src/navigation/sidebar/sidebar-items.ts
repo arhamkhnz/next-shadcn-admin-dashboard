@@ -20,6 +20,7 @@ import {
   Server,
   ShoppingBag,
   SquareArrowUpRight,
+  UserRound,
   Users,
 } from "lucide-react";
 
@@ -175,6 +176,13 @@ export const sidebarItems: NavGroup[] = [
         title: "Invoice",
         url: "/dashboard/invoice",
         icon: ReceiptText,
+      },
+      {
+        id: "profile",
+        title: "Profile",
+        url: "/dashboard/profile",
+        icon: UserRound,
+        badge: "new",
       },
       {
         id: "users",
