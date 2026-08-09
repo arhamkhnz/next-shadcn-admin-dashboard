@@ -9,7 +9,8 @@ export interface ProfileDocument {
   name: string;
   category: string;
   updated: string;
-  status: "Signed" | "Verified" | "Current";
+  status: "Signed" | "Current";
+  restricted: boolean;
 }
 
 export interface ProfileRecord {
@@ -37,7 +38,8 @@ export interface ProfileRecord {
   employmentType: string;
   weeklyHours: string;
   schedule: string;
-  probationEnd: string;
+  contractingEntity: string;
+  noticePeriod: string;
   birthday: string;
   address: string;
   emergencyContact: string;
@@ -52,8 +54,13 @@ export interface ProfileRecord {
   bonusTarget: string;
   payrollStatus: string;
   timeOffPolicy: string;
-  timeOffAvailable: string;
+  timeOffAnnualAllowance: string;
+  timeOffRemaining: string;
+  timeOffCarriedOver: string;
   timeOffUsed: string;
+  timeOffScheduled: string;
+  timeOffPendingRequests: string;
+  timeOffLeaveYear: string;
   nextLeave: string;
   lastWorkingDay: string;
   updatedBy: string;
@@ -86,10 +93,11 @@ export const profile: ProfileRecord = {
   employmentType: "Contractor",
   weeklyHours: "40 hours",
   schedule: "Monday–Friday · 9:00 AM–5:30 PM",
-  probationEnd: "Completed June 18, 2022",
+  contractingEntity: "Studio Technologies Pte. Ltd.",
+  noticePeriod: "30 days",
   birthday: "September 9, 1993",
   address: "1842 Valencia Street, San Francisco, CA 94110",
-  emergencyContact: "Daniel Chen · Brother",
+  emergencyContact: "Ammar K. · Brother",
   emergencyPhone: "+1 (510) 555-0177",
   manager: {
     name: "Pravi K.",
@@ -108,29 +116,42 @@ export const profile: ProfileRecord = {
   compensationEffective: "January 1, 2026",
   bonusTarget: "12% annual target",
   payrollStatus: "Enrolled · Direct deposit",
-  timeOffPolicy: "US Flexible Time Off",
-  timeOffAvailable: "18 days available",
-  timeOffUsed: "7 days used in 2026",
+  timeOffPolicy: "Contract leave allowance",
+  timeOffAnnualAllowance: "25 days",
+  timeOffRemaining: "18 days",
+  timeOffCarriedOver: "0 days",
+  timeOffUsed: "7 days",
+  timeOffScheduled: "5 days",
+  timeOffPendingRequests: "0",
+  timeOffLeaveYear: "January 1–December 31, 2026",
   nextLeave: "August 24–28, 2026",
   lastWorkingDay: "October 3, 2026",
   updatedBy: "Arham Khan",
   updatedAt: "August 8, 2026",
   documents: [
-    { id: "doc-1", name: "Employment agreement", category: "Employment", updated: "Mar 18, 2022", status: "Signed" },
+    {
+      id: "doc-1",
+      name: "Employment agreement",
+      category: "Employment",
+      updated: "Mar 18, 2022",
+      status: "Signed",
+      restricted: false,
+    },
     {
       id: "doc-2",
       name: "Confidentiality agreement",
       category: "Compliance",
       updated: "Mar 18, 2022",
       status: "Signed",
+      restricted: true,
     },
-    { id: "doc-3", name: "Form I-9", category: "Eligibility", updated: "Mar 21, 2022", status: "Verified" },
     {
       id: "doc-4",
       name: "Employee handbook acknowledgement",
       category: "Policy",
       updated: "Jan 8, 2026",
       status: "Current",
+      restricted: false,
     },
   ],
 };

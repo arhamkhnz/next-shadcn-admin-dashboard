@@ -11,11 +11,13 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { profile } from "./_components/profile-data";
-import { EmploymentDetails, PersonalDetails, TimeOffDetails } from "./_components/profile-details";
 import { ProfileDocuments } from "./_components/profile-documents";
+import { EmploymentDetails } from "./_components/profile-employment-details";
 import { ProfileHeader } from "./_components/profile-header";
 import { ProfileOverview } from "./_components/profile-overview";
+import { PersonalDetails } from "./_components/profile-personal-details";
 import { ProfileStatusSidebar } from "./_components/profile-status-sidebar";
+import { TimeOffDetails } from "./_components/profile-time-off-details";
 
 export default function Page() {
   return (
@@ -71,15 +73,15 @@ export default function Page() {
             </div>
           </TabsContent>
 
-          <TabsContent className="py-6" value="personal">
+          <TabsContent className="py-4" value="personal">
             <PersonalDetails profile={profile} />
           </TabsContent>
 
-          <TabsContent className="py-6" value="employment">
+          <TabsContent className="py-4" value="employment">
             <EmploymentDetails profile={profile} />
           </TabsContent>
 
-          <TabsContent className="py-6" value="compensation">
+          <TabsContent className="py-4" value="compensation">
             <div className="flex items-start gap-3">
               <LockKeyhole aria-hidden="true" className="size-4 text-muted-foreground" />
               <div>
@@ -91,11 +93,11 @@ export default function Page() {
             </div>
           </TabsContent>
 
-          <TabsContent className="py-6" value="time-off">
+          <TabsContent className="py-4" value="time-off">
             <TimeOffDetails profile={profile} />
           </TabsContent>
 
-          <TabsContent className="py-6" value="documents">
+          <TabsContent className="py-4" value="documents">
             <ProfileDocuments documents={profile.documents} />
           </TabsContent>
         </div>
