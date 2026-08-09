@@ -10,27 +10,27 @@ export function TimeOffDetails({ profile }: { profile: ProfileRecord }) {
         <dl className="grid gap-x-12 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Policy</dt>
-            <dd className="text-sm">{profile.timeOffPolicy}</dd>
+            <dd className="text-sm">{profile.leavePolicy}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Annual allowance</dt>
-            <dd className="text-sm">{profile.timeOffAnnualAllowance}</dd>
+            <dd className="text-sm">{profile.annualLeaveAllowance}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Remaining</dt>
-            <dd className="text-sm">{profile.timeOffRemaining}</dd>
+            <dd className="text-sm">{profile.remainingLeave}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Carried over</dt>
-            <dd className="text-sm">{profile.timeOffCarriedOver}</dd>
+            <dd className="text-sm">{profile.carriedOverLeave}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Used this year</dt>
-            <dd className="text-sm">{profile.timeOffUsed}</dd>
+            <dd className="text-sm">{profile.usedLeave}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Scheduled</dt>
-            <dd className="text-sm">{profile.timeOffScheduled}</dd>
+            <dd className="text-sm">{profile.scheduledLeave}</dd>
           </div>
         </dl>
       </div>
@@ -46,11 +46,11 @@ export function TimeOffDetails({ profile }: { profile: ProfileRecord }) {
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Pending requests</dt>
-            <dd className="text-sm">{profile.timeOffPendingRequests}</dd>
+            <dd className="text-sm">{profile.pendingLeaveRequests}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Leave year</dt>
-            <dd className="text-sm">{profile.timeOffLeaveYear}</dd>
+            <dd className="text-sm">{profile.leaveYear}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Approver</dt>

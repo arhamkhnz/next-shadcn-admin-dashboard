@@ -25,12 +25,12 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
         <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-12">
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground text-xs">Employee ID</span>
-              <span className="text-sm">{profile.employeeId}</span>
+              <span className="text-muted-foreground text-xs">Contractor ID</span>
+              <span className="text-sm">{profile.contractorId}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground text-xs">Employment status</span>
-              <span className="text-sm">{profile.status}</span>
+              <span className="text-muted-foreground text-xs">Engagement status</span>
+              <span className="text-sm">{profile.engagementStatus}</span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-muted-foreground text-xs">Job level</span>
@@ -59,8 +59,8 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
               <span className="text-sm">{profile.startDate}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground text-xs">Tenure</span>
-              <span className="text-sm">{profile.tenure}</span>
+              <span className="text-muted-foreground text-xs">Engagement length</span>
+              <span className="text-sm">{profile.engagementLength}</span>
             </div>
           </div>
         </div>

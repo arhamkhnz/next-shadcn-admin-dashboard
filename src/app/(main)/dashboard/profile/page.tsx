@@ -48,17 +48,19 @@ export default function Page() {
       <ProfileHeader profile={profile} />
 
       <Tabs className="min-h-0 flex-1 gap-0" defaultValue="overview">
-        <TabsList
-          className="w-full justify-start gap-4 border-y px-4 *:data-[slot=tabs-trigger]:flex-none"
-          variant="line"
-        >
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="personal">Personal</TabsTrigger>
-          <TabsTrigger value="employment">Employment</TabsTrigger>
-          <TabsTrigger value="compensation">Compensation</TabsTrigger>
-          <TabsTrigger value="time-off">Time off</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-        </TabsList>
+        <div className="scrollbar-none touch-pan-x overflow-x-auto overscroll-x-contain border-y">
+          <TabsList
+            className="w-max min-w-full justify-start gap-4 px-4 *:data-[slot=tabs-trigger]:flex-none"
+            variant="line"
+          >
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="personal">Personal</TabsTrigger>
+            <TabsTrigger value="employment">Employment</TabsTrigger>
+            <TabsTrigger value="compensation">Compensation</TabsTrigger>
+            <TabsTrigger value="time-off">Time off</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
+          </TabsList>
+        </div>
 
         <div className="px-4 md:px-6">
           <TabsContent value="overview">

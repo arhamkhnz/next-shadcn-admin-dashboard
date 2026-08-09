@@ -31,7 +31,7 @@ export function PersonalDetails({ profile }: { profile: ProfileRecord }) {
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Date of birth</dt>
-            <dd className="text-sm">{profile.birthday}</dd>
+            <dd className="text-sm">{profile.dateOfBirth}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Personal email</dt>

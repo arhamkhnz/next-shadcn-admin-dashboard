@@ -42,11 +42,11 @@ export function EmploymentDetails({ profile }: { profile: ProfileRecord }) {
         <dl className="grid gap-x-12 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Contractor ID</dt>
-            <dd className="text-sm">{profile.employeeId}</dd>
+            <dd className="text-sm">{profile.contractorId}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Engagement status</dt>
-            <dd className="text-sm">{profile.status}</dd>
+            <dd className="text-sm">{profile.engagementStatus}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Employment type</dt>
@@ -82,7 +82,7 @@ export function EmploymentDetails({ profile }: { profile: ProfileRecord }) {
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Time zone</dt>
-            <dd className="text-sm">{profile.timezone}</dd>
+            <dd className="text-sm">{profile.timeZone}</dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="text-muted-foreground text-xs">Weekly hours</dt>
