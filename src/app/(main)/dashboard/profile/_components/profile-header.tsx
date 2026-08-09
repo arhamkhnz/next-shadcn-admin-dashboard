@@ -43,7 +43,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
         </div>
 
         <div className="flex min-w-0 flex-col gap-2">
-          <div className="flex min-w-0 flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5">
             <h1 className="truncate font-heading font-semibold text-2xl leading-7 tracking-tight">{profile.name}</h1>
             <p className="truncate text-muted-foreground text-sm leading-5">
               {profile.workEmail} · {profile.jobTitle}

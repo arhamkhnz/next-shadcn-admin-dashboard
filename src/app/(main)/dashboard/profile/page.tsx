@@ -1,3 +1,5 @@
+import { LockKeyhole } from "lucide-react";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -5,10 +7,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { profile } from "./_components/profile-data";
-import { CompensationDetails, EmploymentDetails, PersonalDetails, TimeOffDetails } from "./_components/profile-details";
+import { EmploymentDetails, PersonalDetails, TimeOffDetails } from "./_components/profile-details";
 import { ProfileDocuments } from "./_components/profile-documents";
 import { ProfileHeader } from "./_components/profile-header";
 import { ProfileOverview } from "./_components/profile-overview";
@@ -42,7 +45,7 @@ export default function Page() {
       </Breadcrumb>
       <ProfileHeader profile={profile} />
 
-      <Tabs className="gap-0" defaultValue="overview">
+      <Tabs className="min-h-0 flex-1 gap-0" defaultValue="overview">
         <TabsList
           className="w-full justify-start gap-4 border-y px-4 *:data-[slot=tabs-trigger]:flex-none"
           variant="line"
@@ -57,29 +60,42 @@ export default function Page() {
 
         <div className="px-4 md:px-6">
           <TabsContent value="overview">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
-              <ProfileOverview profile={profile} />
-              <ProfileStatusSidebar profile={profile} />
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_auto_18rem]">
+              <div className="py-4 lg:pr-6">
+                <ProfileOverview profile={profile} />
+              </div>
+              <Separator className="hidden lg:block" orientation="vertical" />
+              <div className="py-4 lg:pl-6">
+                <ProfileStatusSidebar profile={profile} />
+              </div>
             </div>
           </TabsContent>
 
-          <TabsContent value="personal">
+          <TabsContent className="py-6" value="personal">
             <PersonalDetails profile={profile} />
           </TabsContent>
 
-          <TabsContent value="employment">
+          <TabsContent className="py-6" value="employment">
             <EmploymentDetails profile={profile} />
           </TabsContent>
 
-          <TabsContent value="compensation">
-            <CompensationDetails profile={profile} />
+          <TabsContent className="py-6" value="compensation">
+            <div className="flex items-start gap-3">
+              <LockKeyhole aria-hidden="true" className="size-4 text-muted-foreground" />
+              <div>
+                <p className="font-medium text-sm">Restricted information</p>
+                <p className="mt-0.5 text-muted-foreground text-sm">
+                  Visible to people administrators and authorized finance roles.
+                </p>
+              </div>
+            </div>
           </TabsContent>
 
-          <TabsContent value="time-off">
+          <TabsContent className="py-6" value="time-off">
             <TimeOffDetails profile={profile} />
           </TabsContent>
 
-          <TabsContent value="documents">
+          <TabsContent className="py-6" value="documents">
             <ProfileDocuments documents={profile.documents} />
           </TabsContent>
         </div>

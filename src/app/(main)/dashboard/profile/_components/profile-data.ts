@@ -21,8 +21,10 @@ export interface ProfileRecord {
   avatar: string;
   status: "Active";
   jobTitle: string;
+  jobLevel: string;
   department: string;
   team: string;
+  currentProject: string;
   workEmail: string;
   personalEmail: string;
   workPhone: string;
@@ -53,8 +55,9 @@ export interface ProfileRecord {
   timeOffAvailable: string;
   timeOffUsed: string;
   nextLeave: string;
-  nextReview: string;
-  lastUpdated: string;
+  lastWorkingDay: string;
+  updatedBy: string;
+  updatedAt: string;
   documents: ProfileDocument[];
 }
 
@@ -67,15 +70,17 @@ export const profile: ProfileRecord = {
   avatar: "https://avatars.githubusercontent.com/u/43849669",
   status: "Active",
   jobTitle: "Software Engineer",
+  jobLevel: "Senior",
   department: "Product",
-  team: "Growth Experience",
+  team: "Product",
+  currentProject: "Autonomous Bid Agent",
   workEmail: "hello@arhamkhnz.com",
   personalEmail: "arhamkhnz@gmail.com",
   workPhone: "+1 (415) 555-0148",
   location: "San Francisco, CA",
   workplace: "Remote",
   timezone: "UTC+5:30",
-  employeeId: "ST-0284",
+  employeeId: "WS-2301",
   startDate: "March 18, 2022",
   tenure: "4 years, 4 months",
   employmentType: "Contractor",
@@ -87,16 +92,16 @@ export const profile: ProfileRecord = {
   emergencyContact: "Daniel Chen · Brother",
   emergencyPhone: "+1 (510) 555-0177",
   manager: {
-    name: "Noah Williams",
-    role: "VP, Product",
-    initials: "NW",
+    name: "Pravi K.",
+    role: "Head of Product",
+    initials: "PK",
   },
   peers: [
     { name: "Owen Grant", role: "Product Manager", initials: "OG" },
     { name: "Alicia Torres", role: "Staff Researcher", initials: "AT" },
     { name: "Sam Rivera", role: "Design Engineer", initials: "SR" },
   ],
-  bio: "Arham leads product design for Growth Experience, partnering with research and engineering from discovery through release. His current focus is making onboarding clearer for multi-team organizations.",
+  bio: "Arham is a software engineer on the product team, building bids and tender management software, including autonomous bid agents that streamline opportunity discovery, requirement analysis, document preparation, compliance checks, pricing, and submission. He focuses on turning complex tender workflows into reliable, easy-to-use products that help teams work faster and make better bidding decisions.",
   salary: "$168,000 per year",
   payFrequency: "Semi-monthly",
   currency: "USD",
@@ -106,9 +111,10 @@ export const profile: ProfileRecord = {
   timeOffPolicy: "US Flexible Time Off",
   timeOffAvailable: "18 days available",
   timeOffUsed: "7 days used in 2026",
-  nextLeave: "August 21–23 · Approved",
-  nextReview: "September 30, 2026",
-  lastUpdated: "August 8, 2026 by Priya Shah",
+  nextLeave: "August 24–28, 2026",
+  lastWorkingDay: "October 3, 2026",
+  updatedBy: "Arham Khan",
+  updatedAt: "August 8, 2026",
   documents: [
     { id: "doc-1", name: "Employment agreement", category: "Employment", updated: "Mar 18, 2022", status: "Signed" },
     {

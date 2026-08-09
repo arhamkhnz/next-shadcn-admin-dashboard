@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import type { ProfileDocument } from "./profile-data";
-import { DetailsPanel } from "./profile-fields";
 
 export function ProfileDocuments({ documents }: { documents: ProfileDocument[] }) {
   return (
-    <DetailsPanel>
+    <>
       <div className="mb-4 flex items-center justify-between gap-4">
         <div>
           <h2 className="font-heading font-medium text-base">Documents</h2>
@@ -50,6 +49,6 @@ export function ProfileDocuments({ documents }: { documents: ProfileDocument[] }
           </TableBody>
         </Table>
       </div>
-    </DetailsPanel>
+    </>
   );
 }

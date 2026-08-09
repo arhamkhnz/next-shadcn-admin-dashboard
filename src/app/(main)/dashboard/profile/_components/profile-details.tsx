@@ -1,9 +1,10 @@
 import { Check, LockKeyhole } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 import type { ProfileRecord } from "./profile-data";
-import { DetailsPanel, FieldGrid, SectionHeader } from "./profile-fields";
+import { FieldGrid } from "./profile-fields";
 
 interface ProfileDetailsProps {
   profile: ProfileRecord;
@@ -11,8 +12,14 @@ interface ProfileDetailsProps {
 
 export function PersonalDetails({ profile }: ProfileDetailsProps) {
   return (
-    <DetailsPanel>
-      <SectionHeader privateSection title="Personal information" />
+    <>
+      <div className="mb-4 flex items-center gap-2">
+        <h2 className="font-heading font-medium text-base">Personal information</h2>
+        <Badge variant="outline">
+          <LockKeyhole data-icon="inline-start" />
+          Private
+        </Badge>
+      </div>
       <FieldGrid
         fields={[
           { label: "Preferred name", value: profile.preferredName },
@@ -24,7 +31,13 @@ export function PersonalDetails({ profile }: ProfileDetailsProps) {
         ]}
       />
       <Separator className="my-7" />
-      <SectionHeader privateSection title="Address and emergency contact" />
+      <div className="mb-4 flex items-center gap-2">
+        <h2 className="font-heading font-medium text-base">Address and emergency contact</h2>
+        <Badge variant="outline">
+          <LockKeyhole data-icon="inline-start" />
+          Private
+        </Badge>
+      </div>
       <FieldGrid
         fields={[
           { label: "Home address", value: profile.address },
@@ -32,14 +45,14 @@ export function PersonalDetails({ profile }: ProfileDetailsProps) {
           { label: "Emergency phone", value: profile.emergencyPhone },
         ]}
       />
-    </DetailsPanel>
+    </>
   );
 }
 
 export function EmploymentDetails({ profile }: ProfileDetailsProps) {
   return (
-    <DetailsPanel>
-      <SectionHeader title="Employment information" />
+    <>
+      <h2 className="mb-4 font-heading font-medium text-base">Employment information</h2>
       <FieldGrid
         fields={[
           { label: "Job title", value: profile.jobTitle },
@@ -53,41 +66,14 @@ export function EmploymentDetails({ profile }: ProfileDetailsProps) {
           { label: "Probation", value: profile.probationEnd },
         ]}
       />
-    </DetailsPanel>
-  );
-}
-
-export function CompensationDetails({ profile }: ProfileDetailsProps) {
-  return (
-    <DetailsPanel>
-      <div className="mb-6 flex items-start gap-3 border-b pb-5">
-        <LockKeyhole aria-hidden="true" className="mt-0.5 size-4 text-muted-foreground" />
-        <div>
-          <p className="font-medium text-sm">Restricted information</p>
-          <p className="mt-0.5 text-muted-foreground text-sm">
-            Visible to people administrators and authorized finance roles.
-          </p>
-        </div>
-      </div>
-      <SectionHeader privateSection title="Compensation" />
-      <FieldGrid
-        fields={[
-          { label: "Base salary", value: profile.salary },
-          { label: "Pay frequency", value: profile.payFrequency },
-          { label: "Currency", value: profile.currency },
-          { label: "Effective from", value: profile.compensationEffective },
-          { label: "Variable compensation", value: profile.bonusTarget },
-          { label: "Payroll", value: profile.payrollStatus },
-        ]}
-      />
-    </DetailsPanel>
+    </>
   );
 }
 
 export function TimeOffDetails({ profile }: ProfileDetailsProps) {
   return (
-    <DetailsPanel>
-      <SectionHeader title="Time off" />
+    <>
+      <h2 className="mb-4 font-heading font-medium text-base">Time off</h2>
       <FieldGrid
         fields={[
           { label: "Policy", value: profile.timeOffPolicy },
@@ -100,6 +86,6 @@ export function TimeOffDetails({ profile }: ProfileDetailsProps) {
         <Check aria-hidden="true" className="size-4 text-muted-foreground" />
         No requests are waiting for approval.
       </div>
-    </DetailsPanel>
+    </>
   );
 }
