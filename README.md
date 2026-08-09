@@ -71,6 +71,7 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 - Patient Monitoring  
 - Chat Page  
 - Email Page  
+- Profile  
 - Users Management  
 - Roles Management  
 - Kanban Board  
