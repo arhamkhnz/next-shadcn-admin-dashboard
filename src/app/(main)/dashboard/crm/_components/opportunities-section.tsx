@@ -36,19 +36,20 @@ import {
 } from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
+import { filterOpportunities, opportunityRows } from "./crm-data/opportunities";
+import { useCrmFilters } from "./crm-filters";
 import { opportunitiesColumns } from "./opportunities-table/columns";
-import opportunitiesData from "./opportunities-table/data.json";
-import { opportunitiesSchema } from "./opportunities-table/schema";
 
 const stageOptions = ["all", "Proposal Sent", "Discovery", "Negotiation", "Qualified"] as const;
 const healthOptions = ["all", "On Track", "Needs Review", "At Risk", "On Hold"] as const;
-const opportunities = opportunitiesSchema.parse(opportunitiesData);
 
 function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>) {
   event.preventDefault();
 }
 
 export function OpportunitiesSection() {
+  const { window, ownerId } = useCrmFilters();
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility] = React.useState<VisibilityState>({});
@@ -57,6 +58,18 @@ export function OpportunitiesSection() {
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const opportunities = React.useMemo(
+    () => filterOpportunities(opportunityRows, window.current, ownerId),
+    [window, ownerId],
+  );
+
+  React.useEffect(() => {
+    if (!window.current || ownerId === undefined) return;
+    setColumnFilters([]);
+    setGlobalFilter("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  }, [window, ownerId]);
 
   const table = useReactTable({
     data: opportunities,
@@ -103,7 +116,7 @@ export function OpportunitiesSection() {
         <CardHeader>
           <CardTitle className="leading-none">Recent Opportunities</CardTitle>
           <CardDescription>
-            Track qualified leads moving through discovery, proposal, and closing stages.
+            Track qualified leads moving through discovery, proposal, and closing stages in the {window.label}.
           </CardDescription>
           <CardAction>
             <div className="flex items-center gap-2">

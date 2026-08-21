@@ -6,7 +6,11 @@ const opportunitySchema = z.object({
   stage: z.string(),
   priority: z.number(),
   health: z.string(),
-  value: z.string(),
+  value: z.number(),
+  ownerId: z.string(),
+  createdAt: z.string(),
+  expectedClose: z.string(),
+  lastActivity: z.string(),
 });
 
 export const opportunitiesSchema = z.array(opportunitySchema);

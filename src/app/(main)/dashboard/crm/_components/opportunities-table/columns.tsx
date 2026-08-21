@@ -4,11 +4,13 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency, getInitials } from "@/lib/utils";
 
+import { getOwnerName } from "../crm-data/sales-team";
 import type { OpportunityRow } from "./schema";
 
 const healthStripSlots = Array.from({ length: 18 }, (_, index) => ({
@@ -98,7 +100,21 @@ export const opportunitiesColumns: ColumnDef<OpportunityRow>[] = [
   {
     accessorKey: "value",
     header: "Value",
-    cell: ({ row }) => <div className="font-medium text-sm tabular-nums">{row.original.value}</div>,
+    cell: ({ row }) => <div className="font-medium text-sm tabular-nums">{formatCurrency(row.original.value)}</div>,
+  },
+  {
+    accessorKey: "ownerId",
+    header: "Owner",
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <Avatar className="size-6">
+          <AvatarFallback className="rounded-md text-[10px]">
+            {getInitials(getOwnerName(row.original.ownerId))}
+          </AvatarFallback>
+        </Avatar>
+        <span className="text-sm text-muted-foreground">{getOwnerName(row.original.ownerId)}</span>
+      </div>
+    ),
   },
   {
     id: "actions",

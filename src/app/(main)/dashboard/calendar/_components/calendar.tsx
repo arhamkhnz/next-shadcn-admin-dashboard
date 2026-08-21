@@ -8,15 +8,73 @@ import interactionPlugin from "@fullcalendar/react/interaction";
 import listPlugin from "@fullcalendar/react/list";
 import multiMonthPlugin from "@fullcalendar/react/multimonth";
 import timeGridPlugin from "@fullcalendar/react/timegrid";
-import { differenceInCalendarDays, endOfMonth, format, startOfMonth } from "date-fns";
+import { differenceInCalendarDays, endOfMonth, format, parseISO, startOfMonth } from "date-fns";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, XIcon } from "lucide-react";
 
+import type { Activity } from "@/app/(main)/dashboard/crm/_components/activities/activity-schema";
+import { getScheduleState, getTaskDueAt } from "@/app/(main)/dashboard/crm/_components/activities/activity-utils";
 import { EventCalendarViews } from "@/components/calendar/event-calendar-views";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+import { useActivityStore } from "../../crm/_components/activities/use-activity-store";
 import { demoEvents } from "./events-data";
+
+const today = new Date(2026, 7, 16);
+
+interface CalendarTaskEvent {
+  id: string;
+  title: string;
+  start: Date;
+  allDay: boolean;
+  url: string;
+  backgroundColor: string;
+  borderColor: string;
+  textColor: string;
+}
+
+function buildTaskCalendarEvents(tasks: Activity[]): CalendarTaskEvent[] {
+  const openColors = {
+    backgroundColor: "var(--color-sky-500)",
+    borderColor: "var(--color-sky-600)",
+    textColor: "white",
+  };
+  const overdueColors = {
+    backgroundColor: "var(--color-red-500)",
+    borderColor: "var(--color-red-600)",
+    textColor: "white",
+  };
+  const completedColors = {
+    backgroundColor: "var(--color-emerald-500)",
+    borderColor: "var(--color-emerald-600)",
+    textColor: "white",
+  };
+
+  return tasks
+    .filter((task) => task.status !== "Canceled")
+    .map((task) => {
+      if (task.status === "Completed") {
+        return {
+          id: task.id,
+          title: `${task.title} (Completed)`,
+          start: task.completedAt ? parseISO(task.completedAt) : parseISO(getTaskDueAt(task)),
+          allDay: true,
+          url: `/dashboard/crm/tasks/${task.id}`,
+          ...completedColors,
+        };
+      }
+      const overdue = getScheduleState(task, today) === "Overdue";
+      return {
+        id: task.id,
+        title: task.title,
+        start: parseISO(getTaskDueAt(task)),
+        allDay: false,
+        url: `/dashboard/crm/tasks/${task.id}`,
+        ...(overdue ? overdueColors : openColors),
+      };
+    });
+}
 
 const views = [
   { key: "dayGridMonth", label: "Month" },
@@ -36,14 +94,19 @@ const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, m
 
 export function Calendar() {
   const controller = useCalendarController();
+  const activities = useActivityStore((s) => s.activities);
   const [eventCount, setEventCount] = React.useState(0);
   const [selectedCalendar, setSelectedCalendar] = React.useState(calendars[0].key);
-  const [dateInfo, setDateInfo] = React.useState(() => {
-    const now = new Date();
 
+  const taskEvents = React.useMemo(
+    () => buildTaskCalendarEvents(activities.filter((a) => a.type === "Task")),
+    [activities],
+  );
+  const allEvents = React.useMemo(() => [...demoEvents, ...taskEvents], [taskEvents]);
+  const [dateInfo, setDateInfo] = React.useState(() => {
     return {
-      title: format(now, "MMMM yyyy"),
-      days: differenceInCalendarDays(endOfMonth(now), startOfMonth(now)) + 1,
+      title: format(today, "MMMM yyyy"),
+      days: differenceInCalendarDays(endOfMonth(today), startOfMonth(today)) + 1,
     };
   });
   const title = dateInfo.title;
@@ -76,13 +139,13 @@ export function Calendar() {
             </SelectContent>
           </Select>
           <ButtonGroup>
-            <Button size="icon" variant="outline" onClick={() => controller.prev()}>
+            <Button size="icon" variant="outline" aria-label="Previous period" onClick={() => controller.prev()}>
               <ChevronLeft />
             </Button>
             <Button variant="outline" onClick={() => controller.today()}>
               Today
             </Button>
-            <Button size="icon" variant="outline" onClick={() => controller.next()}>
+            <Button size="icon" variant="outline" aria-label="Next period" onClick={() => controller.next()}>
               <ChevronRight />
             </Button>
           </ButtonGroup>
@@ -115,9 +178,16 @@ export function Calendar() {
       <EventCalendarViews
         controller={controller}
         initialView={views[0].key}
+        initialDate={today}
         plugins={[...plugins]}
         popoverCloseContent={() => <XIcon className="size-5 text-muted-foreground group-hover:text-foreground" />}
-        events={demoEvents}
+        events={allEvents}
+        eventClick={(info) => {
+          if (info.event.url) {
+            info.jsEvent.preventDefault();
+            window.location.href = info.event.url;
+          }
+        }}
         nowIndicator
         datesSet={(info) => {
           setDateInfo({
@@ -125,7 +195,7 @@ export function Calendar() {
             days: differenceInCalendarDays(info.view.currentEnd, info.view.currentStart),
           });
           setEventCount(
-            demoEvents.filter((event) => {
+            allEvents.filter((event) => {
               const start = new Date(event.start);
 
               return start >= info.start && start < info.end;

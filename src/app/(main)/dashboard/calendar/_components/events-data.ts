@@ -1,7 +1,8 @@
 import { setDate, setHours, setMinutes, startOfMonth } from "date-fns";
 
-const monthStart = startOfMonth(new Date());
-const currentYear = new Date().getFullYear();
+const MOCK_DATA_ANCHOR = new Date(2026, 7, 16);
+const monthStart = startOfMonth(MOCK_DATA_ANCHOR);
+const currentYear = MOCK_DATA_ANCHOR.getFullYear();
 const d = (day: number) => setDate(monthStart, day);
 const dt = (day: number, hour: number, min = 0) => setMinutes(setHours(setDate(monthStart, day), hour), min);
 
