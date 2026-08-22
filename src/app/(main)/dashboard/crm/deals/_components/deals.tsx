@@ -11,14 +11,27 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   type RowSelectionState,
-  type SortingState,
   useReactTable,
-  type VisibilityState,
 } from "@tanstack/react-table";
-import { Columns3Icon, LayoutGridIcon, PlusIcon, Search, X } from "lucide-react";
+import { Columns3Icon, LayoutGridIcon, PlusIcon, Search, Settings2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { currentSalesOwnerId, getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { ColumnResizeHandle, ConfigurableColumnHeader } from "@/components/crm/table-engine/configurable-column-header";
+import { CustomFieldDialog } from "@/components/crm/table-engine/custom-field-dialog";
+import {
+  type ActiveDynamicFilter,
+  AddCustomFilterMenu,
+  DynamicFilterControl,
+} from "@/components/crm/table-engine/dynamic-filter-controls";
+import { ManageFieldsSheet } from "@/components/crm/table-engine/manage-fields-sheet";
+import {
+  selectActiveView,
+  selectEntityViews,
+  useEntityTableFields,
+} from "@/components/crm/table-engine/use-crm-entity-table";
+import { useCommitResizedColumnWidths, useCrmTableColumns } from "@/components/crm/table-engine/use-crm-table-columns";
+import { ViewsMenu } from "@/components/crm/table-engine/views-menu";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
@@ -35,6 +48,16 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { matchesViewFilters, orderFieldsForView } from "@/lib/crm-table-engine/column-adapter";
+import { recordMatchesSearch } from "@/lib/crm-table-engine/filter-evaluator";
+import {
+  type CustomFieldType,
+  FILTERABLE_FIELD_TYPES,
+  type FilterRule,
+  fieldHasValues,
+  type TableField,
+} from "@/lib/crm-table-engine/types";
+import { useCrmConfigStore } from "@/lib/crm-table-engine/use-crm-config-store";
 
 import { BulkAddTagDialog } from "./bulk-add-tag-dialog";
 import { BulkAssignOwnerDialog } from "./bulk-assign-owner-dialog";
@@ -43,23 +66,13 @@ import { DealArchiveRestoreDialog } from "./deal-archive-restore-dialog";
 import { DealForm } from "./deal-form";
 import { DealPipeline } from "./deal-pipeline";
 import { ChangeStageDialog, MarkLostDialog, MarkWonDialog, ReopenDealDialog } from "./deal-workflows";
-import { getDealsColumns } from "./deals-columns";
+import { getDealsActionsColumn, getDealsSelectColumn, renderDealFieldCell } from "./deals-columns";
+import { resolveDealFieldValue } from "./deals-config/deal-value-resolvers";
 import { healthOptions, priorityOptions, sourceOptions, stageOptions } from "./deals-data/data";
 import type { Deal, DealStage } from "./deals-data/schema";
 import { useDealStore } from "./deals-data/use-deal-store";
 
 const today = new Date(2026, 7, 16);
-
-const savedViews = [
-  { id: "all", label: "All Deals" },
-  { id: "mine", label: "My Deals" },
-  { id: "open", label: "Open Deals" },
-  { id: "closing", label: "Closing This Month" },
-  { id: "overdue", label: "Overdue" },
-  { id: "won", label: "Closed Won" },
-  { id: "lost", label: "Closed Lost" },
-  { id: "archived", label: "Archived" },
-] as const;
 
 function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>) {
   event.preventDefault();
@@ -76,69 +89,97 @@ function isOpen(stage: DealStage): boolean {
   return stage !== "Closed Won" && stage !== "Closed Lost";
 }
 
-function isClosingThisMonth(deal: Deal): boolean {
-  if (!deal.expectedCloseDate) return false;
-  const close = new Date(deal.expectedCloseDate);
-  return close.getMonth() === today.getMonth() && close.getFullYear() === today.getFullYear() && isOpen(deal.stage);
+function normalizeInRuleOptions(value: string | number | string[] | undefined): string[] {
+  if (Array.isArray(value)) return value;
+  if (value === undefined || value === "") return [];
+  return [String(value)];
 }
 
-function isOverdue(deal: Deal): boolean {
-  if (!deal.expectedCloseDate) return false;
-  return new Date(deal.expectedCloseDate).getTime() < today.getTime() && isOpen(deal.stage);
+function defaultOperatorForType(type: TableField["type"]): "isTrue" | "equals" | "in" | "gte" {
+  if (type === "checkbox") return "isTrue";
+  if (type === "single_select") return "equals";
+  if (type === "multi_select") return "in";
+  return "gte";
+}
+
+function ariaSortValue(direction: false | "asc" | "desc"): "ascending" | "descending" | undefined {
+  if (direction === "asc") return "ascending";
+  if (direction === "desc") return "descending";
+  return undefined;
+}
+
+function ManageFieldsTrigger({ onClick }: { onClick: () => void }) {
+  return (
+    <Button variant="outline" size="sm" className="h-7 text-xs" onClick={onClick}>
+      <Settings2 className="size-3.5" />
+      Manage Fields
+    </Button>
+  );
 }
 
 function applyFilters(
   allDeals: Deal[],
   params: {
-    view: string;
+    viewFilterRules: FilterRule[] | null;
+    fields: TableField[];
     search: string;
     stage: string;
     health: string;
     priority: string;
     owner: string;
     source: string;
+    dynamicFilters: ActiveDynamicFilter[];
   },
 ): Deal[] {
   let result = [...allDeals];
 
-  const isArchivedView = params.view === "archived";
-
-  if (isArchivedView) {
-    result = result.filter((d) => Boolean(d.archivedAt));
-  } else {
-    result = result.filter((d) => !d.archivedAt);
+  if (params.viewFilterRules) {
+    result = result.filter((d) =>
+      matchesViewFilters(d, params.viewFilterRules ?? [], resolveDealFieldValue, currentSalesOwnerId),
+    );
   }
 
-  switch (params.view) {
-    case "mine":
-      result = result.filter((d) => d.ownerId === currentSalesOwnerId);
-      break;
-    case "open":
-      result = result.filter((d) => isOpen(d.stage));
-      break;
-    case "closing":
-      result = result.filter((d) => isClosingThisMonth(d));
-      break;
-    case "overdue":
-      result = result.filter((d) => isOverdue(d));
-      break;
-    case "won":
-      result = result.filter((d) => d.stage === "Closed Won");
-      break;
-    case "lost":
-      result = result.filter((d) => d.stage === "Closed Lost");
-      break;
+  for (const dynamicFilter of params.dynamicFilters) {
+    const value = dynamicFilter.value;
+    result = result.filter((d) => {
+      const resolved = resolveDealFieldValue(d, dynamicFilter.fieldKey);
+      switch (dynamicFilter.operator) {
+        case "equals":
+          return String(resolved ?? "").toLowerCase() === String(value ?? "").toLowerCase();
+        case "notEquals":
+          return String(resolved ?? "").toLowerCase() !== String(value ?? "").toLowerCase();
+        case "gt":
+        case "gte":
+        case "lt":
+        case "lte": {
+          const left = Number(resolved);
+          const right = Number(value);
+          if (Number.isNaN(left) || Number.isNaN(right)) return false;
+          if (dynamicFilter.operator === "gt") return left > right;
+          if (dynamicFilter.operator === "gte") return left >= right;
+          if (dynamicFilter.operator === "lt") return left < right;
+          return left <= right;
+        }
+        case "isTrue":
+          return resolved === true;
+        case "isFalse":
+          return resolved === false || resolved === undefined || resolved === null;
+        case "in": {
+          const options = normalizeInRuleOptions(value);
+          if (options.length === 0) return true;
+          if (Array.isArray(resolved)) {
+            return resolved.some((entry) => options.includes(String(entry)));
+          }
+          return options.includes(String(resolved));
+        }
+        default:
+          return true;
+      }
+    });
   }
 
   if (params.search) {
-    const q = params.search.toLowerCase();
-    result = result.filter(
-      (d) =>
-        d.name.toLowerCase().includes(q) ||
-        d.stage.toLowerCase().includes(q) ||
-        d.source.toLowerCase().includes(q) ||
-        (d.tags ?? []).some((t) => t.toLowerCase().includes(q)),
-    );
+    result = result.filter((d) => recordMatchesSearch(d, params.search, params.fields, resolveDealFieldValue));
   }
 
   if (params.stage !== "All") {
@@ -170,25 +211,34 @@ function applyFilters(
 
 export function Deals() {
   const deals = useDealStore((s) => s.deals);
+  const setDealCustomFieldValue = useDealStore((s) => s.setDealCustomFieldValue);
   const searchParams = useSearchParams();
   const initialViewMode = searchParams.get("view") === "pipeline" ? "pipeline" : "list";
   const initialStageParam = searchParams.get("stage");
   const initialStage =
     initialStageParam && stageOptions.includes(initialStageParam as DealStage) ? initialStageParam : "All";
   const [viewMode, setViewMode] = React.useState<"list" | "pipeline">(initialViewMode);
+
+  const fields = useEntityTableFields("deal");
+  const allViews = useCrmConfigStore((s) => s.views);
+  const activeViewId = useCrmConfigStore((s) => s.activeViewIds.deal);
+  const entityViews = React.useMemo(() => selectEntityViews(allViews, "deal"), [allViews]);
+  const activeView = React.useMemo(() => selectActiveView(allViews, "deal", activeViewId), [allViews, activeViewId]);
+  const setActiveViewId = useCrmConfigStore((s) => s.setActiveView);
+  const updateViewPresentation = useCrmConfigStore((s) => s.updateViewPresentation);
+  const moveField = useCrmConfigStore((s) => s.moveField);
+  const renameFieldLabel = useCrmConfigStore((s) => s.renameFieldLabel);
+  const restoreFieldDefaultLabel = useCrmConfigStore((s) => s.restoreFieldDefaultLabel);
+  const archiveConfigField = useCrmConfigStore((s) => s.archiveField);
+
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [activeView, setActiveView] = React.useState("all");
   const [stageFilter, setStageFilter] = React.useState<string>(initialStage);
   const [healthFilter, setHealthFilter] = React.useState<string>("All");
   const [priorityFilter, setPriorityFilter] = React.useState<string>("All");
   const [ownerFilter, setOwnerFilter] = React.useState<string>("All");
   const [sourceFilter, setSourceFilter] = React.useState<string>("All");
+  const [dynamicFilters, setDynamicFilters] = React.useState<ActiveDynamicFilter[]>([]);
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
-  const [sorting, setSorting] = React.useState<SortingState>([{ id: "name", desc: true }]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    search: false,
-    lastActivityDate: false,
-  });
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
   const [addSheetOpen, setAddSheetOpen] = React.useState(false);
   const [editDeal, setEditDeal] = React.useState<Deal | null>(null);
@@ -203,6 +253,10 @@ export function Deals() {
   const [bulkAssignOwnerOpen, setBulkAssignOwnerOpen] = React.useState(false);
   const [bulkChangeStageOpen, setBulkChangeStageOpen] = React.useState(false);
   const [bulkAddTagOpen, setBulkAddTagOpen] = React.useState(false);
+  const [manageFieldsOpen, setManageFieldsOpen] = React.useState(false);
+  const [fieldDialogOpen, setFieldDialogOpen] = React.useState(false);
+  const [dialogField, setDialogField] = React.useState<TableField | null>(null);
+  const [dialogInitialType, setDialogInitialType] = React.useState<CustomFieldType>("text");
 
   const archiveDeal = useDealStore((s) => s.archiveDeal);
   const restoreDeal = useDealStore((s) => s.restoreDeal);
@@ -213,9 +267,82 @@ export function Deals() {
   const bulkChangeStage = useDealStore((s) => s.bulkChangeStage);
   const bulkAddTag = useDealStore((s) => s.bulkAddTag);
 
-  const columns = React.useMemo(
+  const orderedFieldKeys = React.useMemo(
+    () => orderFieldsForView(fields, activeView).map((f) => f.key),
+    [fields, activeView],
+  );
+
+  const filterableCustomFields = React.useMemo(
+    () => fields.filter((f) => !f.isCore && FILTERABLE_FIELD_TYPES.includes(f.type)),
+    [fields],
+  );
+
+  const dialogHasValues = React.useMemo(
     () =>
-      getDealsColumns({
+      dialogField
+        ? fieldHasValues({ records: deals ?? [], fieldKey: dialogField.key, resolveValue: resolveDealFieldValue })
+        : false,
+    [dialogField, deals],
+  );
+
+  const handleCommitCustomValue = React.useCallback(
+    (deal: Deal, field: TableField, value: NonNullable<Deal["customFields"]>[string]) => {
+      setDealCustomFieldValue(deal.id, field.systemName, value);
+    },
+    [setDealCustomFieldValue],
+  );
+
+  const columnHeaderActions = React.useMemo(() => {
+    return {
+      onSort: (field: TableField, direction: "asc" | "desc") =>
+        updateViewPresentation(activeView?.id ?? "", { sortRules: [{ fieldKey: field.key, direction }] }),
+      onRename: (field: TableField, label: string) => renameFieldLabel(field.id, label),
+      onMove: (field: TableField, direction: "left" | "right") => moveField("deal", field.key, direction),
+      onHide: (field: TableField) =>
+        updateViewPresentation(activeView?.id ?? "", {
+          columnVisibility: { ...(activeView?.columnVisibility ?? {}), [field.key]: false },
+        }),
+      onEditField: (field: TableField) => {
+        setDialogField(field);
+        setDialogInitialType(field.type);
+        setFieldDialogOpen(true);
+      },
+      onArchiveField: (field: TableField) => {
+        archiveConfigField(field.id);
+        toast(`${field.displayLabel} archived`, {
+          description: "Saved values are preserved and the field can be restored.",
+        });
+      },
+      onRestoreDefaultLabel: (field: TableField) => restoreFieldDefaultLabel(field.id),
+    };
+  }, [activeView, updateViewPresentation, renameFieldLabel, moveField, archiveConfigField, restoreFieldDefaultLabel]);
+
+  const renderHeader = React.useCallback(
+    ({ field }: { field: TableField }) => (
+      <ConfigurableColumnHeader
+        key={field.key}
+        field={field}
+        activeDirection={activeView?.sortRules.find((r) => r.fieldKey === field.key)?.direction ?? null}
+        canMoveLeft={orderedFieldKeys.indexOf(field.key) > 0}
+        canMoveRight={orderedFieldKeys.indexOf(field.key) < orderedFieldKeys.length - 1}
+        labelOverridden={field.displayLabel !== field.defaultLabel}
+        actions={columnHeaderActions}
+      />
+    ),
+    [activeView, orderedFieldKeys, columnHeaderActions],
+  );
+
+  const renderCell = React.useCallback(
+    ({ field, record }: { field: TableField; record: Deal }) =>
+      renderDealFieldCell({ field, deal: record, onCommitCustomValue: handleCommitCustomValue }),
+    [handleCommitCustomValue],
+  );
+
+  const selectColumn = React.useMemo(() => getDealsSelectColumn(), []);
+
+  const actionsColumn = React.useMemo(
+    () =>
+      getDealsActionsColumn({
         onEditDeal: (d) => setEditDeal(d),
         onChangeStage: (d) => setChangeStageDeal(d),
         onMarkWon: (d) => setMarkWonDeal(d),
@@ -231,31 +358,56 @@ export function Deals() {
     [updateDeal],
   );
 
+  const handleCreateField = React.useCallback((type: CustomFieldType) => {
+    setDialogField(null);
+    setDialogInitialType(type);
+    setFieldDialogOpen(true);
+  }, []);
+
+  const { columns, sorting, columnSizing, handleSortingChange, handleColumnSizingChange } = useCrmTableColumns<Deal>({
+    fields,
+    activeView,
+    resolveValue: resolveDealFieldValue,
+    renderHeader,
+    renderCell,
+    selectColumn,
+    actionsColumn,
+    onCreateField: handleCreateField,
+    updateViewPresentation,
+  });
+
+  const isArchivedView = Boolean(activeView?.filterRules.some((rule) => rule.operator === "isArchived")) ?? false;
+
   const filteredDeals = applyFilters(deals, {
-    view: activeView,
+    viewFilterRules: activeView?.filterRules ?? null,
+    fields,
     search: searchQuery,
     stage: stageFilter,
     health: healthFilter,
     priority: priorityFilter,
     owner: ownerFilter,
     source: sourceFilter,
+    dynamicFilters,
   });
 
   const table = useReactTable({
     data: filteredDeals,
     columns,
-    state: { rowSelection, sorting, columnVisibility, pagination },
+    state: { rowSelection, sorting, columnSizing, pagination },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnVisibilityChange: setColumnVisibility,
+    onSortingChange: handleSortingChange,
+    onColumnSizingChange: handleColumnSizingChange,
     onPaginationChange: setPagination,
     getRowId: (row) => row.id,
     autoResetPageIndex: false,
     enableRowSelection: true,
+    columnResizeMode: "onChange",
   });
+
+  useCommitResizedColumnWidths({ table, fields, activeView, updateViewPresentation });
 
   const pageCount = Math.max(table.getPageCount(), 1);
   const currentPage = Math.min(table.getState().pagination.pageIndex + 1, pageCount);
@@ -268,16 +420,19 @@ export function Deals() {
   const openPipelineValue = openDeals.reduce((sum, d) => sum + d.value, 0);
   const wonDeals = filteredDeals.filter((d) => d.stage === "Closed Won");
   const wonValue = wonDeals.reduce((sum, d) => sum + d.value, 0);
-  const overdueDeals = filteredDeals.filter((d) => isOverdue(d));
+  const overdueDeals = filteredDeals.filter(
+    (d) => d.expectedCloseDate && new Date(d.expectedCloseDate).getTime() < today.getTime() && isOpen(d.stage),
+  );
 
   function handleViewChange(viewId: string) {
-    setActiveView(viewId);
+    setActiveViewId("deal", viewId);
     setSearchQuery("");
     setStageFilter("All");
     setHealthFilter("All");
     setPriorityFilter("All");
     setOwnerFilter("All");
     setSourceFilter("All");
+    setDynamicFilters([]);
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     setRowSelection({});
   }
@@ -297,6 +452,7 @@ export function Deals() {
     setPriorityFilter("All");
     setOwnerFilter("All");
     setSourceFilter("All");
+    setDynamicFilters([]);
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }
 
@@ -394,17 +550,19 @@ export function Deals() {
         </section>
 
         <div className="flex flex-wrap items-center gap-2 px-4">
-          {savedViews.map((view) => (
+          {entityViews.map((view) => (
             <Button
               key={view.id}
-              variant={activeView === view.id ? "default" : "outline"}
+              variant={activeView?.id === view.id ? "default" : "outline"}
               size="sm"
               className="h-7 text-xs"
               onClick={() => handleViewChange(view.id)}
             >
-              {view.label}
+              {view.name}
             </Button>
           ))}
+          <ViewsMenu entityType="deal" />
+          <ManageFieldsTrigger onClick={() => setManageFieldsOpen(true)} />
         </div>
 
         <div className="flex flex-wrap items-center gap-3 px-4">
@@ -496,7 +654,39 @@ export function Deals() {
             </SelectContent>
           </Select>
 
-          {activeFilters.length > 0 ? (
+          {filterableCustomFields.length > 0 ? (
+            <AddCustomFilterMenu
+              fields={filterableCustomFields}
+              disabledKeys={new Set(dynamicFilters.map((f) => f.fieldKey))}
+              onAdd={(field) => {
+                const operator = defaultOperatorForType(field.type);
+                setDynamicFilters((prev) => [
+                  ...prev,
+                  {
+                    id: `df-${Date.now().toString(36)}-${prev.length}`,
+                    fieldKey: field.key,
+                    fieldLabel: field.displayLabel,
+                    fieldType: field.type,
+                    options: field.options,
+                    operator,
+                  },
+                ]);
+              }}
+            />
+          ) : null}
+
+          {dynamicFilters.map((filter) => (
+            <DynamicFilterControl
+              key={filter.id}
+              filter={filter}
+              onPatch={(patch) =>
+                setDynamicFilters((prev) => prev.map((f) => (f.id === filter.id ? { ...f, ...patch } : f)))
+              }
+              onRemove={() => setDynamicFilters((prev) => prev.filter((f) => f.id !== filter.id))}
+            />
+          ))}
+
+          {activeFilters.length > 0 || dynamicFilters.length > 0 ? (
             <Button variant="ghost" size="sm" className="h-7 gap-1 text-muted-foreground" onClick={clearAllFilters}>
               <X className="size-3" />
               Clear All
@@ -532,7 +722,7 @@ export function Deals() {
               >
                 Add Tag
               </Button>
-              {activeView === "archived" ? (
+              {isArchivedView ? (
                 <Button variant="outline" size="sm" onClick={() => setBulkRestoreOpen(true)}>
                   Restore
                 </Button>
@@ -549,14 +739,30 @@ export function Deals() {
           <>
             <div>
               <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4">
+                <colgroup>
+                  {table.getVisibleLeafColumns().map((column) => (
+                    <col key={column.id} style={{ width: table.getColumn(column.id)?.getSize() }} />
+                  ))}
+                </colgroup>
                 <TableHeader className="[&_tr]:border-t">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
-                        <TableHead key={header.id} className="py-4 font-normal">
+                        <TableHead
+                          key={header.id}
+                          aria-sort={ariaSortValue(header.column.getIsSorted())}
+                          className="relative select-none py-4 font-normal"
+                        >
                           {header.isPlaceholder
                             ? null
                             : flexRender(header.column.columnDef.header, header.getContext())}
+                          {header.column.getCanResize() ? (
+                            <ColumnResizeHandle
+                              onMouseDown={header.getResizeHandler()}
+                              onTouchStart={header.getResizeHandler()}
+                              isResizing={header.column.getIsResizing()}
+                            />
+                          ) : null}
                         </TableHead>
                       ))}
                     </TableRow>
@@ -700,6 +906,26 @@ export function Deals() {
           </div>
         )}
       </CardContent>
+
+      <CustomFieldDialog
+        open={fieldDialogOpen}
+        onOpenChange={setFieldDialogOpen}
+        entityType="deal"
+        field={dialogField}
+        initialType={dialogInitialType}
+        hasValues={dialogHasValues}
+      />
+      <ManageFieldsSheet
+        open={manageFieldsOpen}
+        onOpenChange={setManageFieldsOpen}
+        entityType="deal"
+        onEditField={(field) => {
+          setDialogField(field);
+          setDialogInitialType(field.type);
+          setFieldDialogOpen(true);
+        }}
+      />
+
       <DealForm open={addSheetOpen} onOpenChange={setAddSheetOpen} />
       <DealForm
         open={Boolean(editDeal)}

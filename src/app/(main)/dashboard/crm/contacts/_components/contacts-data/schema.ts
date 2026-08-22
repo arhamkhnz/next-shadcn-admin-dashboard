@@ -1,5 +1,7 @@
 import z from "zod";
 
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
+
 export const contactLifecycleStageSchema = z.enum([
   "Subscriber",
   "Lead",
@@ -124,6 +126,7 @@ export const contactSchema = z.object({
   relatedDeals: z.array(contactDealSchema).optional(),
   archivedAt: z.string().nullable().optional(),
   archivedBy: z.string().nullable().optional(),
+  customFields: z.record(z.string(), customFieldValueSchema).optional(),
 });
 
 export type Contact = z.infer<typeof contactSchema>;

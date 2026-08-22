@@ -27,6 +27,7 @@ import {
   getRelatedRecords,
   getScheduleState,
 } from "@/app/(main)/dashboard/crm/_components/activities/activity-utils";
+import { CustomFieldsCard } from "@/components/crm/table-engine/custom-fields-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -221,6 +222,8 @@ export function ActivityDetail({ activityId }: { activityId: string }) {
 
           {/* Right sidebar */}
           <div className="flex flex-col gap-4 lg:gap-6">
+            <CustomFieldsCard entityType="activity" pluralLabel="Activities" values={activity.customFields} />
+
             <Card>
               <CardHeader>
                 <CardTitle>Details</CardTitle>

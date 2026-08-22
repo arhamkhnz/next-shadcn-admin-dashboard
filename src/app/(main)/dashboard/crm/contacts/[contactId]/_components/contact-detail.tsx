@@ -35,6 +35,7 @@ import {
 import { useActivityStore } from "@/app/(main)/dashboard/crm/_components/activities/use-activity-store";
 import { currentSalesOwnerId, getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
 import { ContactArchiveRestoreDialog } from "@/app/(main)/dashboard/crm/contacts/_components/contact-archive-restore-dialog";
+import { CustomFieldsCard } from "@/components/crm/table-engine/custom-fields-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -726,6 +727,8 @@ export function ContactDetail({ contactId }: { contactId: string }) {
               </CardContent>
             </Card>
           )}
+
+          <CustomFieldsCard entityType="contact" pluralLabel="Contacts" values={contact.customFields} />
 
           <Card>
             <CardHeader>

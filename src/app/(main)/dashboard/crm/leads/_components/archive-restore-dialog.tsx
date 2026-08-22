@@ -17,11 +17,21 @@ type ArchiveRestoreDialogProps = {
   mode: "archive" | "restore";
   count: number;
   onConfirm: () => void;
+  entitySingularLabel?: string;
+  entityPluralLabel?: string;
 };
 
-export function ArchiveRestoreDialog({ open, onOpenChange, mode, count, onConfirm }: ArchiveRestoreDialogProps) {
+export function ArchiveRestoreDialog({
+  open,
+  onOpenChange,
+  mode,
+  count,
+  onConfirm,
+  entitySingularLabel = "lead",
+  entityPluralLabel = "leads",
+}: ArchiveRestoreDialogProps) {
   const isArchive = mode === "archive";
-  const label = count === 1 ? "lead" : "leads";
+  const label = count === 1 ? entitySingularLabel : entityPluralLabel;
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>

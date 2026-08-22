@@ -1965,6 +1965,40 @@ export const leads: Lead[] = [
   },
 ];
 
+const leadCustomFieldValueSeed: Record<string, Lead["customFields"]> = {
+  "lead-001": { budget: 85000, interested_product: "Core Platform", decision_maker: true },
+  "lead-002": { budget: 42000, interested_product: "Fleet Management Platform", decision_maker: false },
+  "lead-004": { budget: 150000, interested_product: "Fleet Management Platform", decision_maker: true },
+  "lead-005": { interested_product: "Property Listing Suite", budget: 120000 },
+  "lead-007": { interested_product: "Recruitment Hub", decision_maker: true, contract_renewal_date: daysAhead(45) },
+  "lead-010": { budget: 65000, contract_renewal_date: daysAhead(12) },
+  "lead-011": { interested_product: "Property Listing Suite", budget: 96000, decision_maker: false },
+  "lead-014": { budget: 240000, interested_product: "Fleet Management Platform", decision_maker: true },
+  "lead-016": { interested_product: "Recruitment Hub", budget: 38000 },
+  "lead-019": { decision_maker: true, contract_renewal_date: daysAgo(20) },
+  "lead-022": { budget: 110000, interested_product: "Core Platform" },
+  "lead-025": { interested_product: "Property Listing Suite", budget: 175000, decision_maker: true },
+  "lead-028": { contract_renewal_date: daysAhead(90), decision_maker: false },
+  "lead-031": { budget: 54000, interested_product: "Recruitment Hub" },
+  "lead-036": { budget: 300000, interested_product: "Fleet Management Platform", decision_maker: true },
+  "lead-040": { interested_product: "Core Platform", contract_renewal_date: daysAhead(7) },
+  "lead-043": { budget: 72000, decision_maker: true },
+  "lead-048": { interested_product: "Property Listing Suite", budget: 132500 },
+  "lead-052": { budget: 28000, interested_product: "Recruitment Hub", decision_maker: false },
+  "lead-057": { budget: 98000, interested_product: "Fleet Management Platform" },
+  "lead-063": { contract_renewal_date: daysAhead(30), interested_product: "Core Platform", decision_maker: true },
+  "lead-068": { budget: 210000, interested_product: "Property Listing Suite" },
+  "lead-074": { interested_product: "Recruitment Hub", budget: 61000, decision_maker: true },
+  "lead-081": { budget: 45000, contract_renewal_date: daysAhead(60) },
+};
+
+for (const lead of leads) {
+  const seed = leadCustomFieldValueSeed[lead.id];
+  if (seed) {
+    lead.customFields = seed;
+  }
+}
+
 export const statusOptions: readonly LeadStatus[] = [
   "New",
   "Contacted",

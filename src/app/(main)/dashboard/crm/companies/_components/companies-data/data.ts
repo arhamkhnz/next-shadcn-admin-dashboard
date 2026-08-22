@@ -1991,3 +1991,21 @@ export const industryOptions: readonly CompanyIndustry[] = [
 ] as const;
 
 export const sizeOptions: readonly CompanySize[] = ["1-10", "11-50", "51-200", "201-500", "501-1000", "1001+"] as const;
+
+const companyCustomFieldValueSeed: Record<string, Company["customFields"]> = {
+  c1: { business_model: "B2B SaaS", annual_revenue: 48000000, renewal_month: "March" },
+  c2: { business_model: "Hardware", annual_revenue: 125000000, renewal_month: "July" },
+  c3: { business_model: "B2B SaaS", renewal_month: "September" },
+  c4: { business_model: "Professional Services", annual_revenue: 74000000 },
+  c5: { business_model: "Marketplace", annual_revenue: 31000000, renewal_month: "January" },
+  c6: { business_model: "Professional Services" },
+  c7: { business_model: "E-commerce", annual_revenue: 9500000, renewal_month: "November" },
+  c9: { business_model: "B2B SaaS", renewal_month: "June" },
+};
+
+for (const company of companies) {
+  const seed = companyCustomFieldValueSeed[company.id];
+  if (seed) {
+    company.customFields = seed;
+  }
+}

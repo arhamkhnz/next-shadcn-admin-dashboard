@@ -1,7 +1,11 @@
 import { create } from "zustand";
 
+import type { CustomFieldValueRecord } from "@/lib/crm-table-engine/value-schema";
+
 import { deals as mockDeals } from "./data";
 import type { Deal, DealStage } from "./schema";
+
+type DealCustomValue = NonNullable<Deal["customFields"]>[string];
 
 type DealStore = {
   deals: Deal[];
@@ -15,6 +19,9 @@ type DealStore = {
   bulkAssignOwner: (ids: string[], ownerId: string) => void;
   bulkChangeStage: (ids: string[], stage: DealStage, probability: number) => void;
   bulkAddTag: (ids: string[], tag: string) => void;
+  setDealCustomFieldValue: (id: string, systemName: string, value: DealCustomValue) => void;
+  setMultipleDealCustomFieldValues: (id: string, values: CustomFieldValueRecord) => void;
+  clearDealCustomFieldValue: (id: string, systemName: string) => void;
 };
 
 export const useDealStore = create<DealStore>((set, get) => ({
@@ -70,6 +77,45 @@ export const useDealStore = create<DealStore>((set, get) => ({
     set((state) => ({
       deals: state.deals.map((d) =>
         ids.includes(d.id) ? { ...d, tags: [...(d.tags ?? []), tag], updatedAt: new Date().toISOString() } : d,
+      ),
+    })),
+
+  setDealCustomFieldValue: (id, systemName, value) =>
+    set((state) => ({
+      deals: state.deals.map((d) =>
+        d.id === id
+          ? {
+              ...d,
+              updatedAt: new Date().toISOString(),
+              customFields: { ...(d.customFields ?? {}), [systemName]: value },
+            }
+          : d,
+      ),
+    })),
+
+  setMultipleDealCustomFieldValues: (id, values) =>
+    set((state) => ({
+      deals: state.deals.map((d) =>
+        d.id === id
+          ? {
+              ...d,
+              updatedAt: new Date().toISOString(),
+              customFields: { ...(d.customFields ?? {}), ...values },
+            }
+          : d,
+      ),
+    })),
+
+  clearDealCustomFieldValue: (id, systemName) =>
+    set((state) => ({
+      deals: state.deals.map((d) =>
+        d.id === id && d.customFields
+          ? {
+              ...d,
+              updatedAt: new Date().toISOString(),
+              customFields: Object.fromEntries(Object.entries(d.customFields).filter(([key]) => key !== systemName)),
+            }
+          : d,
       ),
     })),
 }));

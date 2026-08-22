@@ -37,6 +37,7 @@ import { useActivityStore } from "@/app/(main)/dashboard/crm/_components/activit
 import { currentSalesOwnerId, getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
 import { useCompanyStore } from "@/app/(main)/dashboard/crm/companies/_components/companies-data/use-company-store";
 import { useContactStore } from "@/app/(main)/dashboard/crm/contacts/_components/contacts-data/use-contact-store";
+import { CustomFieldsCard } from "@/components/crm/table-engine/custom-fields-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -729,6 +730,8 @@ export function DealDetail({ dealId }: { dealId: string }) {
           {/* Right sidebar */}
           <div className="flex flex-col gap-4 lg:gap-6">
             {/* Deal information */}
+            <CustomFieldsCard entityType="deal" pluralLabel="Deals" values={deal.customFields} />
+
             <Card>
               <CardHeader>
                 <CardTitle>Deal Information</CardTitle>

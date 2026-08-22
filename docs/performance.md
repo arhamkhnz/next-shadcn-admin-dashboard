@@ -1,6 +1,6 @@
 # Performance
 
-Principles and checklist for keeping Studio Admin fast. This is a client-heavy admin dashboard, so the biggest levers are bundle size, avoiding hydration work, and not re-rendering unnecessarily.
+Principles and checklist for keeping LynxMind fast. This is a client-heavy admin dashboard, so the biggest levers are bundle size, avoiding hydration work, and not re-rendering unnecessarily.
 
 ## What is already in place
 

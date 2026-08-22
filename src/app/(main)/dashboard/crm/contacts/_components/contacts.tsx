@@ -9,15 +9,28 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   type RowSelectionState,
-  type SortingState,
   useReactTable,
-  type VisibilityState,
 } from "@tanstack/react-table";
-import { differenceInCalendarDays, parseISO, startOfQuarter, startOfYear, subDays } from "date-fns";
-import { Search, UserPlus, X } from "lucide-react";
+import { parseISO, startOfQuarter, startOfYear, subDays } from "date-fns";
+import { Search, Settings2, UserPlus, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { currentSalesOwnerId, getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { ColumnResizeHandle, ConfigurableColumnHeader } from "@/components/crm/table-engine/configurable-column-header";
+import { CustomFieldDialog } from "@/components/crm/table-engine/custom-field-dialog";
+import {
+  type ActiveDynamicFilter,
+  AddCustomFilterMenu,
+  DynamicFilterControl,
+} from "@/components/crm/table-engine/dynamic-filter-controls";
+import { ManageFieldsSheet } from "@/components/crm/table-engine/manage-fields-sheet";
+import {
+  selectActiveView,
+  selectEntityViews,
+  useEntityTableFields,
+} from "@/components/crm/table-engine/use-crm-entity-table";
+import { useCommitResizedColumnWidths, useCrmTableColumns } from "@/components/crm/table-engine/use-crm-table-columns";
+import { ViewsMenu } from "@/components/crm/table-engine/views-menu";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
@@ -34,31 +47,64 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { matchesViewFilters, orderFieldsForView } from "@/lib/crm-table-engine/column-adapter";
+import { recordMatchesSearch } from "@/lib/crm-table-engine/filter-evaluator";
+import {
+  type CustomFieldType,
+  FILTERABLE_FIELD_TYPES,
+  type FilterRule,
+  fieldHasValues,
+  type TableField,
+} from "@/lib/crm-table-engine/types";
+import { useCrmConfigStore } from "@/lib/crm-table-engine/use-crm-config-store";
 
 import { ContactArchiveRestoreDialog } from "./contact-archive-restore-dialog";
 import { ContactForm } from "./contact-form";
-import { getContactsColumns, getFollowUpState } from "./contacts-columns";
+import {
+  getContactsActionsColumn,
+  getContactsSelectColumn,
+  getFollowUpState,
+  renderContactFieldCell,
+} from "./contacts-columns";
+import { resolveContactFieldValue } from "./contacts-config/contact-value-resolvers";
 import { lifecycleStageOptions, openDealStateOptions } from "./contacts-data/data";
 import type { Contact } from "./contacts-data/schema";
 import { useContactStore } from "./contacts-data/use-contact-store";
 
 const today = new Date(2026, 7, 16);
 
-const savedViews = [
-  { id: "all", label: "All Contacts" },
-  { id: "mine", label: "My Contacts" },
-  { id: "customer", label: "Customers" },
-  { id: "prospect", label: "Prospects" },
-  { id: "deals", label: "Open Deals" },
-  { id: "followup", label: "Needs Follow-up" },
-  { id: "inactive", label: "No Recent Activity" },
-  { id: "archived", label: "Archived" },
-] as const;
-
 const createdDateOptions = ["All", "Today", "This Week", "This Month", "This Quarter", "This Year", "Older"] as const;
 
 function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>) {
   event.preventDefault();
+}
+
+function normalizeInRuleOptions(value: string | number | string[] | undefined): string[] {
+  if (Array.isArray(value)) return value;
+  if (value === undefined || value === "") return [];
+  return [String(value)];
+}
+
+function defaultOperatorForType(type: TableField["type"]): "isTrue" | "equals" | "in" | "gte" {
+  if (type === "checkbox") return "isTrue";
+  if (type === "single_select") return "equals";
+  if (type === "multi_select") return "in";
+  return "gte";
+}
+
+function ariaSortValue(direction: false | "asc" | "desc"): "ascending" | "descending" | undefined {
+  if (direction === "asc") return "ascending";
+  if (direction === "desc") return "descending";
+  return undefined;
+}
+
+function ManageFieldsTrigger({ onClick }: { onClick: () => void }) {
+  return (
+    <Button variant="outline" size="sm" className="h-7 text-xs" onClick={onClick}>
+      <Settings2 className="size-3.5" />
+      Manage Fields
+    </Button>
+  );
 }
 
 function getPageNumbers(currentPage: number, pageCount: number) {
@@ -70,64 +116,65 @@ function getPageNumbers(currentPage: number, pageCount: number) {
 
 function applyFilters(params: {
   contacts: Contact[];
-  view: string;
+  viewFilterRules: FilterRule[] | null;
+  fields: TableField[];
   search: string;
   lifecycleStage: string;
   owner: string;
   openDealState: string;
   created: string;
   followUp: string;
+  dynamicFilters: ActiveDynamicFilter[];
 }) {
   let result = [...params.contacts];
 
-  const isArchivedView = params.view === "archived";
-
-  if (isArchivedView) {
-    result = result.filter((c) => Boolean(c.archivedAt));
-  } else {
-    result = result.filter((c) => !c.archivedAt);
+  if (params.viewFilterRules) {
+    result = result.filter((c) =>
+      matchesViewFilters(c, params.viewFilterRules ?? [], resolveContactFieldValue, currentSalesOwnerId),
+    );
   }
 
-  switch (params.view) {
-    case "mine":
-      result = result.filter((c) => c.ownerId === "arham");
-      break;
-    case "customer":
-      result = result.filter((c) => c.lifecycleStage === "Customer");
-      break;
-    case "prospect":
-      result = result.filter((c) =>
-        ["Lead", "Marketing Qualified", "Sales Qualified", "Opportunity"].includes(c.lifecycleStage),
-      );
-      break;
-    case "deals":
-      result = result.filter((c) => c.openDealCount > 0);
-      break;
-    case "followup": {
-      result = result.filter((c) => {
-        const state = getFollowUpState(c.nextActivity);
-        return state === "Overdue" || state === "Due Today";
-      });
-      break;
-    }
-    case "inactive":
-      result = result.filter((c) => {
-        if (!c.lastContacted) return true;
-        return differenceInCalendarDays(today, parseISO(c.lastContacted)) > 30;
-      });
-      break;
+  for (const dynamicFilter of params.dynamicFilters) {
+    const value = dynamicFilter.value;
+    result = result.filter((c) => {
+      const resolved = resolveContactFieldValue(c, dynamicFilter.fieldKey);
+      switch (dynamicFilter.operator) {
+        case "equals":
+          return String(resolved ?? "").toLowerCase() === String(value ?? "").toLowerCase();
+        case "notEquals":
+          return String(resolved ?? "").toLowerCase() !== String(value ?? "").toLowerCase();
+        case "gt":
+        case "gte":
+        case "lt":
+        case "lte": {
+          const left = Number(resolved);
+          const right = Number(value);
+          if (Number.isNaN(left) || Number.isNaN(right)) return false;
+          if (dynamicFilter.operator === "gt") return left > right;
+          if (dynamicFilter.operator === "gte") return left >= right;
+          if (dynamicFilter.operator === "lt") return left < right;
+          return left <= right;
+        }
+        case "isTrue":
+          return resolved === true;
+        case "isFalse":
+          return resolved === false || resolved === undefined || resolved === null;
+        case "in": {
+          const options = normalizeInRuleOptions(value);
+          if (options.length === 0) return true;
+          if (Array.isArray(resolved)) {
+            return resolved.some((entry) => options.includes(String(entry)));
+          }
+          return options.includes(String(resolved));
+        }
+        default:
+          return true;
+      }
+    });
   }
 
   if (params.search) {
-    const q = params.search.toLowerCase();
-    result = result.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.companyName?.toLowerCase().includes(q) ||
-        c.email.toLowerCase().includes(q) ||
-        c.phone?.toLowerCase().includes(q) ||
-        c.jobTitle?.toLowerCase().includes(q),
-    );
+    result = result.filter((c) => recordMatchesSearch(c, params.search, params.fields, resolveContactFieldValue));
   }
 
   if (params.lifecycleStage !== "All") {
@@ -186,26 +233,32 @@ function applyFilters(params: {
 
 export function Contacts() {
   const contacts = useContactStore((s) => s.contacts);
+  const setContactCustomFieldValue = useContactStore((s) => s.setContactCustomFieldValue);
   const archiveContact = useContactStore((s) => s.archiveContact);
   const restoreContact = useContactStore((s) => s.restoreContact);
   const bulkArchiveContacts = useContactStore((s) => s.bulkArchiveContacts);
   const bulkRestoreContacts = useContactStore((s) => s.bulkRestoreContacts);
 
+  const fields = useEntityTableFields("contact");
+  const allViews = useCrmConfigStore((s) => s.views);
+  const activeViewId = useCrmConfigStore((s) => s.activeViewIds.contact);
+  const entityViews = React.useMemo(() => selectEntityViews(allViews, "contact"), [allViews]);
+  const activeView = React.useMemo(() => selectActiveView(allViews, "contact", activeViewId), [allViews, activeViewId]);
+  const setActiveViewId = useCrmConfigStore((s) => s.setActiveView);
+  const updateViewPresentation = useCrmConfigStore((s) => s.updateViewPresentation);
+  const moveField = useCrmConfigStore((s) => s.moveField);
+  const renameFieldLabel = useCrmConfigStore((s) => s.renameFieldLabel);
+  const restoreFieldDefaultLabel = useCrmConfigStore((s) => s.restoreFieldDefaultLabel);
+  const archiveConfigField = useCrmConfigStore((s) => s.archiveField);
+
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [activeView, setActiveView] = React.useState("all");
   const [lifecycleFilter, setLifecycleFilter] = React.useState<string>("All");
   const [ownerFilter, setOwnerFilter] = React.useState<string>("All");
   const [openDealFilter, setOpenDealFilter] = React.useState<string>("All");
   const [createdFilter, setCreatedFilter] = React.useState<string>("All");
   const [followUpFilter, setFollowUpFilter] = React.useState<string>("All");
+  const [dynamicFilters, setDynamicFilters] = React.useState<ActiveDynamicFilter[]>([]);
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
-  const [sorting, setSorting] = React.useState<SortingState>([{ id: "createdAt", desc: true }]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    search: false,
-    email: true,
-    ownerId: true,
-    createdAt: false,
-  });
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
   const [addSheetOpen, setAddSheetOpen] = React.useState(false);
   const [editContact, setEditContact] = React.useState<Contact | null>(null);
@@ -214,54 +267,147 @@ export function Contacts() {
   const [bulkArchiveOpen, setBulkArchiveOpen] = React.useState(false);
   const [bulkRestoreOpen, setBulkRestoreOpen] = React.useState(false);
 
-  const handleEditContact = React.useCallback((contact: Contact) => {
-    setEditContact(contact);
-  }, []);
+  const [manageFieldsOpen, setManageFieldsOpen] = React.useState(false);
+  const [fieldDialogOpen, setFieldDialogOpen] = React.useState(false);
+  const [dialogField, setDialogField] = React.useState<TableField | null>(null);
+  const [dialogInitialType, setDialogInitialType] = React.useState<CustomFieldType>("text");
 
-  const handleArchiveContact = React.useCallback((contact: Contact) => {
-    setArchiveTarget(contact);
-  }, []);
-
-  const handleRestoreContact = React.useCallback((contact: Contact) => {
-    setRestoreTarget(contact);
-  }, []);
-
-  const columns = React.useMemo(
-    () =>
-      getContactsColumns({
-        onEditContact: handleEditContact,
-        onArchiveContact: handleArchiveContact,
-        onRestoreContact: handleRestoreContact,
-      }),
-    [handleEditContact, handleArchiveContact, handleRestoreContact],
+  const orderedFieldKeys = React.useMemo(
+    () => orderFieldsForView(fields, activeView).map((f) => f.key),
+    [fields, activeView],
   );
+
+  const filterableCustomFields = React.useMemo(
+    () => fields.filter((f) => !f.isCore && FILTERABLE_FIELD_TYPES.includes(f.type)),
+    [fields],
+  );
+
+  const dialogHasValues = React.useMemo(
+    () =>
+      dialogField
+        ? fieldHasValues({ records: contacts ?? [], fieldKey: dialogField.key, resolveValue: resolveContactFieldValue })
+        : false,
+    [dialogField, contacts],
+  );
+
+  const handleCommitCustomValue = React.useCallback(
+    (contact: Contact, field: TableField, value: NonNullable<Contact["customFields"]>[string]) => {
+      setContactCustomFieldValue(contact.id, field.systemName, value);
+    },
+    [setContactCustomFieldValue],
+  );
+
+  const columnHeaderActions = React.useMemo(() => {
+    return {
+      onSort: (field: TableField, direction: "asc" | "desc") =>
+        updateViewPresentation(activeView?.id ?? "", { sortRules: [{ fieldKey: field.key, direction }] }),
+      onRename: (field: TableField, label: string) => renameFieldLabel(field.id, label),
+      onMove: (field: TableField, direction: "left" | "right") => moveField("contact", field.key, direction),
+      onHide: (field: TableField) =>
+        updateViewPresentation(activeView?.id ?? "", {
+          columnVisibility: { ...(activeView?.columnVisibility ?? {}), [field.key]: false },
+        }),
+      onEditField: (field: TableField) => {
+        setDialogField(field);
+        setDialogInitialType(field.type);
+        setFieldDialogOpen(true);
+      },
+      onArchiveField: (field: TableField) => {
+        archiveConfigField(field.id);
+        toast(`${field.displayLabel} archived`, {
+          description: "Saved values are preserved and the field can be restored.",
+        });
+      },
+      onRestoreDefaultLabel: (field: TableField) => restoreFieldDefaultLabel(field.id),
+    };
+  }, [activeView, updateViewPresentation, renameFieldLabel, moveField, archiveConfigField, restoreFieldDefaultLabel]);
+
+  const renderHeader = React.useCallback(
+    ({ field }: { field: TableField }) => (
+      <ConfigurableColumnHeader
+        key={field.key}
+        field={field}
+        activeDirection={activeView?.sortRules.find((r) => r.fieldKey === field.key)?.direction ?? null}
+        canMoveLeft={orderedFieldKeys.indexOf(field.key) > 0}
+        canMoveRight={orderedFieldKeys.indexOf(field.key) < orderedFieldKeys.length - 1}
+        labelOverridden={field.displayLabel !== field.defaultLabel}
+        actions={columnHeaderActions}
+      />
+    ),
+    [activeView, orderedFieldKeys, columnHeaderActions],
+  );
+
+  const renderCell = React.useCallback(
+    ({ field, record }: { field: TableField; record: Contact }) =>
+      renderContactFieldCell({ field, contact: record, onCommitCustomValue: handleCommitCustomValue }),
+    [handleCommitCustomValue],
+  );
+
+  const selectColumn = React.useMemo(() => getContactsSelectColumn(), []);
+
+  const actionsColumn = React.useMemo(
+    () =>
+      getContactsActionsColumn({
+        onEditContact: (contact) => setEditContact(contact),
+        onArchiveContact: (contact) => setArchiveTarget(contact),
+        onRestoreContact: (contact) => setRestoreTarget(contact),
+      }),
+    [],
+  );
+
+  const handleCreateField = React.useCallback((type: CustomFieldType) => {
+    setDialogField(null);
+    setDialogInitialType(type);
+    setFieldDialogOpen(true);
+  }, []);
+
+  const { columns, sorting, columnSizing, handleSortingChange, handleColumnSizingChange } = useCrmTableColumns<Contact>(
+    {
+      fields,
+      activeView,
+      resolveValue: resolveContactFieldValue,
+      renderHeader,
+      renderCell,
+      selectColumn,
+      actionsColumn,
+      onCreateField: handleCreateField,
+      updateViewPresentation,
+    },
+  );
+
+  const isArchivedView = Boolean(activeView?.filterRules.some((rule) => rule.operator === "isArchived")) ?? false;
 
   const filteredContacts = applyFilters({
     contacts: contacts ?? [],
-    view: activeView,
+    viewFilterRules: activeView?.filterRules ?? null,
+    fields,
     search: searchQuery,
     lifecycleStage: lifecycleFilter,
     owner: ownerFilter,
     openDealState: openDealFilter,
     created: createdFilter,
     followUp: followUpFilter,
+    dynamicFilters,
   });
 
   const table = useReactTable({
     data: filteredContacts,
     columns,
-    state: { rowSelection, sorting, columnVisibility, pagination },
+    state: { rowSelection, sorting, columnSizing, pagination },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnVisibilityChange: setColumnVisibility,
+    onSortingChange: handleSortingChange,
+    onColumnSizingChange: handleColumnSizingChange,
     onPaginationChange: setPagination,
     getRowId: (row) => row.id,
     autoResetPageIndex: false,
     enableRowSelection: true,
+    columnResizeMode: "onChange",
   });
+
+  useCommitResizedColumnWidths({ table, fields, activeView, updateViewPresentation });
 
   const pageCount = Math.max(table.getPageCount(), 1);
   const currentPage = Math.min(table.getState().pagination.pageIndex + 1, pageCount);
@@ -270,16 +416,15 @@ export function Contacts() {
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
   const totalResults = filteredContacts.length;
 
-  const isArchivedView = activeView === "archived";
-
   function handleViewChange(viewId: string) {
-    setActiveView(viewId);
+    setActiveViewId("contact", viewId);
     setSearchQuery("");
     setLifecycleFilter("All");
     setOwnerFilter("All");
     setOpenDealFilter("All");
     setCreatedFilter("All");
     setFollowUpFilter("All");
+    setDynamicFilters([]);
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     setRowSelection({});
   }
@@ -402,17 +547,19 @@ export function Contacts() {
           </section>
 
           <div className="flex flex-wrap items-center gap-2 px-4">
-            {savedViews.map((view) => (
+            {entityViews.map((view) => (
               <Button
                 key={view.id}
-                variant={activeView === view.id ? "default" : "outline"}
+                variant={activeView?.id === view.id ? "default" : "outline"}
                 size="sm"
                 className="h-7 text-xs"
                 onClick={() => handleViewChange(view.id)}
               >
-                {view.label}
+                {view.name}
               </Button>
             ))}
+            <ViewsMenu entityType="contact" />
+            <ManageFieldsTrigger onClick={() => setManageFieldsOpen(true)} />
           </div>
 
           <div className="flex flex-wrap items-center gap-3 px-4">
@@ -505,8 +652,48 @@ export function Contacts() {
               </SelectContent>
             </Select>
 
-            {activeFilters.length > 0 ? (
-              <Button variant="ghost" size="sm" className="h-7 gap-1 text-muted-foreground" onClick={clearAllFilters}>
+            {filterableCustomFields.length > 0 ? (
+              <AddCustomFilterMenu
+                fields={filterableCustomFields}
+                disabledKeys={new Set(dynamicFilters.map((f) => f.fieldKey))}
+                onAdd={(field) => {
+                  const operator = defaultOperatorForType(field.type);
+                  setDynamicFilters((prev) => [
+                    ...prev,
+                    {
+                      id: `df-${Date.now().toString(36)}-${prev.length}`,
+                      fieldKey: field.key,
+                      fieldLabel: field.displayLabel,
+                      fieldType: field.type,
+                      options: field.options,
+                      operator,
+                    },
+                  ]);
+                }}
+              />
+            ) : null}
+
+            {dynamicFilters.map((filter) => (
+              <DynamicFilterControl
+                key={filter.id}
+                filter={filter}
+                onPatch={(patch) =>
+                  setDynamicFilters((prev) => prev.map((f) => (f.id === filter.id ? { ...f, ...patch } : f)))
+                }
+                onRemove={() => setDynamicFilters((prev) => prev.filter((f) => f.id !== filter.id))}
+              />
+            ))}
+
+            {activeFilters.length > 0 || dynamicFilters.length > 0 ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 gap-1 text-muted-foreground"
+                onClick={() => {
+                  clearAllFilters();
+                  setDynamicFilters([]);
+                }}
+              >
                 <X className="size-3" />
                 Clear All
               </Button>
@@ -517,7 +704,7 @@ export function Contacts() {
             <div className="flex items-center justify-between gap-3 border-b px-4 py-2">
               <span className="text-muted-foreground text-sm tabular-nums">{selectedCount} selected</span>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" disabled title="Bulk actions will be available in a future step">
+                <Button variant="outline" size="sm" disabled title="Bulk assign will be available in a future step">
                   Assign Owner
                 </Button>
                 <Button variant="outline" size="sm" disabled title="Bulk tagging will be available in a future step">
@@ -538,12 +725,28 @@ export function Contacts() {
 
           <div>
             <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4">
+              <colgroup>
+                {table.getVisibleLeafColumns().map((column) => (
+                  <col key={column.id} style={{ width: table.getColumn(column.id)?.getSize() }} />
+                ))}
+              </colgroup>
               <TableHeader className="[&_tr]:border-t">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id} className="py-4 font-normal">
+                      <TableHead
+                        key={header.id}
+                        aria-sort={ariaSortValue(header.column.getIsSorted())}
+                        className="relative select-none py-4 font-normal"
+                      >
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.column.getCanResize() ? (
+                          <ColumnResizeHandle
+                            onMouseDown={header.getResizeHandler()}
+                            onTouchStart={header.getResizeHandler()}
+                            isResizing={header.column.getIsResizing()}
+                          />
+                        ) : null}
                       </TableHead>
                     ))}
                   </TableRow>
@@ -578,6 +781,7 @@ export function Contacts() {
                             onClick={() => {
                               setSearchQuery("");
                               clearAllFilters();
+                              setDynamicFilters([]);
                             }}
                           >
                             <X className="size-3" />
@@ -684,6 +888,25 @@ export function Contacts() {
         open={editContact !== null}
         onOpenChange={(open) => {
           if (!open) setEditContact(null);
+        }}
+      />
+
+      <CustomFieldDialog
+        open={fieldDialogOpen}
+        onOpenChange={setFieldDialogOpen}
+        entityType="contact"
+        field={dialogField}
+        initialType={dialogInitialType}
+        hasValues={dialogHasValues}
+      />
+      <ManageFieldsSheet
+        open={manageFieldsOpen}
+        onOpenChange={setManageFieldsOpen}
+        entityType="contact"
+        onEditField={(field) => {
+          setDialogField(field);
+          setDialogInitialType(field.type);
+          setFieldDialogOpen(true);
         }}
       />
 

@@ -11,6 +11,8 @@ import { z } from "zod";
 import { currentSalesOwnerId, salesOwners } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
 import { useCompanyStore } from "@/app/(main)/dashboard/crm/companies/_components/companies-data/use-company-store";
 import { useContactStore } from "@/app/(main)/dashboard/crm/contacts/_components/contacts-data/use-contact-store";
+import { CustomFieldFormControl, emptyValueForType } from "@/components/crm/table-engine/custom-field-form-controls";
+import { useEntityFormFields } from "@/components/crm/table-engine/use-crm-entity-table";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -28,6 +30,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { validateFieldValue } from "@/lib/crm-table-engine/format";
+import type { CustomFieldValue, TableField } from "@/lib/crm-table-engine/types";
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
 import { cn, formatCurrency } from "@/lib/utils";
 
 import type { Deal, DealHealth, DealPriority, DealProduct, DealSource, DealStage } from "./deals-data/schema";
@@ -108,6 +113,7 @@ const dealFormSchema = z.object({
         .min(0, { message: "Unit price must be non-negative." }),
     }),
   ),
+  custom: z.record(z.string(), customFieldValueSchema),
 });
 
 type DealFormValues = z.infer<typeof dealFormSchema>;
@@ -116,7 +122,24 @@ function generateDealId(): string {
   return `dl-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function toFormValues(deal: Deal): DealFormValues {
+function existingCustomValuesFor(deal: Deal | undefined, formFields: TableField[]): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of formFields) {
+    const current = deal?.customFields?.[field.systemName];
+    values[field.systemName] = current === undefined ? null : current;
+  }
+  return values;
+}
+
+function defaultCustomValuesFor(formFields: TableField[]): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of formFields) {
+    values[field.systemName] = emptyValueForType(field.type, field.defaultValue);
+  }
+  return values;
+}
+
+function toFormValues(deal: Deal, formFields: TableField[]): DealFormValues {
   return {
     name: deal.name,
     companyId: deal.companyId,
@@ -135,10 +158,16 @@ function toFormValues(deal: Deal): DealFormValues {
     description: "",
     initialNote: "",
     products: deal.products.map((p) => ({ name: p.name, quantity: p.quantity, unitPrice: p.unitPrice })),
+    custom: existingCustomValuesFor(deal, formFields),
   };
 }
 
-function buildDealFromForm(values: DealFormValues, existingDeal?: Deal): Deal {
+function buildDealFromForm(
+  values: DealFormValues,
+  customValues: Record<string, CustomFieldValue>,
+  formFields: TableField[],
+  existingDeal?: Deal,
+): Deal {
   const now = new Date().toISOString().slice(0, 10);
   const notes =
     existingDeal?.notes ??
@@ -186,6 +215,13 @@ function buildDealFromForm(values: DealFormValues, existingDeal?: Deal): Deal {
     products,
     tags: values.tags.length > 0 ? values.tags : existingDeal?.tags,
     proposalSummary: existingDeal?.proposalSummary ?? null,
+    customFields: (() => {
+      const merged: Record<string, CustomFieldValue> = { ...(existingDeal?.customFields ?? {}) };
+      for (const field of formFields) {
+        merged[field.systemName] = customValues[field.systemName] ?? null;
+      }
+      return merged;
+    })(),
   };
 }
 
@@ -196,6 +232,7 @@ interface DealFormProps {
 }
 
 export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
+  const formFields = useEntityFormFields("deal");
   const isEditing = Boolean(deal);
   const isClosedStage = deal?.stage === "Closed Won" || deal?.stage === "Closed Lost";
   const addDeal = useDealStore((s) => s.addDeal);
@@ -209,7 +246,7 @@ export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
   const form = useForm<DealFormValues>({
     resolver: zodResolver(dealFormSchema),
     defaultValues: deal
-      ? toFormValues(deal)
+      ? toFormValues(deal, formFields)
       : {
           name: "",
           companyId: "",
@@ -228,6 +265,7 @@ export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
           description: "",
           initialNote: "",
           products: [],
+          custom: {},
         },
   });
 
@@ -264,7 +302,7 @@ export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
     if (open) {
       form.reset(
         deal
-          ? toFormValues(deal)
+          ? toFormValues(deal, formFields)
           : {
               name: "",
               companyId: "",
@@ -283,6 +321,7 @@ export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
               description: "",
               initialNote: "",
               products: [],
+              custom: defaultCustomValuesFor(formFields),
             },
       );
       setDirty(false);
@@ -290,7 +329,7 @@ export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
       setCompanySearchOpen(false);
       setContactSearchOpen(false);
     }
-  }, [open, deal, form]);
+  }, [open, deal, form, formFields]);
 
   useEffect(() => {
     const subscription = form.watch(() => {
@@ -366,7 +405,23 @@ export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
   }
 
   function onSubmit(values: DealFormValues) {
-    const dealData = buildDealFromForm(values, deal);
+    let customInvalid = false;
+    const customValues: Record<string, CustomFieldValue> = {};
+    for (const field of formFields) {
+      const submitted = values.custom[field.systemName];
+      const normalized: CustomFieldValue = submitted === undefined ? null : submitted;
+      customValues[field.systemName] = normalized;
+      const error = validateFieldValue(field, normalized);
+      if (error) {
+        customInvalid = true;
+        form.setError(`custom.${field.systemName}`, { message: error });
+      } else {
+        form.clearErrors(`custom.${field.systemName}`);
+      }
+    }
+    if (customInvalid) return;
+
+    const dealData = buildDealFromForm(values, customValues, formFields, deal);
     if (isEditing && deal) {
       updateDeal(deal.id, dealData);
       toast("Deal updated", { description: `${dealData.name} has been updated.` });
@@ -882,6 +937,50 @@ export function DealForm({ open, onOpenChange, deal }: DealFormProps) {
                   />
                 </FieldGroup>
               </div>
+
+              {formFields.length > 0 ? (
+                <>
+                  <Separator />
+                  {/* Custom Fields */}
+                  <div>
+                    <h3 className="mb-3 font-medium text-muted-foreground text-xs uppercase tracking-wide">
+                      Custom Fields
+                    </h3>
+                    <FieldGroup className="gap-4">
+                      {formFields.map((field) => (
+                        <Controller
+                          key={field.id}
+                          control={form.control}
+                          name={`custom.${field.systemName}` as const}
+                          render={({ field: controllerField, fieldState }) => {
+                            const value = (controllerField.value ?? null) as CustomFieldValue;
+                            return (
+                              <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={`deal-custom-${field.systemName}`}>
+                                  {field.displayLabel}
+                                  {field.required ? " *" : ""}
+                                </FieldLabel>
+                                <CustomFieldFormControl
+                                  id={`deal-custom-${field.systemName}`}
+                                  field={field}
+                                  value={value}
+                                  onChange={(next) => controllerField.onChange(next)}
+                                />
+                                {field.description && field.type !== "long_text" ? (
+                                  <p className="text-muted-foreground text-xs">{field.description}</p>
+                                ) : null}
+                                {fieldState.invalid && fieldState.error ? (
+                                  <FieldError errors={[fieldState.error]} />
+                                ) : null}
+                              </Field>
+                            );
+                          }}
+                        />
+                      ))}
+                    </FieldGroup>
+                  </div>
+                </>
+              ) : null}
 
               <Separator />
 

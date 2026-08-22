@@ -1,5 +1,7 @@
 import z from "zod";
 
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
+
 export const activityTypeSchema = z.enum(["Call", "Meeting", "Email", "Task", "Note"]);
 
 export type ActivityType = z.infer<typeof activityTypeSchema>;
@@ -57,6 +59,7 @@ export const activitySchema = z
     contactId: z.string().nullable().optional(),
     companyId: z.string().nullable().optional(),
     dealId: z.string().nullable().optional(),
+    customFields: z.record(z.string(), customFieldValueSchema).optional(),
   })
   .refine((activity) => Boolean(activity.leadId || activity.contactId || activity.companyId || activity.dealId), {
     message: "An activity must reference at least one Lead, Contact, Company, or Deal.",

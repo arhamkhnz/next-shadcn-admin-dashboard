@@ -33,6 +33,7 @@ import {
 } from "@/app/(main)/dashboard/crm/_components/activities/activity-utils";
 import { useActivityStore } from "@/app/(main)/dashboard/crm/_components/activities/use-activity-store";
 import { currentSalesOwnerId, getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { CustomFieldsCard } from "@/components/crm/table-engine/custom-fields-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,7 @@ import { cn, getInitials } from "@/lib/utils";
 import { ArchiveRestoreDialog } from "../../_components/archive-restore-dialog";
 import { LeadForm } from "../../_components/lead-form";
 import { getScoreClassification } from "../../_components/leads-columns";
+import { useLeadEntityLabels } from "../../_components/leads-config/use-crm-config-store";
 import type { ActivityItem, LeadNote, LeadStatus, LeadTask } from "../../_components/leads-data/schema";
 import { useLeadStore } from "../../_components/leads-data/use-lead-store";
 
@@ -305,6 +307,10 @@ function getClassificationBadgeClass(classification: "Hot" | "Warm" | "Cold"): s
 }
 
 export function LeadDetail({ leadId }: { leadId: string }) {
+  const labels = useLeadEntityLabels();
+  const singularLabel = labels.singularLabel;
+  const pluralLabel = labels.pluralLabel;
+
   const lead = useLeadStore((s) => s.getLeadById(leadId));
   const archiveLead = useLeadStore((s) => s.archiveLead);
   const restoreLead = useLeadStore((s) => s.restoreLead);
@@ -314,17 +320,16 @@ export function LeadDetail({ leadId }: { leadId: string }) {
   const [restoreDialogOpen, setRestoreDialogOpen] = React.useState(false);
   const [addActivityOpen, setAddActivityOpen] = React.useState(false);
   const [addTaskOpen, setAddTaskOpen] = React.useState(false);
-
   if (!lead) {
     return (
       <div className="flex flex-col items-center gap-4 py-16">
-        <span className="text-muted-foreground text-sm">Lead not found.</span>
+        <span className="text-muted-foreground text-sm">{singularLabel} not found.</span>
         <Link
           href="/dashboard/crm/leads"
           className="inline-flex items-center gap-1.5 text-muted-foreground text-sm transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
-          Back to Leads
+          Back to {pluralLabel}
         </Link>
       </div>
     );
@@ -422,7 +427,7 @@ export function LeadDetail({ leadId }: { leadId: string }) {
         <div className="flex items-center gap-2 rounded-lg border border-amber-300/30 bg-amber-500/5 px-4 py-2.5 text-sm dark:border-amber-600/30">
           <Archive className="size-4 text-amber-600 dark:text-amber-400" />
           <span className="text-amber-700 dark:text-amber-300">
-            This lead is archived. It was archived on{" "}
+            This {singularLabel.toLowerCase()} is archived. It was archived on{" "}
             {lead.archivedAt ? formatDate(lead.archivedAt) : "an unknown date"}.
           </span>
         </div>
@@ -501,6 +506,8 @@ export function LeadDetail({ leadId }: { leadId: string }) {
             />
           </CardContent>
         </Card>
+
+        <CustomFieldsCard entityType="lead" pluralLabel={pluralLabel} values={lead.customFields} />
 
         <Card>
           <CardHeader>
@@ -680,7 +687,7 @@ export function LeadDetail({ leadId }: { leadId: string }) {
         count={1}
         onConfirm={() => {
           archiveLead(lead.id, currentSalesOwnerId);
-          toast("Lead archived", { description: `${lead.name} has been archived.` });
+          toast(`${singularLabel} archived`, { description: `${lead.name} has been archived.` });
         }}
       />
       <ArchiveRestoreDialog
@@ -690,7 +697,7 @@ export function LeadDetail({ leadId }: { leadId: string }) {
         count={1}
         onConfirm={() => {
           restoreLead(lead.id);
-          toast("Lead restored", { description: `${lead.name} has been restored.` });
+          toast(`${singularLabel} restored`, { description: `${lead.name} has been restored.` });
         }}
       />
     </div>

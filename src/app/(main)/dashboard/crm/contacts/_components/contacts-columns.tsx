@@ -8,6 +8,7 @@ import { differenceInCalendarDays, format, parseISO } from "date-fns";
 import { CheckCircle2, Clock, MoreHorizontal, XCircle } from "lucide-react";
 
 import { getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { EditableCustomCell } from "@/components/crm/table-engine/editable-custom-cell";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,17 +20,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { TableField } from "@/lib/crm-table-engine/types";
 import { cn, formatCurrency, getInitials } from "@/lib/utils";
 
 import type { Contact, ContactFollowUpState, ContactLifecycleStage } from "./contacts-data/schema";
 
 const today = new Date(2026, 7, 16);
-
-export type ContactsColumnsOptions = {
-  onEditContact?: (contact: Contact) => void;
-  onArchiveContact?: (contact: Contact) => void;
-  onRestoreContact?: (contact: Contact) => void;
-};
 
 const lifecycleMeta: Record<ContactLifecycleStage, { badgeClass: string; dotClass: string }> = {
   Subscriber: {
@@ -160,180 +156,183 @@ function FollowUpBadge({ nextActivity }: { nextActivity: string | null }) {
   );
 }
 
-export function getContactsColumns(options?: ContactsColumnsOptions): ColumnDef<Contact>[] {
-  return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            aria-label="Select all contacts"
-            checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            aria-label={`Select ${row.original.name}`}
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-          />
-        </div>
-      ),
-      enableHiding: false,
-      enableSorting: false,
-    },
-    {
-      id: "search",
-      accessorFn: (row) => `${row.name} ${row.companyName ?? ""} ${row.email} ${row.phone ?? ""} ${row.jobTitle ?? ""}`,
-      filterFn: "includesString",
-      enableHiding: true,
-    },
-    {
-      accessorKey: "name",
-      header: "Contact",
-      cell: ({ row }) => <ContactNameCell name={row.original.name} jobTitle={row.original.jobTitle} />,
-    },
-    {
-      accessorKey: "companyName",
-      header: "Company",
-      cell: ({ row }) => (
-        <span className="text-muted-foreground text-sm">{row.original.companyName ?? "No company"}</span>
-      ),
-    },
-    {
-      accessorKey: "email",
-      header: "Contact Info",
-      cell: ({ row }) => (
-        <div className="min-w-0 text-sm">
-          <div className="truncate text-foreground">{row.original.email}</div>
-          {row.original.phone ? (
-            <div className="truncate text-muted-foreground text-xs">{row.original.phone}</div>
-          ) : null}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "lifecycleStage",
-      header: "Lifecycle Stage",
-      filterFn: "equalsString",
-      cell: ({ row }) => <LifecycleBadge stage={row.original.lifecycleStage} />,
-    },
-    {
-      accessorKey: "ownerId",
-      header: "Owner",
-      filterFn: "equalsString",
-      cell: ({ row }) => {
-        const ownerId = row.original.ownerId;
-        if (!ownerId) {
-          return <span className="text-muted-foreground text-sm">Unassigned</span>;
-        }
-        const name = getOwnerName(ownerId);
-        return (
-          <div className="flex items-center gap-2">
-            <Avatar className={cn("font-medium", avatarTone(name))}>
-              <AvatarFallback>{getInitials(name)}</AvatarFallback>
-            </Avatar>
-            <span className="text-sm">{name}</span>
-          </div>
-        );
-      },
-    },
-    {
-      id: "openDealCount",
-      accessorKey: "openDealCount",
-      header: "Open Deals",
-      cell: ({ row }) => {
-        const count = row.original.openDealCount;
-        const value = row.original.openDealValue;
-        if (count === 0) {
-          return <span className="text-muted-foreground text-sm">—</span>;
-        }
-        return (
-          <div className="text-sm">
-            <span className="font-medium tabular-nums">{count}</span>
-            <span className="ml-1 text-muted-foreground text-xs">{formatCurrency(value)}</span>
-          </div>
-        );
-      },
-    },
-    {
-      id: "lastContacted",
-      accessorFn: (row) => (row.lastContacted ? parseISO(row.lastContacted).getTime() : 0),
-      header: "Last Contacted",
-      cell: ({ row }) => {
-        const lc = row.original.lastContacted;
-        if (!lc) {
-          return <span className="text-muted-foreground text-sm">Never</span>;
-        }
-        return <span className="text-muted-foreground text-sm tabular-nums">{formatRelativeDate(lc)}</span>;
-      },
-    },
-    {
-      id: "followUp",
-      header: "Follow-up",
-      cell: ({ row }) => <FollowUpBadge nextActivity={row.original.nextActivity} />,
-    },
-    {
-      id: "createdAt",
-      accessorKey: "createdAt",
-      header: "Created",
-      cell: ({ row }) => (
-        <span className="text-muted-foreground text-sm tabular-nums">
-          {format(parseISO(row.original.createdAt), "MMM d, yyyy")}
-        </span>
-      ),
-    },
-    {
-      id: "actions",
-      header: () => <div className="text-right">Actions</div>,
-      cell: ({ row }) => {
-        const isArchived = Boolean(row.original.archivedAt);
-        return (
-          <div className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label={`Open actions for ${row.original.name}`}
-                  className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
-                  size="icon-sm"
-                  variant="ghost"
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href={`/dashboard/crm/contacts/${row.original.id}`}>View Contact</Link>
-                </DropdownMenuItem>
-                {isArchived ? (
-                  <DropdownMenuItem onClick={() => options?.onRestoreContact?.(row.original)}>
-                    Restore Contact
-                  </DropdownMenuItem>
-                ) : (
-                  <>
-                    <DropdownMenuItem onClick={() => options?.onEditContact?.(row.original)}>
-                      Edit Contact
-                    </DropdownMenuItem>
-                    <DropdownMenuItem disabled>Assign Owner (coming soon)</DropdownMenuItem>
-                    <DropdownMenuItem disabled>Add Tag (coming soon)</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => options?.onArchiveContact?.(row.original)} variant="destructive">
-                      Archive
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        );
-      },
-      enableHiding: false,
-      enableSorting: false,
-    },
-  ];
+function DateCell({ value }: { value: string }) {
+  return <span className="text-muted-foreground text-sm tabular-nums">{format(parseISO(value), "MMM d, yyyy")}</span>;
 }
 
-export const contactsColumns: ColumnDef<Contact>[] = getContactsColumns();
+function OwnerCell({ ownerId }: { ownerId: string | null }) {
+  if (!ownerId) {
+    return <span className="text-muted-foreground text-sm">Unassigned</span>;
+  }
+  const name = getOwnerName(ownerId);
+  return (
+    <div className="flex items-center gap-2">
+      <Avatar className={cn("font-medium", avatarTone(name))}>
+        <AvatarFallback>{getInitials(name)}</AvatarFallback>
+      </Avatar>
+      <span className="truncate text-sm">{name}</span>
+    </div>
+  );
+}
+
+export function renderContactFieldCell(params: {
+  field: TableField;
+  contact: Contact;
+  onCommitCustomValue: (
+    contact: Contact,
+    field: TableField,
+    value: NonNullable<Contact["customFields"]>[string],
+  ) => void;
+}) {
+  const { field, contact, onCommitCustomValue } = params;
+
+  switch (field.key) {
+    case "contact.name":
+      return <ContactNameCell name={contact.name} jobTitle={contact.jobTitle} />;
+    case "contact.company":
+      return <span className="text-muted-foreground text-sm">{contact.companyName ?? "No company"}</span>;
+    case "contact.email":
+      return (
+        <div className="min-w-0 text-sm">
+          <div className="truncate text-foreground">{contact.email}</div>
+          {contact.phone ? <div className="truncate text-muted-foreground text-xs">{contact.phone}</div> : null}
+        </div>
+      );
+    case "contact.phone":
+      return contact.phone ? (
+        <a href={`tel:${contact.phone}`} className="truncate text-sm hover:underline">
+          {contact.phone}
+        </a>
+      ) : (
+        <span className="text-muted-foreground/60 text-sm">—</span>
+      );
+    case "contact.jobTitle":
+      return <span className="text-muted-foreground text-sm">{contact.jobTitle ?? "—"}</span>;
+    case "contact.lifecycleStage":
+      return <LifecycleBadge stage={contact.lifecycleStage} />;
+    case "contact.owner":
+      return <OwnerCell ownerId={contact.ownerId ?? null} />;
+    case "contact.openDeals": {
+      const count = contact.openDealCount;
+      const value = contact.openDealValue;
+      if (count === 0) {
+        return <span className="text-muted-foreground text-sm">—</span>;
+      }
+      return (
+        <div className="text-sm">
+          <span className="font-medium tabular-nums">{count}</span>
+          <span className="ml-1 text-muted-foreground text-xs">{formatCurrency(value)}</span>
+        </div>
+      );
+    }
+    case "contact.lastContacted":
+      return contact.lastContacted ? (
+        <span className="text-muted-foreground text-sm tabular-nums">{formatRelativeDate(contact.lastContacted)}</span>
+      ) : (
+        <span className="text-muted-foreground text-sm">Never</span>
+      );
+    case "contact.followUpState":
+      return <FollowUpBadge nextActivity={contact.nextActivity} />;
+    case "contact.createdAt":
+      return <DateCell value={contact.createdAt} />;
+    default:
+      break;
+  }
+
+  if (!field.isCore) {
+    const isArchivedContact = Boolean(contact.archivedAt);
+    return (
+      <EditableCustomCell
+        field={field}
+        value={contact.customFields?.[field.systemName]}
+        disabled={isArchivedContact}
+        disabledReason={isArchivedContact ? "Archived contacts cannot be edited." : undefined}
+        onCommit={(value) => onCommitCustomValue(contact, field, value)}
+      />
+    );
+  }
+
+  return null;
+}
+
+export function getContactsSelectColumn(): ColumnDef<Contact> {
+  return {
+    id: "select",
+    header: ({ table }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          aria-label="Select all contacts"
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        />
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          aria-label={`Select ${row.original.name}`}
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+        />
+      </div>
+    ),
+    enableHiding: false,
+    enableSorting: false,
+  };
+}
+
+export type ContactsColumnsOptions = {
+  onEditContact?: (contact: Contact) => void;
+  onArchiveContact?: (contact: Contact) => void;
+  onRestoreContact?: (contact: Contact) => void;
+};
+
+export function getContactsActionsColumn(options?: ContactsColumnsOptions): ColumnDef<Contact> {
+  return {
+    id: "actions",
+    header: () => <div className="text-right">Actions</div>,
+    cell: ({ row }) => {
+      const isArchived = Boolean(row.original.archivedAt);
+      return (
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label={`Open actions for ${row.original.name}`}
+                className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
+                size="icon-sm"
+                variant="ghost"
+              >
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/crm/contacts/${row.original.id}`}>View Contact</Link>
+              </DropdownMenuItem>
+              {isArchived ? (
+                <DropdownMenuItem onClick={() => options?.onRestoreContact?.(row.original)}>
+                  Restore Contact
+                </DropdownMenuItem>
+              ) : (
+                <>
+                  <DropdownMenuItem onClick={() => options?.onEditContact?.(row.original)}>
+                    Edit Contact
+                  </DropdownMenuItem>
+                  <DropdownMenuItem disabled>Assign Owner (coming soon)</DropdownMenuItem>
+                  <DropdownMenuItem disabled>Add Tag (coming soon)</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => options?.onArchiveContact?.(row.original)} variant="destructive">
+                    Archive
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    },
+    enableHiding: false,
+    enableSorting: false,
+  };
+}

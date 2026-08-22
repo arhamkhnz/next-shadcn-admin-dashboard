@@ -1,6 +1,6 @@
 # Documentation
 
-This folder documents the Studio Admin project. Start with [**Overview**](./overview.md).
+This folder documents the LynxMind project. Start with [**Overview**](./overview.md).
 
 | Document | Purpose |
 | --- | --- |
@@ -11,6 +11,10 @@ This folder documents the Studio Admin project. Start with [**Overview**](./over
 | [Security](./security.md) | Security baseline, current limits (no real auth/backend), and the hardening checklist. |
 | [Roadmap](./roadmap.md) | What to make next: planned features, known gaps, and a suggested order of execution. |
 | [CRM Stabilization Audit](./crm-stabilization-audit.md) | Findings and fixes from the CRM frontend stabilization audit (stale lookups, hydration, a11y). |
+| [Backend Architecture Plan](./backend-architecture-plan.md) | Production backend design: tenancy, authentication, modules & entitlements, API architecture, reporting, security. Planning only — not implemented. |
+| [Data Model Plan](./data-model-plan.md) | Persistent entities (platform + CRM), relationships, lead conversion, deal/pipeline architecture, archive strategy. |
+| [Authorization Matrix](./authorization-matrix.md) | Roles, permissions, and the full role × resource permission matrix with module-entitlement gating. |
+| [Frontend ↔ Backend Migration Plan](./frontend-backend-migration-plan.md) | Staged migration from mock Zustand stores to backend data, with parity gates before mock removal. |
 
 ### Quick reference
 

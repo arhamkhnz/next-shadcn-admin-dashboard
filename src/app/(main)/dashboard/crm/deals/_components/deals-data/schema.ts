@@ -1,5 +1,7 @@
 import z from "zod";
 
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
+
 export const dealStageSchema = z.enum([
   "Discovery",
   "Qualified",
@@ -115,6 +117,7 @@ export const dealSchema = z.object({
   proposalSummary: z.string().nullable().optional(),
   archivedAt: z.string().nullable().optional(),
   archivedBy: z.string().nullable().optional(),
+  customFields: z.record(z.string(), customFieldValueSchema).optional(),
 });
 
 export type Deal = z.infer<typeof dealSchema>;

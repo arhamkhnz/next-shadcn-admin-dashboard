@@ -1,6 +1,6 @@
 # Security
 
-Studio Admin is currently a **frontend template**: there is no backend, no real authentication, and all data is local mock data. Treat the notes below as the baseline to maintain now and the checklist to honor once real auth/data/APIs are introduced.
+LynxMind is currently a **frontend template**: there is no backend, no real authentication, and all data is local mock data. Treat the notes below as the baseline to maintain now and the checklist to honor once real auth/data/APIs are introduced.
 
 ## Current state & honest limits
 

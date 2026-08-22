@@ -19,11 +19,12 @@ import type { Activity } from "@/app/(main)/dashboard/crm/_components/activities
 import {
   activityPriorityMeta,
   activityStatusMeta,
-  getOwnerLabel,
   getRelatedRecords,
   getScheduleState,
   getTaskDueAt,
 } from "@/app/(main)/dashboard/crm/_components/activities/activity-utils";
+import { getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { EditableCustomCell } from "@/components/crm/table-engine/editable-custom-cell";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { TableField } from "@/lib/crm-table-engine/types";
 import { cn, getInitials } from "@/lib/utils";
 
 const today = new Date(2026, 7, 16);
@@ -171,180 +173,184 @@ function ReminderCell({ task }: { task: Activity }) {
   );
 }
 
-export function getTasksColumns(options?: TaskColumnsOptions): ColumnDef<Activity>[] {
-  return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          aria-label="Select all tasks on this page"
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          aria-label={`Select ${row.original.title}`}
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "title",
-      header: "Task",
-      cell: ({ row }) => {
-        return (
-          <Link
-            href={`/dashboard/crm/tasks/${row.original.id}`}
-            className="flex min-w-0 max-w-[280px] items-start gap-2.5 transition-opacity hover:opacity-80"
-          >
-            <span className="mt-0.5 shrink-0">
-              <StatusIcon status={row.original.status} />
+function OwnerCell({ ownerId }: { ownerId: string | null }) {
+  if (!ownerId) {
+    return <span className="text-muted-foreground text-sm">Unassigned</span>;
+  }
+  const name = getOwnerName(ownerId);
+  return (
+    <div className="flex items-center gap-2">
+      <Avatar className={cn("size-6 font-medium", avatarTone(name))}>
+        <AvatarFallback className="text-[10px]">{getInitials(name)}</AvatarFallback>
+      </Avatar>
+      <span className="truncate text-sm">{name}</span>
+    </div>
+  );
+}
+
+export function renderTaskFieldCell(params: {
+  field: TableField;
+  task: Activity;
+  onCommitCustomValue: (
+    task: Activity,
+    field: TableField,
+    value: NonNullable<Activity["customFields"]>[string],
+  ) => void;
+}) {
+  const { field, task, onCommitCustomValue } = params;
+
+  switch (field.key) {
+    case "task.title":
+      return (
+        <Link
+          href={`/dashboard/crm/tasks/${task.id}`}
+          className="flex min-w-0 max-w-[280px] items-start gap-2.5 transition-opacity hover:opacity-80"
+        >
+          <span className="mt-0.5 shrink-0">
+            <StatusIcon status={task.status} />
+          </span>
+          <span className="min-w-0">
+            <span
+              className={cn(
+                "line-clamp-2 font-medium text-foreground text-sm",
+                task.status === "Completed" && "text-muted-foreground line-through",
+              )}
+            >
+              {task.title}
             </span>
-            <span className="min-w-0">
-              <span
-                className={cn(
-                  "line-clamp-2 font-medium text-foreground text-sm",
-                  row.original.status === "Completed" && "text-muted-foreground line-through",
-                )}
-              >
-                {row.original.title}
-              </span>
-              {row.original.description ? (
-                <span className="line-clamp-1 block text-muted-foreground text-xs">{row.original.description}</span>
-              ) : null}
-            </span>
-          </Link>
-        );
-      },
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      filterFn: "equalsString",
-      cell: ({ row }) => <StatusBadge status={row.original.status} />,
-    },
-    {
-      id: "priority",
-      accessorFn: (row) => ({ Low: 0, Medium: 1, High: 2, Urgent: 3 })[row.priority],
-      header: "Priority",
-      filterFn: "equalsString",
-      cell: ({ row }) => <PriorityBadge priority={row.original.priority} />,
-    },
-    {
-      id: "relatedTo",
-      header: "Related To",
-      enableSorting: false,
-      cell: ({ row }) => <RelatedToCell task={row.original} />,
-    },
-    {
-      id: "owner",
-      accessorFn: (row) => getOwnerLabel(row),
-      header: "Owner",
-      cell: ({ row }) => {
-        if (!row.original.ownerId) {
-          return <span className="text-muted-foreground text-sm">Unassigned</span>;
-        }
-        const name = getOwnerLabel(row.original);
-        return (
-          <div className="flex items-center gap-2">
-            <Avatar className={cn("size-6 font-medium", avatarTone(name))}>
-              <AvatarFallback className="text-[10px]">{getInitials(name)}</AvatarFallback>
-            </Avatar>
-            <span className="truncate text-sm">{name}</span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "dueAt",
-      accessorFn: (row) => parseISO(getTaskDueAt(row)).getTime(),
-      id: "due",
-      header: "Due Date",
-      cell: ({ row }) => <DueDateCell task={row.original} />,
-    },
-    {
-      accessorKey: "reminderAt",
-      header: "Reminder",
-      enableSorting: false,
-      cell: ({ row }) => <ReminderCell task={row.original} />,
-    },
-    {
-      accessorKey: "updatedAt",
-      accessorFn: (row) => parseISO(row.updatedAt ?? row.createdAt).getTime(),
-      header: "Last Updated",
-      cell: ({ row }) => (
+            {task.description ? (
+              <span className="line-clamp-1 block text-muted-foreground text-xs">{task.description}</span>
+            ) : null}
+          </span>
+        </Link>
+      );
+    case "task.status":
+      return <StatusBadge status={task.status} />;
+    case "task.priority":
+      return <PriorityBadge priority={task.priority} />;
+    case "task.relatedTo":
+      return <RelatedToCell task={task} />;
+    case "task.owner":
+      return <OwnerCell ownerId={task.ownerId ?? null} />;
+    case "task.dueAt":
+      return <DueDateCell task={task} />;
+    case "task.reminderAt":
+      return <ReminderCell task={task} />;
+    case "task.outcome":
+      return (
+        <span className="line-clamp-2 block max-w-[200px] text-muted-foreground text-sm">{task.outcome ?? "—"}</span>
+      );
+    case "task.updatedAt":
+      return (
         <span className="text-muted-foreground text-sm tabular-nums">
-          {format(parseISO(row.original.updatedAt ?? row.original.createdAt), "MMM d, yyyy")}
+          {format(parseISO(task.updatedAt ?? task.createdAt), "MMM d, yyyy")}
         </span>
-      ),
+      );
+    default:
+      break;
+  }
+
+  if (!field.isCore) {
+    const isClosed = task.status === "Canceled";
+    return (
+      <EditableCustomCell
+        field={field}
+        value={task.customFields?.[field.systemName]}
+        disabled={isClosed}
+        disabledReason={isClosed ? "Canceled tasks cannot be edited." : undefined}
+        onCommit={(value) => onCommitCustomValue(task, field, value)}
+      />
+    );
+  }
+
+  return null;
+}
+
+export function getTasksSelectColumn(): ColumnDef<Activity> {
+  return {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        aria-label="Select all tasks on this page"
+        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        aria-label={`Select ${row.original.title}`}
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  };
+}
+
+export function getTasksActionsColumn(options?: TaskColumnsOptions): ColumnDef<Activity> {
+  return {
+    id: "actions",
+    header: () => <div className="text-right">Actions</div>,
+    cell: ({ row }) => {
+      const task = row.original;
+      const isOpen = task.status === "To Do" || task.status === "In Progress";
+      const isCompleted = task.status === "Completed";
+      const isCanceled = task.status === "Canceled";
+      return (
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label={`Open actions for ${task.title}`}
+                className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
+                size="icon-sm"
+                variant="ghost"
+              >
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => options?.onView?.(task)}>View task</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => options?.onEditTask?.(task)}>Edit task</DropdownMenuItem>
+              {isOpen ? (
+                <>
+                  <DropdownMenuSeparator />
+                  {task.status === "To Do" ? (
+                    <DropdownMenuItem onClick={() => options?.onStartTask?.(task)}>
+                      <CircleDotDashed className="size-3.5" />
+                      Start Task
+                    </DropdownMenuItem>
+                  ) : null}
+                  <DropdownMenuItem onClick={() => options?.onCompleteTask?.(task)}>
+                    <CheckCircle2 className="size-3.5" />
+                    Mark Complete
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => options?.onRescheduleTask?.(task)}>
+                    <CalendarClock className="size-3.5" />
+                    Reschedule
+                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive" onClick={() => options?.onCancelTask?.(task)}>
+                    <XCircle className="size-3.5" />
+                    Cancel Task
+                  </DropdownMenuItem>
+                </>
+              ) : null}
+              {isCompleted || isCanceled ? (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => options?.onReopenTask?.(task)}>
+                    <RotateCcw className="size-3.5" />
+                    Reopen Task
+                  </DropdownMenuItem>
+                </>
+              ) : null}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
     },
-    {
-      id: "actions",
-      header: () => <div className="text-right">Actions</div>,
-      cell: ({ row }) => {
-        const task = row.original;
-        const isOpen = task.status === "To Do" || task.status === "In Progress";
-        const isCompleted = task.status === "Completed";
-        const isCanceled = task.status === "Canceled";
-        return (
-          <div className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label={`Open actions for ${task.title}`}
-                  className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
-                  size="icon-sm"
-                  variant="ghost"
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => options?.onView?.(task)}>View task</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => options?.onEditTask?.(task)}>Edit task</DropdownMenuItem>
-                {isOpen ? (
-                  <>
-                    <DropdownMenuSeparator />
-                    {task.status === "To Do" ? (
-                      <DropdownMenuItem onClick={() => options?.onStartTask?.(task)}>
-                        <CircleDotDashed className="size-3.5" />
-                        Start Task
-                      </DropdownMenuItem>
-                    ) : null}
-                    <DropdownMenuItem onClick={() => options?.onCompleteTask?.(task)}>
-                      <CheckCircle2 className="size-3.5" />
-                      Mark Complete
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => options?.onRescheduleTask?.(task)}>
-                      <CalendarClock className="size-3.5" />
-                      Reschedule
-                    </DropdownMenuItem>
-                    <DropdownMenuItem variant="destructive" onClick={() => options?.onCancelTask?.(task)}>
-                      <XCircle className="size-3.5" />
-                      Cancel Task
-                    </DropdownMenuItem>
-                  </>
-                ) : null}
-                {isCompleted || isCanceled ? (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => options?.onReopenTask?.(task)}>
-                      <RotateCcw className="size-3.5" />
-                      Reopen Task
-                    </DropdownMenuItem>
-                  </>
-                ) : null}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        );
-      },
-      enableHiding: false,
-      enableSorting: false,
-    },
-  ];
+    enableHiding: false,
+    enableSorting: false,
+  };
 }

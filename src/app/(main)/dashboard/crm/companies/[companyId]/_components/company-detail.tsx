@@ -36,6 +36,7 @@ import { useActivityStore } from "@/app/(main)/dashboard/crm/_components/activit
 import { currentSalesOwnerId, getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
 import { useContactStore } from "@/app/(main)/dashboard/crm/contacts/_components/contacts-data/use-contact-store";
 import { useLeadStore } from "@/app/(main)/dashboard/crm/leads/_components/leads-data/use-lead-store";
+import { CustomFieldsCard } from "@/components/crm/table-engine/custom-fields-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -644,6 +645,8 @@ export function CompanyDetail({ companyId }: { companyId: string }) {
         </div>
 
         <div className="flex flex-col gap-4">
+          <CustomFieldsCard entityType="company" pluralLabel="Companies" values={company.customFields} />
+
           <Card>
             <CardHeader>
               <CardTitle>Company Information</CardTitle>

@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { salesOwners } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { CustomFieldFormControl, emptyValueForType } from "@/components/crm/table-engine/custom-field-form-controls";
+import { useEntityFormFields } from "@/components/crm/table-engine/use-crm-entity-table";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -23,6 +25,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { validateFieldValue } from "@/lib/crm-table-engine/format";
+import type { CustomFieldValue, TableField } from "@/lib/crm-table-engine/types";
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
 
 import { industryOptions, sizeOptions, typeOptions } from "./companies-data/data";
 import type { Company, CompanyIndustry, CompanySize, CompanyType } from "./companies-data/schema";
@@ -38,6 +43,7 @@ const companyFormSchema = z.object({
   website: z.string().optional(),
   ownerId: z.string().optional(),
   description: z.string().optional(),
+  custom: z.record(z.string(), customFieldValueSchema),
 });
 
 type CompanyFormValues = z.infer<typeof companyFormSchema>;
@@ -46,7 +52,27 @@ function generateId(): string {
   return `company-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function toFormValues(company: Company): CompanyFormValues {
+function existingCustomValuesFor(
+  company: Company | undefined,
+  formFields: TableField[],
+): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of formFields) {
+    const current = company?.customFields?.[field.systemName];
+    values[field.systemName] = current === undefined ? null : current;
+  }
+  return values;
+}
+
+function defaultCustomValuesFor(formFields: TableField[]): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of formFields) {
+    values[field.systemName] = emptyValueForType(field.type, field.defaultValue);
+  }
+  return values;
+}
+
+function toFormValues(company: Company, formFields: TableField[]): CompanyFormValues {
   return {
     name: company.name,
     industry: company.industry,
@@ -57,10 +83,16 @@ function toFormValues(company: Company): CompanyFormValues {
     website: company.website ?? "",
     ownerId: company.ownerId ?? "",
     description: company.description ?? "",
+    custom: existingCustomValuesFor(company, formFields),
   };
 }
 
-function fromFormValues(values: CompanyFormValues, existingCompany?: Company): Company {
+function fromFormValues(
+  values: CompanyFormValues,
+  customValues: Record<string, CustomFieldValue>,
+  formFields: TableField[],
+  existingCompany?: Company,
+): Company {
   const now = new Date().toISOString().slice(0, 10);
   return {
     id: existingCompany?.id ?? generateId(),
@@ -90,6 +122,13 @@ function fromFormValues(values: CompanyFormValues, existingCompany?: Company): C
     archivedBy: existingCompany?.archivedBy,
     createdAt: existingCompany?.createdAt ?? now,
     updatedAt: now,
+    customFields: (() => {
+      const merged: Record<string, CustomFieldValue> = { ...(existingCompany?.customFields ?? {}) };
+      for (const field of formFields) {
+        merged[field.systemName] = customValues[field.systemName] ?? null;
+      }
+      return merged;
+    })(),
   };
 }
 
@@ -106,10 +145,12 @@ export function CompanyForm({ open, onOpenChange, company }: CompanyFormProps) {
   const [dirty, setDirty] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
 
+  const formFields = useEntityFormFields("company");
+
   const form = useForm<CompanyFormValues>({
     resolver: zodResolver(companyFormSchema),
     defaultValues: company
-      ? toFormValues(company)
+      ? toFormValues(company, formFields)
       : {
           name: "",
           industry: "Technology",
@@ -120,6 +161,7 @@ export function CompanyForm({ open, onOpenChange, company }: CompanyFormProps) {
           website: "",
           ownerId: "",
           description: "",
+          custom: {},
         },
   });
 
@@ -127,7 +169,7 @@ export function CompanyForm({ open, onOpenChange, company }: CompanyFormProps) {
     if (open) {
       form.reset(
         company
-          ? toFormValues(company)
+          ? toFormValues(company, formFields)
           : {
               name: "",
               industry: "Technology",
@@ -138,11 +180,12 @@ export function CompanyForm({ open, onOpenChange, company }: CompanyFormProps) {
               website: "",
               ownerId: "",
               description: "",
+              custom: defaultCustomValuesFor(formFields),
             },
       );
       setDirty(false);
     }
-  }, [open, company, form]);
+  }, [open, company, form, formFields]);
 
   useEffect(() => {
     const subscription = form.watch(() => {
@@ -162,7 +205,23 @@ export function CompanyForm({ open, onOpenChange, company }: CompanyFormProps) {
   );
 
   function onSubmit(values: CompanyFormValues) {
-    const companyData = fromFormValues(values, company);
+    let customInvalid = false;
+    const customValues: Record<string, CustomFieldValue> = {};
+    for (const field of formFields) {
+      const submitted = values.custom[field.systemName];
+      const normalized: CustomFieldValue = submitted === undefined ? null : submitted;
+      customValues[field.systemName] = normalized;
+      const error = validateFieldValue(field, normalized);
+      if (error) {
+        customInvalid = true;
+        form.setError(`custom.${field.systemName}`, { message: error });
+      } else {
+        form.clearErrors(`custom.${field.systemName}`);
+      }
+    }
+    if (customInvalid) return;
+
+    const companyData = fromFormValues(values, customValues, formFields, company);
     if (isEditing && company) {
       updateCompany(company.id, companyData);
       toast("Company updated", { description: `${companyData.name} has been updated.` });
@@ -386,6 +445,49 @@ export function CompanyForm({ open, onOpenChange, company }: CompanyFormProps) {
                   />
                 </FieldGroup>
               </div>
+
+              {formFields.length > 0 ? (
+                <>
+                  <Separator />
+                  <div>
+                    <h3 className="mb-3 font-medium text-muted-foreground text-xs uppercase tracking-wide">
+                      Custom Fields
+                    </h3>
+                    <FieldGroup className="gap-4">
+                      {formFields.map((field) => (
+                        <Controller
+                          key={field.id}
+                          control={form.control}
+                          name={`custom.${field.systemName}` as const}
+                          render={({ field: controllerField, fieldState }) => {
+                            const value = (controllerField.value ?? null) as CustomFieldValue;
+                            return (
+                              <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={`company-custom-${field.systemName}`}>
+                                  {field.displayLabel}
+                                  {field.required ? " *" : ""}
+                                </FieldLabel>
+                                <CustomFieldFormControl
+                                  id={`company-custom-${field.systemName}`}
+                                  field={field}
+                                  value={value}
+                                  onChange={(next) => controllerField.onChange(next)}
+                                />
+                                {field.description && field.type !== "long_text" ? (
+                                  <p className="text-muted-foreground text-xs">{field.description}</p>
+                                ) : null}
+                                {fieldState.invalid && fieldState.error ? (
+                                  <FieldError errors={[fieldState.error]} />
+                                ) : null}
+                              </Field>
+                            );
+                          }}
+                        />
+                      ))}
+                    </FieldGroup>
+                  </div>
+                </>
+              ) : null}
             </FieldGroup>
           </div>
 

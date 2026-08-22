@@ -5120,3 +5120,25 @@ export const lifecycleStageOptions: readonly ContactLifecycleStage[] = [
 ] as const;
 
 export const openDealStateOptions = ["Has Open Deals", "No Open Deals"] as const;
+
+const contactCustomFieldValueSeed: Record<string, Contact["customFields"]> = {
+  "con-001": { preferred_contact_time: "Morning (9–12)", customer_segment: "Enterprise" },
+  "con-002": { preferred_contact_time: "Afternoon (12–5)", customer_segment: "Mid-Market" },
+  "con-004": { customer_segment: "Enterprise" },
+  "con-006": { preferred_contact_time: "Evening (5–8)", customer_segment: "SMB" },
+  "con-009": { preferred_contact_time: "Morning (9–12)", customer_segment: "Startup" },
+  "con-013": { customer_segment: "Mid-Market" },
+  "con-017": { preferred_contact_time: "Afternoon (12–5)", customer_segment: "Enterprise" },
+  "con-021": { preferred_contact_time: "Morning (9–12)" },
+  "con-026": { customer_segment: "SMB" },
+  "con-031": { preferred_contact_time: "Evening (5–8)", customer_segment: "Startup" },
+  "con-038": { customer_segment: "Enterprise", preferred_contact_time: "Morning (9–12)" },
+  "con-044": { preferred_contact_time: "Afternoon (12–5)" },
+};
+
+for (const contact of contacts) {
+  const seed = contactCustomFieldValueSeed[contact.id];
+  if (seed) {
+    contact.customFields = seed;
+  }
+}

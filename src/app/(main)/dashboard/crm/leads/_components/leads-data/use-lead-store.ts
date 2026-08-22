@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { leads as mockLeads } from "./data";
-import type { Lead } from "./schema";
+import type { CustomFieldValueRecord, Lead } from "./schema";
 
 type LeadStore = {
   leads: Lead[];
@@ -12,6 +12,9 @@ type LeadStore = {
   restoreLead: (id: string) => void;
   bulkArchiveLeads: (ids: string[], archivedBy: string) => void;
   bulkRestoreLeads: (ids: string[]) => void;
+  setLeadCustomFieldValue: (id: string, systemName: string, value: NonNullable<Lead["customFields"]>[string]) => void;
+  setMultipleLeadCustomFieldValues: (id: string, values: CustomFieldValueRecord) => void;
+  clearLeadCustomFieldValue: (id: string, systemName: string) => void;
 };
 
 export const useLeadStore = create<LeadStore>((set, get) => ({
@@ -49,5 +52,44 @@ export const useLeadStore = create<LeadStore>((set, get) => ({
   bulkRestoreLeads: (ids: string[]) =>
     set((state) => ({
       leads: state.leads.map((l) => (ids.includes(l.id) ? { ...l, archivedAt: null, archivedBy: null } : l)),
+    })),
+
+  setLeadCustomFieldValue: (id, systemName, value) =>
+    set((state) => ({
+      leads: state.leads.map((l) =>
+        l.id === id
+          ? {
+              ...l,
+              updatedAt: new Date().toISOString().slice(0, 10),
+              customFields: { ...(l.customFields ?? {}), [systemName]: value },
+            }
+          : l,
+      ),
+    })),
+
+  setMultipleLeadCustomFieldValues: (id, values) =>
+    set((state) => ({
+      leads: state.leads.map((l) =>
+        l.id === id
+          ? {
+              ...l,
+              updatedAt: new Date().toISOString().slice(0, 10),
+              customFields: { ...(l.customFields ?? {}), ...values },
+            }
+          : l,
+      ),
+    })),
+
+  clearLeadCustomFieldValue: (id, systemName) =>
+    set((state) => ({
+      leads: state.leads.map((l) =>
+        l.id === id && l.customFields
+          ? {
+              ...l,
+              updatedAt: new Date().toISOString().slice(0, 10),
+              customFields: Object.fromEntries(Object.entries(l.customFields).filter(([key]) => key !== systemName)),
+            }
+          : l,
+      ),
     })),
 }));

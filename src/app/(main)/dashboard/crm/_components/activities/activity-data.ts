@@ -292,3 +292,45 @@ function currentCreator(index: number): string {
 }
 
 export const activities: Activity[] = Array.from({ length: 120 }, (_, i) => buildActivity(i));
+
+const activityCustomFieldValueSeed: Record<string, NonNullable<Activity["customFields"]>> = {
+  "act-001": { location: "HQ — Room 4B", follow_up_required: true },
+  "act-002": { follow_up_required: false },
+  "act-005": { location: "Zoom" },
+  "act-009": { location: "Client site — Berlin", follow_up_required: true },
+  "act-014": { follow_up_required: true },
+  "act-020": { location: "Phone" },
+  "act-027": { location: "HQ — Atrium", follow_up_required: false },
+  "act-036": { follow_up_required: true },
+};
+
+for (const activity of activities) {
+  const seed = activityCustomFieldValueSeed[activity.id];
+  if (seed) {
+    activity.customFields = seed;
+  }
+}
+
+const taskCustomFieldValueSeed: Record<string, NonNullable<Activity["customFields"]>> = {
+  "act-011": { external_dependency: "Waiting on customer IT sign-off for SSO setup.", estimated_hours: 6 },
+  "act-018": { estimated_hours: 3 },
+  "act-031": { external_dependency: "Legal review of the DPA attachment.", estimated_hours: 12 },
+  "act-044": { estimated_hours: 2 },
+  "act-059": { external_dependency: "Vendor demo environment provisioning.", estimated_hours: 8 },
+  "act-077": { estimated_hours: 4 },
+};
+
+const TASK_CUSTOM_KEYS = new Set(["external_dependency", "estimated_hours"]);
+
+for (const activity of activities) {
+  if (activity.type !== "Task") continue;
+  const seed = taskCustomFieldValueSeed[activity.id];
+  if (seed) {
+    const existing = activity.customFields ?? {};
+    for (const [key, value] of Object.entries(seed)) {
+      if (!TASK_CUSTOM_KEYS.has(key)) continue;
+      existing[key] = value;
+    }
+    activity.customFields = existing;
+  }
+}

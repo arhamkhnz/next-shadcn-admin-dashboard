@@ -1308,3 +1308,24 @@ export const sourceOptions: DealSource[] = [
   "Website",
   "Cold Call",
 ];
+
+const dealCustomFieldValueSeed: Record<string, Deal["customFields"]> = {
+  "dl-001": { competitor: "Vertex Corp", contract_type: "Subscription", implementation_required: true },
+  "dl-002": { contract_type: "Fixed Fee" },
+  "dl-003": { competitor: "None known", contract_type: "Pilot", implementation_required: false },
+  "dl-005": { competitor: "Northline", implementation_required: true },
+  "dl-008": { contract_type: "Time & Materials" },
+  "dl-012": { competitor: "Apex Systems", contract_type: "Subscription", implementation_required: false },
+  "dl-017": { contract_type: "Fixed Fee", implementation_required: true },
+  "dl-021": { competitor: "Other", contract_type: "Time & Materials" },
+  "dl-026": { implementation_required: false, contract_type: "Subscription" },
+  "dl-032": { competitor: "Vertex Corp", implementation_required: true },
+  "dl-040": { contract_type: "Pilot" },
+};
+
+for (const deal of deals) {
+  const seed = dealCustomFieldValueSeed[deal.id];
+  if (seed) {
+    deal.customFields = seed;
+  }
+}

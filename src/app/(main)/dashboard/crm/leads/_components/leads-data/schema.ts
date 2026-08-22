@@ -80,6 +80,10 @@ export const preferredContactSchema = z.enum(["email", "phone", "linkedin", "in_
 
 export type PreferredContact = z.infer<typeof preferredContactSchema>;
 
+export const customFieldValueSchema = z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.null()]);
+
+export type CustomFieldValueRecord = Record<string, z.infer<typeof customFieldValueSchema>>;
+
 export const leadSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -107,6 +111,7 @@ export const leadSchema = z.object({
   notes: z.array(leadNoteSchema).optional(),
   archivedAt: z.string().nullable().optional(),
   archivedBy: z.string().nullable().optional(),
+  customFields: z.record(z.string(), customFieldValueSchema).optional(),
 });
 
 export type Lead = z.infer<typeof leadSchema>;

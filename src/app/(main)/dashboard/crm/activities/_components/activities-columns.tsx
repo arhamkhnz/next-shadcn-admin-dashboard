@@ -12,10 +12,11 @@ import {
   activityPriorityMeta,
   activityStatusMeta,
   activityTypeMeta,
-  getOwnerLabel,
   getRelatedRecords,
   getScheduleState,
 } from "@/app/(main)/dashboard/crm/_components/activities/activity-utils";
+import { getOwnerName } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { EditableCustomCell } from "@/components/crm/table-engine/editable-custom-cell";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { TableField } from "@/lib/crm-table-engine/types";
 import { cn, getInitials } from "@/lib/utils";
 
 const today = new Date(2026, 7, 16);
@@ -36,13 +38,6 @@ export type ActivitiesColumnsOptions = {
   onCompleteActivity?: (activity: Activity) => void;
   onCancelActivity?: (activity: Activity) => void;
   onRescheduleActivity?: (activity: Activity) => void;
-};
-
-const prioritySortOrder: Record<ActivityPriority, number> = {
-  Low: 0,
-  Medium: 1,
-  High: 2,
-  Urgent: 3,
 };
 
 function avatarTone(name: string) {
@@ -153,151 +148,153 @@ function ScheduledCell({ activity }: { activity: Activity }) {
   );
 }
 
-export function getActivitiesColumns(options?: ActivitiesColumnsOptions): ColumnDef<Activity>[] {
-  return [
-    {
-      accessorKey: "title",
-      header: "Activity",
-      cell: ({ row }) => {
-        const meta = activityTypeMeta[row.original.type];
-        const Icon = meta.icon;
-        return (
-          <Link
-            href={`/dashboard/crm/activities/${row.original.id}`}
-            className="flex min-w-0 max-w-[260px] items-start gap-2.5 transition-opacity hover:opacity-80"
-          >
-            <span
-              className={cn("mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full", meta.badgeClass)}
-            >
-              <Icon className="size-3" />
-            </span>
-            <span className="min-w-0">
-              <span className="line-clamp-2 font-medium text-foreground text-sm">{row.original.title}</span>
-              {row.original.description ? (
-                <span className="line-clamp-1 block text-muted-foreground text-xs">{row.original.description}</span>
-              ) : null}
-            </span>
-          </Link>
-        );
-      },
-    },
-    {
-      accessorKey: "type",
-      header: "Type",
-      filterFn: "equalsString",
-      cell: ({ row }) => <TypeBadge type={row.original.type} />,
-    },
-    {
-      id: "relatedTo",
-      header: "Related To",
-      enableSorting: false,
-      cell: ({ row }) => <RelatedToCell activity={row.original} />,
-    },
-    {
-      id: "owner",
-      accessorFn: (row) => getOwnerLabel(row),
-      header: "Owner",
-      cell: ({ row }) => {
-        if (!row.original.ownerId) {
-          return <span className="text-muted-foreground text-sm">Unassigned</span>;
-        }
-        const name = getOwnerLabel(row.original);
-        return (
-          <div className="flex items-center gap-2">
-            <Avatar className={cn("size-6 font-medium", avatarTone(name))}>
-              <AvatarFallback className="text-[10px]">{getInitials(name)}</AvatarFallback>
-            </Avatar>
-            <span className="truncate text-sm">{name}</span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "scheduledAt",
-      accessorFn: (row) => parseISO(row.scheduledAt).getTime(),
-      id: "scheduled",
-      header: "Scheduled",
-      cell: ({ row }) => <ScheduledCell activity={row.original} />,
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      filterFn: "equalsString",
-      cell: ({ row }) => <StatusBadge status={row.original.status} />,
-    },
-    {
-      accessorKey: "priority",
-      accessorFn: (row) => prioritySortOrder[row.priority],
-      header: "Priority",
-      filterFn: "equalsString",
-      cell: ({ row }) => <PriorityBadge priority={row.original.priority} />,
-    },
-    {
-      accessorKey: "outcome",
-      header: "Outcome",
-      enableSorting: false,
-      cell: ({ row }) => (
+export function renderActivityFieldCell(params: {
+  field: TableField;
+  activity: Activity;
+  onCommitCustomValue: (
+    activity: Activity,
+    field: TableField,
+    value: NonNullable<Activity["customFields"]>[string],
+  ) => void;
+}) {
+  const { field, activity, onCommitCustomValue } = params;
+
+  switch (field.key) {
+    case "activity.title": {
+      const meta = activityTypeMeta[activity.type];
+      const Icon = meta.icon;
+      return (
+        <Link
+          href={`/dashboard/crm/activities/${activity.id}`}
+          className="flex min-w-0 max-w-[260px] items-start gap-2.5 transition-opacity hover:opacity-80"
+        >
+          <span className={cn("mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full", meta.badgeClass)}>
+            <Icon className="size-3" />
+          </span>
+          <span className="min-w-0">
+            <span className="line-clamp-2 font-medium text-foreground text-sm">{activity.title}</span>
+            {activity.description ? (
+              <span className="line-clamp-1 block text-muted-foreground text-xs">{activity.description}</span>
+            ) : null}
+          </span>
+        </Link>
+      );
+    }
+    case "activity.type":
+      return <TypeBadge type={activity.type} />;
+    case "activity.relatedTo":
+      return <RelatedToCell activity={activity} />;
+    case "activity.owner":
+      return <OwnerCell ownerId={activity.ownerId} />;
+    case "activity.scheduledAt":
+      return <ScheduledCell activity={activity} />;
+    case "activity.status":
+      return <StatusBadge status={activity.status} />;
+    case "activity.priority":
+      return <PriorityBadge priority={activity.priority} />;
+    case "activity.outcome":
+      return (
         <span className="line-clamp-2 block max-w-[200px] text-muted-foreground text-sm">
-          {row.original.outcome ?? "—"}
+          {activity.outcome ?? "—"}
         </span>
-      ),
+      );
+    case "activity.createdAt":
+      return (
+        <span className="text-muted-foreground text-sm tabular-nums">
+          {format(parseISO(activity.createdAt), "MMM d, yyyy")}
+        </span>
+      );
+    default:
+      break;
+  }
+
+  if (!field.isCore) {
+    const isClosed = activity.status === "Canceled";
+    return (
+      <EditableCustomCell
+        field={field}
+        value={activity.customFields?.[field.systemName]}
+        disabled={isClosed}
+        disabledReason={isClosed ? "Canceled activities cannot be edited." : undefined}
+        onCommit={(value) => onCommitCustomValue(activity, field, value)}
+      />
+    );
+  }
+
+  return null;
+}
+
+function OwnerCell({ ownerId }: { ownerId: string | null }) {
+  if (!ownerId) {
+    return <span className="text-muted-foreground text-sm">Unassigned</span>;
+  }
+  const name = getOwnerName(ownerId);
+  return (
+    <div className="flex items-center gap-2">
+      <Avatar className={cn("size-6 font-medium", avatarTone(name))}>
+        <AvatarFallback className="text-[10px]">{getInitials(name)}</AvatarFallback>
+      </Avatar>
+      <span className="truncate text-sm">{name}</span>
+    </div>
+  );
+}
+
+export function getActivitiesActionsColumn(options?: ActivitiesColumnsOptions): ColumnDef<Activity> {
+  return {
+    id: "actions",
+    header: () => <div className="text-right">Actions</div>,
+    cell: ({ row }) => {
+      const activity = row.original;
+      const isScheduled = activity.status === "Scheduled";
+      const isCanceled = activity.status === "Canceled";
+      return (
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label={`Open actions for ${activity.title}`}
+                className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
+                size="icon-sm"
+                variant="ghost"
+              >
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => options?.onView?.(activity)}>View activity</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => options?.onEditActivity?.(activity)}>Edit activity</DropdownMenuItem>
+              {isScheduled ? (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => options?.onCompleteActivity?.(activity)}>
+                    <CheckCircle2 className="size-3.5" />
+                    Mark Complete
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => options?.onRescheduleActivity?.(activity)}>
+                    <CalendarClock className="size-3.5" />
+                    Reschedule
+                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive" onClick={() => options?.onCancelActivity?.(activity)}>
+                    <XCircle className="size-3.5" />
+                    Cancel Activity
+                  </DropdownMenuItem>
+                </>
+              ) : null}
+              {isCanceled ? (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => options?.onRescheduleActivity?.(activity)}>
+                    <RotateCcw className="size-3.5" />
+                    Reschedule
+                  </DropdownMenuItem>
+                </>
+              ) : null}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
     },
-    {
-      id: "actions",
-      header: () => <div className="text-right">Actions</div>,
-      cell: ({ row }) => {
-        const activity = row.original;
-        const isScheduled = activity.status === "Scheduled";
-        const isCanceled = activity.status === "Canceled";
-        return (
-          <div className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label={`Open actions for ${activity.title}`}
-                  className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
-                  size="icon-sm"
-                  variant="ghost"
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => options?.onView?.(activity)}>View activity</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => options?.onEditActivity?.(activity)}>Edit activity</DropdownMenuItem>
-                {isScheduled ? (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => options?.onCompleteActivity?.(activity)}>
-                      <CheckCircle2 className="size-3.5" />
-                      Mark Complete
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => options?.onRescheduleActivity?.(activity)}>
-                      <CalendarClock className="size-3.5" />
-                      Reschedule
-                    </DropdownMenuItem>
-                    <DropdownMenuItem variant="destructive" onClick={() => options?.onCancelActivity?.(activity)}>
-                      <XCircle className="size-3.5" />
-                      Cancel Activity
-                    </DropdownMenuItem>
-                  </>
-                ) : null}
-                {isCanceled ? (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => options?.onRescheduleActivity?.(activity)}>
-                      <RotateCcw className="size-3.5" />
-                      Reschedule
-                    </DropdownMenuItem>
-                  </>
-                ) : null}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        );
-      },
-      enableHiding: false,
-      enableSorting: false,
-    },
-  ];
+    enableHiding: false,
+    enableSorting: false,
+  };
 }

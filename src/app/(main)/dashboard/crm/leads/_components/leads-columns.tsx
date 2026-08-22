@@ -31,6 +31,83 @@ export type LeadsColumnsOptions = {
   onRestoreLead?: (lead: Lead) => void;
 };
 
+export function getLeadsActionsColumn(options?: LeadsColumnsOptions): ColumnDef<Lead> {
+  return {
+    id: "actions",
+    header: () => <div className="text-right">Actions</div>,
+    cell: ({ row }) => {
+      const isArchived = Boolean(row.original.archivedAt);
+      return (
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label={`Open actions for ${row.original.name}`}
+                className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
+                size="icon-sm"
+                variant="ghost"
+              >
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => {
+                  window.location.href = `/dashboard/crm/leads/${row.original.id}`;
+                }}
+              >
+                View lead
+              </DropdownMenuItem>
+              {!isArchived ? (
+                <>
+                  <DropdownMenuItem onClick={() => options?.onEditLead?.(row.original)}>Edit lead</DropdownMenuItem>
+                  <DropdownMenuItem disabled>Assign owner (coming soon)</DropdownMenuItem>
+                  <DropdownMenuItem disabled>Change status (coming soon)</DropdownMenuItem>
+                  <DropdownMenuItem disabled>Add tag (coming soon)</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem variant="destructive" onClick={() => options?.onArchiveLead?.(row.original)}>
+                    Archive
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem onClick={() => options?.onRestoreLead?.(row.original)}>Restore lead</DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    },
+    enableHiding: false,
+    enableSorting: false,
+  };
+}
+
+export function getLeadsSelectColumn(): ColumnDef<Lead> {
+  return {
+    id: "select",
+    header: ({ table }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          aria-label="Select all leads"
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        />
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          aria-label={`Select ${row.original.name}`}
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+        />
+      </div>
+    ),
+    enableHiding: false,
+    enableSorting: false,
+  };
+}
+
 const statusMeta: Record<LeadStatus, { badgeClass: string; dotClass: string }> = {
   New: {
     badgeClass:
@@ -88,7 +165,7 @@ export function getFollowUpState(nextActivity: string | null): "Overdue" | "Due 
   return "Upcoming";
 }
 
-function formatRelativeDate(dateStr: string): string {
+export function formatRelativeDate(dateStr: string): string {
   const date = parseISO(dateStr);
   const diff = differenceInCalendarDays(today, date);
   if (diff === 0) return "Today";
@@ -98,7 +175,7 @@ function formatRelativeDate(dateStr: string): string {
   return format(date, "MMM d");
 }
 
-function avatarTone(name: string) {
+export function avatarTone(name: string) {
   const tones = [
     "[&_[data-slot=avatar-fallback]]:bg-amber-100 [&_[data-slot=avatar-fallback]]:text-amber-700 dark:[&_[data-slot=avatar-fallback]]:bg-amber-500/15 dark:[&_[data-slot=avatar-fallback]]:text-amber-300",
     "[&_[data-slot=avatar-fallback]]:bg-orange-100 [&_[data-slot=avatar-fallback]]:text-orange-700 dark:[&_[data-slot=avatar-fallback]]:bg-orange-500/15 dark:[&_[data-slot=avatar-fallback]]:text-orange-300",
@@ -114,7 +191,7 @@ function avatarTone(name: string) {
   return tones[name.length % tones.length];
 }
 
-function LeadNameCell({ name, jobTitle, leadId }: { name: string; jobTitle?: string; leadId: string }) {
+export function LeadNameCell({ name, jobTitle, leadId }: { name: string; jobTitle?: string; leadId: string }) {
   return (
     <Link
       href={`/dashboard/crm/leads/${leadId}`}
@@ -131,7 +208,7 @@ function LeadNameCell({ name, jobTitle, leadId }: { name: string; jobTitle?: str
   );
 }
 
-function StatusBadge({ status }: { status: LeadStatus }) {
+export function StatusBadge({ status }: { status: LeadStatus }) {
   const meta = statusMeta[status];
   return (
     <Badge className={cn("gap-1.5 border px-2 py-1 font-medium", meta.badgeClass)} variant="outline">
@@ -141,7 +218,7 @@ function StatusBadge({ status }: { status: LeadStatus }) {
   );
 }
 
-function ScoreBadge({ score }: { score: number }) {
+export function ScoreBadge({ score }: { score: number }) {
   const classification = getScoreClassification(score);
   const meta = classificationMeta[classification];
   return (
@@ -155,7 +232,7 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
-function FollowUpBadge({ nextActivity }: { nextActivity: string | null }) {
+export function FollowUpBadge({ nextActivity }: { nextActivity: string | null }) {
   const state = getFollowUpState(nextActivity);
 
   const meta: Record<string, { badgeClass: string; icon: typeof CheckCircle2 | null }> = {
@@ -192,29 +269,7 @@ function FollowUpBadge({ nextActivity }: { nextActivity: string | null }) {
 
 export function getLeadsColumns(options?: LeadsColumnsOptions): ColumnDef<Lead>[] {
   return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            aria-label="Select all leads"
-            checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            aria-label={`Select ${row.original.name}`}
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-          />
-        </div>
-      ),
-      enableHiding: false,
-      enableSorting: false,
-    },
+    getLeadsSelectColumn(),
     {
       id: "search",
       accessorFn: (row) => `${row.name} ${row.company ?? ""} ${row.email} ${row.phone ?? ""}`,
@@ -316,56 +371,7 @@ export function getLeadsColumns(options?: LeadsColumnsOptions): ColumnDef<Lead>[
         </span>
       ),
     },
-    {
-      id: "actions",
-      header: () => <div className="text-right">Actions</div>,
-      cell: ({ row }) => {
-        const isArchived = Boolean(row.original.archivedAt);
-        return (
-          <div className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label={`Open actions for ${row.original.name}`}
-                  className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
-                  size="icon-sm"
-                  variant="ghost"
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => {
-                    window.location.href = `/dashboard/crm/leads/${row.original.id}`;
-                  }}
-                >
-                  View lead
-                </DropdownMenuItem>
-                {!isArchived ? (
-                  <>
-                    <DropdownMenuItem onClick={() => options?.onEditLead?.(row.original)}>Edit lead</DropdownMenuItem>
-                    <DropdownMenuItem disabled>Assign owner (coming soon)</DropdownMenuItem>
-                    <DropdownMenuItem disabled>Change status (coming soon)</DropdownMenuItem>
-                    <DropdownMenuItem disabled>Add tag (coming soon)</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive" onClick={() => options?.onArchiveLead?.(row.original)}>
-                      Archive
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <DropdownMenuItem onClick={() => options?.onRestoreLead?.(row.original)}>
-                    Restore lead
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        );
-      },
-      enableHiding: false,
-      enableSorting: false,
-    },
+    getLeadsActionsColumn(options),
   ];
 }
 

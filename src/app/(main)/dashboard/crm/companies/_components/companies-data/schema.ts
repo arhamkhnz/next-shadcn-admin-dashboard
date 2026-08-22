@@ -1,5 +1,7 @@
 import z from "zod";
 
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
+
 export const companyTypeSchema = z.enum(["Prospect", "Customer", "Partner", "Former Customer"]);
 
 export type CompanyType = z.infer<typeof companyTypeSchema>;
@@ -119,6 +121,7 @@ export const companySchema = z.object({
   archivedBy: z.string().nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string().optional(),
+  customFields: z.record(z.string(), customFieldValueSchema).optional(),
 });
 
 export type Company = z.infer<typeof companySchema>;

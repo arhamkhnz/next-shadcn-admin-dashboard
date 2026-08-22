@@ -17,6 +17,8 @@ import { useCompanyStore } from "@/app/(main)/dashboard/crm/companies/_component
 import { useContactStore } from "@/app/(main)/dashboard/crm/contacts/_components/contacts-data/use-contact-store";
 import { useDealStore } from "@/app/(main)/dashboard/crm/deals/_components/deals-data/use-deal-store";
 import { useLeadStore } from "@/app/(main)/dashboard/crm/leads/_components/leads-data/use-lead-store";
+import { CustomFieldFormControl, emptyValueForType } from "@/components/crm/table-engine/custom-field-form-controls";
+import { useEntityFormFields } from "@/components/crm/table-engine/use-crm-entity-table";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -34,6 +36,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { validateFieldValue } from "@/lib/crm-table-engine/format";
+import type { CustomFieldValue, TableField } from "@/lib/crm-table-engine/types";
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
 import { cn } from "@/lib/utils";
 
 import type { Activity, ActivityDirection, ActivityStatus, ActivityType } from "./activity-schema";
@@ -64,6 +69,7 @@ const activityFormSchema = z
     companyId: z.string(),
     dealId: z.string(),
     relationships: z.boolean().optional(),
+    custom: z.record(z.string(), customFieldValueSchema),
   })
   .superRefine((values, ctx) => {
     const requiresSchedule = values.type !== "Note";
@@ -211,10 +217,11 @@ function emptyValues(defaults?: { type?: ActivityType; related?: PreselectedReco
     contactId: defaults?.related?.contactId ?? "",
     companyId: defaults?.related?.companyId ?? "",
     dealId: defaults?.related?.dealId ?? "",
+    custom: {},
   };
 }
 
-function toFormValues(activity: Activity): ActivityFormValues {
+function toFormValues(activity: Activity, formFields: TableField[]): ActivityFormValues {
   const { date, time } = splitDateTime(activity.scheduledAt);
   const reminder = activity.reminderAt ? splitDateTime(activity.reminderAt) : null;
   return {
@@ -233,6 +240,7 @@ function toFormValues(activity: Activity): ActivityFormValues {
     contactId: activity.contactId ?? "",
     companyId: activity.companyId ?? "",
     dealId: activity.dealId ?? "",
+    custom: existingCustomValuesFor(activity, formFields),
   };
 }
 
@@ -246,7 +254,27 @@ function resolveDirection(values: ActivityFormValues): ActivityDirection | null 
   return null;
 }
 
-function buildActivityFromForm(values: ActivityFormValues, existing?: Activity): Activity {
+function existingCustomValuesFor(
+  activity: Activity | undefined,
+  fields: TableField[],
+): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of fields) {
+    const current = activity?.customFields?.[field.systemName];
+    values[field.systemName] = current === undefined ? null : current;
+  }
+  return values;
+}
+
+function defaultCustomValuesFor(fields: TableField[]): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of fields) {
+    values[field.systemName] = emptyValueForType(field.type, field.defaultValue);
+  }
+  return values;
+}
+
+function buildActivityFromForm(values: ActivityFormValues, formFields: TableField[], existing?: Activity): Activity {
   const now = new Date().toISOString();
   const hasSchedule = Boolean(values.scheduledDate && values.scheduledTime);
   const scheduledAt = hasSchedule ? combineDateTime(values.scheduledDate, values.scheduledTime) : now;
@@ -286,6 +314,13 @@ function buildActivityFromForm(values: ActivityFormValues, existing?: Activity):
     contactId: values.contactId || null,
     companyId: values.companyId || null,
     dealId: values.dealId || null,
+    customFields: (() => {
+      const merged: Record<string, CustomFieldValue> = { ...(existing?.customFields ?? {}) };
+      for (const field of formFields) {
+        merged[field.systemName] = values.custom?.[field.systemName] ?? null;
+      }
+      return merged;
+    })(),
   };
 }
 
@@ -307,9 +342,15 @@ export function ActivityForm({
   const [companySearchOpen, setCompanySearchOpen] = useState(false);
   const [dealSearchOpen, setDealSearchOpen] = useState(false);
 
+  const isTaskEntity = lockType === true || defaultType === "Task";
+  const formEntityType: "task" | "activity" = isTaskEntity ? "task" : "activity";
+  const formFields = useEntityFormFields(formEntityType);
+
   const form = useForm<ActivityFormValues>({
     resolver: zodResolver(activityFormSchema),
-    defaultValues: activity ? toFormValues(activity) : emptyValues({ type: defaultType, related: defaultRelated }),
+    defaultValues: activity
+      ? toFormValues(activity, formFields)
+      : emptyValues({ type: defaultType, related: defaultRelated }),
   });
 
   const watchedType = form.watch("type");
@@ -346,26 +387,26 @@ export function ActivityForm({
 
   useEffect(() => {
     if (open) {
-      form.reset(
-        activity
-          ? toFormValues(activity)
-          : emptyValues({
-              type: defaultType,
-              related: {
-                leadId: defaultLeadId,
-                contactId: defaultContactId,
-                companyId: defaultCompanyId,
-                dealId: defaultDealId,
-              },
-            }),
-      );
+      const base = activity
+        ? toFormValues(activity, formFields)
+        : emptyValues({
+            type: defaultType,
+            related: {
+              leadId: defaultLeadId,
+              contactId: defaultContactId,
+              companyId: defaultCompanyId,
+              dealId: defaultDealId,
+            },
+          });
+      base.custom = activity ? existingCustomValuesFor(activity, formFields) : defaultCustomValuesFor(formFields);
+      form.reset(base);
       setDirty(false);
       setLeadSearchOpen(false);
       setContactSearchOpen(false);
       setCompanySearchOpen(false);
       setDealSearchOpen(false);
     }
-  }, [open, activity, defaultType, defaultLeadId, defaultContactId, defaultCompanyId, defaultDealId, form]);
+  }, [open, activity, defaultType, defaultLeadId, defaultContactId, defaultCompanyId, defaultDealId, form, formFields]);
 
   useEffect(() => {
     const subscription = form.watch(() => {
@@ -435,7 +476,23 @@ export function ActivityForm({
   }
 
   function onSubmit(values: ActivityFormValues) {
-    const activityData = buildActivityFromForm(values, activity ?? undefined);
+    let customInvalid = false;
+    const customValues: Record<string, CustomFieldValue> = {};
+    for (const field of formFields) {
+      const submitted = values.custom?.[field.systemName];
+      const normalized: CustomFieldValue = submitted === undefined ? null : submitted;
+      customValues[field.systemName] = normalized;
+      const error = validateFieldValue(field, normalized);
+      if (error) {
+        customInvalid = true;
+        form.setError(`custom.${field.systemName}`, { message: error });
+      } else {
+        form.clearErrors(`custom.${field.systemName}`);
+      }
+    }
+    if (customInvalid) return;
+
+    const activityData = buildActivityFromForm(values, formFields, activity ?? undefined);
     if (isEditing && activity) {
       updateActivity(activity.id, activityData);
       toast(isTaskForm ? "Task updated" : "Activity updated", {
@@ -748,6 +805,49 @@ export function ActivityForm({
                   />
                 </FieldGroup>
               </div>
+
+              {formFields.length > 0 ? (
+                <>
+                  <Separator />
+                  <div>
+                    <h3 className="mb-3 font-medium text-muted-foreground text-xs uppercase tracking-wide">
+                      Custom Fields
+                    </h3>
+                    <FieldGroup className="gap-4">
+                      {formFields.map((field) => (
+                        <Controller
+                          key={field.id}
+                          control={form.control}
+                          name={`custom.${field.systemName}` as const}
+                          render={({ field: controllerField, fieldState }) => {
+                            const value = (controllerField.value ?? null) as CustomFieldValue;
+                            return (
+                              <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={`activity-custom-${field.systemName}`}>
+                                  {field.displayLabel}
+                                  {field.required ? " *" : ""}
+                                </FieldLabel>
+                                <CustomFieldFormControl
+                                  id={`activity-custom-${field.systemName}`}
+                                  field={field}
+                                  value={value}
+                                  onChange={(next) => controllerField.onChange(next)}
+                                />
+                                {field.description && field.type !== "long_text" ? (
+                                  <p className="text-muted-foreground text-xs">{field.description}</p>
+                                ) : null}
+                                {fieldState.invalid && fieldState.error ? (
+                                  <FieldError errors={[fieldState.error]} />
+                                ) : null}
+                              </Field>
+                            );
+                          }}
+                        />
+                      ))}
+                    </FieldGroup>
+                  </div>
+                </>
+              ) : null}
 
               <Separator />
 

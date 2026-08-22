@@ -1,6 +1,6 @@
 CRM Frontend Scope
 
-This document is the source of truth for the CRM frontend module in Studio Admin. It defines the CRM navigation, pages, workflows, UI states, and mock data required before backend implementation.
+This document is the source of truth for the CRM frontend module in LynxMind. It defines the CRM navigation, pages, workflows, UI states, and mock data required before backend implementation.
 
 1. Purpose
 
@@ -28,7 +28,7 @@ Keep CRM-specific code colocated inside the CRM route until a second module genu
 
 Use semantic theme tokens. Do not hardcode arbitrary colors.
 
-New components must match the current Studio Admin visual language in light mode, dark mode, and every existing theme preset.
+New components must match the current LynxMind visual language in light mode, dark mode, and every existing theme preset.
 
 Do not add a dependency unless the required behavior cannot be built correctly with the installed packages.
 
@@ -244,6 +244,16 @@ Saved-view frontend examples such as All leads, My leads, New, Unassigned, Hot, 
 Row selection and mock bulk actions for assign owner, change status, add tag, and archive
 
 Import and export buttons as frontend-only demonstrations
+
+✅ Table customization pilot — implemented at `/dashboard/crm/leads` using the reusable engine in `src/lib/crm-table-engine` (frontend mock state only; no backend persistence):
+
+- Core field presentation customization: rename visible labels (technical keys such as `lead.name`, `lead.status`, `lead.owner` stay immutable), reorder columns, resize widths, show/hide where safe, restore default labels, and Reset Table Layout (restores default core labels/order/visibility/widths/sorting without deleting custom fields, values, or views).
+- Custom fields: unlimited creation from the plus button in the table header (type menu → configuration dialog). Supported types: text, long_text, number, currency, percentage, date, date_time, checkbox, single_select, multi_select, email, phone, url. Definitions carry id/entityType/key/systemName/displayLabel/description/type/required/visibleInTable/visibleInForm/position/width/options/defaultValue/timestamps/archivedAt. Rename, describe, reposition, resize, hide/show, include/exclude from forms, set required, archive and restore are supported; archiving never deletes stored values. Field type locks once values exist (no destructive conversion).
+- Custom values live on each Lead record as `customFields`, kept separate from definitions, and appear immediately in the table, inline cell editing (per-type validation, Escape-to-cancel, archived-lead protection), Add/Edit Lead forms (form-visible fields, required validation, defaults only on create), Lead detail (Custom Fields card with Show Empty Fields toggle), search (text-like types), and type-aware Add Filter controls (number/currency/percentage/date/checkbox/single/multi select).
+- Saved table views (id/name/entityType/columnOrder/columnVisibility/columnWidths/sortRules/filterRules/isDefault/createdAt/updatedAt/archivedAt): the previous quick-view buttons migrated into this store-backed model and keep working; create, rename, duplicate, switch, set default, archive, restore archived, and restore the default view layout are available. Industry example views (Automotive Buyers, Property Applicants, Recruitment Candidates) are seeded through the same public view/filter model rather than hardcoded columns.
+- Organization-level entity terminology (`leadSingularLabel` / `leadPluralLabel`, defaulting to Lead/Leads) is editable from Manage Fields → Entity Labels and applied consistently across visible text (page title, description, Add button, search placeholder, empty states, dialogs, toasts, summaries, detail back-link). Routes, stores, TypeScript types, permission keys, and internal field keys never change.
+- Engine placement: models, formatting/validation, filter evaluation, column adapter, and config-store factory live in `src/lib/crm-table-engine`; Leads wires them up in `leads/_components/leads-config/`. Contacts, Companies, and Deals integration remains future work reusing the same adapters.
+- ✅ Industry templates — frontend-only mock configuration in `/dashboard/crm/templates` with reusable presets for General Sales, Automotive, Real Estate, Recruitment, Agency, and SaaS. Applying a template only adds missing fields, terminology labels, pipeline stages, and saved views; it preserves all existing records, user-created fields, and custom values. No backend persistence, auth, authorization, or route/permission changes are introduced.
 
 Lead statuses
 
@@ -923,7 +933,7 @@ Audit-log persistence
 
 Workflow automation engine
 
-Custom-field builder
+Custom-field builder — the Leads frontend pilot is implemented (see section 5.2); a full builder with backend persistence, Contacts/Companies/Deals rollout, and industry templates remains deferred
 
 Products, catalog, quoting, and advanced forecasting
 
@@ -979,7 +989,7 @@ The CRM frontend phase is complete when:
 
 The CRM sidebar presents a focused CRM product while all unrelated source routes remain preserved.
 
-Every defined CRM page exists and follows the Studio Admin design system.
+Every defined CRM page exists and follows the LynxMind design system.
 
 Leads, contacts, companies, deals, and activities use consistent connected mock data.
 

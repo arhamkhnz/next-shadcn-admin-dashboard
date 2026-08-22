@@ -1,7 +1,12 @@
 import { create } from "zustand";
 
+import type { CustomFieldValueRecord } from "@/lib/crm-table-engine/value-schema";
+
 import { activities as mockActivities } from "./activity-data";
 import type { Activity, ActivityPriority, ActivityStatus } from "./activity-schema";
+
+type ActivityCustomValue = NonNullable<Activity["customFields"]>[string];
+
 import { canTransitionStatus, isActiveStatus, isTaskActivity } from "./activity-utils";
 
 export interface CompleteActivityInput {
@@ -36,6 +41,9 @@ type ActivityStore = {
   getActivitiesForContact: (contactId: string) => Activity[];
   getActivitiesForCompany: (companyId: string) => Activity[];
   getActivitiesForDeal: (dealId: string) => Activity[];
+  setActivityCustomFieldValue: (id: string, systemName: string, value: ActivityCustomValue) => void;
+  setMultipleActivityCustomFieldValues: (id: string, values: CustomFieldValueRecord) => void;
+  clearActivityCustomFieldValue: (id: string, systemName: string) => void;
 };
 
 function nowIso(): string {
@@ -229,4 +237,43 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
   getActivitiesForCompany: (companyId: string) => get().activities.filter((a) => a.companyId === companyId),
 
   getActivitiesForDeal: (dealId: string) => get().activities.filter((a) => a.dealId === dealId),
+
+  setActivityCustomFieldValue: (id, systemName, value) =>
+    set((state) => ({
+      activities: state.activities.map((a) =>
+        a.id === id
+          ? {
+              ...a,
+              updatedAt: nowIso(),
+              customFields: { ...(a.customFields ?? {}), [systemName]: value },
+            }
+          : a,
+      ),
+    })),
+
+  setMultipleActivityCustomFieldValues: (id, values) =>
+    set((state) => ({
+      activities: state.activities.map((a) =>
+        a.id === id
+          ? {
+              ...a,
+              updatedAt: nowIso(),
+              customFields: { ...(a.customFields ?? {}), ...values },
+            }
+          : a,
+      ),
+    })),
+
+  clearActivityCustomFieldValue: (id, systemName) =>
+    set((state) => ({
+      activities: state.activities.map((a) =>
+        a.id === id && a.customFields
+          ? {
+              ...a,
+              updatedAt: nowIso(),
+              customFields: Object.fromEntries(Object.entries(a.customFields).filter(([key]) => key !== systemName)),
+            }
+          : a,
+      ),
+    })),
 }));

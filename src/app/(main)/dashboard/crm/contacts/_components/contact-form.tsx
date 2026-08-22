@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { salesOwners } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
+import { CustomFieldFormControl, emptyValueForType } from "@/components/crm/table-engine/custom-field-form-controls";
+import { useEntityFormFields } from "@/components/crm/table-engine/use-crm-entity-table";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -24,6 +26,9 @@ import {
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { validateFieldValue } from "@/lib/crm-table-engine/format";
+import type { CustomFieldValue, TableField } from "@/lib/crm-table-engine/types";
+import { customFieldValueSchema } from "@/lib/crm-table-engine/value-schema";
 
 import type { Contact } from "./contacts-data/schema";
 import {
@@ -61,6 +66,7 @@ const contactFormSchema = z.object({
   isPrimaryContact: z.boolean().optional(),
   nextActivity: z.string().optional(),
   initialNote: z.string().trim().max(2000).optional(),
+  custom: z.record(z.string(), customFieldValueSchema),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -116,7 +122,27 @@ function generateId(): string {
   return `contact-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function toFormValues(contact: Contact): ContactFormValues {
+function existingCustomValuesFor(
+  contact: Contact | undefined,
+  formFields: TableField[],
+): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of formFields) {
+    const current = contact?.customFields?.[field.systemName];
+    values[field.systemName] = current === undefined ? null : current;
+  }
+  return values;
+}
+
+function defaultCustomValuesFor(formFields: TableField[]): Record<string, CustomFieldValue> {
+  const values: Record<string, CustomFieldValue> = {};
+  for (const field of formFields) {
+    values[field.systemName] = emptyValueForType(field.type, field.defaultValue);
+  }
+  return values;
+}
+
+function toFormValues(contact: Contact, formFields: TableField[]): ContactFormValues {
   return {
     name: contact.name,
     email: contact.email,
@@ -137,10 +163,17 @@ function toFormValues(contact: Contact): ContactFormValues {
     isPrimaryContact: contact.isPrimaryContact ?? false,
     nextActivity: contact.nextActivity ?? "",
     initialNote: "",
+    custom: existingCustomValuesFor(contact, formFields),
   };
 }
 
-function fromFormValues(values: ContactFormValues, existingContact?: Contact, authorName?: string): Contact {
+function fromFormValues(
+  values: ContactFormValues,
+  customValues: Record<string, CustomFieldValue>,
+  formFields: TableField[],
+  existingContact?: Contact,
+  authorName?: string,
+): Contact {
   const now = new Date().toISOString().slice(0, 10);
   const notes =
     existingContact?.notes ??
@@ -188,6 +221,13 @@ function fromFormValues(values: ContactFormValues, existingContact?: Contact, au
     tasks: existingContact?.tasks,
     notes,
     relatedDeals: existingContact?.relatedDeals,
+    customFields: (() => {
+      const merged: Record<string, CustomFieldValue> = { ...(existingContact?.customFields ?? {}) };
+      for (const field of formFields) {
+        merged[field.systemName] = customValues[field.systemName] ?? null;
+      }
+      return merged;
+    })(),
   };
 }
 
@@ -205,10 +245,12 @@ export function ContactForm({ open, onOpenChange, contact }: ContactFormProps) {
   const [dirty, setDirty] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
 
+  const formFields = useEntityFormFields("contact");
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: contact
-      ? toFormValues(contact)
+      ? toFormValues(contact, formFields)
       : {
           name: "",
           email: "",
@@ -227,6 +269,7 @@ export function ContactForm({ open, onOpenChange, contact }: ContactFormProps) {
           isPrimaryContact: false,
           nextActivity: "",
           initialNote: "",
+          custom: {},
         },
   });
 
@@ -236,7 +279,7 @@ export function ContactForm({ open, onOpenChange, contact }: ContactFormProps) {
     if (open) {
       form.reset(
         contact
-          ? toFormValues(contact)
+          ? toFormValues(contact, formFields)
           : {
               name: "",
               email: "",
@@ -255,12 +298,13 @@ export function ContactForm({ open, onOpenChange, contact }: ContactFormProps) {
               isPrimaryContact: false,
               nextActivity: "",
               initialNote: "",
+              custom: defaultCustomValuesFor(formFields),
             },
       );
       setDirty(false);
       setNewTag("");
     }
-  }, [open, contact, form]);
+  }, [open, contact, form, formFields]);
 
   useEffect(() => {
     const subscription = form.watch(() => {
@@ -343,7 +387,23 @@ export function ContactForm({ open, onOpenChange, contact }: ContactFormProps) {
       seen.add(lower);
     }
 
-    const contactData = fromFormValues(values, contact);
+    let customInvalid = false;
+    const customValues: Record<string, CustomFieldValue> = {};
+    for (const field of formFields) {
+      const submitted = values.custom[field.systemName];
+      const normalized: CustomFieldValue = submitted === undefined ? null : submitted;
+      customValues[field.systemName] = normalized;
+      const error = validateFieldValue(field, normalized);
+      if (error) {
+        customInvalid = true;
+        form.setError(`custom.${field.systemName}`, { message: error });
+      } else {
+        form.clearErrors(`custom.${field.systemName}`);
+      }
+    }
+    if (customInvalid) return;
+
+    const contactData = fromFormValues(values, customValues, formFields, contact);
     if (isEditing && contact) {
       updateContact(contact.id, contactData);
       toast("Contact updated", { description: `${contactData.name} has been updated.` });
@@ -792,6 +852,49 @@ export function ContactForm({ open, onOpenChange, contact }: ContactFormProps) {
                   />
                 </FieldGroup>
               </div>
+
+              {formFields.length > 0 ? (
+                <>
+                  <Separator />
+                  <div>
+                    <h3 className="mb-3 font-medium text-muted-foreground text-xs uppercase tracking-wide">
+                      Custom Fields
+                    </h3>
+                    <FieldGroup className="gap-4">
+                      {formFields.map((field) => (
+                        <Controller
+                          key={field.id}
+                          control={form.control}
+                          name={`custom.${field.systemName}` as const}
+                          render={({ field: controllerField, fieldState }) => {
+                            const value = (controllerField.value ?? null) as CustomFieldValue;
+                            return (
+                              <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={`contact-custom-${field.systemName}`}>
+                                  {field.displayLabel}
+                                  {field.required ? " *" : ""}
+                                </FieldLabel>
+                                <CustomFieldFormControl
+                                  id={`contact-custom-${field.systemName}`}
+                                  field={field}
+                                  value={value}
+                                  onChange={(next) => controllerField.onChange(next)}
+                                />
+                                {field.description && field.type !== "long_text" ? (
+                                  <p className="text-muted-foreground text-xs">{field.description}</p>
+                                ) : null}
+                                {fieldState.invalid && fieldState.error ? (
+                                  <FieldError errors={[fieldState.error]} />
+                                ) : null}
+                              </Field>
+                            );
+                          }}
+                        />
+                      ))}
+                    </FieldGroup>
+                  </div>
+                </>
+              ) : null}
 
               {!isEditing ? (
                 <>

@@ -10,6 +10,7 @@ import { Building2, MoreHorizontal } from "lucide-react";
 import { getOwnerName, salesOwners } from "@/app/(main)/dashboard/crm/_components/crm-data/sales-team";
 import { useCompanyStore } from "@/app/(main)/dashboard/crm/companies/_components/companies-data/use-company-store";
 import { useContactStore } from "@/app/(main)/dashboard/crm/contacts/_components/contacts-data/use-contact-store";
+import { EditableCustomCell } from "@/components/crm/table-engine/editable-custom-cell";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { TableField } from "@/lib/crm-table-engine/types";
 import { cn, formatCurrency, getInitials } from "@/lib/utils";
 
 import type { Deal, DealHealth, DealStage } from "./deals-data/schema";
@@ -76,279 +78,258 @@ function probabilityColor(p: number): string {
   return "bg-muted-foreground/30";
 }
 
-function isOpen(stage: DealStage): boolean {
-  return stage !== "Closed Won" && stage !== "Closed Lost";
+function DateCell({ value }: { value: string }) {
+  return <span className="text-muted-foreground text-sm tabular-nums">{format(parseISO(value), "MMM d, yyyy")}</span>;
 }
 
-export function getDealsColumns(options?: DealsColumnsOptions): ColumnDef<Deal>[] {
-  return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            aria-label="Select all deals"
-            checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            aria-label={`Select ${row.original.name}`}
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-          />
-        </div>
-      ),
-      enableHiding: false,
-      enableSorting: false,
-    },
-    {
-      id: "search",
-      accessorFn: (row) => {
-        const company = useCompanyStore.getState().getCompanyById(row.companyId);
-        return `${row.name} ${company?.name ?? ""} ${row.stage} ${row.source} ${(row.tags ?? []).join(" ")}`;
-      },
-      filterFn: "includesString",
-      enableHiding: true,
-    },
-    {
-      accessorKey: "name",
-      header: "Deal",
-      cell: ({ row }) => (
+export function renderDealFieldCell(params: {
+  field: TableField;
+  deal: Deal;
+  onCommitCustomValue: (deal: Deal, field: TableField, value: NonNullable<Deal["customFields"]>[string]) => void;
+}) {
+  const { field, deal, onCommitCustomValue } = params;
+
+  switch (field.key) {
+    case "deal.name":
+      return (
         <Link
-          href={`/dashboard/crm/deals/${row.original.id}`}
+          href={`/dashboard/crm/deals/${deal.id}`}
           className="truncate font-medium text-foreground text-sm transition-opacity hover:opacity-80"
         >
-          {row.original.name}
+          {deal.name}
         </Link>
-      ),
-    },
-    {
-      id: "company",
-      header: "Company",
-      cell: ({ row }) => {
-        const company = useCompanyStore.getState().getCompanyById(row.original.companyId);
-        if (!company) return <span className="text-muted-foreground text-sm">—</span>;
-        return (
-          <Link
-            href={`/dashboard/crm/companies/${company.id}`}
-            className="flex items-center gap-2 transition-opacity hover:opacity-80"
-          >
-            <Avatar className={cn("size-6 font-medium", avatarTone(company.name))}>
-              <AvatarFallback>
-                <Building2 className="size-3" />
-              </AvatarFallback>
-            </Avatar>
-            <span className="truncate text-sm">{company.name}</span>
-          </Link>
-        );
-      },
-    },
-    {
-      id: "primaryContact",
-      header: "Primary Contact",
-      cell: ({ row }) => {
-        const contactId = row.original.primaryContactId;
-        if (!contactId) return <span className="text-muted-foreground text-sm">—</span>;
-        const contact = useContactStore.getState().getContactById(contactId);
-        if (!contact) return <span className="text-muted-foreground text-sm">—</span>;
-        return (
-          <Link
-            href={`/dashboard/crm/contacts/${contactId}`}
-            className="flex items-center gap-2 transition-opacity hover:opacity-80"
-          >
-            <Avatar className={cn("size-6 font-medium", avatarTone(contact.name))}>
-              <AvatarFallback className="text-xs">{getInitials(contact.name)}</AvatarFallback>
-            </Avatar>
-            <span className="text-sm">{contact.name}</span>
-          </Link>
-        );
-      },
-    },
-    {
-      accessorKey: "stage",
-      header: "Stage",
-      filterFn: "equalsString",
-      cell: ({ row }) => {
-        const stage = row.original.stage;
-        return <Badge className={cn("font-medium", stageBadgeVariant[stage])}>{stage}</Badge>;
-      },
-    },
-    {
-      accessorKey: "value",
-      header: "Value",
-      cell: ({ row }) => (
+      );
+    case "deal.company": {
+      const company = useCompanyStore.getState().getCompanyById(deal.companyId);
+      if (!company) return <span className="text-muted-foreground text-sm">—</span>;
+      return (
+        <Link
+          href={`/dashboard/crm/companies/${company.id}`}
+          className="flex items-center gap-2 transition-opacity hover:opacity-80"
+        >
+          <Avatar className={cn("size-6 font-medium", avatarTone(company.name))}>
+            <AvatarFallback>
+              <Building2 className="size-3" />
+            </AvatarFallback>
+          </Avatar>
+          <span className="truncate text-sm">{company.name}</span>
+        </Link>
+      );
+    }
+    case "deal.primaryContact": {
+      const contactId = deal.primaryContactId;
+      if (!contactId) return <span className="text-muted-foreground text-sm">—</span>;
+      const contact = useContactStore.getState().getContactById(contactId);
+      if (!contact) return <span className="text-muted-foreground text-sm">—</span>;
+      return (
+        <Link
+          href={`/dashboard/crm/contacts/${contactId}`}
+          className="flex items-center gap-2 transition-opacity hover:opacity-80"
+        >
+          <Avatar className={cn("size-6 font-medium", avatarTone(contact.name))}>
+            <AvatarFallback className="text-xs">{getInitials(contact.name)}</AvatarFallback>
+          </Avatar>
+          <span className="text-sm">{contact.name}</span>
+        </Link>
+      );
+    }
+    case "deal.stage":
+      return <Badge className={cn("font-medium", stageBadgeVariant[deal.stage])}>{deal.stage}</Badge>;
+    case "deal.value":
+      return (
         <span className="text-sm tabular-nums">
-          {formatCurrency(row.original.value, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+          {formatCurrency(deal.value, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
         </span>
-      ),
-    },
-    {
-      accessorKey: "probability",
-      header: "Probability",
-      cell: ({ row }) => {
-        const p = row.original.probability;
-        return (
-          <div className="flex items-center gap-2">
-            <div className="h-1.5 w-12 overflow-hidden rounded-full bg-muted">
-              <div
-                className={cn("h-full rounded-full transition-all", probabilityColor(p))}
-                style={{ width: `${p}%` }}
-              />
-            </div>
-            <span className="text-muted-foreground text-xs tabular-nums">{p}%</span>
+      );
+    case "deal.probability": {
+      const p = deal.probability;
+      return (
+        <div className="flex items-center gap-2">
+          <div className="h-1.5 w-12 overflow-hidden rounded-full bg-muted">
+            <div className={cn("h-full rounded-full transition-all", probabilityColor(p))} style={{ width: `${p}%` }} />
           </div>
-        );
-      },
-    },
-    {
-      accessorKey: "health",
-      header: "Health",
-      filterFn: "equalsString",
-      cell: ({ row }) => {
-        const health = row.original.health;
-        return <Badge className={cn("font-medium", healthBadgeVariant[health])}>{health}</Badge>;
-      },
-    },
-    {
-      accessorKey: "ownerId",
-      header: "Owner",
-      filterFn: "equalsString",
-      cell: ({ row }) => {
-        const ownerId = row.original.ownerId;
-        if (!ownerId) return <span className="text-muted-foreground text-sm">Unassigned</span>;
-        const name = getOwnerName(ownerId);
-        return (
-          <div className="flex items-center gap-2">
-            <Avatar className={cn("size-6 font-medium", avatarTone(name))}>
-              <AvatarFallback className="text-xs">{getInitials(name)}</AvatarFallback>
-            </Avatar>
-            <span className="text-sm">{name}</span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "lastActivityDate",
-      header: "Last Activity",
-      cell: ({ row }) => {
-        const d = row.original.lastActivityDate;
-        if (!d) return <span className="text-muted-foreground text-sm">—</span>;
-        return <span className="text-muted-foreground text-sm tabular-nums">{format(parseISO(d), "MMM d, yyyy")}</span>;
-      },
-    },
-    {
-      accessorKey: "expectedCloseDate",
-      header: "Expected Close",
-      cell: ({ row }) => {
-        const d = row.original.expectedCloseDate;
-        if (!d) return <span className="text-muted-foreground text-sm">—</span>;
-        const isOverdue = parseISO(d).getTime() < new Date(2026, 7, 16).getTime();
-        return (
-          <span
-            className={cn("text-sm tabular-nums", isOverdue ? "font-medium text-destructive" : "text-muted-foreground")}
-          >
-            {format(parseISO(d), "MMM d, yyyy")}
-          </span>
-        );
-      },
-    },
-    {
-      id: "actions",
-      header: () => <div className="text-right">Actions</div>,
-      cell: ({ row }) => {
-        const isArchived = Boolean(row.original.archivedAt);
-        return (
-          <div className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label={`Open actions for ${row.original.name}`}
-                  className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
-                  size="icon-sm"
-                  variant="ghost"
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href={`/dashboard/crm/deals/${row.original.id}`}>View deal</Link>
-                </DropdownMenuItem>
-                {!isArchived ? (
-                  <>
-                    <DropdownMenuItem onClick={() => options?.onEditDeal?.(row.original)}>Edit deal</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    {isOpen(row.original.stage) ? (
-                      <>
-                        <DropdownMenuItem onClick={() => options?.onChangeStage?.(row.original)}>
-                          Change stage
-                        </DropdownMenuItem>
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger>Assign owner</DropdownMenuSubTrigger>
-                          <DropdownMenuSubContent>
-                            {salesOwners.map((owner) => (
-                              <DropdownMenuItem
-                                key={owner.id}
-                                onClick={() => options?.onAssignOwner?.(row.original, owner.id)}
-                              >
-                                {owner.name}
-                                {row.original.ownerId === owner.id && (
-                                  <span className="ml-1 text-muted-foreground text-xs">(current)</span>
-                                )}
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuSubContent>
-                        </DropdownMenuSub>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => options?.onMarkWon?.(row.original)}>Mark Won</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => options?.onMarkLost?.(row.original)}>
-                          Mark Lost
-                        </DropdownMenuItem>
-                      </>
-                    ) : (
-                      <>
-                        <DropdownMenuItem onClick={() => options?.onReopenDeal?.(row.original)}>
-                          Reopen Deal
-                        </DropdownMenuItem>
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger>Assign owner</DropdownMenuSubTrigger>
-                          <DropdownMenuSubContent>
-                            {salesOwners.map((owner) => (
-                              <DropdownMenuItem
-                                key={owner.id}
-                                onClick={() => options?.onAssignOwner?.(row.original, owner.id)}
-                              >
-                                {owner.name}
-                                {row.original.ownerId === owner.id && (
-                                  <span className="ml-1 text-muted-foreground text-xs">(current)</span>
-                                )}
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuSubContent>
-                        </DropdownMenuSub>
-                      </>
-                    )}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive" onClick={() => options?.onArchiveDeal?.(row.original)}>
-                      Archive
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <DropdownMenuItem onClick={() => options?.onRestoreDeal?.(row.original)}>
-                    Restore deal
+          <span className="text-muted-foreground text-xs tabular-nums">{p}%</span>
+        </div>
+      );
+    }
+    case "deal.health":
+      return <Badge className={cn("font-medium", healthBadgeVariant[deal.health])}>{deal.health}</Badge>;
+    case "deal.owner":
+      return <OwnerCell ownerId={deal.ownerId ?? null} />;
+    case "deal.source":
+      return <span className="text-muted-foreground text-sm">{deal.source}</span>;
+    case "deal.lastActivity":
+      return deal.lastActivityDate ? (
+        <DateCell value={deal.lastActivityDate} />
+      ) : (
+        <span className="text-muted-foreground text-sm">—</span>
+      );
+    case "deal.expectedClose": {
+      const d = deal.expectedCloseDate;
+      if (!d) return <span className="text-muted-foreground text-sm">—</span>;
+      const isOverdue = parseISO(d).getTime() < new Date(2026, 7, 16).getTime();
+      return (
+        <span
+          className={cn("text-sm tabular-nums", isOverdue ? "font-medium text-destructive" : "text-muted-foreground")}
+        >
+          {format(parseISO(d), "MMM d, yyyy")}
+        </span>
+      );
+    }
+    case "deal.createdAt":
+      return <DateCell value={deal.createdAt} />;
+    default:
+      break;
+  }
+
+  if (!field.isCore) {
+    const isArchivedDeal = Boolean(deal.archivedAt);
+    return (
+      <EditableCustomCell
+        field={field}
+        value={deal.customFields?.[field.systemName]}
+        disabled={isArchivedDeal}
+        disabledReason={isArchivedDeal ? "Archived deals cannot be edited." : undefined}
+        onCommit={(value) => onCommitCustomValue(deal, field, value)}
+      />
+    );
+  }
+
+  return null;
+}
+
+function OwnerCell({ ownerId }: { ownerId: string | null }) {
+  if (!ownerId) return <span className="text-muted-foreground text-sm">Unassigned</span>;
+  const name = getOwnerName(ownerId);
+  return (
+    <div className="flex items-center gap-2">
+      <Avatar className={cn("size-6 font-medium", avatarTone(name))}>
+        <AvatarFallback className="text-xs">{getInitials(name)}</AvatarFallback>
+      </Avatar>
+      <span className="truncate text-sm">{name}</span>
+    </div>
+  );
+}
+
+export function getDealsSelectColumn(): ColumnDef<Deal> {
+  return {
+    id: "select",
+    header: ({ table }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          aria-label="Select all deals"
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        />
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          aria-label={`Select ${row.original.name}`}
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+        />
+      </div>
+    ),
+    enableHiding: false,
+    enableSorting: false,
+  };
+}
+
+export function getDealsActionsColumn(options?: DealsColumnsOptions): ColumnDef<Deal> {
+  return {
+    id: "actions",
+    header: () => <div className="text-right">Actions</div>,
+    cell: ({ row }) => {
+      const isArchived = Boolean(row.original.archivedAt);
+      return (
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label={`Open actions for ${row.original.name}`}
+                className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
+                size="icon-sm"
+                variant="ghost"
+              >
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/crm/deals/${row.original.id}`}>View deal</Link>
+              </DropdownMenuItem>
+              {!isArchived ? (
+                <>
+                  <DropdownMenuItem onClick={() => options?.onEditDeal?.(row.original)}>Edit deal</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {isOpenStage(row.original.stage) ? (
+                    <>
+                      <DropdownMenuItem onClick={() => options?.onChangeStage?.(row.original)}>
+                        Change stage
+                      </DropdownMenuItem>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>Assign owner</DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                          {salesOwners.map((owner) => (
+                            <DropdownMenuItem
+                              key={owner.id}
+                              onClick={() => options?.onAssignOwner?.(row.original, owner.id)}
+                            >
+                              {owner.name}
+                              {row.original.ownerId === owner.id && (
+                                <span className="ml-1 text-muted-foreground text-xs">(current)</span>
+                              )}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => options?.onMarkWon?.(row.original)}>Mark Won</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => options?.onMarkLost?.(row.original)}>Mark Lost</DropdownMenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <DropdownMenuItem onClick={() => options?.onReopenDeal?.(row.original)}>
+                        Reopen Deal
+                      </DropdownMenuItem>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>Assign owner</DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                          {salesOwners.map((owner) => (
+                            <DropdownMenuItem
+                              key={owner.id}
+                              onClick={() => options?.onAssignOwner?.(row.original, owner.id)}
+                            >
+                              {owner.name}
+                              {row.original.ownerId === owner.id && (
+                                <span className="ml-1 text-muted-foreground text-xs">(current)</span>
+                              )}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
+                    </>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem variant="destructive" onClick={() => options?.onArchiveDeal?.(row.original)}>
+                    Archive
                   </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        );
-      },
-      enableHiding: false,
-      enableSorting: false,
+                </>
+              ) : (
+                <DropdownMenuItem onClick={() => options?.onRestoreDeal?.(row.original)}>Restore deal</DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
     },
-  ];
+    enableHiding: false,
+    enableSorting: false,
+  };
+}
+
+function isOpenStage(stage: DealStage): boolean {
+  return stage !== "Closed Won" && stage !== "Closed Lost";
 }

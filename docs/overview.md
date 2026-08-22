@@ -4,7 +4,7 @@
 
 ## What this project is
 
-**Studio Admin** is a modern, open-source **admin dashboard template / starter kit** built on the Next.js App Router. It ships a complete set of prebuilt dashboards, management pages (email, chat, kanban, tasks, invoice, calendar, users, roles), authentication screens, and a fully customizable **theme + layout preference system**.
+**LynxMind** is a modern, open-source **admin dashboard template / starter kit** built on the Next.js App Router. It ships a complete set of prebuilt dashboards, management pages (email, chat, kanban, tasks, invoice, calendar, users, roles), authentication screens, and a fully customizable **theme + layout preference system**.
 
 The repository is derived from [`next-shadcn-admin-dashboard`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) by Mohammed Arham Khan (MIT licensed) and lives at `DashBoard-CRM`. It is used as the foundation for a CRM-oriented admin product, so most work happening here is about extending the dashboard screens (CRM, finance, analytics, etc.) and their features.
 
