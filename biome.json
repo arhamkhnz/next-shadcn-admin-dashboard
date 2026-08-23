@@ -39,6 +39,7 @@
       "!.next",
       "!dist",
       "!out",
+      "!src/generated",
       "!src/components/ui",
       "!src/components/calendar"
     ]

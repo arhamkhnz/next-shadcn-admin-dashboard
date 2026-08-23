@@ -1,8 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "node"
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowImportingTsExtensions": true
   },
-  "include": ["src/scripts/**/*.ts"]
+  "include": ["prisma.config.ts", "prisma/**/*.ts", "src/scripts/**/*.ts"]
 }
