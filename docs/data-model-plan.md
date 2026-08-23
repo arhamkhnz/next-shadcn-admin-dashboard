@@ -1,6 +1,6 @@
 # Data Model Plan
 
-Status: **Planning — not implemented.** This document designs the persistent entities for the CRM platform. No schema, migration, or database code exists yet; nothing here is introduced by this document.
+Status: **Phase 0A foundation implemented.** This document designs the persistent entities for the CRM platform. The repository now includes a Prisma schema, an initial SQL migration, and a deterministic seed aligned to this model. API usage, auth integration, and live frontend reads/writes are still pending.
 
 Reads alongside [`backend-architecture-plan.md`](./backend-architecture-plan.md) (tenancy, enforcement) and [`authorization-matrix.md`](./authorization-matrix.md) (who may touch what).
 

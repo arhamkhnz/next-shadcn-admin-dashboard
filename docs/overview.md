@@ -82,7 +82,7 @@ MIT — see [`LICENSE`](../LICENSE). Copyright (c) 2024 Mohammed Arham Khan.
 - **`/dashboard` redirects to `/dashboard/crm`.**
 - The dashboard shell is configured as a **CRM-focused product shell** (Phase 1). The CRM sidebar shows only the CRM Overview and shared workspace tools (Tasks, Calendar, Email, Chat). All other department routes (Default, Finance, Analytics, Productivity, E-commerce, Academy, Logistics, Infrastructure, Kanban, Invoice, Users, Roles, legacy dashboards, coming-soon) **still exist** and remain reachable via their direct URLs — they are hidden only from the CRM sidebar, not removed.
 - **Preferences system** (theme, layout, fonts) is persisted via cookies/localStorage and applied pre-hydration by a boot script to avoid flicker. See [`architecture.md`](./architecture.md).
-- **There is no backend yet.** All data is local mock data (`data.ts`, `data.json`). Auth screens are UI-only. Real auth/RBAC/API are planned work (see [`roadmap.md`](./roadmap.md)).
+- **There is no live backend integration yet.** All current screens still render local mock data (`data.ts`, `data.json`), and the auth screens remain UI-only. A Phase 0A Prisma/PostgreSQL foundation now exists in the repo, but real auth/RBAC/API wiring is still planned work (see [`roadmap.md`](./roadmap.md)).
 
 ## Features
 

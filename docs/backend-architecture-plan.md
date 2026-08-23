@@ -1,6 +1,6 @@
 # Backend Architecture Plan
 
-Status: **Planning — not implemented.** This document defines the production backend architecture for the CRM platform (LynxMind). It is design and documentation only: no database, API, authentication, permission, subscription, or middleware code exists yet, and none is introduced by this document.
+Status: **Phase 0A foundation implemented; broader backend still pending.** This document defines the production backend architecture for the CRM platform (LynxMind). The repository now includes a Prisma schema, an initial SQL migration, a deterministic seed, and a server-only Prisma client helper. API routes, authentication, permission enforcement, billing logic, and middleware are still not implemented.
 
 Companion documents:
 
@@ -20,9 +20,9 @@ The repository today is a frontend-only Next.js application. Verified facts that
 | UI | Tailwind CSS v4, shadcn/ui (`radix-nova`), Radix + Base UI primitives |
 | Validation | Zod `4.4.3` schemas colocated with each screen (`schema.ts`) |
 | Client state | Zustand `5.0.14` — preferences store plus CRM stores (`useLeadStore`, `useContactStore`, `useCompanyStore`, `useDealStore`, `useActivityStore`) seeded from mock data |
-| Data | Static mock modules co-located per screen; no database |
+| Data | Static mock modules still drive the UI; a deterministic Prisma seed now exists for backend foundation work |
 | Authentication | **None.** `/auth/v1` and `/auth/v2` are UI-only screens. No auth library in `package.json`. No sessions, no cookies beyond theme/layout preferences |
-| Database / ORM | **None.** No Prisma schema, no ORM config, no `.env*` files committed |
+| Database / ORM | Prisma 7 + PostgreSQL foundation committed (`prisma/schema.prisma`, `prisma/migrations/`, `prisma/seed.ts`, `prisma.config.ts`, `src/server/db/prisma.ts`) |
 | API routes | **None.** No `src/app/api/**` directory |
 | Server actions | Only preference cookie helpers in `src/server/server-actions.ts` |
 | Middleware/proxy | `src/proxy.disabled.ts` template exists, disabled |

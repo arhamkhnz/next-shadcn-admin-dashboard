@@ -1,11 +1,12 @@
 # Security
 
-LynxMind is currently a **frontend template**: there is no backend, no real authentication, and all data is local mock data. Treat the notes below as the baseline to maintain now and the checklist to honor once real auth/data/APIs are introduced.
+LynxMind is currently a **frontend-first application** with a committed Phase 0A database foundation: the repository now includes a Prisma schema, an initial SQL migration, a deterministic seed, and a server-only Prisma client helper. The CRM UI is still mock-driven, there are still no API routes or real authentication flows, and the frontend is not connected to the database yet. Treat the notes below as the baseline to maintain now and the checklist to honor once real auth/data/APIs are introduced.
 
 ## Current state & honest limits
 
 - Auth screens (`/auth/v1`, `/auth/v2`) are **UI only**. They do not authenticate anyone.
-- There are no API routes, no database, no sessions.
+- There are no API routes and no real sessions yet.
+- A database foundation now exists in `prisma/` and `src/server/db/prisma.ts`, but it is not wired into the frontend or request handling yet.
 - `src/proxy.disabled.ts` is a disabled `proxy.ts` template for rewrites/redirects/headers — enabling real middleware/proxy work is a future step.
 - Preferences (theme/layout) are stored in **cookies** (`client-cookie`/`server-cookie`) or **localStorage**. These values are non-sensitive UI state, but they are writable by the user — they must never be treated as trusted security data.
 

@@ -1,6 +1,6 @@
 # Frontend ↔ Backend Migration Plan
 
-Status: **Planning — not implemented.** Defines the staged migration of the CRM frontend from mock Zustand stores to the production backend described in [`backend-architecture-plan.md`](./backend-architecture-plan.md) and [`data-model-plan.md`](./data-model-plan.md).
+Status: **Planning with Phase 0A foundation implemented.** Defines the staged migration of the CRM frontend from mock Zustand stores to the production backend described in [`backend-architecture-plan.md`](./backend-architecture-plan.md) and [`data-model-plan.md`](./data-model-plan.md). The schema, initial migration, deterministic seed, and Prisma client helper now exist; the frontend still follows the staged migration plan below.
 
 Prime directive: **no mock data is deleted during early phases**, and no screen changes behavior until its backend parity is verified. The CRM remains fully usable at the end of every phase.
 

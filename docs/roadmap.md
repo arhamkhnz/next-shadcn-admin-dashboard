@@ -20,14 +20,14 @@ There is **no test setup at all** (`package.json` has no `test` script; no vites
 - Add `npm test` + CI wiring; document commands in `README.md` and `AGENTS.md`.
 
 ### 2. Backend / data layer 🔴
-Everything is mock data. To become a real CRM product:
+The frontend is still mock-driven. Phase 0A database foundations now exist, but to become a real CRM product:
 
 - Introduce an API/data access layer (Route Handlers, or a headless CMS/DB adapter), keeping screen components UI-only.
 - Real **authentication** (Auth.js / Better Auth / session-based) + protecting routes. See [`security.md`](./security.md).
 - Server-enforced **RBAC** keyed off roles/permissions, replacing client-only mock role UI.
 - Multi-tenant scoping (tenant id on data + middleware).
 
-> **Architecture planning milestone (planning complete, implementation not started):** the production backend architecture is now designed in four documents — [`backend-architecture-plan.md`](./backend-architecture-plan.md) (tenancy, auth, modules & entitlements, API, reporting, security), [`data-model-plan.md`](./data-model-plan.md) (entities, relationships, lead conversion, archive strategy), [`authorization-matrix.md`](./authorization-matrix.md) (roles × permissions), and [`frontend-backend-migration-plan.md`](./frontend-backend-migration-plan.md) (staged migration from mock stores with parity gates). These designs refine the Phase 1/Phase 2 order below into concrete decisions; several business decisions still await confirmation in each document's *Open decisions* section. No backend code exists yet — implementation remains 🔴.
+> **Architecture milestone update:** the production backend architecture is designed in four documents — [`backend-architecture-plan.md`](./backend-architecture-plan.md) (tenancy, auth, modules & entitlements, API, reporting, security), [`data-model-plan.md`](./data-model-plan.md) (entities, relationships, lead conversion, archive strategy), [`authorization-matrix.md`](./authorization-matrix.md) (roles × permissions), and [`frontend-backend-migration-plan.md`](./frontend-backend-migration-plan.md) (staged migration from mock stores with parity gates). Phase 0A is now implemented as a Prisma schema, initial SQL migration, deterministic seed, and Prisma client helper. Live auth, APIs, enforcement, and UI migration work remain 🔴.
 
 ### 3. Complete "coming soon" stubs 🟢
 Several screens render dashed "Coming soon" placeholders. Either build or remove them:

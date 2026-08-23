@@ -137,7 +137,7 @@ Injected in `<head>` by the root layout. Reads cookies/localStorage for every pr
 
 - All screen data is static: `data.ts` / `data.json` modules co-located with each screen.
 - Tables use `@tanstack/react-table` with Zod schemas for types/validation (`schema.ts`).
-- There are **no API routes, database, or real authentication** yet. `src/proxy.disabled.ts` is a disabled template (`src/proxy.ts`) for rewrites/redirects/headers.
+- There are **no API routes or real authentication** yet. A Prisma/PostgreSQL foundation now exists under `prisma/` plus `src/server/db/prisma.ts`, but the UI is still mock-driven and not connected to it yet. `src/proxy.disabled.ts` is a disabled template (`src/proxy.ts`) for rewrites/redirects/headers.
 
 ## What not to touch
 
