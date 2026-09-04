@@ -2,12 +2,13 @@
 
 import { Fragment, useState } from "react";
 
+import { cn } from "cn";
+
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 import type { PatientRecord } from "./data";
 import { PatientCard } from "./patient-card";

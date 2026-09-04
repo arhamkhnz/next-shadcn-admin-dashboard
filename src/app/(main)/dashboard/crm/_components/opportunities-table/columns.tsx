@@ -1,13 +1,13 @@
 "use client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Subscribe } from "@tanstack/react-table";
+import { cn } from "cn";
 import { Pencil } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { DataTableFeatures } from "@/lib/data-table-features";
-import { cn } from "@/lib/utils";
 
 import type { OpportunityRow } from "./schema";
 

@@ -2,9 +2,8 @@
 
 import type * as React from "react";
 
+import { cn } from "cn";
 import type { SimpleIcon as SimpleIconType } from "simple-icons";
-
-import { cn } from "@/lib/utils";
 
 type SimpleIconProps = {
   icon: SimpleIconType;

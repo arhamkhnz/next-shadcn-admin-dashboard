@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { cn } from "cn";
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns";
 import { Check, ChevronsUpDown, Download } from "lucide-react";
 import type { DateRange } from "react-day-picker";
@@ -16,7 +17,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 
 type RiskView = "risk-view" | "momentum" | "quality";
 type FilterToggleKey = "enterpriseOnly" | "stalledOnly" | "overdueOnly" | "includeRenewals";

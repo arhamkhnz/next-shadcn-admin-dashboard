@@ -1,8 +1,8 @@
+import { cn } from "cn";
 import { CalendarDays, CalendarRange } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 const proposalSent = 12;
 const proposalGoal = 18;

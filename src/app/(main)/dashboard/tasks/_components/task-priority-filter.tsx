@@ -1,5 +1,6 @@
 "use client";
 import type { ReactTable, RowData } from "@tanstack/react-table";
+import { cn } from "cn";
 import { ListFilter, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { DataTableFeatures } from "@/lib/data-table-features";
-import { cn } from "@/lib/utils";
 
 import { priorities } from "./data";
 

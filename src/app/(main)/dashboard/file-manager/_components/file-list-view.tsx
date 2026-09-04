@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 
+import { cn } from "cn";
 import { Star } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 
 import { type FileManagerFile, fileIcons } from "./data";
 import { FileActions } from "./file-actions";

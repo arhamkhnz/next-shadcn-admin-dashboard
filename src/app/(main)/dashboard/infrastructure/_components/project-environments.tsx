@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import {
   ArrowUpDown,
   Bell,
@@ -28,7 +29,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 
 import type { InfrastructureEnvironment, InfrastructureGroup } from "./infrastructure-data";
 

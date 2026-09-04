@@ -8,6 +8,7 @@ import {
   type SortingState,
   useTable,
 } from "@tanstack/react-table";
+import { cn } from "cn";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import {
@@ -22,7 +23,6 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { dataTableFeatures } from "@/lib/data-table-features";
-import { cn } from "@/lib/utils";
 
 import { columns } from "./columns";
 import type { Task } from "./data";

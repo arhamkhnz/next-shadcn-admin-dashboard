@@ -3,10 +3,10 @@
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
+import { cn } from "cn";
 import { GripVertical, MoreVertical, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 import { SortableTaskCard } from "./sortable-task-card";
 import type { Column, Task } from "./types";

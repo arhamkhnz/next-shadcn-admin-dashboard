@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { format } from "date-fns/format";
 import {
   Archive,
@@ -35,7 +36,6 @@ import {
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 
 import type { Mail } from "./data";
 import { useMail } from "./use-mail";

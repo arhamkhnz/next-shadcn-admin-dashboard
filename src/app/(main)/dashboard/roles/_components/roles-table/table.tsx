@@ -2,6 +2,7 @@
 import { useMemo } from "react";
 
 import { FlexRender, type ReactTable } from "@tanstack/react-table";
+import { cn } from "cn";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,7 +16,6 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { DataTableFeatures } from "@/lib/data-table-features";
-import { cn } from "@/lib/utils";
 
 import type { Role } from "./data";
 

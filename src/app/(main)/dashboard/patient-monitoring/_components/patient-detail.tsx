@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 import type { PatientRecord } from "./data";
 import { type EcgLead, usePatientWaveformSeries } from "./use-patient-vital-series";

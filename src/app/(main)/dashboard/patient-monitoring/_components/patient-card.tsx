@@ -1,5 +1,6 @@
+import { cn } from "cn";
+
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 
 import type { PatientRecord } from "./data";
 import { usePatientWaveformSeries } from "./use-patient-vital-series";

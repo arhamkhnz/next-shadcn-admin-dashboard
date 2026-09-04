@@ -1,5 +1,6 @@
 "use client";
 import type { ReactTable, RowData } from "@tanstack/react-table";
+import { cn } from "cn";
 import { Settings2, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import type { DataTableFeatures } from "@/lib/data-table-features";
-import { cn } from "@/lib/utils";
 
 import { TaskPriorityFilter } from "./task-priority-filter";
 import { TaskStatusFilter } from "./task-status-filter";

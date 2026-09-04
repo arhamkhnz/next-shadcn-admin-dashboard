@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import { Plane, Search, Ship, SlidersHorizontal, Truck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,6 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/componen
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 import type { Shipment } from "./shipment-data";
 

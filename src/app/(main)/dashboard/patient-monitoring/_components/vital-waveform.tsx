@@ -1,7 +1,7 @@
+import { cn } from "cn";
 import { CartesianGrid, Line, LineChart, YAxis } from "recharts";
 
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
-import { cn } from "@/lib/utils";
 
 import { getVerticalGridCoordinates } from "./chart-grid";
 

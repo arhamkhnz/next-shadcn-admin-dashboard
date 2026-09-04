@@ -1,10 +1,10 @@
+import { cn } from "cn";
 import { differenceInDays } from "date-fns/differenceInDays";
 import { format } from "date-fns/format";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 import type { Mail } from "./data";
 import { useMail } from "./use-mail";
