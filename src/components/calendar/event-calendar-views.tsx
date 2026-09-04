@@ -1,6 +1,6 @@
 import FullCalendar, { type CalendarOptions, type DayCellInfo } from '@fullcalendar/react'
 import '@fullcalendar/react/skeleton.css'
-import { cn } from '@/lib/utils'
+import { cn } from "cn"
 
 const xxsTextClass = 'text-[0.6875rem]/[1.090909]'
 
