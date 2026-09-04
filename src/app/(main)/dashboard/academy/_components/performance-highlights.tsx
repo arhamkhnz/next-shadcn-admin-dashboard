@@ -1,6 +1,6 @@
 "use client";
 
-import { type FocusEvent, type PointerEvent, useEffect, useRef, useState } from "react";
+import { type FocusEvent, type PointerEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { ArrowRight } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -66,8 +66,22 @@ const chartConfig = {
 type PerformanceHighlight = (typeof performanceHighlights)[number];
 type PerformancePerson = PerformanceHighlight["people"][number];
 
+const PERSON_TOOLTIP_ID = "academy-performance-person-tooltip";
+
 function getPersonKey(className: string, initials: string) {
   return `${className}-${initials}`;
+}
+
+function isPersonAvatar(target: EventTarget | null) {
+  return target instanceof HTMLElement && Boolean(target.closest("[data-person-key]"));
+}
+
+function syncTooltipDescribedBy(element: HTMLElement | null) {
+  for (const button of document.querySelectorAll(`[data-person-key][aria-describedby="${PERSON_TOOLTIP_ID}"]`)) {
+    button.removeAttribute("aria-describedby");
+  }
+
+  element?.setAttribute("aria-describedby", PERSON_TOOLTIP_ID);
 }
 
 const peopleLookup = new Map(
@@ -94,6 +108,7 @@ function PersonIdentityCard({ hovered }: { hovered: HoveredPerson }) {
   return createPortal(
     <div
       className="pointer-events-none fixed z-50 grid min-w-36 -translate-x-1/2 -translate-y-[calc(100%+8px)] gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl"
+      id={PERSON_TOOLTIP_ID}
       role="tooltip"
       style={{ left: hovered.x, top: hovered.y }}
     >
@@ -166,7 +181,7 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
             y={avatarY}
           >
             <button
-              aria-label={`${person.name}, ${person.role}`}
+              aria-label={`${person.name}, ${person.role}, ${highlight.className} ${highlight.subject}`}
               className="flex size-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
               data-person-key={getPersonKey(highlight.className, person.initials)}
               type="button"
@@ -208,10 +223,24 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
 export function PerformanceHighlights() {
   const hideTimeoutRef = useRef<number>(0);
   const [hovered, setHovered] = useState<HoveredPerson | null>(null);
+  const hoveredKey = hovered ? getPersonKey(hovered.className, hovered.person.initials) : null;
 
   useEffect(() => {
     return () => window.clearTimeout(hideTimeoutRef.current);
   }, []);
+
+  useLayoutEffect(() => {
+    if (!hoveredKey) {
+      syncTooltipDescribedBy(null);
+      return;
+    }
+
+    const element = document.querySelector(`[data-person-key="${hoveredKey}"]`);
+
+    if (element instanceof HTMLElement) {
+      syncTooltipDescribedBy(element);
+    }
+  }, [hoveredKey]);
 
   const showPersonFromElement = (element: HTMLElement) => {
     const key = element.dataset.personKey;
@@ -222,6 +251,7 @@ export function PerformanceHighlights() {
     }
 
     window.clearTimeout(hideTimeoutRef.current);
+    syncTooltipDescribedBy(element);
     const avatar = element.getBoundingClientRect();
 
     setHovered((current) => {
@@ -242,6 +272,7 @@ export function PerformanceHighlights() {
   const hidePerson = () => {
     window.clearTimeout(hideTimeoutRef.current);
     hideTimeoutRef.current = window.setTimeout(() => {
+      syncTooltipDescribedBy(null);
       setHovered(null);
     }, 80);
   };
@@ -265,6 +296,20 @@ export function PerformanceHighlights() {
     }
   };
 
+  const handleBlurCapture = (event: FocusEvent<HTMLDivElement>) => {
+    if (isPersonAvatar(event.relatedTarget)) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      if (isPersonAvatar(document.activeElement)) {
+        return;
+      }
+
+      hidePerson();
+    });
+  };
+
   return (
     <Card className="h-full">
       <CardHeader>
@@ -273,7 +318,12 @@ export function PerformanceHighlights() {
           View Insights <ArrowRight className="size-4" />
         </CardAction>
       </CardHeader>
-      <CardContent onFocusCapture={handleFocusCapture} onPointerLeave={hidePerson} onPointerMove={handlePointerMove}>
+      <CardContent
+        onBlurCapture={handleBlurCapture}
+        onFocusCapture={handleFocusCapture}
+        onPointerLeave={hidePerson}
+        onPointerMove={handlePointerMove}
+      >
         <ChartContainer config={chartConfig} className="aspect-auto h-70 min-h-70 w-full">
           <BarChart
             accessibilityLayer
