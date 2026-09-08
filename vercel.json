@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "https://studio-admin.arhamkhnz.com/:path*",
+      "permanent": true,
+      "missing": [
+        {
+          "type": "host",
+          "value": "studio-admin.arhamkhnz.com"
+        }
+      ]
+    }
+  ]
+}
