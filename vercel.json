@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "ignoreCommand": "exit 0 # Skip builds because this Vercel-only redirect config is not required by the project",
   "redirects": [
     {
       "source": "/:path*",
