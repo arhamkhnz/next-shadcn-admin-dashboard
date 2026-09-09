@@ -235,11 +235,39 @@ export function PerformanceHighlights() {
       return;
     }
 
-    const element = document.querySelector(`[data-person-key="${hoveredKey}"]`);
+    let frameId = 0;
 
-    if (element instanceof HTMLElement) {
-      syncTooltipDescribedBy(element);
-    }
+    // Track layout changes as well as window and nested-container scrolling.
+    const updatePosition = () => {
+      const element = document.querySelector(`[data-person-key="${hoveredKey}"]`);
+
+      if (!(element instanceof HTMLElement)) {
+        syncTooltipDescribedBy(null);
+        setHovered(null);
+        return;
+      }
+
+      if (element.getAttribute("aria-describedby") !== PERSON_TOOLTIP_ID) {
+        syncTooltipDescribedBy(element);
+      }
+      const avatar = element.getBoundingClientRect();
+      const x = avatar.left + avatar.width / 2;
+      const y = avatar.top;
+
+      setHovered((current) => {
+        if (!current || getPersonKey(current.className, current.person.initials) !== hoveredKey) {
+          return current;
+        }
+
+        return current.x === x && current.y === y ? current : { ...current, x, y };
+      });
+
+      frameId = window.requestAnimationFrame(updatePosition);
+    };
+
+    updatePosition();
+
+    return () => window.cancelAnimationFrame(frameId);
   }, [hoveredKey]);
 
   const showPersonFromElement = (element: HTMLElement) => {
