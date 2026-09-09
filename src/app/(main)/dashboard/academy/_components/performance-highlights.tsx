@@ -222,6 +222,8 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
 
 export function PerformanceHighlights() {
   const hideTimeoutRef = useRef<number>(0);
+  const pointerPersonRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const [hovered, setHovered] = useState<HoveredPerson | null>(null);
   const hoveredKey = hovered ? getPersonKey(hovered.className, hovered.person.initials) : null;
 
@@ -237,8 +239,8 @@ export function PerformanceHighlights() {
 
     let frameId = 0;
 
-    // Track layout changes as well as window and nested-container scrolling.
     const updatePosition = () => {
+      frameId = 0;
       const element = document.querySelector(`[data-person-key="${hoveredKey}"]`);
 
       if (!(element instanceof HTMLElement)) {
@@ -261,13 +263,31 @@ export function PerformanceHighlights() {
 
         return current.x === x && current.y === y ? current : { ...current, x, y };
       });
-
-      frameId = window.requestAnimationFrame(updatePosition);
     };
 
+    const schedulePosition = () => {
+      if (!frameId) {
+        frameId = window.requestAnimationFrame(updatePosition);
+      }
+    };
+
+    const observer = new ResizeObserver(schedulePosition);
+    // Ancestor resizing covers responsive chart and dashboard layout changes.
+    let ancestor: Element | null = document.querySelector(`[data-person-key="${hoveredKey}"]`);
+    while (ancestor) {
+      observer.observe(ancestor);
+      ancestor = ancestor.parentElement;
+    }
+    window.addEventListener("scroll", schedulePosition, true);
+    window.addEventListener("resize", schedulePosition);
     updatePosition();
 
-    return () => window.cancelAnimationFrame(frameId);
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      observer.disconnect();
+      window.removeEventListener("scroll", schedulePosition, true);
+      window.removeEventListener("resize", schedulePosition);
+    };
   }, [hoveredKey]);
 
   const showPersonFromElement = (element: HTMLElement) => {
@@ -300,6 +320,18 @@ export function PerformanceHighlights() {
   const hidePerson = () => {
     window.clearTimeout(hideTimeoutRef.current);
     hideTimeoutRef.current = window.setTimeout(() => {
+      const focused = document.activeElement;
+      if (focused instanceof HTMLElement && isPersonAvatar(focused) && contentRef.current?.contains(focused)) {
+        showPersonFromElement(focused);
+        return;
+      }
+
+      const pointerPerson = pointerPersonRef.current;
+      if (pointerPerson?.isConnected && pointerPerson.matches(":hover")) {
+        showPersonFromElement(pointerPerson);
+        return;
+      }
+
       syncTooltipDescribedBy(null);
       setHovered(null);
     }, 80);
@@ -307,12 +339,18 @@ export function PerformanceHighlights() {
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     const element = getPersonElementAtPoint(event.clientX, event.clientY);
+    pointerPersonRef.current = element ?? null;
 
     if (element) {
       showPersonFromElement(element);
       return;
     }
 
+    hidePerson();
+  };
+
+  const handlePointerLeave = () => {
+    pointerPersonRef.current = null;
     hidePerson();
   };
 
@@ -347,9 +385,10 @@ export function PerformanceHighlights() {
         </CardAction>
       </CardHeader>
       <CardContent
+        ref={contentRef}
         onBlurCapture={handleBlurCapture}
         onFocusCapture={handleFocusCapture}
-        onPointerLeave={hidePerson}
+        onPointerLeave={handlePointerLeave}
         onPointerMove={handlePointerMove}
       >
         <ChartContainer config={chartConfig} className="aspect-auto h-70 min-h-70 w-full">
