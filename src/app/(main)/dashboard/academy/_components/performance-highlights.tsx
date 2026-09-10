@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { Bar, BarChart, type BarShapeProps, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,46 +62,46 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 type PerformanceHighlight = (typeof performanceHighlights)[number];
-function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 }: BarShapeProps) {
-  const highlight = payload as PerformanceHighlight | undefined;
 
-  if (!highlight?.people?.length) {
+function PerformanceHighlightBar({
+  height = 0,
+  payload,
+  width = 0,
+  x = 0,
+  y = 0,
+}: {
+  height?: number;
+  payload?: PerformanceHighlight;
+  width?: number;
+  x?: number;
+  y?: number;
+}) {
+  if (!payload) {
     return null;
   }
 
-  const barWidth = Number(width) || 0;
-  const barHeight = Math.min(32, Number(height) || 0);
-  const barX = Number(x) || 0;
-  const barY = (Number(y) || 0) + ((Number(height) || 0) - barHeight) / 2;
+  const barHeight = Math.min(32, height);
+  const barY = y + (height - barHeight) / 2;
   const radius = barHeight / 2;
-  const fillWidth = Math.max(barWidth * (highlight.score / 100), 86);
+  const fillWidth = Math.max(width * (payload.score / 100), 86);
   const avatarSize = 22;
-  const avatarStart = barX + 8;
+  const avatarStart = x + 8;
   const avatarY = barY + (barHeight - avatarSize) / 2 - 1.5;
-  const labelX = avatarStart + highlight.people.length * 14 + 14;
+  const labelX = avatarStart + payload.people.length * 14 + 14;
 
   return (
     <g>
       <rect
         fill="color-mix(in oklch, var(--color-duration) 18%, transparent)"
         height={barHeight}
-        pointerEvents="none"
         rx={radius}
-        width={barWidth}
-        x={barX}
+        width={width}
+        x={x}
         y={barY}
       />
-      <rect
-        fill="var(--color-duration)"
-        height={barHeight}
-        pointerEvents="none"
-        rx={radius}
-        width={fillWidth}
-        x={barX}
-        y={barY}
-      />
+      <rect fill="var(--color-duration)" height={barHeight} rx={radius} width={fillWidth} x={x} y={barY} />
 
-      {highlight.people.map((person, index) => {
+      {payload.people.map((person, index) => {
         const avatarX = avatarStart + index * 14;
 
         return (
@@ -109,7 +109,6 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
             height={avatarSize + 4}
             key={person.initials}
             overflow="visible"
-            style={{ overflow: "visible" }}
             width={avatarSize + 4}
             x={avatarX - 2}
             y={avatarY}
@@ -117,7 +116,7 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  aria-label={`${person.name}, ${person.role}, ${highlight.className} ${highlight.subject}`}
+                  aria-label={person.name}
                   className="flex size-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   type="button"
                 >
@@ -131,7 +130,7 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
                   <p>{person.name}</p>
                   <p>{person.role}</p>
                   <p>
-                    {highlight.className} · {highlight.subject}
+                    {payload.className} · {payload.subject}
                   </p>
                 </div>
               </TooltipContent>
@@ -142,25 +141,23 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
 
       <text
         dominantBaseline="middle"
-        pointerEvents="none"
         x={labelX}
         y={barY + barHeight / 2 + 0.5}
         className="fill-primary-foreground font-medium text-xs"
       >
-        {highlight.subject}
+        {payload.subject}
       </text>
 
       <text
         dominantBaseline="middle"
         fill="var(--foreground)"
         fontSize={11}
-        pointerEvents="none"
         textAnchor="end"
-        x={barX + barWidth - 10}
+        x={x + width - 10}
         y={barY + barHeight / 2 + 0.5}
         className="font-medium tabular-nums"
       >
-        {highlight.score}%
+        {payload.score}%
       </text>
     </g>
   );
@@ -176,7 +173,7 @@ export function PerformanceHighlights() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="aspect-auto h-70 min-h-70 w-full">
+        <ChartContainer config={chartConfig} className="h-70 w-full">
           <BarChart
             accessibilityLayer
             data={performanceHighlights}
@@ -194,8 +191,8 @@ export function PerformanceHighlights() {
               type="number"
             />
             <YAxis axisLine={false} dataKey="className" tickLine={false} tickMargin={10} type="category" width={45} />
-            <Bar dataKey="start" fill="transparent" isAnimationActive={false} stackId="timeline" />
-            <Bar dataKey="duration" isAnimationActive={false} shape={PerformanceHighlightBar} stackId="timeline" />
+            <Bar dataKey="start" fill="transparent" stackId="timeline" />
+            <Bar dataKey="duration" shape={<PerformanceHighlightBar />} stackId="timeline" />
           </BarChart>
         </ChartContainer>
       </CardContent>
