@@ -15,10 +15,10 @@ const performanceHighlights = [
     duration: 1.45,
     subject: "Pure Math",
     score: 84,
-    people: [
-      { initials: "AM", name: "Amina Malik", role: "Lead Teacher" },
-      { initials: "LS", name: "Liam Scott", role: "Teaching Assistant" },
-      { initials: "NK", name: "Nora Khan", role: "Student" },
+    students: [
+      { initials: "OD", name: "Olivia Davis", achievement: "Top Performer", score: 96 },
+      { initials: "EM", name: "Ethan Miller", achievement: "Problem-Solving Excellence", score: 91 },
+      { initials: "SW", name: "Sophia Wilson", achievement: "Most Improved", score: 88 },
     ],
   },
   {
@@ -27,7 +27,7 @@ const performanceHighlights = [
     duration: 1.75,
     subject: "Literature",
     score: 78,
-    people: [{ initials: "IR", name: "Isla Reed", role: "Lead Teacher" }],
+    students: [{ initials: "IA", name: "Isabella Anderson", achievement: "Critical Analysis Award", score: 93 }],
   },
   {
     className: "G11C",
@@ -35,10 +35,10 @@ const performanceHighlights = [
     duration: 1.9,
     subject: "Physics",
     score: 80,
-    people: [
-      { initials: "SK", name: "Samir Khan", role: "Lead Teacher" },
-      { initials: "MJ", name: "Maya Jensen", role: "Lab Technician" },
-      { initials: "AT", name: "Alex Torres", role: "Student" },
+    students: [
+      { initials: "AB", name: "Alexander Brown", achievement: "Top Performer", score: 95 },
+      { initials: "MG", name: "Mia Garcia", achievement: "Laboratory Excellence", score: 92 },
+      { initials: "NM", name: "Noah Martinez", achievement: "Most Improved", score: 87 },
     ],
   },
   {
@@ -47,9 +47,9 @@ const performanceHighlights = [
     duration: 1.66,
     subject: "History",
     score: 73,
-    people: [
-      { initials: "RP", name: "Ravi Patel", role: "Lead Teacher" },
-      { initials: "EH", name: "Elena Hart", role: "Student" },
+    students: [
+      { initials: "ET", name: "Emma Taylor", achievement: "Research Excellence", score: 90 },
+      { initials: "WJ", name: "William Johnson", achievement: "Consistent Performer", score: 86 },
     ],
   },
 ];
@@ -87,7 +87,7 @@ function PerformanceHighlightBar({
   const avatarSize = 22;
   const avatarStart = x + 8;
   const avatarY = barY + (barHeight - avatarSize) / 2 - 1.5;
-  const labelX = avatarStart + payload.people.length * 14 + 14;
+  const labelX = avatarStart + payload.students.length * 14 + 14;
 
   return (
     <g>
@@ -101,34 +101,34 @@ function PerformanceHighlightBar({
       />
       <rect fill="var(--color-duration)" height={barHeight} rx={radius} width={fillWidth} x={x} y={barY} />
 
-      {payload.people.map((person, index) => {
+      {payload.students.map((student, index) => {
         const avatarX = avatarStart + index * 14;
 
         return (
           <foreignObject
             height={avatarSize + 4}
-            key={person.initials}
+            key={student.initials}
             overflow="visible"
             width={avatarSize + 4}
             x={avatarX - 2}
             y={avatarY}
           >
             <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  aria-label={person.name}
-                  className="flex size-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  type="button"
-                >
-                  <Avatar className="size-5 bg-muted" size="sm">
-                    <AvatarFallback className="text-foreground">{person.initials}</AvatarFallback>
-                  </Avatar>
-                </button>
+              <TooltipTrigger
+                aria-label={student.name}
+                className="flex size-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                type="button"
+              >
+                <Avatar className="size-5 bg-muted" size="sm">
+                  <AvatarFallback className="text-foreground">{student.initials}</AvatarFallback>
+                </Avatar>
               </TooltipTrigger>
               <TooltipContent side="top" sideOffset={8}>
                 <div className="grid gap-1">
-                  <p>{person.name}</p>
-                  <p>{person.role}</p>
+                  <p>{student.name}</p>
+                  <p>
+                    {student.achievement} · {student.score}%
+                  </p>
                   <p>
                     {payload.className} · {payload.subject}
                   </p>
