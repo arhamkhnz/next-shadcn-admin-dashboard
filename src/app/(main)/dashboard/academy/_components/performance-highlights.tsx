@@ -1,14 +1,12 @@
 "use client";
 
-import { type FocusEvent, type PointerEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
-
 import { ArrowRight } from "lucide-react";
-import { createPortal } from "react-dom";
 import { Bar, BarChart, type BarShapeProps, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const performanceHighlights = [
   {
@@ -64,70 +62,6 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 type PerformanceHighlight = (typeof performanceHighlights)[number];
-type PerformancePerson = PerformanceHighlight["people"][number];
-
-const PERSON_TOOLTIP_ID = "academy-performance-person-tooltip";
-
-function getPersonKey(className: string, initials: string) {
-  return `${className}-${initials}`;
-}
-
-function isPersonAvatar(target: EventTarget | null) {
-  return target instanceof HTMLElement && Boolean(target.closest("[data-person-key]"));
-}
-
-function syncTooltipDescribedBy(element: HTMLElement | null) {
-  for (const button of document.querySelectorAll(`[data-person-key][aria-describedby="${PERSON_TOOLTIP_ID}"]`)) {
-    button.removeAttribute("aria-describedby");
-  }
-
-  element?.setAttribute("aria-describedby", PERSON_TOOLTIP_ID);
-}
-
-const peopleLookup = new Map(
-  performanceHighlights.flatMap((highlight) =>
-    highlight.people.map((person) => [getPersonKey(highlight.className, person.initials), { highlight, person }]),
-  ),
-);
-
-function getPersonElementAtPoint(clientX: number, clientY: number) {
-  return document.elementsFromPoint(clientX, clientY).find((element): element is HTMLElement => {
-    return element instanceof HTMLElement && Boolean(element.dataset.personKey);
-  });
-}
-
-type HoveredPerson = {
-  className: string;
-  person: PerformancePerson;
-  subject: string;
-  x: number;
-  y: number;
-};
-
-function PersonIdentityCard({ hovered }: { hovered: HoveredPerson }) {
-  return createPortal(
-    <div
-      className="pointer-events-none fixed z-50 grid min-w-36 -translate-x-1/2 -translate-y-[calc(100%+8px)] gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl"
-      id={PERSON_TOOLTIP_ID}
-      role="tooltip"
-      style={{ left: hovered.x, top: hovered.y }}
-    >
-      <div className="font-medium">{hovered.person.name}</div>
-      <div className="grid gap-1">
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-muted-foreground">{hovered.person.role}</span>
-          <span className="font-medium text-foreground tabular-nums">{hovered.className}</span>
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-muted-foreground">{hovered.subject}</span>
-          <span className="font-medium text-foreground tabular-nums">{hovered.person.initials}</span>
-        </div>
-      </div>
-    </div>,
-    document.body,
-  );
-}
-
 function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 }: BarShapeProps) {
   const highlight = payload as PerformanceHighlight | undefined;
 
@@ -173,23 +107,35 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
         return (
           <foreignObject
             height={avatarSize + 4}
-            key={getPersonKey(highlight.className, person.initials)}
+            key={person.initials}
             overflow="visible"
             style={{ overflow: "visible" }}
             width={avatarSize + 4}
             x={avatarX - 2}
             y={avatarY}
           >
-            <button
-              aria-label={`${person.name}, ${person.role}, ${highlight.className} ${highlight.subject}`}
-              className="flex size-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              data-person-key={getPersonKey(highlight.className, person.initials)}
-              type="button"
-            >
-              <Avatar className="size-5 bg-muted" size="sm">
-                <AvatarFallback className="text-foreground">{person.initials}</AvatarFallback>
-              </Avatar>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  aria-label={`${person.name}, ${person.role}, ${highlight.className} ${highlight.subject}`}
+                  className="flex size-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  type="button"
+                >
+                  <Avatar className="size-5 bg-muted" size="sm">
+                    <AvatarFallback className="text-foreground">{person.initials}</AvatarFallback>
+                  </Avatar>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" sideOffset={8}>
+                <div className="grid gap-1">
+                  <p>{person.name}</p>
+                  <p>{person.role}</p>
+                  <p>
+                    {highlight.className} · {highlight.subject}
+                  </p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
           </foreignObject>
         );
       })}
@@ -221,161 +167,6 @@ function PerformanceHighlightBar({ height = 0, payload, width = 0, x = 0, y = 0 
 }
 
 export function PerformanceHighlights() {
-  const hideTimeoutRef = useRef<number>(0);
-  const pointerPersonRef = useRef<HTMLElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const [hovered, setHovered] = useState<HoveredPerson | null>(null);
-  const hoveredKey = hovered ? getPersonKey(hovered.className, hovered.person.initials) : null;
-
-  useEffect(() => {
-    return () => window.clearTimeout(hideTimeoutRef.current);
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!hoveredKey) {
-      syncTooltipDescribedBy(null);
-      return;
-    }
-
-    let frameId = 0;
-
-    const updatePosition = () => {
-      frameId = 0;
-      const element = document.querySelector(`[data-person-key="${hoveredKey}"]`);
-
-      if (!(element instanceof HTMLElement)) {
-        syncTooltipDescribedBy(null);
-        setHovered(null);
-        return;
-      }
-
-      if (element.getAttribute("aria-describedby") !== PERSON_TOOLTIP_ID) {
-        syncTooltipDescribedBy(element);
-      }
-      const avatar = element.getBoundingClientRect();
-      const x = avatar.left + avatar.width / 2;
-      const y = avatar.top;
-
-      setHovered((current) => {
-        if (!current || getPersonKey(current.className, current.person.initials) !== hoveredKey) {
-          return current;
-        }
-
-        return current.x === x && current.y === y ? current : { ...current, x, y };
-      });
-    };
-
-    const schedulePosition = () => {
-      if (!frameId) {
-        frameId = window.requestAnimationFrame(updatePosition);
-      }
-    };
-
-    const observer = new ResizeObserver(schedulePosition);
-    // Ancestor resizing covers responsive chart and dashboard layout changes.
-    let ancestor: Element | null = document.querySelector(`[data-person-key="${hoveredKey}"]`);
-    while (ancestor) {
-      observer.observe(ancestor);
-      ancestor = ancestor.parentElement;
-    }
-    window.addEventListener("scroll", schedulePosition, true);
-    window.addEventListener("resize", schedulePosition);
-    updatePosition();
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-      observer.disconnect();
-      window.removeEventListener("scroll", schedulePosition, true);
-      window.removeEventListener("resize", schedulePosition);
-    };
-  }, [hoveredKey]);
-
-  const showPersonFromElement = (element: HTMLElement) => {
-    const key = element.dataset.personKey;
-    const match = key ? peopleLookup.get(key) : undefined;
-
-    if (!match) {
-      return;
-    }
-
-    window.clearTimeout(hideTimeoutRef.current);
-    syncTooltipDescribedBy(element);
-    const avatar = element.getBoundingClientRect();
-
-    setHovered((current) => {
-      if (current?.className === match.highlight.className && current.person.initials === match.person.initials) {
-        return current;
-      }
-
-      return {
-        className: match.highlight.className,
-        person: match.person,
-        subject: match.highlight.subject,
-        x: avatar.left + avatar.width / 2,
-        y: avatar.top,
-      };
-    });
-  };
-
-  const hidePerson = () => {
-    window.clearTimeout(hideTimeoutRef.current);
-    hideTimeoutRef.current = window.setTimeout(() => {
-      const focused = document.activeElement;
-      if (focused instanceof HTMLElement && isPersonAvatar(focused) && contentRef.current?.contains(focused)) {
-        showPersonFromElement(focused);
-        return;
-      }
-
-      const pointerPerson = pointerPersonRef.current;
-      if (pointerPerson?.isConnected && pointerPerson.matches(":hover")) {
-        showPersonFromElement(pointerPerson);
-        return;
-      }
-
-      syncTooltipDescribedBy(null);
-      setHovered(null);
-    }, 80);
-  };
-
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    const element = getPersonElementAtPoint(event.clientX, event.clientY);
-    pointerPersonRef.current = element ?? null;
-
-    if (element) {
-      showPersonFromElement(element);
-      return;
-    }
-
-    hidePerson();
-  };
-
-  const handlePointerLeave = () => {
-    pointerPersonRef.current = null;
-    hidePerson();
-  };
-
-  const handleFocusCapture = (event: FocusEvent<HTMLDivElement>) => {
-    const element = event.target instanceof HTMLElement ? event.target.closest("[data-person-key]") : null;
-
-    if (element instanceof HTMLElement) {
-      showPersonFromElement(element);
-    }
-  };
-
-  const handleBlurCapture = (event: FocusEvent<HTMLDivElement>) => {
-    if (isPersonAvatar(event.relatedTarget)) {
-      return;
-    }
-
-    window.requestAnimationFrame(() => {
-      if (isPersonAvatar(document.activeElement)) {
-        return;
-      }
-
-      hidePerson();
-    });
-  };
-
   return (
     <Card className="h-full">
       <CardHeader>
@@ -384,13 +175,7 @@ export function PerformanceHighlights() {
           View Insights <ArrowRight className="size-4" />
         </CardAction>
       </CardHeader>
-      <CardContent
-        ref={contentRef}
-        onBlurCapture={handleBlurCapture}
-        onFocusCapture={handleFocusCapture}
-        onPointerLeave={handlePointerLeave}
-        onPointerMove={handlePointerMove}
-      >
+      <CardContent>
         <ChartContainer config={chartConfig} className="aspect-auto h-70 min-h-70 w-full">
           <BarChart
             accessibilityLayer
@@ -413,7 +198,6 @@ export function PerformanceHighlights() {
             <Bar dataKey="duration" isAnimationActive={false} shape={PerformanceHighlightBar} stackId="timeline" />
           </BarChart>
         </ChartContainer>
-        {hovered ? <PersonIdentityCard hovered={hovered} /> : null}
       </CardContent>
     </Card>
   );
