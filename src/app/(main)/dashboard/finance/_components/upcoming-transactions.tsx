@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { addDays, format, set } from "date-fns";
 import { ChevronRight, Zap } from "lucide-react";
 import { siClaude, siLinear, siResend } from "simple-icons";
@@ -8,28 +10,31 @@ import { SimpleIcon } from "@/components/simple-icon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from "@/components/ui/item";
 
-const transactions = [
-  {
-    id: 1,
-    title: "Claude Pro Subscription",
-    date: format(set(addDays(new Date(), 2), { hours: 14, minutes: 45 }), "hh.mm a '•' MMMM dd, yyyy"),
-    icon: siClaude,
-  },
-  {
-    id: 2,
-    title: "Resend Pro Team",
-    date: format(set(addDays(new Date(), 4), { hours: 7, minutes: 0 }), "hh.mm a '•' MMMM dd, yyyy"),
-    icon: siResend,
-  },
-  {
-    id: 3,
-    title: "Linear Plus Plan",
-    date: format(set(addDays(new Date(), 10), { hours: 7, minutes: 0 }), "hh.mm a '•' MMMM dd, yyyy"),
-    icon: siLinear,
-  },
+const baseTransactions = [
+  { id: 1, title: "Claude Pro Subscription", icon: siClaude, offsetDays: 2, hours: 14, minutes: 45 },
+  { id: 2, title: "Resend Pro Team", icon: siResend, offsetDays: 4, hours: 7, minutes: 0 },
+  { id: 3, title: "Linear Plus Plan", icon: siLinear, offsetDays: 10, hours: 7, minutes: 0 },
 ];
 
+const DATE_FORMAT = "hh.mm a '•' MMMM dd, yyyy";
+
 export function UpcomingTransactions() {
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setNow(new Date());
+  }, []);
+
+  const transactions = baseTransactions.map((transaction) => ({
+    ...transaction,
+    date: now
+      ? format(
+          set(addDays(now, transaction.offsetDays), { hours: transaction.hours, minutes: transaction.minutes }),
+          DATE_FORMAT,
+        )
+      : " ",
+  }));
+
   return (
     <Card>
       <CardHeader>
