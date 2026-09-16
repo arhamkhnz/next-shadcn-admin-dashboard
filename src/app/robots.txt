@@ -1,0 +1,66 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: Amzn-SearchBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: GPTBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: Claude-Web
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: anthropic-ai
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: Google-Extended
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: Amazonbot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: Bytespider
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: CCBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+User-Agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+Sitemap: https://studio-admin.arhamkhnz.com/sitemap.xml
