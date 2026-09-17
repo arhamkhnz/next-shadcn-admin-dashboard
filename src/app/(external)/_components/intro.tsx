@@ -3,13 +3,11 @@ import Link from "next/link";
 import { ArrowUpRight, StarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
-import { getGitHubStarCount } from "../_lib/get-github-star-count";
-import { VariantsSelect } from "./variants-select";
+import { getGitHubStarCount } from "@/lib/get-github-star-count";
 
 const repositoryUrl = "https://github.com/arhamkhnz/next-shadcn-admin-dashboard";
 
-export async function HeroContent() {
+export async function Intro() {
   const starCount = await getGitHubStarCount();
 
   return (
@@ -25,7 +23,6 @@ export async function HeroContent() {
             <ArrowUpRight aria-hidden="true" data-icon="inline-end" />
           </Link>
         </Button>
-        <VariantsSelect />
         <Button asChild className="pe-0" variant="outline">
           <a href={repositoryUrl} target="_blank" rel="noreferrer">
             <StarIcon aria-hidden="true" data-icon="inline-start" />

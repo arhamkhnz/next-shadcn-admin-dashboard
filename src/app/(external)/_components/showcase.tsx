@@ -3,7 +3,7 @@ import Link from "next/link";
 import dashboardImage from "../../../../media/dashboard.png";
 import { LandingThemeSwitcher } from "./landing-theme-switcher";
 
-export function HeroSection() {
+export function Showcase() {
   return (
     <>
       <header className="flex items-center justify-between gap-6">
