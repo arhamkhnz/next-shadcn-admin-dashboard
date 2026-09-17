@@ -14,10 +14,15 @@ export function Intro() {
   const starCount = useGitHubStarCount();
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8">
-      <h1 className="text-balance font-medium text-2xl leading-snug tracking-tight sm:text-3xl" id="hero-title">
-        A polished admin experience, thoughtfully designed and available across multiple stacks.
-      </h1>
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
+        <h1 className="text-balance font-medium text-2xl leading-snug tracking-tight sm:text-3xl" id="hero-title">
+          A polished admin dashboard built to fit your stack and the way you work.
+        </h1>
+        <p className="text-muted-foreground text-sm leading-6 sm:text-base">
+          Choose Radix UI, Base UI, React Aria, or TanStack Start, all with the same polished experience.
+        </p>
+      </div>
 
       <div className="flex flex-wrap gap-2 sm:gap-3">
         <Button asChild>

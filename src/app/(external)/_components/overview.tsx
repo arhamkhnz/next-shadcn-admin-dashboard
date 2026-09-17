@@ -37,33 +37,22 @@ export function Overview() {
           <div className="flex flex-col gap-4">
             <p className="font-medium text-muted-foreground text-xs">About</p>
             <h2 className="text-pretty text-xl leading-7 tracking-tight" id="overview-title">
-              Studio Admin is an open-source admin dashboard template with configurable layouts, customizable themes,
-              and editions built on multiple React UI foundations.
+              An open-source admin dashboard with 25+ screens, ready to make your own.
             </h2>
           </div>
 
           <div className="flex flex-col gap-4">
-            <p className="font-medium text-muted-foreground text-xs">My approach</p>
-            <p className="font-medium text-primary text-sm">“One design, many stacks.”</p>
+            <p className="font-medium text-muted-foreground text-xs">Make it yours</p>
             <p className="text-muted-foreground text-sm leading-6">
-              Each edition keeps the same visual language while staying native to its framework and component
-              foundation.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <p className="font-medium text-muted-foreground text-xs">Designed to adapt</p>
-            <p className="text-muted-foreground text-sm leading-6">
-              Every screen is built with standard shadcn/ui components kept intact, so the foundation stays familiar and
-              easy to adapt. Four visual presets and configurable page and sidebar layouts let you shape it around your
-              use case.
+              Customize the fonts, themes, content width, navbar, and sidebar layout. Each edition stays native to its
+              foundation while keeping the design consistent.
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-6 sm:gap-10">
           <div className="flex flex-col gap-4">
-            <h3 className="font-medium text-muted-foreground text-xs">25+ screens</h3>
+            <h3 className="font-medium text-muted-foreground text-xs">Featured screens</h3>
             <ul className="flex flex-col gap-1 text-sm">
               {includedScreens.map((screen) => (
                 <li key={screen.name}>
@@ -76,7 +65,6 @@ export function Overview() {
                 </li>
               ))}
             </ul>
-            <p className="text-muted-foreground text-xs">More coming.</p>
           </div>
 
           <div className="flex flex-col gap-4" id="variants">
