@@ -34,21 +34,21 @@ export function VariantsSection() {
     <>
       <section id="variants" aria-labelledby="variants-title">
         <Separator />
-        <div className="grid gap-8 py-20 sm:grid-cols-[3rem_1fr] sm:gap-8 sm:py-24">
+        <div className="grid grid-cols-[3rem_1fr] gap-8 py-24">
           <Badge className="size-10 rounded-full p-0 tabular-nums" variant="outline">
             2
           </Badge>
 
           <div>
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" id="variants-title">
+            <h2 className="font-medium text-3xl tracking-tight" id="variants-title">
               Four foundations
             </h2>
 
-            <div className="mt-12 space-y-12 sm:mt-14 sm:space-y-14">
+            <div className="mt-14 flex flex-col gap-14">
               {variants.map((variant) => (
                 <article className="max-w-2xl" key={variant.name}>
                   <a
-                    className="inline-flex items-center gap-1.5 text-lg font-medium tracking-tight underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground sm:text-xl"
+                    className="inline-flex items-center gap-1.5 font-medium text-xl tracking-tight underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
                     href={variant.repository}
                     target="_blank"
                     rel="noreferrer"
@@ -56,9 +56,7 @@ export function VariantsSection() {
                     {variant.name}
                     <ArrowUpRight className="size-4" aria-hidden="true" />
                   </a>
-                  <p className="mt-3 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-                    {variant.description}
-                  </p>
+                  <p className="mt-3 text-lg text-muted-foreground leading-8">{variant.description}</p>
                 </article>
               ))}
             </div>
@@ -66,9 +64,9 @@ export function VariantsSection() {
         </div>
       </section>
 
-      <footer className="pb-10 sm:pb-12">
+      <footer>
         <Separator />
-        <div className="flex flex-col gap-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-row items-center justify-between gap-6 pt-8 text-muted-foreground text-sm">
           <p>Studio Admin · Open-source dashboard template</p>
           <div className="flex items-center gap-5">
             <Button asChild size="sm" variant="ghost">
