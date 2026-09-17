@@ -80,12 +80,12 @@ try {
 const defaultLightPrimaryRegex = /:root\s*{[^}]*--primary:\s*([^;]+);/;
 const defaultDarkPrimaryRegex = /\.dark\s*{[^}]*--primary:\s*([^;]+);/;
 
-const defaultLightPrimaryMatch = defaultLightPrimaryRegex.exec(globalContent);
-const defaultDarkPrimaryMatch = defaultDarkPrimaryRegex.exec(globalContent);
+const defaultLightPrimaryMatch = globalContent.match(defaultLightPrimaryRegex);
+const defaultDarkPrimaryMatch = globalContent.match(defaultDarkPrimaryRegex);
 
 const defaultPrimary = {
-  light: defaultLightPrimaryMatch?.[1]?.trim() ?? "",
-  dark: defaultDarkPrimaryMatch?.[1]?.trim() ?? "",
+  light: defaultLightPrimaryMatch?.[1].trim() ?? "",
+  dark: defaultDarkPrimaryMatch?.[1].trim() ?? "",
 };
 
 presets.unshift({ label: "Default", value: "default", primary: defaultPrimary });
