@@ -11,12 +11,12 @@ export async function Intro() {
   const starCount = await getGitHubStarCount();
 
   return (
-    <div className="flex flex-col gap-8">
-      <h1 className="text-balance font-medium text-3xl leading-snug tracking-tight" id="hero-title">
+    <div className="flex flex-col gap-6 sm:gap-8">
+      <h1 className="text-balance font-medium text-2xl leading-snug tracking-tight sm:text-3xl" id="hero-title">
         A polished admin experience, thoughtfully designed and available across multiple stacks.
       </h1>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2 sm:gap-3">
         <Button asChild>
           <Link href="/dashboard/default">
             Live demo

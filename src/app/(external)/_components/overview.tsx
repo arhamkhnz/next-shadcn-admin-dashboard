@@ -32,8 +32,8 @@ const editions = [
 export function Overview() {
   return (
     <section aria-labelledby="overview-title">
-      <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] gap-16">
-        <div className="flex flex-col gap-12">
+      <div className="grid grid-cols-1 gap-12 md:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] md:gap-16">
+        <div className="flex flex-col gap-10 md:gap-12">
           <div className="flex flex-col gap-4">
             <p className="font-medium text-muted-foreground text-xs">About</p>
             <h2 className="text-pretty text-xl leading-7 tracking-tight" id="overview-title">
@@ -61,7 +61,7 @@ export function Overview() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-10">
+        <div className="grid grid-cols-2 gap-6 sm:gap-10">
           <div className="flex flex-col gap-4">
             <h3 className="font-medium text-muted-foreground text-xs">25+ screens</h3>
             <ul className="flex flex-col gap-1 text-sm">

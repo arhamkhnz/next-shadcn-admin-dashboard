@@ -8,7 +8,7 @@ import { Showcase } from "./_components/showcase";
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground" data-landing-page>
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-8">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-4 sm:gap-8 sm:p-6 md:p-8">
         <Showcase />
         <Intro />
         <Separator />
