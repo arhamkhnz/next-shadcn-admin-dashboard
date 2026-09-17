@@ -1,54 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import Link from "next/link";
 
 import { ArrowUpRight, StarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-const repositoryUrl = "https://github.com/arhamkhnz/next-shadcn-admin-dashboard";
-const repositoryStarsUrl = "https://api.github.com/repos/arhamkhnz/next-shadcn-admin-dashboard/stargazers/count";
+import { useGitHubStarCount } from "../_hooks/use-github-star-count";
 
-type GitHubStarsResponse = {
-  count: number;
-};
+const repositoryUrl = "https://github.com/arhamkhnz/next-shadcn-admin-dashboard";
 
 export function Intro() {
-  const [starCount, setStarCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadStarCount() {
-      try {
-        const response = await fetch(repositoryStarsUrl, {
-          headers: {
-            Accept: "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2026-03-10",
-          },
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          return;
-        }
-
-        const data = (await response.json()) as GitHubStarsResponse;
-
-        if (Number.isFinite(data.count)) {
-          setStarCount(data.count);
-        }
-      } catch {
-        // Keep the neutral fallback when GitHub is unavailable.
-      }
-    }
-
-    void loadStarCount();
-
-    return () => controller.abort();
-  }, []);
+  const starCount = useGitHubStarCount();
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8">
