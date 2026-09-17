@@ -1,72 +1,47 @@
-import { Boxes, LayoutDashboard, Paintbrush2, PanelsTopLeft } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 const features = [
   {
-    icon: LayoutDashboard,
     title: "A complete product surface",
     description:
-      "Move beyond a single overview screen with focused experiences for analytics, CRM, finance, ecommerce, tasks, mail, and more.",
+      "Start with purpose-built screens for analytics, CRM, finance, ecommerce, mail, tasks, and the everyday work around them.",
   },
   {
-    icon: PanelsTopLeft,
-    title: "Layouts that adapt",
-    description:
-      "Responsive navigation, compact modes, and considered content density give the interface room to fit different products and teams.",
-  },
-  {
-    icon: Paintbrush2,
     title: "Designed to become yours",
     description:
-      "Theme presets, typography choices, and semantic design tokens make customization deliberate without fighting the system underneath.",
+      "Responsive layouts, semantic design tokens, and theme presets give you a clear system to shape around your own product.",
   },
   {
-    icon: Boxes,
-    title: "Components you own",
+    title: "Components you control",
     description:
-      "The interface is composed from local shadcn/ui components, so the implementation stays inspectable, editable, and under your control.",
+      "Every interface is composed from local shadcn/ui components, so the source stays inspectable, editable, and in your hands.",
   },
 ];
 
 export function FeaturesSection() {
   return (
-    <section className="border-b border-border" id="features" aria-labelledby="features-title">
-      <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-12 lg:px-12 lg:py-36">
-        <div className="lg:col-span-3">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">01 / The foundation</p>
-        </div>
+    <section id="features" aria-labelledby="features-title">
+      <Separator />
+      <div className="grid gap-8 py-20 sm:grid-cols-[3rem_1fr] sm:gap-8 sm:py-24">
+        <Badge className="size-10 rounded-full p-0 tabular-nums" variant="outline">
+          1
+        </Badge>
 
-        <div className="lg:col-span-9">
-          <div className="grid gap-8 lg:grid-cols-3">
-            <h2
-              className="text-balance text-4xl leading-tight font-medium tracking-[-0.04em] sm:text-5xl lg:col-span-2 lg:text-6xl"
-              id="features-title"
-            >
-              Made for the work after the starter.
-            </h2>
-            <p className="max-w-sm self-end text-base leading-relaxed text-muted-foreground">
-              Studio Admin provides enough structure to move quickly, without turning your product into a copy of the
-              template.
-            </p>
-          </div>
+        <div>
+          <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" id="features-title">
+            What’s inside
+          </h2>
 
-          <div className="mt-16 grid border-t border-border sm:grid-cols-2 lg:mt-24">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-
-              return (
-                <article
-                  className="border-b border-border py-8 sm:odd:pr-8 sm:even:border-l sm:even:pl-8 lg:py-10"
-                  key={feature.title}
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <Icon className="size-5" strokeWidth={1.6} aria-hidden="true" />
-                    <span className="text-xs text-muted-foreground">0{index + 1}</span>
-                  </div>
-                  <h3 className="mt-12 text-xl font-medium tracking-tight sm:text-2xl">{feature.title}</h3>
-                  <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground">{feature.description}</p>
-                </article>
-              );
-            })}
+          <div className="mt-12 space-y-12 sm:mt-14 sm:space-y-14">
+            {features.map((feature) => (
+              <article className="max-w-2xl" key={feature.title}>
+                <h3 className="text-lg font-medium tracking-tight sm:text-xl">{feature.title}</h3>
+                <p className="mt-3 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+                  {feature.description}
+                </p>
+              </article>
+            ))}
           </div>
         </div>
       </div>

@@ -5,11 +5,13 @@ import { VariantsSection } from "./_components/variants-section";
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
-      <LandingHeader />
-      <HeroSection />
-      <FeaturesSection />
-      <VariantsSection />
+    <main className="dark min-h-screen bg-background text-foreground">
+      <div className="mx-auto w-full max-w-3xl px-5 sm:px-8">
+        <LandingHeader />
+        <HeroSection />
+        <FeaturesSection />
+        <VariantsSection />
+      </div>
     </main>
   );
 }
