@@ -26,7 +26,7 @@ export function Showcase() {
         href="/dashboard/default"
         aria-label="Open the Studio Admin live demo"
       >
-        {/* biome-ignore lint/performance/noImgElement: This landing image intentionally uses the native img element. */}
+        {/* biome-ignore lint/performance/noImgElement: This landing image is optimized separately. */}
         <img
           alt="Studio Admin interface showing dashboard, authentication, and layout customization screens"
           className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.01]"
