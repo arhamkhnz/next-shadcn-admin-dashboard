@@ -1,0 +1,1 @@
+Studio Admin open source admin dashboard with shadcn/ui
