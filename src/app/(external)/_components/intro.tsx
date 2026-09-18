@@ -16,6 +16,7 @@ async function getGitHubStarCount() {
     const response = await fetch(repositoryStarsUrl, {
       headers: {
         Accept: "application/vnd.github+json",
+        "User-Agent": "arhamkhnz-studio-admin",
         "X-GitHub-Api-Version": "2026-03-10",
       },
       next: { revalidate: 3600 },
