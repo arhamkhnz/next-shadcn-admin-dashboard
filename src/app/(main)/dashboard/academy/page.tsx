@@ -1,4 +1,5 @@
 import { BookOpenCheck, Megaphone, Plus } from "lucide-react";
+import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
 
@@ -7,6 +8,12 @@ import { ClassSchedule } from "./_components/class-schedule";
 import { KpiCards } from "./_components/kpi-cards";
 import { PerformanceHighlights } from "./_components/performance-highlights";
 import { UpcomingEvents } from "./_components/upcoming-events";
+
+export const metadata: Metadata = {
+  title: "Open Source Education Dashboard with shadcn/ui",
+  description:
+    "Explore an open source education dashboard with class schedules, assignments, performance insights, and upcoming events.",
+};
 
 export default function Page() {
   return (

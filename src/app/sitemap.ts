@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 const SITE_URL = "https://studio-admin.arhamkhnz.com";
 
 const PUBLIC_ROUTES = [
+  "/",
   "/dashboard/default",
   "/dashboard/crm",
   "/dashboard/finance",
@@ -14,8 +15,6 @@ const PUBLIC_ROUTES = [
   "/dashboard/infrastructure",
   "/dashboard/file-manager",
   "/dashboard/patient-monitoring",
-  "/dashboard/mail",
-  "/dashboard/chat",
   "/dashboard/calendar",
   "/dashboard/kanban",
   "/dashboard/tasks",

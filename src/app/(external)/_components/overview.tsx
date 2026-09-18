@@ -37,7 +37,7 @@ export function Overview() {
           <div className="flex flex-col gap-4">
             <p className="font-medium text-muted-foreground text-xs">About</p>
             <h2 className="text-pretty text-xl leading-7 tracking-tight" id="overview-title">
-              An open-source admin dashboard with 25+ screens, ready to make your own.
+              An open source shadcn/ui admin dashboard with 25+ screens, ready to make your own.
             </h2>
           </div>
 

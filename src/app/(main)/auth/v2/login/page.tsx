@@ -1,11 +1,18 @@
 import Link from "next/link";
 
 import { Globe } from "lucide-react";
+import type { Metadata } from "next";
 
 import { APP_CONFIG } from "@/config/app-config";
 
 import { LoginForm } from "../../_components/login-form";
 import { GoogleButton } from "../../_components/social-auth/google-button";
+
+export const metadata: Metadata = {
+  title: "Open Source Branded Login Page with shadcn/ui",
+  description:
+    "Explore an open source branded login page with a two-column layout, social sign-in, and email and password fields.",
+};
 
 export default function LoginV2() {
   return (

@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import type { Metadata } from "next";
+
 import { Separator } from "@/components/ui/separator";
 
 import { Footer } from "./_components/footer";
@@ -7,6 +9,12 @@ import { Intro } from "./_components/intro";
 import { LandingThemeSwitcher } from "./_components/landing-theme-switcher";
 import { Overview } from "./_components/overview";
 import { Showcase } from "./_components/showcase";
+
+export const metadata: Metadata = {
+  title: "Studio Admin: Open Source Admin Dashboard with shadcn/ui",
+  description:
+    "A polished open source shadcn/ui admin dashboard with 25+ screens and editions for Radix UI, Base UI, React Aria, and TanStack Start.",
+};
 
 export default function Home() {
   return (

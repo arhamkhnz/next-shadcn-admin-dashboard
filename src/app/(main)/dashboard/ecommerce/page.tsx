@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { Settings2 } from "lucide-react";
+import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,6 +13,12 @@ import { RecentOrders } from "./_components/recent-orders";
 import { StoreTraffic } from "./_components/store-traffic";
 import { TopProducts } from "./_components/top-products";
 import { TrafficSources } from "./_components/traffic-sources";
+
+export const metadata: Metadata = {
+  title: "Open Source E-commerce Dashboard with shadcn/ui",
+  description:
+    "Explore an open source e-commerce dashboard with sales metrics, orders, store traffic, inventory, products, and reviews.",
+};
 
 export default function Page() {
   const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");

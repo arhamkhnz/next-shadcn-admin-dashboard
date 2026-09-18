@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { AnalyticsKpiStrip } from "./_components/analytics-kpi-strip";
@@ -9,6 +11,12 @@ import { TrafficQuality } from "./_components/traffic-quality";
 
 // Import this stylesheet in any page or component that renders country flag classes.
 import "@/styles/flag-icons/flags.css";
+
+export const metadata: Metadata = {
+  title: "Open Source Analytics Dashboard with shadcn/ui",
+  description:
+    "Explore an open source analytics dashboard with traffic metrics, realtime visitors, page performance, and conversion insights.",
+};
 
 export default function Page() {
   return (

@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
+
 export default function Page() {
   return (
     <div className="flex h-full flex-col items-center justify-center space-y-2 text-center">

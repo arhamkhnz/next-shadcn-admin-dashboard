@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { Download, RotateCw, Settings2 } from "lucide-react";
+import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +13,12 @@ import { QuickActions } from "./_components/quick-actions";
 import { TransactionsOverviewCard } from "./_components/transactions-overview-card";
 import { UpcomingTransactions } from "./_components/upcoming-transactions";
 import { Wallet } from "./_components/wallet";
+
+export const metadata: Metadata = {
+  title: "Open Source Finance Dashboard with shadcn/ui",
+  description:
+    "Explore an open source personal finance dashboard with net worth, spending, income sources, account allocation, transactions, and wallets.",
+};
 
 export default function Page() {
   const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");

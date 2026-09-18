@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { Network, Printer, Volume2 } from "lucide-react";
+import type { Metadata } from "next";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 import { patients } from "./_components/data";
 import { PatientMonitoring } from "./_components/patient-monitoring";
+
+export const metadata: Metadata = {
+  title: "Open Source Patient Monitoring Dashboard with shadcn/ui",
+  description:
+    "Explore an open source patient monitoring dashboard with live vital signs, ECG waveforms, patient trends, alarms, and device status.",
+};
 
 export default function Page() {
   const now = new Date();

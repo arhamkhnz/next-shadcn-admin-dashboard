@@ -1,4 +1,5 @@
 import { LockKeyhole } from "lucide-react";
+import type { Metadata } from "next";
 
 import {
   Breadcrumb,
@@ -18,6 +19,12 @@ import { ProfileOverview } from "./_components/profile-overview";
 import { PersonalDetails } from "./_components/profile-personal-details";
 import { ProfileStatusSidebar } from "./_components/profile-status-sidebar";
 import { TimeOffDetails } from "./_components/profile-time-off-details";
+
+export const metadata: Metadata = {
+  title: "Open Source Employee Profile Dashboard with shadcn/ui",
+  description:
+    "Explore an open source employee profile dashboard with personal details, employment information, time off, documents, and reporting lines.",
+};
 
 export default function Page() {
   return (

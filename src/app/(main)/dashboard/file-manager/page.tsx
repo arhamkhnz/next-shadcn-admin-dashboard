@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { FolderPlus, Grid2X2, List, Upload } from "lucide-react";
+import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -10,6 +11,15 @@ import { FileGridView } from "./_components/file-grid-view";
 import { FileListView } from "./_components/file-list-view";
 import { FileManagerToolbar } from "./_components/file-manager-toolbar";
 import { FoldersSection } from "./_components/folders-section";
+
+export const metadata: Metadata = {
+  title: "Open Source File Manager with shadcn/ui",
+  description:
+    "Explore an open source file manager for browsing, organizing, uploading, and viewing files and folders.",
+  alternates: {
+    canonical: "/dashboard/file-manager",
+  },
+};
 
 interface PageProps {
   searchParams: Promise<{ view?: string | string[] }>;

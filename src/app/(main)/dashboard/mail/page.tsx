@@ -1,8 +1,16 @@
 import Link from "next/link";
 
 import { ExternalLink } from "lucide-react";
+import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default function Page() {
   return (
