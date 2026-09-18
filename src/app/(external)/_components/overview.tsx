@@ -59,6 +59,7 @@ export function Overview() {
                   <Link
                     className="underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
                     href={screen.href}
+                    prefetch={false}
                   >
                     {screen.name}
                   </Link>

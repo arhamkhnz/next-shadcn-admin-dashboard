@@ -47,7 +47,7 @@ export async function Intro() {
 
       <div className="flex flex-wrap gap-2 sm:gap-3">
         <Button asChild>
-          <Link href="/dashboard/default">
+          <Link href="/dashboard/default" prefetch={false}>
             Live demo
             <ArrowUpRight aria-hidden="true" data-icon="inline-end" />
           </Link>
