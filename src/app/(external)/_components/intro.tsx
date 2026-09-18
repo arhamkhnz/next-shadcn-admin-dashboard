@@ -1,8 +1,10 @@
 import Link from "next/link";
 
-import { ArrowUpRight, StarIcon } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+
+import { GitHubStarButton } from "./github-star-button";
 
 const repositoryUrl = "https://github.com/arhamkhnz/next-shadcn-admin-dashboard";
 const repositoryStarsUrl = "https://api.github.com/repos/arhamkhnz/next-shadcn-admin-dashboard/stargazers/count";
@@ -52,15 +54,7 @@ export async function Intro() {
             <ArrowUpRight aria-hidden="true" data-icon="inline-end" />
           </Link>
         </Button>
-        <Button asChild className="pe-0" variant="outline">
-          <a href={repositoryUrl} target="_blank" rel="noreferrer">
-            <StarIcon aria-hidden="true" data-icon="inline-start" />
-            Star
-            <span className="relative ms-1 px-2 font-medium text-muted-foreground text-xs before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
-              {starCount === null ? "—" : new Intl.NumberFormat("en-US").format(starCount)}
-            </span>
-          </a>
-        </Button>
+        <GitHubStarButton initialCount={starCount} repositoryUrl={repositoryUrl} />
       </div>
     </div>
   );
