@@ -238,6 +238,19 @@ html {
   overscroll-behavior: none;
 }
 
+html:has([data-landing-page]) {
+  view-transition-name: none;
+}
+
+[data-landing-dashboard-preview] {
+  view-transition-name: landing-dashboard-preview;
+}
+
+::view-transition-group(landing-dashboard-preview) {
+  animation-duration: 360ms;
+  animation-timing-function: ease-out;
+}
+
 .disable-transitions * {
   transition: none !important;
 }

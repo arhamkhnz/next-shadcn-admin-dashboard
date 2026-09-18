@@ -19,8 +19,14 @@ export function LandingThemeSwitcher() {
   const cycleTheme = () => {
     const currentIndex = THEME_CYCLE.indexOf(themeMode);
     const nextTheme = THEME_CYCLE[(currentIndex + 1) % THEME_CYCLE.length];
+    const updateTheme = () => setPreference("theme_mode", nextTheme);
 
-    setPreference("theme_mode", nextTheme);
+    if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      updateTheme();
+      return;
+    }
+
+    document.startViewTransition(updateTheme);
   };
 
   return (

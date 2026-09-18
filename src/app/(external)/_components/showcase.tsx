@@ -1,22 +1,29 @@
-import Link from "next/link";
+import { Card } from "@/components/ui/card";
 
-import dashboardImage from "../../../../media/dashboard.png";
+import defaultDarkImage from "../../../../media/default/default-dark.webp";
+import defaultLightImage from "../../../../media/default/default-light.webp";
 
 export function Showcase() {
   return (
-    <Link
-      className="group block overflow-hidden rounded-lg border border-border bg-card"
-      href="/dashboard/default"
-      aria-label="Open the Studio Admin live demo"
-    >
-      {/* biome-ignore lint/performance/noImgElement: This landing image is optimized separately. */}
-      <img
-        alt="Studio Admin interface showing dashboard, authentication, and layout customization screens"
-        className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.01]"
-        height={dashboardImage.height}
-        src={dashboardImage.src}
-        width={dashboardImage.width}
-      />
-    </Link>
+    <section aria-label="Studio Admin preview">
+      <Card className="rounded-lg py-0" data-landing-dashboard-preview>
+        {/* biome-ignore lint/performance/noImgElement: These landing images are optimized separately. */}
+        <img
+          alt="Studio Admin default dashboard with its layout customization controls open"
+          className="h-auto w-full rounded-lg! dark:hidden"
+          height={defaultLightImage.height}
+          src={defaultLightImage.src}
+          width={defaultLightImage.width}
+        />
+        {/* biome-ignore lint/performance/noImgElement: These landing images are optimized separately. */}
+        <img
+          alt="Studio Admin default dashboard with its layout customization controls open"
+          className="hidden h-auto w-full rounded-lg! dark:block"
+          height={defaultDarkImage.height}
+          src={defaultDarkImage.src}
+          width={defaultDarkImage.width}
+        />
+      </Card>
+    </section>
   );
 }
