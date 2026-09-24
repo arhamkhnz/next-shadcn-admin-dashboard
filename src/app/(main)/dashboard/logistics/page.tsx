@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Open Source Logistics Dashboard with shadcn/ui",
   description:
     "Explore an open source logistics dashboard with shipment tracking, delivery status, route maps, cargo details, and transport information.",
+  alternates: {
+    canonical: "/dashboard/logistics",
+  },
 };
 
 export default function Page() {

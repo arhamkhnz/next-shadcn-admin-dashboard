@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Open Source Branded Login Page with shadcn/ui",
   description:
     "Explore an open source branded login page with a two-column layout, social sign-in, and email and password fields.",
+  alternates: {
+    canonical: "/auth/v2/login",
+  },
 };
 
 export default function LoginV2() {

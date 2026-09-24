@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Open Source Split Screen Login Page with shadcn/ui",
   description:
     "Explore an open source split screen login page with email and password fields, social sign-in, and a registration link.",
+  alternates: {
+    canonical: "/auth/v1/login",
+  },
 };
 
 export default function LoginV1() {

@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   title: "Open Source Employee Profile Dashboard with shadcn/ui",
   description:
     "Explore an open source employee profile dashboard with personal details, employment information, time off, documents, and reporting lines.",
+  alternates: {
+    canonical: "/dashboard/profile",
+  },
 };
 
 export default function Page() {

@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Open Source Branded Registration Page with shadcn/ui",
   description:
     "Explore an open source branded registration page with a two-column layout, social sign-up, and account details.",
+  alternates: {
+    canonical: "/auth/v2/register",
+  },
 };
 
 export default function RegisterV2() {

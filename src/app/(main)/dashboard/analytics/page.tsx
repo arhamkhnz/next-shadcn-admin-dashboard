@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Open Source Analytics Dashboard with shadcn/ui",
   description:
     "Explore an open source analytics dashboard with traffic metrics, realtime visitors, page performance, and conversion insights.",
+  alternates: {
+    canonical: "/dashboard/analytics",
+  },
 };
 
 export default function Page() {

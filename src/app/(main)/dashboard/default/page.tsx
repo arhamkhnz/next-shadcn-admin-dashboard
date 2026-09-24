@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Open Source Business Dashboard with shadcn/ui",
   description:
     "Explore an open source admin dashboard with business metrics, customer activity, performance charts, and customer data.",
+  alternates: {
+    canonical: "/dashboard/default",
+  },
 };
 
 export default function Page() {

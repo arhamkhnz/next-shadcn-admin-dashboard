@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "Open Source E-commerce Dashboard with shadcn/ui",
   description:
     "Explore an open source e-commerce dashboard with sales metrics, orders, store traffic, inventory, products, and reviews.",
+  alternates: {
+    canonical: "/dashboard/ecommerce",
+  },
 };
 
 export default function Page() {

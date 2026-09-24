@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Open Source CRM Dashboard with shadcn/ui",
   description:
     "Explore an open source CRM dashboard with pipeline activity, opportunities, sales performance, and task reminders.",
+  alternates: {
+    canonical: "/dashboard/crm",
+  },
 };
 
 export default function Page() {

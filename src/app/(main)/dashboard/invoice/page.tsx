@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Open Source Invoice Dashboard with shadcn/ui",
   description:
     "Explore an open source invoice dashboard for creating, reviewing, saving, and sending customer invoices.",
+  alternates: {
+    canonical: "/dashboard/invoice",
+  },
 };
 
 export default function Page() {

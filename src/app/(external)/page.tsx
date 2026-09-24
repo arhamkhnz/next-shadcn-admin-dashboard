@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "Studio Admin: Open Source Admin Dashboard with shadcn/ui",
   description:
     "A polished open source shadcn/ui admin dashboard with 25+ screens and editions for Radix UI, Base UI, React Aria, and TanStack Start.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function Home() {

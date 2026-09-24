@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "Open Source Finance Dashboard with shadcn/ui",
   description:
     "Explore an open source personal finance dashboard with net worth, spending, income sources, account allocation, transactions, and wallets.",
+  alternates: {
+    canonical: "/dashboard/finance",
+  },
 };
 
 export default function Page() {

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: "Open Source Patient Monitoring Dashboard with shadcn/ui",
   description:
     "Explore an open source patient monitoring dashboard with live vital signs, ECG waveforms, patient trends, alarms, and device status.",
+  alternates: {
+    canonical: "/dashboard/patient-monitoring",
+  },
 };
 
 export default function Page() {

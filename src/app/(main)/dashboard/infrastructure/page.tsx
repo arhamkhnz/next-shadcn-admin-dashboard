@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Open Source Infrastructure Dashboard with shadcn/ui",
   description:
     "Explore an open source infrastructure dashboard with environments, server health, uptime, resource usage, and deployment status.",
+  alternates: {
+    canonical: "/dashboard/infrastructure",
+  },
 };
 
 export default function Page() {

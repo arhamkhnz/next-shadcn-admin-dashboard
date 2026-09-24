@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: "Open Source Productivity Dashboard with shadcn/ui",
   description:
     "Explore an open source productivity dashboard with tasks, projects, focus time, notes, schedules, and weekly progress.",
+  alternates: {
+    canonical: "/dashboard/productivity",
+  },
 };
 
 export default function Page() {

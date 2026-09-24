@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Open Source Email Client with shadcn/ui",
   description:
     "Explore an open source email client with inbox navigation, message search, reading, replying, and archiving.",
+  alternates: {
+    canonical: "/mail",
+  },
 };
 
 export default async function Page() {
