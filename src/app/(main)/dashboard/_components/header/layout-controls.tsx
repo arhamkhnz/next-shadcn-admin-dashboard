@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { type FontKey, fontOptions } from "@/lib/fonts/registry";
-import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "@/lib/preferences/layout";
-import { THEME_PRESET_OPTIONS, type ThemeMode, type ThemePreset } from "@/lib/preferences/theme";
+import { fontOptions } from "@/lib/fonts/registry";
+import { PREFERENCE_REGISTRY } from "@/lib/preferences/preferences-config";
+import { THEME_PRESET_OPTIONS } from "@/lib/preferences/theme";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function LayoutControls() {
@@ -33,38 +33,46 @@ export function LayoutControls() {
     font,
   } = values;
 
-  const onThemePresetChange = (preset: ThemePreset) => {
+  const onThemePresetChange = (value: string) => {
+    const preset = PREFERENCE_REGISTRY.theme_preset.values.find((preset) => preset === value);
+    if (!preset) return;
     setPreference("theme_preset", preset);
   };
 
-  const onThemeModeChange = (mode: ThemeMode | "") => {
+  const onThemeModeChange = (value: string) => {
+    const mode = PREFERENCE_REGISTRY.theme_mode.values.find((mode) => mode === value);
     if (!mode) return;
     setPreference("theme_mode", mode);
   };
 
-  const onContentLayoutChange = (layout: ContentLayout | "") => {
+  const onContentLayoutChange = (value: string) => {
+    const layout = PREFERENCE_REGISTRY.content_layout.values.find((layout) => layout === value);
     if (!layout) return;
     setPreference("content_layout", layout);
   };
 
-  const onNavbarStyleChange = (style: NavbarStyle | "") => {
+  const onNavbarStyleChange = (value: string) => {
+    const style = PREFERENCE_REGISTRY.navbar_style.values.find((style) => style === value);
     if (!style) return;
     setPreference("navbar_style", style);
   };
 
-  const onSidebarStyleChange = (value: SidebarVariant | "") => {
-    if (!value) return;
-    setPreference("sidebar_variant", value);
+  const onSidebarStyleChange = (value: string) => {
+    const variant = PREFERENCE_REGISTRY.sidebar_variant.values.find((variant) => variant === value);
+    if (!variant) return;
+    setPreference("sidebar_variant", variant);
   };
 
-  const onSidebarCollapseModeChange = (value: SidebarCollapsible | "") => {
-    if (!value) return;
-    setPreference("sidebar_collapsible", value);
+  const onSidebarCollapseModeChange = (value: string) => {
+    const collapsible = PREFERENCE_REGISTRY.sidebar_collapsible.values.find((collapsible) => collapsible === value);
+    if (!collapsible) return;
+    setPreference("sidebar_collapsible", collapsible);
   };
 
-  const onFontChange = (value: FontKey | "") => {
-    if (!value) return;
-    setPreference("font", value);
+  const onFontChange = (value: string) => {
+    const font = PREFERENCE_REGISTRY.font.values.find((font) => font === value);
+    if (!font) return;
+    setPreference("font", font);
   };
 
   return (
