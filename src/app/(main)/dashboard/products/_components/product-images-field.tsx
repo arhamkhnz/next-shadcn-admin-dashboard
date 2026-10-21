@@ -4,7 +4,7 @@ import { type Ref, useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 
-import { ImagePlus, X } from "lucide-react";
+import { ImageOff, ImagePlus, X } from "lucide-react";
 
 import {
   Attachment,
@@ -22,6 +22,12 @@ import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui
 export const productImageTypes = ["image/jpeg", "image/png", "image/webp"];
 export const maxProductImageSize = 5 * 1024 * 1024;
 
+interface ProductImagePreview {
+  file: File;
+  url?: string;
+  rejection?: string;
+}
+
 interface ProductImagesFieldProps {
   files: File[];
   onChange: (files: File[]) => void;
@@ -32,16 +38,20 @@ interface ProductImagesFieldProps {
 
 export function ProductImagesField({ files, onChange, onBlur, inputRef, error }: ProductImagesFieldProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previews, setPreviews] = useState<{ file: File; url: string }[]>([]);
+  const [previews, setPreviews] = useState<ProductImagePreview[]>([]);
 
   useEffect(() => {
-    const images = files
-      .slice(0, 5)
-      .filter((file) => productImageTypes.includes(file.type) && file.size <= maxProductImageSize)
-      .map((file) => ({ file, url: URL.createObjectURL(file) }));
+    const images = files.map((file): ProductImagePreview => {
+      if (!productImageTypes.includes(file.type)) return { file, rejection: "Use JPG, PNG, or WebP images." };
+      if (file.size === 0) return { file, rejection: "This file is empty." };
+      if (file.size > maxProductImageSize) return { file, rejection: "Image exceeds the 5 MB limit." };
+      return { file, url: URL.createObjectURL(file) };
+    });
     setPreviews(images);
     return () => {
-      for (const image of images) URL.revokeObjectURL(image.url);
+      for (const image of images) {
+        if (image.url) URL.revokeObjectURL(image.url);
+      }
     };
   }, [files]);
 
@@ -87,15 +97,26 @@ export function ProductImagesField({ files, onChange, onBlur, inputRef, error }:
       {error && <FieldError id="add-product-images-error">{error}</FieldError>}
       {previews.length > 0 && (
         <AttachmentGroup aria-label="Selected product images">
-          {previews.map(({ file, url }, index) => (
-            <Attachment key={url} orientation="vertical" state="idle" className="w-40">
-              <AttachmentMedia variant="image">
-                <Image src={url} alt={file.name} width={160} height={160} unoptimized />
+          {previews.map(({ file, url, rejection }, index) => (
+            <Attachment
+              key={`${file.name}-${file.size}-${file.lastModified}`}
+              orientation="vertical"
+              state={rejection ? "error" : "idle"}
+              className="w-40"
+            >
+              <AttachmentMedia variant={url ? "image" : "icon"}>
+                {url && <Image src={url} alt={file.name} width={160} height={160} unoptimized />}
+                {rejection && <ImageOff aria-hidden="true" />}
               </AttachmentMedia>
               <AttachmentContent>
                 <AttachmentTitle title={file.name}>{file.name}</AttachmentTitle>
-                <AttachmentDescription>
-                  {Math.max(1, Math.round(file.size / 1024))} KB{index === 0 && " · Cover image"}
+                <AttachmentDescription title={rejection}>
+                  {rejection}
+                  {!rejection && (
+                    <>
+                      {Math.max(1, Math.round(file.size / 1024))} KB{index === 0 && " · Cover image"}
+                    </>
+                  )}
                 </AttachmentDescription>
               </AttachmentContent>
               <AttachmentActions>
