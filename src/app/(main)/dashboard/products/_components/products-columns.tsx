@@ -31,17 +31,24 @@ export function createProductsColumns(
   return [
     {
       id: "select",
+      size: 56,
+      minSize: 56,
+      maxSize: 56,
       header: ({ table }) => (
         <Subscribe
-          source={table.atoms.rowSelection}
-          selector={() => table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          source={table.store}
+          selector={() => ({
+            checked:
+              table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && ("indeterminate" as const)),
+            disabled: !table.getRowModel().rows.length,
+          })}
         >
-          {(checked) => (
+          {({ checked, disabled }) => (
             <Checkbox
               className="mx-auto"
               aria-label="Select all products on this page"
               checked={checked}
-              disabled={!table.getRowModel().rows.length}
+              disabled={disabled}
               onCheckedChange={(value) => table.toggleAllPageRowsSelected(value === true)}
             />
           )}
@@ -71,7 +78,6 @@ export function createProductsColumns(
     {
       accessorKey: "name",
       header: "Product",
-      sortFn: "text",
       cell: ({ row }) => (
         <button
           type="button"
@@ -85,15 +91,13 @@ export function createProductsColumns(
     {
       accessorKey: "sku",
       header: "SKU",
-      sortFn: "text",
       cell: ({ row }) => <span className="font-mono text-muted-foreground text-xs">{row.original.sku}</span>,
     },
-    { accessorKey: "category", header: "Category", filterFn: "equalsString", sortFn: "text" },
+    { accessorKey: "category", header: "Category", filterFn: "equalsString" },
     {
       accessorKey: "status",
       header: "Status",
       filterFn: "equalsString",
-      sortFn: "text",
       cell: ({ row }) => (
         <Badge variant="secondary" className={cn("rounded-md", statusColors[row.original.status])}>
           {row.original.status}
@@ -106,18 +110,20 @@ export function createProductsColumns(
       cell: ({ row }) => (
         <Badge
           variant="secondary"
-          className={cn(
-            "rounded-md tabular-nums",
-            row.original.stock === 0
-              ? "bg-rose-200 text-rose-800 dark:bg-rose-950 dark:text-rose-400"
-              : row.original.stock <= 10
-                ? "bg-orange-200 text-orange-800 dark:bg-orange-950 dark:text-orange-400"
-                : "bg-sky-200 text-sky-800 dark:bg-sky-950 dark:text-sky-400",
-          )}
+          className={cn("rounded-md tabular-nums", {
+            "bg-rose-200 text-rose-800 dark:bg-rose-950 dark:text-rose-400": row.original.stock === 0,
+            "bg-orange-200 text-orange-800 dark:bg-orange-950 dark:text-orange-400":
+              row.original.stock > 0 && row.original.stock <= 10,
+            "bg-sky-200 text-sky-800 dark:bg-sky-950 dark:text-sky-400": row.original.stock > 10,
+          })}
         >
-          {row.original.stock === 0
-            ? "Out of stock"
-            : `${number.format(row.original.stock)} in stock${row.original.stock <= 10 ? " · Low stock" : ""}`}
+          {row.original.stock === 0 && "Out of stock"}
+          {row.original.stock > 0 && (
+            <>
+              {number.format(row.original.stock)} in stock
+              {row.original.stock <= 10 && " · Low stock"}
+            </>
+          )}
         </Badge>
       ),
     },
@@ -133,6 +139,9 @@ export function createProductsColumns(
     },
     {
       id: "actions",
+      size: 56,
+      minSize: 56,
+      maxSize: 56,
       header: () => <span className="sr-only">Actions</span>,
       enableSorting: false,
       enableHiding: false,
@@ -150,7 +159,13 @@ export function createProductsColumns(
                   <Pencil />
                   Edit product
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => onDuplicate(row.original)}>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    onDuplicate(row.original);
+                    row.table.resetColumnFilters();
+                    row.table.setPageIndex(0);
+                  }}
+                >
                   <Copy />
                   Duplicate
                 </DropdownMenuItem>

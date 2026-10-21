@@ -3,8 +3,6 @@
 import type { ReactTable } from "@tanstack/react-table";
 import { cn } from "cn";
 import {
-  ArrowDown,
-  ArrowUp,
   Boxes,
   ChevronLeft,
   ChevronRight,
@@ -49,42 +47,39 @@ export function ProductsTable({
   const pages = Array.from({ length: Math.min(5, pageCount) }, (_, index) => pageStart + index);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col [&>[data-slot=table-container]]:min-h-0 [&>[data-slot=table-container]]:flex-1 [&>[data-slot=table-container]]:overflow-auto">
-      <Table aria-label="Products" className="min-w-280 border-border/60 border-y">
-        <TableHeader>
+    <div className="flex min-h-0 flex-1 flex-col *:data-[slot=table-container]:min-h-0 *:data-[slot=table-container]:flex-1 *:data-[slot=table-container]:overflow-auto">
+      <Table aria-label="Products" className="min-w-280 border-separate border-spacing-0 border-border/60 border-b">
+        <TableHeader className="sticky top-0 z-10 bg-background">
           {table.getHeaderGroups().map((group) => (
             <TableRow key={group.id} className="border-border/60 hover:bg-transparent">
               {group.headers.map((header) => {
                 const Icon = headerIcons[header.column.id];
-                const sorted = header.column.getIsSorted();
                 const right = header.column.id === "price" || header.column.id === "sold";
                 return (
                   <TableHead
                     key={header.id}
-                    aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined}
+                    style={{
+                      width: header.getSize(),
+                      minWidth: header.column.columnDef.minSize,
+                      maxWidth: header.column.columnDef.maxSize,
+                    }}
                     className={cn(
-                      "h-10 border-border/50 border-r px-4.5 last:border-r-0",
-                      (header.column.id === "select" || header.column.id === "actions") &&
-                        "w-14 px-2.5 [&:has([role=checkbox])]:pr-2.5",
+                      "h-10 border-border/50 border-t border-r border-b bg-background px-4.5 font-[450] last:border-r-0",
+                      header.column.id === "select" && "px-0 text-center",
+                      header.column.id === "actions" && "px-2.5",
                     )}
                   >
-                    {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                      <button
-                        type="button"
-                        onClick={header.column.getToggleSortingHandler()}
-                        aria-label={`Sort by ${String(header.column.columnDef.header)}`}
+                    {!header.isPlaceholder && (
+                      <div
                         className={cn(
-                          "flex w-full items-center gap-2 rounded-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
+                          "flex w-full items-center gap-2 text-muted-foreground",
                           right && "justify-end",
+                          header.column.id === "select" && "justify-center",
                         )}
                       >
                         {Icon && <Icon className="size-3.5 shrink-0" aria-hidden="true" />}
                         <table.FlexRender header={header} />
-                        {sorted === "asc" && <ArrowUp className="size-3" aria-hidden="true" />}
-                        {sorted === "desc" && <ArrowDown className="size-3" aria-hidden="true" />}
-                      </button>
-                    ) : (
-                      <table.FlexRender header={header} />
+                      </div>
                     )}
                   </TableHead>
                 );
@@ -97,15 +92,20 @@ export function ProductsTable({
             <TableRow
               key={row.id}
               data-state={table.state.rowSelection[row.id] ? "selected" : undefined}
-              className="border-border/60 hover:bg-muted/30"
+              className="border-border/60 last:*:border-b-0 hover:bg-muted/30"
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell
                   key={cell.id}
+                  style={{
+                    width: cell.column.getSize(),
+                    minWidth: cell.column.columnDef.minSize,
+                    maxWidth: cell.column.columnDef.maxSize,
+                  }}
                   className={cn(
-                    "h-12 border-border/50 border-r px-4.5 py-2 last:border-r-0",
-                    (cell.column.id === "select" || cell.column.id === "actions") &&
-                      "w-14 px-2.5 [&:has([role=checkbox])]:pr-2.5",
+                    "h-12 border-border/50 border-r border-b px-4.5 py-2 last:border-r-0",
+                    cell.column.id === "select" && "px-0 text-center",
+                    cell.column.id === "actions" && "px-2.5",
                     (cell.column.id === "price" || cell.column.id === "sold") && "text-right",
                   )}
                 >

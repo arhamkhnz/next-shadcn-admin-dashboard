@@ -2,14 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 
-import {
-  type ColumnFiltersState,
-  type ColumnVisibilityState,
-  type PaginationState,
-  type SortingState,
-  useTable,
-} from "@tanstack/react-table";
-import { PackagePlus, Search } from "lucide-react";
+import { useTable } from "@tanstack/react-table";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -24,14 +18,9 @@ import { ProductsTable } from "./products-table";
 
 export function Products() {
   const [products, setProducts] = useState(initialProducts);
-  const [rowSelection, setRowSelection] = useState({});
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>({ search: false });
-  const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
-  const [editor, setEditor] = useState<{ product: Product | null } | null>(null);
+  const [editor, setEditor] = useState<Product | null>(null);
 
-  const editProduct = useCallback((product: Product) => setEditor({ product }), []);
+  const editProduct = useCallback((product: Product) => setEditor(product), []);
   const duplicateProduct = useCallback((product: Product) => {
     const id = crypto.randomUUID();
     setProducts((current) => [
@@ -45,9 +34,6 @@ export function Products() {
       },
       ...current,
     ]);
-    setColumnFilters([]);
-    setSorting([]);
-    setPagination((current) => ({ ...current, pageIndex: 0 }));
     toast.success("Product duplicated as a draft.");
   }, []);
   const columns = useMemo(() => createProductsColumns(editProduct, duplicateProduct), [editProduct, duplicateProduct]);
@@ -56,18 +42,14 @@ export function Products() {
     features: dataTableFeatures,
     data: products,
     columns,
-    state: { rowSelection, sorting, columnFilters, columnVisibility, pagination },
+    initialState: {
+      columnVisibility: { search: false },
+      pagination: { pageIndex: 0, pageSize: 10 },
+    },
     getRowId: (row) => row.id,
     autoResetPageIndex: false,
     enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: (updater) => {
-      setSorting(updater);
-      setPagination((current) => ({ ...current, pageIndex: 0 }));
-    },
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination,
+    enableSorting: false,
   });
 
   const search = (table.getColumn("search")?.getFilterValue() as string | undefined) ?? "";
@@ -85,33 +67,15 @@ export function Products() {
   }
 
   return (
-    <section
-      data-content-padding="false"
-      aria-label="Products list"
-      className="flex h-[calc(100svh-var(--dashboard-header-height))] min-h-0 min-w-0 flex-col"
-    >
-      <header className="flex shrink-0 flex-wrap items-center justify-between gap-4 px-4 pt-5 pb-5">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="font-medium text-3xl tracking-tight">
-            Products <span className="text-muted-foreground text-xl">[{products.length}]</span>
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Manage your catalog, inventory, pricing, and product availability.
-          </p>
-        </div>
-        <Button size="sm" onClick={() => setEditor({ product: null })}>
-          <PackagePlus data-icon="inline-start" />
-          Add product
-        </Button>
-      </header>
-
-      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 pb-3">
-        <InputGroup className="w-full sm:w-64">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4">
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 md:px-6">
+        <InputGroup className="h-7 w-full rounded-[min(var(--radius-md),10px)] sm:w-64">
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
           <InputGroupInput
-            type="search"
+            className="h-7"
+            type="text"
             aria-label="Search products"
             placeholder="Search products…"
             value={search}
@@ -160,22 +124,17 @@ export function Products() {
 
       {editor && (
         <ProductForm
-          product={editor.product}
+          product={editor}
           products={products}
           onClose={() => setEditor(null)}
           onSave={(product) => {
-            setProducts((current) =>
-              current.some((p) => p.id === product.id)
-                ? current.map((p) => (p.id === product.id ? product : p))
-                : [product, ...current],
-            );
+            setProducts((current) => current.map((p) => (p.id === product.id ? product : p)));
             setEditor(null);
             resetFilters();
-            table.resetSorting();
             toast.success("Product saved in this demo session.");
           }}
         />
       )}
-    </section>
+    </div>
   );
 }
