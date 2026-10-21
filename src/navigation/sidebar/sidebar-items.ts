@@ -16,6 +16,7 @@ import {
   type LucideIcon,
   Mail,
   MessageSquare,
+  Package,
   ReceiptText,
   Server,
   ShoppingBag,
@@ -139,6 +140,13 @@ export const sidebarItems: NavGroup[] = [
     id: 2,
     label: "Pages",
     items: [
+      {
+        id: "products",
+        title: "Products",
+        url: "/dashboard/products",
+        icon: Package,
+        badge: "new",
+      },
       {
         id: "email",
         title: "Email",
