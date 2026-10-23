@@ -51,7 +51,7 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
             {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
           </Button>
           <Separator orientation="vertical" className="mr-1.5 h-4 data-vertical:self-center" />
-          <h1 className="font-medium text-xl leading-none">Inbox</h1>
+          <h1 className="text-xl leading-none font-medium">Inbox</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon-sm">
@@ -88,7 +88,7 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
           <div className="flex flex-col gap-3 pt-0">
             {conversationGroups.map(({ group, conversations }) => (
               <Collapsible key={group} defaultOpen>
-                <CollapsibleTrigger className="flex w-full items-center justify-between gap-1 px-3 py-2 font-medium text-muted-foreground text-xs hover:text-foreground [&[data-state=open]>svg]:rotate-180">
+                <CollapsibleTrigger className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between gap-1 px-3 py-2 text-xs font-medium [&[data-state=open]>svg]:rotate-180">
                   {group}
                   <ChevronDown className="size-3 transition-transform" />
                 </CollapsibleTrigger>
@@ -102,8 +102,8 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
                           key={conversation.id}
                           type="button"
                           className={cn(
-                            "w-full overflow-hidden rounded-lg px-2.5 py-2.5 text-left ring-inset transition-colors",
-                            isSelected ? "bg-muted ring-1 ring-border" : "hover:bg-muted/75",
+                            "w-full overflow-hidden rounded-lg px-2.5 py-2.5 text-left transition-colors ring-inset",
+                            isSelected ? "bg-muted ring-border ring-1" : "hover:bg-muted/75",
                           )}
                           onClick={(event) => {
                             event.currentTarget.blur();
@@ -126,17 +126,17 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
 
                             <div className="w-0 flex-1 overflow-hidden">
                               <div className="flex w-full items-center justify-between gap-2">
-                                <div className="truncate font-medium text-sm leading-5">{conversation.name}</div>
-                                <span className="text-nowrap text-muted-foreground text-xs leading-5">
+                                <div className="truncate text-sm leading-5 font-medium">{conversation.name}</div>
+                                <span className="text-muted-foreground text-xs leading-5 text-nowrap">
                                   {conversation.time}
                                 </span>
                               </div>
                               <div className="flex min-w-0 items-end gap-2">
                                 <div className="w-0 flex-1 overflow-hidden">
-                                  <div className="truncate font-medium text-foreground/90 text-xs leading-4">
+                                  <div className="text-foreground/90 truncate text-xs leading-4 font-medium">
                                     {conversation.subject}
                                   </div>
-                                  <div className="truncate text-muted-foreground text-xs leading-4">
+                                  <div className="text-muted-foreground truncate text-xs leading-4">
                                     {conversation.preview}
                                   </div>
                                 </div>
@@ -149,7 +149,7 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
                                   )}
 
                                   {conversation.isUnread && (
-                                    <div className="grid size-5 place-items-center rounded-full bg-primary/90 text-primary-foreground text-xs">
+                                    <div className="bg-primary/90 text-primary-foreground grid size-5 place-items-center rounded-full text-xs">
                                       {conversation.unreadCount}
                                     </div>
                                   )}

@@ -20,7 +20,7 @@ export function GitHubStarButton({ initialCount, repositoryUrl }: GitHubStarButt
         <StarIcon aria-hidden="true" data-icon="inline-start" />
         Star
         <span
-          className="relative ms-1 px-2 font-medium text-muted-foreground text-xs before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border"
+          className="text-muted-foreground before:bg-border relative ms-1 px-2 text-xs font-medium before:absolute before:inset-y-0 before:left-0 before:w-px"
           aria-live="polite"
         >
           {starCount === null ? "—" : new Intl.NumberFormat("en-US").format(starCount)}

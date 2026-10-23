@@ -42,7 +42,7 @@ export default function Page() {
           </TabsList>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
+            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
               <RotateCw className="size-4" />
               <span>Updated 5 min ago</span>
             </div>
@@ -92,13 +92,13 @@ export default function Page() {
         </TabsContent>
 
         <TabsContent value="12-months">
-          <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
+          <div className="border-border text-muted-foreground flex h-64 items-center justify-center rounded-xl border border-dashed">
             Accounts view coming soon.
           </div>
         </TabsContent>
 
         <TabsContent value="custom">
-          <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
+          <div className="border-border text-muted-foreground flex h-64 items-center justify-center rounded-xl border border-dashed">
             Transactions view coming soon.
           </div>
         </TabsContent>

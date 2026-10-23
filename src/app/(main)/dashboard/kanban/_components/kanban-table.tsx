@@ -81,7 +81,7 @@ export function KanbanTable({
   return (
     <div className="flex min-h-0 flex-1 flex-col *:data-[slot=table-container]:min-h-0 *:data-[slot=table-container]:flex-1 *:data-[slot=table-container]:overflow-auto">
       <Table aria-label="Kanban tasks" className="min-w-280 table-fixed border-separate border-spacing-0">
-        <TableHeader className="sticky top-0 z-10 bg-background">
+        <TableHeader className="bg-background sticky top-0 z-10">
           {table.getHeaderGroups().map((group) => (
             <TableRow key={group.id} className="hover:bg-transparent">
               {group.headers.map((header) => {
@@ -93,12 +93,12 @@ export function KanbanTable({
                     scope="col"
                     style={{ width: header.getSize() }}
                     className={cn(
-                      "h-10 border-border/50 border-r border-b bg-background px-6 font-normal last:border-r-0",
+                      "border-border/50 bg-background h-10 border-r border-b px-6 font-normal last:border-r-0",
                       header.column.id === "drag" && "px-0",
                     )}
                   >
                     {!header.isPlaceholder && (
-                      <span className="flex items-center gap-2 text-muted-foreground">
+                      <span className="text-muted-foreground flex items-center gap-2">
                         {Icon && <Icon className="size-3.5 shrink-0" aria-hidden="true" />}
                         <table.FlexRender header={header} />
                       </span>
@@ -127,7 +127,7 @@ export function KanbanTable({
           )}
         </TableBody>
       </Table>
-      <footer className="flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-3 border-t px-6 py-2 text-muted-foreground text-sm">
+      <footer className="text-muted-foreground flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-3 border-t px-6 py-2 text-sm">
         <div className="flex flex-wrap items-center gap-4">
           <span className="tabular-nums" aria-live="polite">
             {data.length ? pageIndex * pageSize + 1 : 0}–{Math.min((pageIndex + 1) * pageSize, data.length)} of{" "}

@@ -111,20 +111,20 @@ export function PipelineActivity() {
 
             <div className="flex flex-col gap-5 rounded-lg p-4 lg:col-span-4">
               <div className="flex flex-col gap-1">
-                <div className="font-medium text-4xl tabular-nums leading-none">
-                  {totalQualified} <span className="font-normal text-lg text-muted-foreground">leads</span>
+                <div className="text-4xl leading-none font-medium tabular-nums">
+                  {totalQualified} <span className="text-muted-foreground text-lg font-normal">leads</span>
                 </div>
                 <p className="text-muted-foreground text-sm">Total qualified leads captured over the last 12 months.</p>
               </div>
 
-              <div className="flex flex-col gap-3 rounded-lg border border-border/60 p-3">
-                <div className="text-[11px] text-muted-foreground uppercase tracking-widest">
+              <div className="border-border/60 flex flex-col gap-3 rounded-lg border p-3">
+                <div className="text-muted-foreground text-[11px] tracking-widest uppercase">
                   Discovery Calls Booked
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <div className="font-medium text-2xl tabular-nums leading-none">
-                    {discoveryCallsBooked} <span className="font-normal text-muted-foreground text-sm">meetings</span>
+                  <div className="text-2xl leading-none font-medium tabular-nums">
+                    {discoveryCallsBooked} <span className="text-muted-foreground text-sm font-normal">meetings</span>
                   </div>
                   <p className="text-muted-foreground text-sm">
                     {discoveryProgress}% of qualified leads booked a first call.
@@ -134,7 +134,7 @@ export function PipelineActivity() {
                 <div className="flex flex-col gap-2 pt-0.5">
                   <Progress
                     value={discoveryProgress}
-                    className="h-2.5 bg-chart-2/12 *:data-[slot='progress-indicator']:bg-chart-2"
+                    className="bg-chart-2/12 *:data-[slot='progress-indicator']:bg-chart-2 h-2.5"
                   />
                   <div className="flex items-center justify-between text-xs">
                     <div className="font-medium tabular-nums">{discoveryCallsBooked} booked</div>

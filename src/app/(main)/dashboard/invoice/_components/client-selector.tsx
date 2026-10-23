@@ -45,7 +45,7 @@ export function ClientSelector() {
                   <SelectValue placeholder="Select client">
                     <div className="flex items-center gap-1.5">
                       <Avatar className="after:rounded-md">
-                        <AvatarFallback className="rounded-md bg-card text-foreground">
+                        <AvatarFallback className="bg-card text-foreground rounded-md">
                           {getInitials(selectedClient.name).slice(0, 2)}
                         </AvatarFallback>
                       </Avatar>

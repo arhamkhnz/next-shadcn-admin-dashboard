@@ -63,13 +63,13 @@ export function Wallet() {
             <div key={card.id} className="flex items-center justify-between">
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-foreground text-sm leading-none">
+                  <span className="text-foreground text-sm leading-none font-medium">
                     {card.bank} • **** {card.last4}
                   </span>
                 </div>
-                <span className="font-normal text-muted-foreground text-xs">{card.balance}</span>
+                <span className="text-muted-foreground text-xs font-normal">{card.balance}</span>
               </div>
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-md border bg-background">
+              <div className="bg-background flex size-9 shrink-0 items-center justify-center rounded-md border">
                 <SimpleIcon icon={card.icon} />
               </div>
             </div>
@@ -83,15 +83,15 @@ export function Wallet() {
             <div key={asset.id} className="flex items-center justify-between">
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-foreground text-sm leading-none">
+                  <span className="text-foreground text-sm leading-none font-medium">
                     {asset.name} • {asset.vault}
                   </span>
                 </div>
-                <span className="font-normal text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-xs font-normal">
                   {asset.balance} • {asset.usdValue}
                 </span>
               </div>
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-md border bg-background">
+              <div className="bg-background flex size-9 shrink-0 items-center justify-center rounded-md border">
                 <SimpleIcon icon={asset.icon} />
               </div>
             </div>
@@ -100,13 +100,13 @@ export function Wallet() {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <span className="font-medium text-[10px] text-muted-foreground">
+            <span className="text-muted-foreground text-[10px] font-medium">
               Physical Vault: <span className="text-foreground">Ledger Nano X</span>
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="size-1 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-            <span className="font-bold text-[9px] text-green-500 uppercase tracking-widest">Air-Gapped</span>
+            <span className="text-[9px] font-bold tracking-widest text-green-500 uppercase">Air-Gapped</span>
           </div>
         </div>
       </CardContent>

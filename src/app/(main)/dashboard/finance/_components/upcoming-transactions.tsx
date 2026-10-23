@@ -43,13 +43,13 @@ export function UpcomingTransactions() {
               <span className="text-muted-foreground text-xl">.00</span>
             </h2>
             <p className="text-muted-foreground text-sm leading-none">
-              You have <span className="font-medium text-foreground">3</span> bills due this month
+              You have <span className="text-foreground font-medium">3</span> bills due this month
             </p>
           </div>
-          <div className="flex w-max items-center gap-2 rounded-md border border-border bg-muted/70 px-2 py-1.5 text-sm">
-            <Zap className="size-4 fill-primary text-primary" />
+          <div className="border-border bg-muted/70 flex w-max items-center gap-2 rounded-md border px-2 py-1.5 text-sm">
+            <Zap className="fill-primary text-primary size-4" />
             <span className="text-muted-foreground">
-              Autopay will process <span className="font-medium text-foreground">$145.00</span> today
+              Autopay will process <span className="text-foreground font-medium">$145.00</span> today
             </span>
           </div>
         </div>
@@ -58,7 +58,7 @@ export function UpcomingTransactions() {
           {transactions.map((transaction) => (
             <Item key={transaction.id} variant="outline" size="xs">
               <ItemMedia>
-                <div className="grid size-9 place-items-center rounded-md border bg-background">
+                <div className="bg-background grid size-9 place-items-center rounded-md border">
                   <SimpleIcon icon={transaction.icon} />
                 </div>
               </ItemMedia>
@@ -67,7 +67,7 @@ export function UpcomingTransactions() {
                 <ItemDescription>{transaction.date}</ItemDescription>
               </ItemContent>
               <ItemActions>
-                <ChevronRight className="size-5 text-muted-foreground" />
+                <ChevronRight className="text-muted-foreground size-5" />
               </ItemActions>
             </Item>
           ))}

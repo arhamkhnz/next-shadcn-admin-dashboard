@@ -80,7 +80,7 @@ function DatePicker({ id, value, onChange }: { id: string; value: string; onChan
           id={id}
           variant="outline"
           data-empty={!date}
-          className="w-full justify-between text-left font-normal data-[empty=true]:text-muted-foreground"
+          className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
         >
           {date ? format(date, "PPP") : <span>Pick a date</span>}
           <CalendarIcon className="text-muted-foreground" />

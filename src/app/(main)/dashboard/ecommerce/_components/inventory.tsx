@@ -72,8 +72,8 @@ export function Inventory() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="font-normal text-muted-foreground text-sm">Inventory</CardTitle>
-        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+        <CardTitle className="text-muted-foreground text-sm font-normal">Inventory</CardTitle>
+        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
           {availablePercent}% available
         </CardDescription>
         <CardAction>
@@ -103,7 +103,7 @@ export function Inventory() {
                     return (
                       <text textAnchor="middle" x={viewBox.cx} y={viewBox.cy}>
                         <tspan
-                          className="fill-foreground font-medium text-2xl tabular-nums"
+                          className="fill-foreground text-2xl font-medium tabular-nums"
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 22}
                         >
@@ -125,12 +125,12 @@ export function Inventory() {
         <div className="grid grid-cols-3 divide-x">
           {inventorySummary.map((item, _index) => (
             <div key={item.label} className="flex flex-col items-center gap-3 text-center">
-              <div className="grid size-9 place-items-center rounded-full bg-muted">
-                <item.icon className="size-4 text-muted-foreground" />
+              <div className="bg-muted grid size-9 place-items-center rounded-full">
+                <item.icon className="text-muted-foreground size-4" />
               </div>
               <div>
                 <div className="text-muted-foreground text-xs leading-none">{item.label}</div>
-                <div className="font-medium text-sm tabular-nums">{item.value.toLocaleString()}</div>
+                <div className="text-sm font-medium tabular-nums">{item.value.toLocaleString()}</div>
               </div>
             </div>
           ))}

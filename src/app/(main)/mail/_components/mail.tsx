@@ -33,7 +33,7 @@ export function MailComponent({ mails, defaultLayout = [...DEFAULT_MAIL_LAYOUT] 
 
   if (!isMounted) {
     return (
-      <div className="flex size-full items-center justify-center text-muted-foreground text-sm">Loading mail...</div>
+      <div className="text-muted-foreground flex size-full items-center justify-center text-sm">Loading mail...</div>
     );
   }
 

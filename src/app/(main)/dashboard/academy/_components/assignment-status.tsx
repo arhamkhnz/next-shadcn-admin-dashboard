@@ -22,15 +22,15 @@ const chartData = [
 ];
 
 function SubmittedLegendIcon() {
-  return <span className="block size-2 rounded-[2px] bg-chart-3" />;
+  return <span className="bg-chart-3 block size-2 rounded-[2px]" />;
 }
 
 function PendingLegendIcon() {
-  return <span className="block size-2 rounded-[2px] bg-chart-2" />;
+  return <span className="bg-chart-2 block size-2 rounded-[2px]" />;
 }
 
 function OverdueLegendIcon() {
-  return <span className="block size-2 rounded-[2px] bg-destructive" />;
+  return <span className="bg-destructive block size-2 rounded-[2px]" />;
 }
 
 const chartConfig = {
@@ -66,7 +66,7 @@ export function AssignmentStatus() {
     <Card className="h-full">
       <CardHeader>
         <CardTitle className="text-sm">Assignment Status</CardTitle>
-        <CardAction className="flex items-center gap-1 text-muted-foreground text-xs">
+        <CardAction className="text-muted-foreground flex items-center gap-1 text-xs">
           View Report <ArrowRight className="size-4" />
         </CardAction>
       </CardHeader>

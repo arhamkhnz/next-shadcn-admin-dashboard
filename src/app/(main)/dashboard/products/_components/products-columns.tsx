@@ -82,7 +82,7 @@ export function createProductsColumns(
         <button
           type="button"
           onClick={() => onEdit(row.original)}
-          className="max-w-72 truncate rounded-sm text-left outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring"
+          className="hover:text-primary focus-visible:ring-ring max-w-72 truncate rounded-sm text-left outline-none focus-visible:ring-2"
         >
           {row.original.name}
         </button>
@@ -91,7 +91,7 @@ export function createProductsColumns(
     {
       accessorKey: "sku",
       header: "SKU",
-      cell: ({ row }) => <span className="font-mono text-muted-foreground text-xs">{row.original.sku}</span>,
+      cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.sku}</span>,
     },
     { accessorKey: "category", header: "Category", filterFn: "equalsString" },
     {

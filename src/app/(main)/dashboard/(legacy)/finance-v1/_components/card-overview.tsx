@@ -53,34 +53,34 @@ export function CardOverview() {
       <CardContent>
         <div className="space-y-4">
           <div className="grid w-full place-items-center">
-            <div className="relative flex aspect-8/5 w-full max-w-100 flex-col justify-between overflow-hidden rounded-xl bg-primary p-6">
+            <div className="bg-primary relative flex aspect-8/5 w-full max-w-100 flex-col justify-between overflow-hidden rounded-xl p-6">
               <div className="flex items-start justify-between">
-                <SimpleIcon icon={siApple} className="size-5 fill-primary-foreground sm:size-8" />
+                <SimpleIcon icon={siApple} className="fill-primary-foreground size-5 sm:size-8" />
               </div>
 
               <div className="space-y-1">
-                <p className="font-mono text-primary-foreground/90 text-sm tracking-[0.15em] sm:text-lg">
+                <p className="text-primary-foreground/90 font-mono text-sm tracking-[0.15em] sm:text-lg">
                   •••• •••• •••• 2301
                 </p>
               </div>
 
               <div className="flex items-end justify-between">
                 <div className="space-y-2">
-                  <p className="font-medium font-mono text-primary-foreground text-sm uppercase tracking-wide">
+                  <p className="text-primary-foreground font-mono text-sm font-medium tracking-wide uppercase">
                     Arham Khan
                   </p>
                   <div className="flex gap-6">
                     <div>
-                      <p className="text-[10px] text-primary-foreground/80 uppercase tracking-wider">Valid Thru</p>
-                      <p className="font-mono text-primary-foreground/80 text-xs">06/30</p>
+                      <p className="text-primary-foreground/80 text-[10px] tracking-wider uppercase">Valid Thru</p>
+                      <p className="text-primary-foreground/80 font-mono text-xs">06/30</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-primary-foreground/80 uppercase tracking-wider">CVV</p>
-                      <p className="font-mono text-primary-foreground/80 text-xs">•••</p>
+                      <p className="text-primary-foreground/80 text-[10px] tracking-wider uppercase">CVV</p>
+                      <p className="text-primary-foreground/80 font-mono text-xs">•••</p>
                     </div>
                   </div>
                 </div>
-                <SimpleIcon icon={siMastercard} className="size-7 fill-primary-foreground/80 sm:size-10" />
+                <SimpleIcon icon={siMastercard} className="fill-primary-foreground/80 size-7 sm:size-10" />
               </div>
             </div>
           </div>
@@ -121,16 +121,16 @@ export function CardOverview() {
             <div className="space-y-4">
               {upcomingPayments.map((transaction) => (
                 <div key={transaction.id} className="flex items-center gap-2">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted">
-                    <transaction.icon className="size-5 text-muted-foreground" />
+                  <div className="bg-muted flex size-10 shrink-0 items-center justify-center rounded-full">
+                    <transaction.icon className="text-muted-foreground size-5" />
                   </div>
                   <div className="flex w-full items-end justify-between">
                     <div>
-                      <p className="font-medium text-sm">{transaction.title}</p>
+                      <p className="text-sm font-medium">{transaction.title}</p>
                       <p className="text-muted-foreground text-xs">{transaction.date}</p>
                     </div>
                     <div>
-                      <span className="font-medium text-destructive text-sm tabular-nums leading-none">
+                      <span className="text-destructive text-sm leading-none font-medium tabular-nums">
                         {formatCurrency(transaction.amount, {
                           noDecimals: true,
                         })}

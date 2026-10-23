@@ -21,11 +21,11 @@ function TraceRow({ calibration, kind, label, lead, patient }: TraceRowProps) {
   const series = usePatientWaveformSeries({ kind, lead, patient });
 
   return (
-    <div className="grid min-h-16 grid-cols-[6.5rem_minmax(0,1fr)] border-border border-b">
+    <div className="border-border grid min-h-16 grid-cols-[6.5rem_minmax(0,1fr)] border-b">
       <div className="flex flex-col gap-0.5 px-3 py-2">
         <span
           className={cn(
-            "font-medium text-sm",
+            "text-sm font-medium",
             kind === "ecg" && "text-lime-500 dark:text-lime-400",
             kind === "pleth" && "text-cyan-500 dark:text-cyan-400",
             kind === "respiration" && "text-amber-500 dark:text-amber-400",
@@ -34,7 +34,7 @@ function TraceRow({ calibration, kind, label, lead, patient }: TraceRowProps) {
         >
           {label}
         </span>
-        {calibration && <span className="text-[10px] text-muted-foreground">{calibration}</span>}
+        {calibration && <span className="text-muted-foreground text-[10px]">{calibration}</span>}
       </div>
       <VitalWaveform kind={kind} showGrid {...series} />
     </div>
@@ -55,13 +55,13 @@ function NumericVital({
   value: number | string;
 }) {
   return (
-    <div className="grid min-h-16 grid-cols-[minmax(0,1fr)_auto] items-center border-border border-b px-3 py-1">
+    <div className="border-border grid min-h-16 grid-cols-[minmax(0,1fr)_auto] items-center border-b px-3 py-1">
       <div>
-        <div className={cn("font-medium text-sm", color)}>{label}</div>
-        <div className="text-[10px] text-muted-foreground">{limits}</div>
+        <div className={cn("text-sm font-medium", color)}>{label}</div>
+        <div className="text-muted-foreground text-[10px]">{limits}</div>
       </div>
       <div
-        className={cn("flex items-baseline gap-0.5 text-right font-medium text-4xl tabular-nums leading-none", color)}
+        className={cn("flex items-baseline gap-0.5 text-right text-4xl leading-none font-medium tabular-nums", color)}
       >
         {value} <span className="text-xs">{unit}</span>
       </div>
@@ -72,7 +72,7 @@ function NumericVital({
 export function PatientDetail({ hasActiveAlarm, patient }: PatientDetailProps) {
   return (
     <div className="grid min-w-0 xl:grid-cols-[minmax(0,1fr)_15.5rem]">
-      <div className="min-w-0 border-border after:hidden xl:grid xl:grid-rows-6 xl:border-r xl:after:block xl:after:border-border xl:after:border-b">
+      <div className="border-border xl:after:border-border min-w-0 after:hidden xl:grid xl:grid-rows-6 xl:border-r xl:after:block xl:after:border-b">
         <TraceRow calibration="25 mm/s · 10 mm/mV" kind="ecg" label="ECG II" lead="II" patient={patient} />
         <TraceRow calibration="25 mm/s · 10 mm/mV" kind="ecg" label="ECG V5" lead="V5" patient={patient} />
         <TraceRow kind="pleth" label="Pleth" patient={patient} />

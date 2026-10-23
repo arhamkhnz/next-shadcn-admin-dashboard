@@ -173,7 +173,7 @@ const ledgerColumns: ColumnDef<DataTableFeatures, LedgerRow>[] = [
     header: "Account",
     cell: ({ row }) => (
       <div className="flex flex-col gap-1">
-        <p className="font-medium text-sm">{row.original.account}</p>
+        <p className="text-sm font-medium">{row.original.account}</p>
         <p className="text-muted-foreground text-xs">
           {row.original.dealId} · {row.original.stage}
         </p>
@@ -183,7 +183,7 @@ const ledgerColumns: ColumnDef<DataTableFeatures, LedgerRow>[] = [
   {
     accessorKey: "blocker",
     header: "Blocker",
-    cell: ({ row }) => <div className="max-w-44 whitespace-normal text-xs">{row.original.blocker}</div>,
+    cell: ({ row }) => <div className="max-w-44 text-xs whitespace-normal">{row.original.blocker}</div>,
   },
   {
     accessorKey: "owner",
@@ -272,7 +272,7 @@ export function ActionsRiskLedger() {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <div className="grid gap-3 rounded-lg border bg-muted/20 p-3 text-sm sm:grid-cols-4 sm:divide-x sm:divide-border/60">
+        <div className="bg-muted/20 sm:divide-border/60 grid gap-3 rounded-lg border p-3 text-sm sm:grid-cols-4 sm:divide-x">
           <LedgerStat label="Critical accounts" value="1" detail="Risk Ladder >= 80 (current window)" />
           <LedgerStat label="Escalations due" value="1" detail="Next 7 days" />
           <LedgerStat label="Median inactivity" value="31d" detail="Current filter window" />
@@ -316,9 +316,9 @@ export function ActionsRiskLedger() {
 
 function LedgerStat({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="flex flex-col gap-1 px-0 sm:px-3 last:sm:pr-0 first:sm:pl-0">
+    <div className="flex flex-col gap-1 px-0 sm:px-3 first:sm:pl-0 last:sm:pr-0">
       <p className="text-muted-foreground text-xs">{label}</p>
-      <p className="font-semibold text-base tabular-nums">{value}</p>
+      <p className="text-base font-semibold tabular-nums">{value}</p>
       <p className="text-muted-foreground text-xs">{detail}</p>
     </div>
   );

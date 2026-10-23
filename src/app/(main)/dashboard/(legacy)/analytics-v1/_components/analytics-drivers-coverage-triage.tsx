@@ -52,18 +52,18 @@ export function DriversCoverageTriage() {
 
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {leverOptions.map((lever) => (
-            <div key={lever.key} className="space-y-1 rounded-md border bg-muted/20 px-2.5 py-2">
+            <div key={lever.key} className="bg-muted/20 space-y-1 rounded-md border px-2.5 py-2">
               <p className="text-muted-foreground text-xs">{lever.label}</p>
-              <p className="font-semibold text-sm tabular-nums">{lever.value}</p>
+              <p className="text-sm font-semibold tabular-nums">{lever.value}</p>
               <p className="text-muted-foreground text-xs">{lever.context}</p>
             </div>
           ))}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border bg-muted/20 px-3 py-2">
+        <div className="bg-muted/20 flex flex-wrap items-center justify-between gap-2 rounded-md border px-3 py-2">
           <div className="flex flex-wrap items-center gap-3 text-xs">
             <span className="text-muted-foreground">
-              Owner: <span className="font-medium text-foreground">Leila Zhang</span>
+              Owner: <span className="text-foreground font-medium">Leila Zhang</span>
             </span>
             <span className="text-muted-foreground">
               Focus: <span className="text-foreground">top gap-filling deals</span>
@@ -77,9 +77,9 @@ export function DriversCoverageTriage() {
           </Button>
         </div>
 
-        <div className="space-y-1 rounded-md border border-dashed bg-muted/10 px-3 py-2.5">
+        <div className="bg-muted/10 space-y-1 rounded-md border border-dashed px-3 py-2.5">
           <p className="text-muted-foreground text-xs">
-            Fastest path: <span className="font-medium text-foreground">-4d cycle</span> recovers 40% of gap.
+            Fastest path: <span className="text-foreground font-medium">-4d cycle</span> recovers 40% of gap.
           </p>
           <p className="text-muted-foreground text-xs">
             Priority sequence: <span className="text-foreground">cycle time</span> before net-new volume.

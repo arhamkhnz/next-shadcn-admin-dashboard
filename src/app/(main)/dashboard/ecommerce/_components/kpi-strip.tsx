@@ -87,18 +87,18 @@ function formatCurrencyTooltipValue(value: unknown) {
 
 export function KpiStrip() {
   return (
-    <div className="h-full overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 xl:col-span-12">
+    <div className="bg-card ring-foreground/10 h-full overflow-hidden rounded-xl ring-1 xl:col-span-12">
       <div>
         <div className="grid grid-cols-1 xl:grid-cols-12">
           <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 xl:col-span-5 xl:border-r">
-            <Card className="h-full rounded-none border-0 border-border border-b ring-0 md:border-r">
+            <Card className="border-border h-full rounded-none border-0 border-b ring-0 md:border-r">
               <CardHeader>
-                <CardTitle className="font-normal text-sm">Total Sales</CardTitle>
-                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
+                <CardTitle className="text-sm font-normal">Total Sales</CardTitle>
+                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
                   $48,560.00
                 </CardDescription>
-                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
-                  <DollarSign className="size-3 text-foreground" />
+                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
+                  <DollarSign className="text-foreground size-3" />
                 </CardAction>
               </CardHeader>
               <CardContent>
@@ -109,14 +109,14 @@ export function KpiStrip() {
               </CardContent>
             </Card>
 
-            <Card className="h-full rounded-none border-0 border-border border-b ring-0">
+            <Card className="border-border h-full rounded-none border-0 border-b ring-0">
               <CardHeader>
-                <CardTitle className="font-normal text-sm">Total Orders</CardTitle>
-                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
+                <CardTitle className="text-sm font-normal">Total Orders</CardTitle>
+                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
                   379
                 </CardDescription>
-                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
-                  <ShoppingBag className="size-3 text-foreground" />
+                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
+                  <ShoppingBag className="text-foreground size-3" />
                 </CardAction>
               </CardHeader>
               <CardContent>
@@ -127,14 +127,14 @@ export function KpiStrip() {
               </CardContent>
             </Card>
 
-            <Card className="h-full rounded-none border-0 border-border border-b ring-0 md:border-r">
+            <Card className="border-border h-full rounded-none border-0 border-b ring-0 md:border-r">
               <CardHeader>
-                <CardTitle className="font-normal text-sm">Customer Growth</CardTitle>
-                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
+                <CardTitle className="text-sm font-normal">Customer Growth</CardTitle>
+                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
                   820
                 </CardDescription>
-                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
-                  <Users className="size-3 text-foreground" />
+                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
+                  <Users className="text-foreground size-3" />
                 </CardAction>
               </CardHeader>
               <CardContent>
@@ -145,14 +145,14 @@ export function KpiStrip() {
               </CardContent>
             </Card>
 
-            <Card className="h-full rounded-none border-0 border-border border-b ring-0">
+            <Card className="border-border h-full rounded-none border-0 border-b ring-0">
               <CardHeader>
-                <CardTitle className="font-normal text-sm">Average Order</CardTitle>
-                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
+                <CardTitle className="text-sm font-normal">Average Order</CardTitle>
+                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
                   $128
                 </CardDescription>
-                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
-                  <ReceiptText className="size-3 text-foreground" />
+                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
+                  <ReceiptText className="text-foreground size-3" />
                 </CardAction>
               </CardHeader>
               <CardContent>
@@ -163,14 +163,14 @@ export function KpiStrip() {
               </CardContent>
             </Card>
 
-            <Card className="h-full rounded-none border-0 border-border border-b ring-0 md:border-r md:border-b-0">
+            <Card className="border-border h-full rounded-none border-0 border-b ring-0 md:border-r md:border-b-0">
               <CardHeader>
-                <CardTitle className="font-normal text-sm">Return Requests</CardTitle>
-                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
+                <CardTitle className="text-sm font-normal">Return Requests</CardTitle>
+                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
                   18
                 </CardDescription>
-                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
-                  <RotateCcw className="size-3 text-foreground" />
+                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
+                  <RotateCcw className="text-foreground size-3" />
                 </CardAction>
               </CardHeader>
               <CardContent>
@@ -183,12 +183,12 @@ export function KpiStrip() {
 
             <Card className="h-full rounded-none border-0 ring-0">
               <CardHeader>
-                <CardTitle className="font-normal text-sm">Stock Accuracy</CardTitle>
-                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
+                <CardTitle className="text-sm font-normal">Stock Accuracy</CardTitle>
+                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
                   97%
                 </CardDescription>
-                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
-                  <PackageCheck className="size-3 text-foreground" />
+                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
+                  <PackageCheck className="text-foreground size-3" />
                 </CardAction>
               </CardHeader>
               <CardContent>
@@ -255,7 +255,7 @@ export function KpiStrip() {
                             />
                             <div className="flex flex-1 items-center justify-between leading-none">
                               <span className="text-muted-foreground">{String(name ?? "")}</span>
-                              <span className="font-medium font-mono text-foreground tabular-nums">
+                              <span className="text-foreground font-mono font-medium tabular-nums">
                                 {formatCurrencyTooltipValue(value)}
                               </span>
                             </div>

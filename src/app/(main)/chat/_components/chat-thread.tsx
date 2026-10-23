@@ -78,7 +78,7 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
               <AvatarBadge className="bg-green-600 dark:bg-green-800" />
             </Avatar>
             <div>
-              <div className="font-medium text-sm">{contact.name}</div>
+              <div className="text-sm font-medium">{contact.name}</div>
               <div className="text-muted-foreground text-xs leading-3">{contact.role}</div>
             </div>
           </div>
@@ -201,7 +201,7 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
         <Tabs defaultValue="reply" className="gap-0 rounded-md border">
           <TabsList
             variant="line"
-            className="w-full justify-start gap-2 border-b px-3 **:data-[slot=tabs-trigger]:border-x-0 **:data-[slot=tabs-trigger]:px-6 group-data-horizontal/tabs:h-10"
+            className="w-full justify-start gap-2 border-b px-3 group-data-horizontal/tabs:h-10 **:data-[slot=tabs-trigger]:border-x-0 **:data-[slot=tabs-trigger]:px-6"
           >
             <TabsTrigger value="reply" className="flex-none px-1">
               Reply
@@ -231,7 +231,7 @@ function MessageComposer({ placeholder }: { placeholder: string }) {
         event.preventDefault();
       }}
     >
-      <InputGroup className="border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-0 has-[[data-slot][aria-invalid=true]]:border-0 has-[[data-slot=input-group-control]:focus-visible]:ring-0 has-[[data-slot][aria-invalid=true]]:ring-0 dark:bg-transparent dark:has-[[data-slot][aria-invalid=true]]:ring-0">
+      <InputGroup className="border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-0 has-[[data-slot=input-group-control]:focus-visible]:ring-0 has-[[data-slot][aria-invalid=true]]:border-0 has-[[data-slot][aria-invalid=true]]:ring-0 dark:bg-transparent dark:has-[[data-slot][aria-invalid=true]]:ring-0">
         <InputGroupTextarea
           placeholder={placeholder}
           className="min-h-14 px-3 py-2.5 text-sm ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:aria-invalid:ring-0"

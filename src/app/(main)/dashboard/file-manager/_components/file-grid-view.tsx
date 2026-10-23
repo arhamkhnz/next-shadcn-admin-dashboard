@@ -30,13 +30,13 @@ export function FileGridView({ files }: FileGridViewProps) {
         return (
           <Card key={file.id} size="sm" className="group/file">
             <CardContent>
-              <div className="relative flex h-36 items-center justify-center rounded-lg bg-muted/50">
-                <FileIcon className="size-12 text-muted-foreground" aria-hidden="true" />
+              <div className="bg-muted/50 relative flex h-36 items-center justify-center rounded-lg">
+                <FileIcon className="text-muted-foreground size-12" aria-hidden="true" />
                 <Button
                   variant="secondary"
                   size="icon-sm"
                   className={cn(
-                    "absolute top-2 right-2 opacity-0 focus-visible:opacity-100 group-hover/file:opacity-100",
+                    "absolute top-2 right-2 opacity-0 group-hover/file:opacity-100 focus-visible:opacity-100",
                     file.starred && "opacity-100",
                   )}
                   aria-label={file.starred ? `Unstar ${file.name}` : `Star ${file.name}`}
@@ -44,7 +44,7 @@ export function FileGridView({ files }: FileGridViewProps) {
                 >
                   <Star className={cn(file.starred && "fill-current")} />
                 </Button>
-                <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 text-muted-foreground text-xs">
+                <div className="text-muted-foreground absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 text-xs">
                   <span>{fileKindLabels[file.kind]}</span>
                   <span>{file.size}</span>
                 </div>

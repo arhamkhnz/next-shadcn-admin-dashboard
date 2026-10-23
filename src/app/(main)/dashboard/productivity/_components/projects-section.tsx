@@ -67,7 +67,7 @@ export function ProjectsSection() {
             <CardHeader>
               <CardTitle>
                 <div className="flex items-center gap-2">
-                  <project.icon className="size-4 text-muted-foreground" />
+                  <project.icon className="text-muted-foreground size-4" />
                   <span>{project.title}</span>
                 </div>
               </CardTitle>

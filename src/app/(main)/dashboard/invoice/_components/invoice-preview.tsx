@@ -27,9 +27,9 @@ export function InvoicePreview({ invoice }: { invoice: InvoiceFormValues }) {
   return (
     <>
       <PrintInvoice invoice={invoice} />
-      <div className="flex flex-col rounded-xl border bg-card">
+      <div className="bg-card flex flex-col rounded-xl border">
         <div className="flex items-center justify-between px-4 py-4">
-          <h2 className="font-medium text-lg">Preview</h2>
+          <h2 className="text-lg font-medium">Preview</h2>
           <ButtonGroup>
             <Button type="button" variant="outline" onClick={handlePrint}>
               <Printer data-icon="inline-start" />
@@ -47,7 +47,7 @@ export function InvoicePreview({ invoice }: { invoice: InvoiceFormValues }) {
           className="@container/preview relative min-h-[calc(100svh-15rem)] flex-1 rounded-b-xl bg-stone-200 p-4 dark:bg-stone-800"
         >
           {paperLayout === null ? (
-            <div className="absolute inset-0 grid place-items-center text-muted-foreground text-sm">
+            <div className="text-muted-foreground absolute inset-0 grid place-items-center text-sm">
               Loading Preview
             </div>
           ) : null}

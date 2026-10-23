@@ -44,10 +44,10 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
 
         <div className="flex min-w-0 flex-col gap-2">
           <div className="flex flex-col gap-0.5">
-            <h1 className="truncate font-heading font-semibold text-xl leading-6 tracking-tight sm:text-2xl sm:leading-7">
+            <h1 className="font-heading truncate text-xl leading-6 font-semibold tracking-tight sm:text-2xl sm:leading-7">
               {profile.name}
             </h1>
-            <p className="truncate text-muted-foreground text-sm leading-5">
+            <p className="text-muted-foreground truncate text-sm leading-5">
               {profile.workEmail} · {profile.jobTitle}
             </p>
           </div>

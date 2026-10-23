@@ -27,7 +27,7 @@ const progressRingClasses: Record<Shipment["status"], string> = {
 
 function getProgressRingClass(status: Shipment["status"]) {
   return cn(
-    "grid size-3 place-items-center rounded-full p-[0.5px] bg-[conic-gradient(currentColor_0deg_var(--angle),transparent_var(--angle)_360deg)]",
+    "grid size-3 place-items-center rounded-full bg-[conic-gradient(currentColor_0deg_var(--angle),transparent_var(--angle)_360deg)] p-[0.5px]",
     progressRingClasses[status],
   );
 }
@@ -58,7 +58,7 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
       }}
       className={cn(
         "flex w-full flex-col gap-5 rounded-xl border p-3 text-left transition-colors",
-        "hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "hover:bg-muted/50 focus-visible:ring-ring/50 focus-visible:ring-3 focus-visible:outline-none",
         active && "border-primary bg-muted/50",
       )}
     >
@@ -70,7 +70,7 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
             style={{ "--angle": `${angle}deg` } as React.CSSProperties}
             className={getProgressRingClass(shipment.status)}
           >
-            <div className="grid size-2 place-items-center rounded-full bg-card">
+            <div className="bg-card grid size-2 place-items-center rounded-full">
               <div className="size-1 rounded-full bg-current" />
             </div>
           </div>
@@ -82,14 +82,14 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
         <div className="flex items-center gap-1.5">
           <div className={cn(`flag:${shipment.origin.countryCode.toUpperCase()}`, "rounded-xs text-3xl outline")} />
           <div className="flex flex-col gap-0.5">
-            <div className="font-medium text-xs leading-none">{shipment.origin.country},</div>
+            <div className="text-xs leading-none font-medium">{shipment.origin.country},</div>
             <div className="text-muted-foreground text-xs">{shipment.origin.display}</div>
           </div>
         </div>
 
         <div className="flex items-center gap-1.5 text-right">
           <div className="flex flex-col gap-0.5">
-            <div className="font-medium text-xs leading-none">{shipment.destination.country},</div>
+            <div className="text-xs leading-none font-medium">{shipment.destination.country},</div>
             <div className="text-muted-foreground text-xs">{shipment.destination.display}</div>
           </div>
           <div
@@ -100,12 +100,12 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
 
       <div className="flex items-center gap-0.5">
         <span
-          className="h-px min-w-0 border-foreground border-t border-dashed"
+          className="border-foreground h-px min-w-0 border-t border-dashed"
           style={{ flexGrow: shipment.progress, flexBasis: 0 }}
         />
         <Icon className={cn("size-3.5", shipment.mode === "air" && "rotate-45")} />
         <span
-          className="h-px min-w-0 border-border border-t border-dashed"
+          className="border-border h-px min-w-0 border-t border-dashed"
           style={{ flexGrow: 100 - shipment.progress, flexBasis: 0 }}
         />
       </div>
@@ -117,10 +117,10 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
         </div>
         <div className="text-right">
           <div className="text-muted-foreground text-xs leading-none">ETA</div>
-          <div className="text-sm tabular-nums tracking-tight">
+          <div className="text-sm tracking-tight tabular-nums">
             {shipment.eta}
             {shipment.etaMeta && (
-              <span className="ml-1 font-normal text-muted-foreground text-xs">{shipment.etaMeta}</span>
+              <span className="text-muted-foreground ml-1 text-xs font-normal">{shipment.etaMeta}</span>
             )}
           </div>
         </div>
@@ -133,7 +133,7 @@ export function ShipmentList({ shipments, selectedShipmentId, onSelectShipment }
   return (
     <Card className="h-full rounded-none ring-0">
       <CardHeader>
-        <CardTitle className="font-normal text-xl">Shipments</CardTitle>
+        <CardTitle className="text-xl font-normal">Shipments</CardTitle>
         <CardAction>
           <Button size="icon-sm" variant="ghost">
             <SlidersHorizontal />

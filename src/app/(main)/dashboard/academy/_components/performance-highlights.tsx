@@ -116,10 +116,10 @@ function PerformanceHighlightBar({
             <Tooltip>
               <TooltipTrigger
                 aria-label={student.name}
-                className="flex size-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="focus-visible:ring-ring flex size-5 rounded-full outline-none focus-visible:ring-2"
                 type="button"
               >
-                <Avatar className="size-5 bg-muted" size="sm">
+                <Avatar className="bg-muted size-5" size="sm">
                   <AvatarFallback className="text-foreground">{student.initials}</AvatarFallback>
                 </Avatar>
               </TooltipTrigger>
@@ -143,7 +143,7 @@ function PerformanceHighlightBar({
         dominantBaseline="middle"
         x={labelX}
         y={barY + barHeight / 2 + 0.5}
-        className="fill-primary-foreground font-medium text-xs"
+        className="fill-primary-foreground text-xs font-medium"
       >
         {payload.subject}
       </text>
@@ -168,7 +168,7 @@ export function PerformanceHighlights() {
     <Card className="h-full">
       <CardHeader>
         <CardTitle className="text-sm">Performance Highlights</CardTitle>
-        <CardAction className="flex items-center gap-1 text-muted-foreground text-xs">
+        <CardAction className="text-muted-foreground flex items-center gap-1 text-xs">
           View Insights <ArrowRight className="size-4" />
         </CardAction>
       </CardHeader>

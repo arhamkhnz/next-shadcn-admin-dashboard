@@ -10,8 +10,8 @@ export function CustomerReviews() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="font-normal text-muted-foreground text-sm">Reviews</CardTitle>
-        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+        <CardTitle className="text-muted-foreground text-sm font-normal">Reviews</CardTitle>
+        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
           4.6 average rating
         </CardDescription>
         <CardAction>
@@ -20,10 +20,10 @@ export function CustomerReviews() {
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
-        <div className="rounded-lg bg-muted p-4">
+        <div className="bg-muted rounded-lg p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col gap-2">
-              <div className="flex gap-0.5 text-foreground">
+              <div className="text-foreground flex gap-0.5">
                 <Star className="size-3.5 fill-current" />
                 <Star className="size-3.5 fill-current" />
                 <Star className="size-3.5 fill-current" />
@@ -31,8 +31,8 @@ export function CustomerReviews() {
                 <Star className="size-3.5 fill-current" />
               </div>
               <div>
-                <div className="font-medium text-sm">Melody Macy</div>
-                <p className="mt-2 line-clamp-3 min-h-[4.5em] text-muted-foreground text-sm">
+                <div className="text-sm font-medium">Melody Macy</div>
+                <p className="text-muted-foreground mt-2 line-clamp-3 min-h-[4.5em] text-sm">
                   The linen overshirt arrived faster than expected and the fit was exactly right.
                 </p>
               </div>
@@ -51,8 +51,8 @@ export function CustomerReviews() {
 
         <div className="flex items-center justify-between gap-4 rounded-lg border px-4 py-3">
           <div className="min-w-0">
-            <div className="font-medium text-sm">12.8K reviews</div>
-            <div className="line-clamp-2 min-h-[3em] text-muted-foreground text-xs">Customers reviewed this month</div>
+            <div className="text-sm font-medium">12.8K reviews</div>
+            <div className="text-muted-foreground line-clamp-2 min-h-[3em] text-xs">Customers reviewed this month</div>
           </div>
 
           <AvatarGroup>

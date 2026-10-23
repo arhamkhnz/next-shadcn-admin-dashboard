@@ -33,6 +33,7 @@
     "ignoreUnknown": true,
     "includes": [
       "**",
+      "!**/*.md",
       "!.github",
       "!.husky",
       "!node_modules",

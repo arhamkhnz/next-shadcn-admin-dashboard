@@ -34,7 +34,7 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="font-medium text-foreground">$254,200</span>{" "}
+              <span className="text-foreground font-medium">$254,200</span>{" "}
               <span className="text-muted-foreground">last month</span>
             </p>
           </CardContent>
@@ -57,7 +57,7 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="font-medium text-foreground">30.9%</span>{" "}
+              <span className="text-foreground font-medium">30.9%</span>{" "}
               <span className="text-muted-foreground">last month</span>
             </p>
           </CardContent>
@@ -83,7 +83,7 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="font-medium text-foreground">35</span>{" "}
+              <span className="text-foreground font-medium">35</span>{" "}
               <span className="text-muted-foreground">last month</span>
             </p>
           </CardContent>
@@ -109,7 +109,7 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="font-medium text-foreground">16.5%</span>{" "}
+              <span className="text-foreground font-medium">16.5%</span>{" "}
               <span className="text-muted-foreground">last month</span>
             </p>
           </CardContent>

@@ -3,9 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function OverviewKpis() {
   return (
-    <div className="overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10">
+    <div className="bg-card ring-foreground/10 overflow-hidden rounded-xl ring-1">
       <div className="grid grid-cols-1 xl:grid-cols-8">
-        <Card className="gap-5 overflow-hidden rounded-none border-0 border-foreground/10 border-b ring-0 xl:col-span-4 xl:border-r">
+        <Card className="border-foreground/10 gap-5 overflow-hidden rounded-none border-0 border-b ring-0 xl:col-span-4 xl:border-r">
           <CardHeader>
             <CardTitle className="font-normal">Net worth</CardTitle>
           </CardHeader>
@@ -18,7 +18,7 @@ export function OverviewKpis() {
           </CardContent>
         </Card>
 
-        <Card className="gap-5 overflow-hidden rounded-none border-0 border-foreground/10 border-b ring-0 xl:col-span-4">
+        <Card className="border-foreground/10 gap-5 overflow-hidden rounded-none border-0 border-b ring-0 xl:col-span-4">
           <CardHeader>
             <CardTitle className="font-normal">Available cash</CardTitle>
           </CardHeader>
@@ -31,7 +31,7 @@ export function OverviewKpis() {
           </CardContent>
         </Card>
 
-        <Card className="gap-5 overflow-hidden rounded-none border-0 border-foreground/10 ring-0 xl:col-span-4 xl:border-r">
+        <Card className="border-foreground/10 gap-5 overflow-hidden rounded-none border-0 ring-0 xl:col-span-4 xl:border-r">
           <CardHeader>
             <CardTitle className="font-normal">Monthly spend</CardTitle>
           </CardHeader>

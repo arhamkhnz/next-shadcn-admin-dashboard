@@ -16,7 +16,7 @@ export function FocusCard() {
             <Button className="min-w-24">Start</Button>
           </div>
 
-          <div className="flex items-center gap-2 text-muted-foreground text-xs">
+          <div className="text-muted-foreground flex items-center gap-2 text-xs">
             <BellOff className="size-3" />
             <span>No notifications · Full focus</span>
           </div>

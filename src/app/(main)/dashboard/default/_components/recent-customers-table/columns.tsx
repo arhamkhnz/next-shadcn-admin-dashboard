@@ -13,7 +13,7 @@ import type { RecentCustomerRow } from "./schema";
 function billingIcon(billing: string) {
   switch (billing) {
     case "Paid":
-      return <CircleCheckIcon className="fill-green-500 stroke-primary-foreground dark:fill-green-600" />;
+      return <CircleCheckIcon className="stroke-primary-foreground fill-green-500 dark:fill-green-600" />;
     case "Pending":
       return <LoaderIcon />;
     case "Overdue":
@@ -67,14 +67,14 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
     header: "Customer",
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
-        <span className="flex size-8 items-center justify-center rounded-md border bg-muted">
-          <UserRound className="size-4 text-muted-foreground" />
+        <span className="bg-muted flex size-8 items-center justify-center rounded-md border">
+          <UserRound className="text-muted-foreground size-4" />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-end justify-between gap-3">
             <div className="grid min-w-0 gap-0.5">
-              <span className="truncate font-medium text-sm leading-none">{row.original.name}</span>
-              <span className="truncate text-muted-foreground text-xs leading-none">#{row.original.id}</span>
+              <span className="truncate text-sm leading-none font-medium">{row.original.name}</span>
+              <span className="text-muted-foreground truncate text-xs leading-none">#{row.original.id}</span>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
     header: "Status",
     filterFn: "equalsString",
     cell: ({ row }) => (
-      <Badge variant="outline" className="px-1.5 text-muted-foreground">
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.status}
       </Badge>
     ),
@@ -103,7 +103,7 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
     header: "Billing",
     filterFn: "equalsString",
     cell: ({ row }) => (
-      <Badge variant="outline" className="px-1.5 text-muted-foreground">
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
         {billingIcon(row.original.billing)}
         {row.original.billing}
       </Badge>

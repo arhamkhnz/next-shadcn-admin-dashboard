@@ -48,8 +48,8 @@ export function ProductsTable({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col *:data-[slot=table-container]:min-h-0 *:data-[slot=table-container]:flex-1 *:data-[slot=table-container]:overflow-auto">
-      <Table aria-label="Products" className="min-w-280 border-separate border-spacing-0 border-border/60 border-b">
-        <TableHeader className="sticky top-0 z-10 bg-background">
+      <Table aria-label="Products" className="border-border/60 min-w-280 border-separate border-spacing-0 border-b">
+        <TableHeader className="bg-background sticky top-0 z-10">
           {table.getHeaderGroups().map((group) => (
             <TableRow key={group.id} className="border-border/60 hover:bg-transparent">
               {group.headers.map((header) => {
@@ -64,7 +64,7 @@ export function ProductsTable({
                       maxWidth: header.column.columnDef.maxSize,
                     }}
                     className={cn(
-                      "h-10 border-border/50 border-t border-r border-b bg-background px-4.5 font-[450] last:border-r-0",
+                      "border-border/50 bg-background h-10 border-t border-r border-b px-4.5 font-[450] last:border-r-0",
                       header.column.id === "select" && "px-0 text-center",
                       header.column.id === "actions" && "px-2.5",
                     )}
@@ -72,7 +72,7 @@ export function ProductsTable({
                     {!header.isPlaceholder && (
                       <div
                         className={cn(
-                          "flex w-full items-center gap-2 text-muted-foreground",
+                          "text-muted-foreground flex w-full items-center gap-2",
                           right && "justify-end",
                           header.column.id === "select" && "justify-center",
                         )}
@@ -92,7 +92,7 @@ export function ProductsTable({
             <TableRow
               key={row.id}
               data-state={table.state.rowSelection[row.id] ? "selected" : undefined}
-              className="border-border/60 last:*:border-b-0 hover:bg-muted/30"
+              className="border-border/60 hover:bg-muted/30 last:*:border-b-0"
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell
@@ -103,7 +103,7 @@ export function ProductsTable({
                     maxWidth: cell.column.columnDef.maxSize,
                   }}
                   className={cn(
-                    "h-12 border-border/50 border-r border-b px-4.5 py-2 last:border-r-0",
+                    "border-border/50 h-12 border-r border-b px-4.5 py-2 last:border-r-0",
                     cell.column.id === "select" && "px-0 text-center",
                     cell.column.id === "actions" && "px-2.5",
                     (cell.column.id === "price" || cell.column.id === "sold") && "text-right",
@@ -131,8 +131,8 @@ export function ProductsTable({
           )}
         </TableBody>
       </Table>
-      <footer className="flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-3 border-t bg-background px-4 py-2 text-sm">
-        <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
+      <footer className="bg-background flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-3 border-t px-4 py-2 text-sm">
+        <div className="text-muted-foreground flex flex-wrap items-center gap-4">
           <span className="tabular-nums" aria-live="polite">
             {total ? pageIndex * pageSize + 1 : 0} – {Math.min((pageIndex + 1) * pageSize, total)} of {total} products
             {selected > 0 && ` · ${selected} selected`}

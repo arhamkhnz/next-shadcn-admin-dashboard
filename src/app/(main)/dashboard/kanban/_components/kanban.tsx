@@ -196,7 +196,7 @@ export function Kanban({ initialBoard }: KanbanProps) {
 
       <TabsContent value="board" className="min-h-0 min-w-0 flex-col data-[state=active]:flex">
         <DragDropProvider onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-          <div className="scrollbar-thin min-h-0 min-w-0 flex-1 overflow-x-auto overflow-y-hidden bg-muted/25 px-4 pt-4 pb-0 [scrollbar-color:var(--border)_transparent] lg:px-5 lg:pt-5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
+          <div className="bg-muted/25 [&::-webkit-scrollbar-thumb]:bg-border min-h-0 min-w-0 flex-1 scrollbar-thin [scrollbar-color:var(--border)_transparent] overflow-x-auto overflow-y-hidden px-4 pt-4 pb-0 lg:px-5 lg:pt-5 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
             <div className="inline-grid h-full min-w-full grid-cols-[repeat(5,minmax(20rem,1fr))] gap-4">
               {orderedColumns.map((column, index) => (
                 <KanbanColumn key={column.id} column={column} index={index} tasks={board[column.id]} />

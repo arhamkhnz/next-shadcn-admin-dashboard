@@ -40,8 +40,8 @@ export function ChatProfileDetails({ contact, onClose }: ChatProfileDetailsProps
         </Avatar>
 
         <div className="min-w-0 flex-1">
-          <div className="truncate font-medium leading-5">{contact.name}</div>
-          <div className="truncate text-muted-foreground text-xs">{contact.role}</div>
+          <div className="truncate leading-5 font-medium">{contact.name}</div>
+          <div className="text-muted-foreground truncate text-xs">{contact.role}</div>
         </div>
 
         <Button variant="ghost" size="icon-sm" aria-label="Close profile" onClick={onClose}>
@@ -78,17 +78,17 @@ export function ChatProfileDetails({ contact, onClose }: ChatProfileDetailsProps
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex items-center gap-2">
-            <Mail className="size-4 shrink-0 text-muted-foreground" />
+            <Mail className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Email</span>
             <span className="ml-auto truncate text-sm">{contact.email}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Phone className="size-4 shrink-0 text-muted-foreground" />
+            <Phone className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Phone</span>
             <span className="ml-auto truncate text-sm">{contact.phone}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Globe className="size-4 shrink-0 text-muted-foreground" />
+            <Globe className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Website</span>
             <span className="ml-auto truncate text-sm">{contact.website}</span>
           </div>
@@ -98,29 +98,29 @@ export function ChatProfileDetails({ contact, onClose }: ChatProfileDetailsProps
 
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex items-center gap-2">
-            <Building2 className="size-4 shrink-0 text-muted-foreground" />
+            <Building2 className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Company</span>
             <span className="ml-auto truncate text-sm">{contact.company}</span>
           </div>
           <div className="flex items-center gap-2">
-            <UserRound className="size-4 shrink-0 text-muted-foreground" />
+            <UserRound className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Role</span>
             <span className="ml-auto truncate text-sm">{contact.role}</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-4 shrink-0 text-muted-foreground" />
+            <CheckCircle2 className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Stage</span>
             <Badge variant="secondary" className="ml-auto">
               {contact.status}
             </Badge>
           </div>
           <div className="flex items-center gap-2">
-            <Calendar className="size-4 shrink-0 text-muted-foreground" />
+            <Calendar className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Qualified since</span>
             <span className="ml-auto truncate text-sm">{contact.qualifiedAt}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Monitor className="size-4 shrink-0 text-muted-foreground" />
+            <Monitor className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Timezone</span>
             <span className="ml-auto truncate text-sm">{contact.timezone}</span>
           </div>
@@ -130,12 +130,12 @@ export function ChatProfileDetails({ contact, onClose }: ChatProfileDetailsProps
 
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex items-center gap-2">
-            <MapPin className="size-4 shrink-0 text-muted-foreground" />
+            <MapPin className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Location</span>
             <span className="ml-auto truncate text-sm">{contact.location}</span>
           </div>
           <div className="flex items-start gap-2">
-            <Tag className="size-4 shrink-0 text-muted-foreground" />
+            <Tag className="text-muted-foreground size-4 shrink-0" />
             <span className="text-muted-foreground text-sm">Tags</span>
             <div className="ml-auto flex flex-wrap justify-end gap-1">
               {contact.tags.map((tag) => (

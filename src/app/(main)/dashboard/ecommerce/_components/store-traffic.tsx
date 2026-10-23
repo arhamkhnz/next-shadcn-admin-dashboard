@@ -157,8 +157,8 @@ export function StoreTraffic() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-normal text-muted-foreground text-sm">Store Traffic</CardTitle>
-        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+        <CardTitle className="text-muted-foreground text-sm font-normal">Store Traffic</CardTitle>
+        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
           12.9K visits
         </CardDescription>
         <CardAction>

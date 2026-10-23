@@ -17,9 +17,9 @@ export function SupportCard() {
             target="_blank"
             rel="noreferrer"
             aria-label="Reach out on X"
-            className="inline-flex items-center text-foreground"
+            className="text-foreground inline-flex items-center"
           >
-            <SimpleIcon icon={siX} aria-hidden className="size-3 fill-foreground" />
+            <SimpleIcon icon={siX} aria-hidden className="fill-foreground size-3" />
           </Link>
           &nbsp;or by{" "}
           <Link

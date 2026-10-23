@@ -35,7 +35,7 @@ export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
     header: "Role",
     size: 180,
     minSize: 180,
-    cell: ({ row }) => <span className="font-medium text-sm">{row.original.role}</span>,
+    cell: ({ row }) => <span className="text-sm font-medium">{row.original.role}</span>,
   },
   {
     id: "accessLevel",

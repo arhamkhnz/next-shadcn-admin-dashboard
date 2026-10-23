@@ -133,9 +133,9 @@ export function DriversForecastTarget() {
 
 function MetricChip({ label, value, note }: { label: string; value: string; note: string }) {
   return (
-    <div className="rounded-md border bg-muted/35 px-3 py-2.5">
+    <div className="bg-muted/35 rounded-md border px-3 py-2.5">
       <p className="text-muted-foreground text-xs">{label}</p>
-      <p className="font-semibold text-lg tabular-nums">{value}</p>
+      <p className="text-lg font-semibold tabular-nums">{value}</p>
       <p className="text-muted-foreground text-xs">{note}</p>
     </div>
   );

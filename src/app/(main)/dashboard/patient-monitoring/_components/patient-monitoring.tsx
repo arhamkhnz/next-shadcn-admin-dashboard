@@ -32,7 +32,7 @@ export function PatientMonitoring({ patients }: PatientMonitoringProps) {
 
   return (
     <div className="grid min-w-0 flex-1 lg:grid-cols-[20rem_minmax(0,1fr)]">
-      <div className="grid grid-cols-2 content-start *:border-border *:border-r *:border-b *:even:border-r-0">
+      <div className="*:border-border grid grid-cols-2 content-start *:border-r *:border-b *:even:border-r-0">
         {patients.map((patient) => (
           <PatientCard
             acknowledged={acknowledgedPatientIds.includes(patient.id)}
@@ -44,8 +44,8 @@ export function PatientMonitoring({ patients }: PatientMonitoringProps) {
         ))}
       </div>
 
-      <div className="flex min-w-0 flex-col border-border lg:border-l">
-        <div className="flex min-h-11 items-center gap-4 bg-muted/50 px-3">
+      <div className="border-border flex min-w-0 flex-col lg:border-l">
+        <div className="bg-muted/50 flex min-h-11 items-center gap-4 px-3">
           <div className="flex items-center gap-3 font-medium">
             <Badge className="rounded-none" variant="outline">
               {selectedPatient.bed}
@@ -92,7 +92,7 @@ export function PatientMonitoring({ patients }: PatientMonitoringProps) {
 
         <Tabs className="min-h-0 flex-1 gap-0" defaultValue="trends">
           <TabsList
-            className="w-full justify-start gap-0 border-b p-0 *:h-full *:max-w-32 *:rounded-none *:border-0 *:border-border *:border-r *:after:-bottom-px!"
+            className="*:border-border w-full justify-start gap-0 border-b p-0 *:h-full *:max-w-32 *:rounded-none *:border-0 *:border-r *:after:-bottom-px!"
             variant="line"
           >
             <TabsTrigger value="real-time">Real time</TabsTrigger>
@@ -105,12 +105,12 @@ export function PatientMonitoring({ patients }: PatientMonitoringProps) {
             className="m-0 flex flex-col items-center justify-center gap-1 px-4 text-center"
             value="real-time"
           >
-            <p className="font-medium text-sm">Live monitoring is active</p>
+            <p className="text-sm font-medium">Live monitoring is active</p>
             <p className="text-muted-foreground text-xs">Waveforms and vital signs update continuously above.</p>
           </TabsContent>
           <TabsContent className="m-0" value="events">
             <div className="min-h-44">
-              <div className="grid grid-cols-[4rem_1fr] bg-muted/40 px-4 py-2 font-medium text-muted-foreground text-xs">
+              <div className="bg-muted/40 text-muted-foreground grid grid-cols-[4rem_1fr] px-4 py-2 text-xs font-medium">
                 <span>Time</span>
                 <span>Event</span>
               </div>
@@ -133,7 +133,7 @@ export function PatientMonitoring({ patients }: PatientMonitoringProps) {
             className="m-0 flex flex-col items-center justify-center gap-1 px-4 text-center"
             value="disclosure"
           >
-            <p className="font-medium text-sm">Full disclosure recording is active</p>
+            <p className="text-sm font-medium">Full disclosure recording is active</p>
             <p className="text-muted-foreground text-xs">
               Continuous waveform history is available for the last 24 hours.
             </p>

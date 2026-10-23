@@ -36,7 +36,7 @@ function VitalTrendChart({ ariaLabel, data, domain, kind, ticks }: VitalTrendCha
   return (
     <ChartContainer
       aria-label={ariaLabel}
-      className={cn("aspect-auto h-full min-h-12 w-full border-current border-r", trendClasses[kind])}
+      className={cn("aspect-auto h-full min-h-12 w-full border-r border-current", trendClasses[kind])}
       config={trendChartConfig}
       initialDimension={{ width: 600, height: 48 }}
       role="img"
@@ -87,12 +87,12 @@ function TrendStrip({
   );
 
   return (
-    <div className="grid min-h-12 grid-cols-[4rem_2rem_minmax(0,1fr)_2.5rem] items-stretch gap-1 border-border border-b">
+    <div className="border-border grid min-h-12 grid-cols-[4rem_2rem_minmax(0,1fr)_2.5rem] items-stretch gap-1 border-b">
       <div className="flex flex-col justify-start p-2">
-        <div className={cn("font-medium text-xs", color)}>{label}</div>
-        <div className="text-[10px] text-muted-foreground">{unit}</div>
+        <div className={cn("text-xs font-medium", color)}>{label}</div>
+        <div className="text-muted-foreground text-[10px]">{unit}</div>
       </div>
-      <div className="flex h-full min-h-12 flex-col justify-between text-right text-[10px] text-muted-foreground tabular-nums">
+      <div className="text-muted-foreground flex h-full min-h-12 flex-col justify-between text-right text-[10px] tabular-nums">
         {scale.map((tick) => (
           <span key={tick}>{tick}</span>
         ))}
@@ -104,7 +104,7 @@ function TrendStrip({
         kind={kind}
         ticks={series.ticks}
       />
-      <div className={cn("self-end pr-1 text-right font-medium text-sm tabular-nums", color)}>{value}</div>
+      <div className={cn("self-end pr-1 text-right text-sm font-medium tabular-nums", color)}>{value}</div>
     </div>
   );
 }
@@ -112,13 +112,13 @@ function TrendStrip({
 export function PatientTrends({ patient }: PatientTrendsProps) {
   return (
     <div className="grid h-full min-h-36 xl:grid-cols-[minmax(0,1fr)_13.5rem]">
-      <div className="min-w-0 border-border xl:border-r">
+      <div className="border-border min-w-0 xl:border-r">
         <TrendStrip kind="heart-rate" label="HR" patient={patient} unit="bpm" value={patient.heartRate} />
         <TrendStrip kind="spo2" label="SpO₂" patient={patient} unit="%" value={patient.spo2} />
         <TrendStrip kind="map" label="MAP" patient={patient} unit="mmHg" value={patient.arterialMap} />
         <div className="grid grid-cols-[4rem_2rem_minmax(0,1fr)_2.5rem] gap-1 py-0.5">
           <div className="col-span-2" />
-          <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
+          <div className="text-muted-foreground flex justify-between text-[10px] tabular-nums">
             <span>21:00</span>
             <span>22:00</span>
             <span>23:00</span>
@@ -128,7 +128,7 @@ export function PatientTrends({ patient }: PatientTrendsProps) {
         </div>
       </div>
       <div className="px-3 py-2">
-        <div className="mb-2 font-medium text-xs">Recent events</div>
+        <div className="mb-2 text-xs font-medium">Recent events</div>
         <div className="flex flex-col gap-2">
           {patient.recentEvents.map((event) => (
             <div className="grid grid-cols-[3rem_1fr] text-[11px]" key={`${event.time}-${event.label}`}>

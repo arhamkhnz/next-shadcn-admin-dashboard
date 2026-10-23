@@ -235,7 +235,7 @@ export function PerformanceOverview() {
       <CardHeader>
         <CardTitle className="leading-none">Customer Activity</CardTitle>
         <CardDescription>
-          <span className="@[540px]/card:block hidden">Customer activity for the last 3 months</span>
+          <span className="hidden @[540px]/card:block">Customer activity for the last 3 months</span>
           <span className="@[540px]/card:hidden">Last 3 months</span>
         </CardDescription>
         <CardAction className="flex items-center gap-2">

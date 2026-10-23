@@ -68,7 +68,7 @@ export function SortableTaskTableRow({
         <TableCell
           key={cell.id}
           className={cn(
-            "h-12 border-border/50 border-r border-b px-6 py-2 last:border-r-0",
+            "border-border/50 h-12 border-r border-b px-6 py-2 last:border-r-0",
             cell.column.id === "drag" && "px-0 text-center",
           )}
         >
@@ -77,7 +77,7 @@ export function SortableTaskTableRow({
               ref={handleRef}
               variant="ghost"
               size="icon-sm"
-              className="touch-none cursor-grab text-muted-foreground active:cursor-grabbing"
+              className="text-muted-foreground cursor-grab touch-none active:cursor-grabbing"
               aria-label={`Drag ${row.original.title}`}
             >
               <GripVertical />

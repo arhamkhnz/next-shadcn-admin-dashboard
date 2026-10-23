@@ -49,7 +49,7 @@ export function KanbanListDropGroup({ columnId, children }: { columnId: ColumnId
   });
 
   return (
-    <div ref={ref} className={cn(isDropTarget && "ring-1 ring-border ring-inset")}>
+    <div ref={ref} className={cn(isDropTarget && "ring-border ring-1 ring-inset")}>
       {children}
     </div>
   );
@@ -79,7 +79,7 @@ export function SortableListTask({
       ref={ref}
       aria-label={task.title}
       className={cn(
-        "flex min-h-12 touch-none cursor-grab items-center gap-2.5 bg-background px-4 py-2 outline-none hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset active:cursor-grabbing lg:px-5.5",
+        "bg-background hover:bg-muted/40 focus-visible:ring-ring flex min-h-12 cursor-grab touch-none items-center gap-2.5 px-4 py-2 outline-none focus-visible:ring-2 focus-visible:ring-inset active:cursor-grabbing lg:px-5.5",
         isDragging && "opacity-40",
       )}
     >

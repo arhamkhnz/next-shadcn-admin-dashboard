@@ -35,14 +35,14 @@ export function Overview() {
       <div className="grid grid-cols-1 gap-12 md:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] md:gap-16">
         <div className="flex flex-col gap-10 md:gap-12">
           <div className="flex flex-col gap-4">
-            <p className="font-medium text-muted-foreground text-xs">About</p>
-            <h2 className="text-pretty text-xl leading-7 tracking-tight" id="overview-title">
+            <p className="text-muted-foreground text-xs font-medium">About</p>
+            <h2 className="text-xl leading-7 tracking-tight text-pretty" id="overview-title">
               An open source shadcn/ui admin dashboard with 25+ screens, ready to make your own.
             </h2>
           </div>
 
           <div className="flex flex-col gap-4">
-            <p className="font-medium text-muted-foreground text-xs">Make it yours</p>
+            <p className="text-muted-foreground text-xs font-medium">Make it yours</p>
             <p className="text-muted-foreground text-sm leading-6">
               Customize the fonts, themes, content width, navbar, and sidebar layout. Each edition stays native to its
               foundation while keeping the design consistent.
@@ -52,12 +52,12 @@ export function Overview() {
 
         <div className="grid grid-cols-2 gap-6 sm:gap-10">
           <div className="flex flex-col gap-4">
-            <h3 className="font-medium text-muted-foreground text-xs">Featured screens</h3>
+            <h3 className="text-muted-foreground text-xs font-medium">Featured screens</h3>
             <ul className="flex flex-col gap-1 text-sm">
               {includedScreens.map((screen) => (
                 <li key={screen.name}>
                   <Link
-                    className="underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+                    className="decoration-border hover:decoration-foreground underline underline-offset-4 transition-colors"
                     href={screen.href}
                     prefetch={false}
                   >
@@ -69,12 +69,12 @@ export function Overview() {
           </div>
 
           <div className="flex flex-col gap-4" id="variants">
-            <h3 className="font-medium text-muted-foreground text-xs">Editions</h3>
+            <h3 className="text-muted-foreground text-xs font-medium">Editions</h3>
             <ul className="flex flex-col gap-1 text-sm">
               {editions.map((edition) => (
                 <li key={edition.name}>
                   <a
-                    className="underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+                    className="decoration-border hover:decoration-foreground underline underline-offset-4 transition-colors"
                     href={edition.repository}
                     target="_blank"
                     rel="noreferrer"

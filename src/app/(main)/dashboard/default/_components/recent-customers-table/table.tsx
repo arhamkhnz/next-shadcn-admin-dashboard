@@ -121,7 +121,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
       <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative w-full lg:w-80">
-            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
             <Input
               className="h-7 rounded-[min(var(--radius-md),12px)] pl-8"
               placeholder="Search customers..."
@@ -229,7 +229,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border bg-card">
+      <div className="bg-card overflow-hidden rounded-lg border">
         <Table>
           <TableHeader className="bg-muted/15">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -265,13 +265,13 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
       </div>
 
       <div className="flex items-center justify-between px-1">
-        <div className="hidden flex-1 text-muted-foreground text-sm lg:flex">
+        <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
           {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
           selected.
         </div>
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
-            <Label htmlFor="recent-customers-rows-per-page" className="font-medium text-sm">
+            <Label htmlFor="recent-customers-rows-per-page" className="text-sm font-medium">
               Rows per page
             </Label>
             <Select
@@ -294,7 +294,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex w-fit items-center justify-center font-medium text-sm">
+          <div className="flex w-fit items-center justify-center text-sm font-medium">
             Page {table.state.pagination.pageIndex + 1} of {table.getPageCount()}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">

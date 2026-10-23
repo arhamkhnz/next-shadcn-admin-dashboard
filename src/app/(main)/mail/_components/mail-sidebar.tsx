@@ -42,7 +42,7 @@ export function MailSidebar() {
   const [selectedAccount, setSelectedAccount] = React.useState(accounts[0]);
 
   return (
-    <Sidebar collapsible="icon" className="absolute inset-y-0 h-full **:data-[sidebar=sidebar]:bg-background">
+    <Sidebar collapsible="icon" className="**:data-[sidebar=sidebar]:bg-background absolute inset-y-0 h-full">
       <SidebarHeader className="gap-3 py-3 pb-1">
         <div className="flex items-center justify-between">
           {isCollapsed ? (
@@ -106,8 +106,8 @@ export function MailSidebar() {
         <Separator />
 
         <div className="flex flex-col gap-1.5 group-data-[state=collapsed]:hidden">
-          <div className="font-medium text-sm leading-none">{selectedAccount.label}</div>
-          <div className="truncate text-muted-foreground text-sm leading-none">{selectedAccount.email}</div>
+          <div className="text-sm leading-none font-medium">{selectedAccount.label}</div>
+          <div className="text-muted-foreground truncate text-sm leading-none">{selectedAccount.email}</div>
         </div>
 
         <Button size={isCollapsed ? "icon-sm" : "sm"} variant="outline" className="group-data-[state=expanded]:w-full">
@@ -146,7 +146,7 @@ function renderNavItem(nav: MailNavItem) {
 
 const accountTriggerClassName = cn(
   "relative size-7 min-w-7 rounded-sm p-0 transition-colors",
-  "bg-primary text-primary-foreground text-xs hover:bg-primary/90 hover:text-primary-foreground",
+  "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground text-xs",
   "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
   "data-[state=on]:ring data-[state=on]:ring-green-600",
   "focus-visible:border-transparent focus-visible:ring-0",
@@ -160,7 +160,7 @@ function AccountMarker({ account, isSelected = false }: { account: Account; isSe
       {getInitials(account.label).slice(0, 1)}
       <span
         className={cn(
-          "absolute right-0 bottom-0 z-10 hidden size-2.5 items-center justify-center rounded-full bg-green-600 text-primary-foreground ring-[1.25px] ring-background group-data-[state=on]/toggle:flex",
+          "text-primary-foreground ring-background absolute right-0 bottom-0 z-10 hidden size-2.5 items-center justify-center rounded-full bg-green-600 ring-[1.25px] group-data-[state=on]/toggle:flex",
           isSelected && "flex",
         )}
       >
@@ -200,7 +200,7 @@ function AccountMenuContent({
                 <DropdownMenuRadioItem key={account.id} value={String(account.id)}>
                   <div className="flex min-w-0 flex-col">
                     <span>{account.label}</span>
-                    <span className="truncate text-muted-foreground text-xs">{account.email}</span>
+                    <span className="text-muted-foreground truncate text-xs">{account.email}</span>
                   </div>
                 </DropdownMenuRadioItem>
               ))}

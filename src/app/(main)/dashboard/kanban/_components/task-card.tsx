@@ -36,13 +36,13 @@ export function TaskCard({
   return (
     <article
       className={cn(
-        "flex flex-col gap-3 rounded-xl border bg-card p-4 text-card-foreground shadow-xs",
+        "bg-card text-card-foreground flex flex-col gap-3 rounded-xl border p-4 shadow-xs",
         isOverlay && "w-68 rotate-1 shadow-lg",
       )}
     >
       <div className="min-w-0 space-y-1.5">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="min-w-0 truncate font-medium text-sm leading-none">{task.title}</h3>
+          <h3 className="min-w-0 truncate text-sm leading-none font-medium">{task.title}</h3>
           <Badge
             variant={priorityBadgeConfig[task.priority].variant}
             className={cn(
@@ -54,7 +54,7 @@ export function TaskCard({
             {task.priority}
           </Badge>
         </div>
-        <p className="line-clamp-2 text-muted-foreground text-sm leading-5">{task.description}</p>
+        <p className="text-muted-foreground line-clamp-2 text-sm leading-5">{task.description}</p>
       </div>
 
       {!showBuildingDetails ? (
@@ -67,7 +67,7 @@ export function TaskCard({
             <span className="text-muted-foreground text-sm">{owner.name}</span>
           </div>
 
-          <div className="flex min-w-0 items-center gap-1.5 text-muted-foreground">
+          <div className="text-muted-foreground flex min-w-0 items-center gap-1.5">
             <span className="truncate text-sm">{task.dueDate}</span>
             <CalendarDays className="size-3" />
           </div>
@@ -77,9 +77,9 @@ export function TaskCard({
       {showBuildingDetails ? (
         <div className="flex flex-col gap-3">
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-muted-foreground text-xs">
+            <div className="text-muted-foreground flex items-center justify-between text-xs">
               <span className="leading-none">Progress</span>
-              <span className="tabular-nums leading-none">{task.progress}%</span>
+              <span className="leading-none tabular-nums">{task.progress}%</span>
             </div>
             <Progress value={task.progress} />
           </div>
@@ -87,7 +87,7 @@ export function TaskCard({
             <div className="flex items-center justify-between gap-3">
               <span className="text-muted-foreground text-sm">Owner</span>
               <div className="flex items-center gap-1.5">
-                <span className="truncate text-muted-foreground text-sm">{owner.name}</span>
+                <span className="text-muted-foreground truncate text-sm">{owner.name}</span>
                 <Avatar className={cn("size-5 after:rounded-sm", owner.tone)}>
                   <AvatarFallback className="rounded-sm text-[10px]">{getInitials(owner.name)}</AvatarFallback>
                 </Avatar>
@@ -96,7 +96,7 @@ export function TaskCard({
 
             <div className="flex items-center justify-between gap-3">
               <span className="text-muted-foreground text-sm">Due date</span>
-              <span className="flex items-center gap-1.5 text-muted-foreground">
+              <span className="text-muted-foreground flex items-center gap-1.5">
                 <span className="truncate text-sm">{task.dueDate}</span>
                 <CalendarDays className="size-3" />
               </span>
@@ -119,14 +119,14 @@ export function TaskCard({
 
       <div>
         {isDone ? (
-          <div className="flex items-center gap-1 font-medium text-green-700 text-sm dark:text-green-600">
+          <div className="flex items-center gap-1 text-sm font-medium text-green-700 dark:text-green-600">
             <BadgeCheck className="size-4" />
             Done
           </div>
         ) : null}
 
         {!isDone ? (
-          <div className="flex items-center gap-3 text-muted-foreground text-sm">
+          <div className="text-muted-foreground flex items-center gap-3 text-sm">
             {task.insights.map((insight) => {
               const Icon = taskInsightIcons[insight.label];
 

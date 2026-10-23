@@ -46,8 +46,8 @@ export function TopProducts() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="font-normal text-muted-foreground text-sm">Top Products</CardTitle>
-        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+        <CardTitle className="text-muted-foreground text-sm font-normal">Top Products</CardTitle>
+        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
           73% of sales
         </CardDescription>
         <CardAction>
@@ -57,7 +57,7 @@ export function TopProducts() {
 
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <div aria-label="Sales by category" className="flex h-2 gap-1 overflow-hidden bg-muted" role="img">
+          <div aria-label="Sales by category" className="bg-muted flex h-2 gap-1 overflow-hidden" role="img">
             {categories.map((category) => (
               <div
                 aria-hidden="true"
@@ -94,7 +94,7 @@ export function TopProducts() {
                 <div className="truncate font-medium">{product.name}</div>
                 <div className="text-muted-foreground text-xs">{product.category}</div>
               </div>
-              <div className="self-center text-muted-foreground tabular-nums">{product.share}</div>
+              <div className="text-muted-foreground self-center tabular-nums">{product.share}</div>
               <div className="self-center font-medium tabular-nums">{product.sales}</div>
             </div>
           ))}

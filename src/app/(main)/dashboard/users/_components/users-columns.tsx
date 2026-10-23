@@ -110,7 +110,7 @@ function WorkspaceCell({ workspaces }: { workspaces: string[] }) {
         </Avatar>
       ) : null}
       {remainingCount > 0 ? (
-        <AvatarGroupCount className="rounded-sm border ring-card">+{remainingCount}</AvatarGroupCount>
+        <AvatarGroupCount className="ring-card rounded-sm border">+{remainingCount}</AvatarGroupCount>
       ) : null}
     </AvatarGroup>
   );
@@ -167,8 +167,8 @@ export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
       <div className="flex items-center gap-3">
         <AvatarCell name={row.original.name} lastActive={row.original.lastActive} />
         <div className="min-w-0">
-          <div className="truncate font-medium text-foreground text-sm">{row.original.name}</div>
-          <div className="truncate text-muted-foreground text-sm">{row.original.email}</div>
+          <div className="text-foreground truncate text-sm font-medium">{row.original.name}</div>
+          <div className="text-muted-foreground truncate text-sm">{row.original.email}</div>
         </div>
       </div>
     ),
@@ -212,7 +212,7 @@ export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
           <DropdownMenuTrigger asChild>
             <Button
               aria-label={`Open actions for ${row.original.name}`}
-              className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
+              className="text-muted-foreground hover:bg-muted/50 size-8 rounded-md"
               size="icon-sm"
               variant="ghost"
             >

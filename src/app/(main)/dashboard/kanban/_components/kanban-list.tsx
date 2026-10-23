@@ -32,18 +32,18 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
         return (
           <KanbanListDropGroup key={column.id} columnId={column.id}>
             <Collapsible defaultOpen className="border-b">
-              <div className="flex items-center gap-1 bg-muted/50 pr-3 hover:bg-muted lg:pr-4.5">
+              <div className="bg-muted/50 hover:bg-muted flex items-center gap-1 pr-3 lg:pr-4.5">
                 <h2 className="min-w-0 flex-1">
-                  <CollapsibleTrigger className="flex min-h-10 w-full items-center gap-2 py-2 pr-3 pl-4 text-left font-medium text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset lg:pl-6">
-                    <StatusIcon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                  <CollapsibleTrigger className="focus-visible:ring-ring flex min-h-10 w-full items-center gap-2 py-2 pr-3 pl-4 text-left text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-inset lg:pl-6">
+                    <StatusIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden="true" />
                     {column.title}
-                    <span className="font-normal text-muted-foreground tabular-nums">
+                    <span className="text-muted-foreground font-normal tabular-nums">
                       {tasks.length}
                       <span className="sr-only"> tasks</span>
                     </span>
                     {highPriorityCount > 0 && (
-                      <span className="ml-auto hidden items-center gap-1.5 font-normal text-muted-foreground text-xs sm:flex">
-                        <Flame className="size-3.5 text-destructive" aria-hidden="true" />
+                      <span className="text-muted-foreground ml-auto hidden items-center gap-1.5 text-xs font-normal sm:flex">
+                        <Flame className="text-destructive size-3.5" aria-hidden="true" />
                         {highPriorityCount} high priority
                       </span>
                     )}
@@ -83,14 +83,14 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                           <span className="sr-only">{task.priority} priority</span>
                         </Badge>
                         <div className="flex min-w-0 flex-1 flex-col items-start gap-2.5 sm:flex-row sm:items-center sm:gap-4">
-                          <span className="w-full truncate font-normal text-sm sm:w-auto sm:flex-1" title={task.title}>
+                          <span className="w-full truncate text-sm font-normal sm:w-auto sm:flex-1" title={task.title}>
                             {task.title}
                           </span>
                           <Badge variant="secondary" className={cn("shrink-0", tagTones[task.team])}>
                             {task.team}
                           </Badge>
                         </div>
-                        <span className="hidden shrink-0 items-center gap-2.5 text-muted-foreground text-xs tabular-nums sm:flex">
+                        <span className="text-muted-foreground hidden shrink-0 items-center gap-2.5 text-xs tabular-nums sm:flex">
                           {task.insights
                             .filter((insight) => insight.count > 0)
                             .map((insight) => {
@@ -109,7 +109,7 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                               );
                             })}
                         </span>
-                        <span className="shrink-0 text-muted-foreground text-xs tabular-nums">
+                        <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
                           <span className="sr-only">Due </span>
                           {task.dueDate}
                         </span>
@@ -124,7 +124,7 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                       </SortableListTask>
                     );
                   })}
-                  {tasks.length === 0 && <li className="px-4 py-6 text-muted-foreground text-sm lg:px-6">No tasks.</li>}
+                  {tasks.length === 0 && <li className="text-muted-foreground px-4 py-6 text-sm lg:px-6">No tasks.</li>}
                 </ul>
               </CollapsibleContent>
             </Collapsible>

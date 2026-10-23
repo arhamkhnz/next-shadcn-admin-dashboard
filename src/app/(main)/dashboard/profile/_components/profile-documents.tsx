@@ -10,7 +10,7 @@ export function ProfileDocuments({ documents }: { documents: ProfileDocument[] }
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="font-heading font-medium text-base">Documents</h2>
+        <h2 className="font-heading text-base font-medium">Documents</h2>
         <Button size="sm">
           <FileText data-icon="inline-start" />
           Add document
@@ -43,7 +43,7 @@ export function ProfileDocuments({ documents }: { documents: ProfileDocument[] }
               </TableCell>
               <TableCell className="text-right">
                 {document.isRestricted ? (
-                  <span className="inline-flex items-center gap-1.5 text-muted-foreground text-xs" title="Restricted">
+                  <span className="text-muted-foreground inline-flex items-center gap-1.5 text-xs" title="Restricted">
                     <LockKeyhole aria-hidden="true" className="size-3.5" />
                     Restricted
                   </span>

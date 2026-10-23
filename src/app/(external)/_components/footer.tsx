@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 export function Footer() {
   return (
     <footer>
-      <div className="flex flex-row items-center justify-between gap-6 text-muted-foreground text-sm">
+      <div className="text-muted-foreground flex flex-row items-center justify-between gap-6 text-sm">
         <p>
           Brought to you by{" "}
           <a
-            className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+            className="text-foreground decoration-border hover:decoration-foreground underline underline-offset-4 transition-colors"
             href="https://x.com/arhamkhnz"
             target="_blank"
             rel="noreferrer"

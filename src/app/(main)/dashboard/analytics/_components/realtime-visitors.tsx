@@ -101,10 +101,10 @@ export function RealtimeVisitors() {
       <CardContent className="flex flex-col gap-4">
         <div className="flex items-end justify-between">
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl tabular-nums leading-none tracking-tight">24</span>
+            <span className="text-2xl leading-none tracking-tight tabular-nums">24</span>
             <span className="text-muted-foreground text-sm">per minute</span>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground text-sm">
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-500 opacity-75" />
               <span className="relative inline-flex size-2 rounded-full bg-green-500" />
@@ -121,23 +121,23 @@ export function RealtimeVisitors() {
           </BarChart>
         </ChartContainer>
         <div className="grid grid-cols-2">
-          <div className="flex items-center gap-3 border-border/50 border-r border-b pt-1 pr-5 pb-4">
-            <span aria-hidden="true" className="flag:US shrink-0 rounded-xs text-lg ring-1 ring-foreground/10" />
+          <div className="border-border/50 flex items-center gap-3 border-r border-b pt-1 pr-5 pb-4">
+            <span aria-hidden="true" className="flag:US ring-foreground/10 shrink-0 rounded-xs text-lg ring-1" />
             <span className="min-w-0 flex-1 truncate text-sm">United States</span>
             <span className="text-sm tabular-nums">14</span>
           </div>
-          <div className="flex items-center gap-3 border-border/50 border-b pt-1 pb-4 pl-5">
-            <span aria-hidden="true" className="flag:GB shrink-0 rounded-xs text-lg ring-1 ring-foreground/10" />
+          <div className="border-border/50 flex items-center gap-3 border-b pt-1 pb-4 pl-5">
+            <span aria-hidden="true" className="flag:GB ring-foreground/10 shrink-0 rounded-xs text-lg ring-1" />
             <span className="min-w-0 flex-1 truncate text-sm">United Kingdom</span>
             <span className="text-sm tabular-nums">4</span>
           </div>
-          <div className="flex items-center gap-3 border-border/50 border-r pt-4 pr-5 pb-1">
-            <span aria-hidden="true" className="flag:CA shrink-0 rounded-xs text-lg ring-1 ring-foreground/10" />
+          <div className="border-border/50 flex items-center gap-3 border-r pt-4 pr-5 pb-1">
+            <span aria-hidden="true" className="flag:CA ring-foreground/10 shrink-0 rounded-xs text-lg ring-1" />
             <span className="min-w-0 flex-1 truncate text-sm">Canada</span>
             <span className="text-sm tabular-nums">3</span>
           </div>
           <div className="flex items-center gap-3 pt-4 pb-1 pl-5">
-            <span aria-hidden="true" className="flag:IN shrink-0 rounded-xs text-lg ring-1 ring-foreground/10" />
+            <span aria-hidden="true" className="flag:IN ring-foreground/10 shrink-0 rounded-xs text-lg ring-1" />
             <span className="min-w-0 flex-1 truncate text-sm">India</span>
             <span className="text-sm tabular-nums">3</span>
           </div>

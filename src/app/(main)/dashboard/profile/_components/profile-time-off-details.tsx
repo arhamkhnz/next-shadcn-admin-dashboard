@@ -6,7 +6,7 @@ export function TimeOffDetails({ profile }: { profile: ProfileRecord }) {
   return (
     <>
       <div className="flex flex-col gap-2">
-        <h2 className="font-heading font-medium text-base">Leave balance</h2>
+        <h2 className="font-heading text-base font-medium">Leave balance</h2>
         <dl className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-12">
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">
@@ -46,7 +46,7 @@ export function TimeOffDetails({ profile }: { profile: ProfileRecord }) {
       <Separator className="my-4" />
 
       <div className="flex flex-col gap-2">
-        <h2 className="font-heading font-medium text-base">Upcoming and approvals</h2>
+        <h2 className="font-heading text-base font-medium">Upcoming and approvals</h2>
         <dl className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-12">
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">

@@ -10,7 +10,7 @@ export function PersonalDetails({ profile }: { profile: ProfileRecord }) {
     <>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <h2 className="font-heading font-medium text-base">Personal information</h2>
+          <h2 className="font-heading text-base font-medium">Personal information</h2>
           <Badge className="rounded-sm" variant="outline">
             <LockKeyhole data-icon="inline-start" />
             Private
@@ -56,7 +56,7 @@ export function PersonalDetails({ profile }: { profile: ProfileRecord }) {
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <h2 className="font-heading font-medium text-base">Address and emergency contact</h2>
+          <h2 className="font-heading text-base font-medium">Address and emergency contact</h2>
           <Badge className="rounded-sm" variant="outline">
             <LockKeyhole data-icon="inline-start" />
             Private

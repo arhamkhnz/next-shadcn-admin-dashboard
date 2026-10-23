@@ -45,7 +45,7 @@ export function FileListView({ files }: FileListViewProps) {
             <TableRow key={file.id}>
               <TableCell className="pl-0">
                 <div className="flex min-w-0 items-center gap-3">
-                  <FileIcon className="size-5 shrink-0 text-muted-foreground" />
+                  <FileIcon className="text-muted-foreground size-5 shrink-0" />
                   <Button variant="link" size="sm" className="h-auto max-w-72 justify-start px-0">
                     <span className="truncate">{file.name}</span>
                   </Button>
@@ -64,8 +64,8 @@ export function FileListView({ files }: FileListViewProps) {
                   <span>{file.owner}</span>
                 </div>
               </TableCell>
-              <TableCell className="hidden text-muted-foreground lg:table-cell">{file.modifiedAt}</TableCell>
-              <TableCell className="hidden text-muted-foreground sm:table-cell">{file.size}</TableCell>
+              <TableCell className="text-muted-foreground hidden lg:table-cell">{file.modifiedAt}</TableCell>
+              <TableCell className="text-muted-foreground hidden sm:table-cell">{file.size}</TableCell>
               <TableCell>
                 <div className="flex items-center justify-end">
                   <Button

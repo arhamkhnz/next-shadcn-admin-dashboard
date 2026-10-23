@@ -14,28 +14,28 @@ export function IncomeReliability() {
       <CardContent className="space-y-4">
         <Separator />
         <div className="space-y-0.5">
-          <p className="font-medium text-xl">High Reliability</p>
+          <p className="text-xl font-medium">High Reliability</p>
           <p className="text-muted-foreground text-xs">Based on last 6 months of income</p>
         </div>
         <Separator />
         <div className="flex justify-between">
           <div className="space-y-0.5">
-            <p className="font-medium text-lg">Fixed Income</p>
+            <p className="text-lg font-medium">Fixed Income</p>
             <p className="text-muted-foreground text-xs">Recurring · Predictable</p>
           </div>
-          <p className="font-medium text-lg">{formatCurrency(90000, { noDecimals: true })}</p>
+          <p className="text-lg font-medium">{formatCurrency(90000, { noDecimals: true })}</p>
         </div>
         <Separator />
         <div className="flex justify-between">
           <div className="space-y-0.5">
-            <p className="font-medium text-lg">Variable Income</p>
+            <p className="text-lg font-medium">Variable Income</p>
             <p className="text-muted-foreground text-xs">Fluctuating sources</p>
           </div>
-          <p className="font-medium text-lg">{formatCurrency(46500, { noDecimals: true })}</p>
+          <p className="text-lg font-medium">{formatCurrency(46500, { noDecimals: true })}</p>
         </div>
         <Separator />
         <p className="text-muted-foreground text-xs">
-          Consistency trend: <span className="font-medium text-primary">Stable</span>
+          Consistency trend: <span className="text-primary font-medium">Stable</span>
         </p>
       </CardContent>
     </Card>

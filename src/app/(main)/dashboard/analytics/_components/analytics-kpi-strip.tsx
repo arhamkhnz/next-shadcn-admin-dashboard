@@ -5,11 +5,11 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/componen
 
 export function AnalyticsKpiStrip() {
   return (
-    <div className="overflow-hidden rounded-xl bg-card shadow-xs ring-1 ring-foreground/10">
+    <div className="bg-card ring-foreground/10 overflow-hidden rounded-xl shadow-xs ring-1">
       <div className="grid divide-y *:data-[slot=card]:rounded-none *:data-[slot=card]:ring-0 md:grid-cols-2 md:divide-x md:divide-y-0 xl:grid-cols-5">
         <Card>
           <CardHeader>
-            <CardTitle className="font-normal text-sm">Unique Visitors</CardTitle>
+            <CardTitle className="text-sm font-normal">Unique Visitors</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -23,7 +23,7 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="flex items-center gap-2 text-muted-foreground text-xs">
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
               <span>
                 from <span className="text-foreground">207.3k</span>
               </span>
@@ -35,7 +35,7 @@ export function AnalyticsKpiStrip() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-normal text-sm">Sessions</CardTitle>
+            <CardTitle className="text-sm font-normal">Sessions</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -49,7 +49,7 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="flex items-center gap-2 text-muted-foreground text-xs">
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
               <span>
                 from <span className="text-foreground">243.5k</span>
               </span>
@@ -61,7 +61,7 @@ export function AnalyticsKpiStrip() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-normal text-sm">Pageviews</CardTitle>
+            <CardTitle className="text-sm font-normal">Pageviews</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -75,7 +75,7 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="flex items-center gap-2 text-muted-foreground text-xs">
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
               <span>
                 from <span className="text-foreground">566.8k</span>
               </span>
@@ -87,7 +87,7 @@ export function AnalyticsKpiStrip() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-normal text-sm">Engagement Rate</CardTitle>
+            <CardTitle className="text-sm font-normal">Engagement Rate</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -101,7 +101,7 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="flex items-center gap-2 text-muted-foreground text-xs">
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
               <span>
                 from <span className="text-foreground">58.9%</span>
               </span>
@@ -113,7 +113,7 @@ export function AnalyticsKpiStrip() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-normal text-sm">Conversion Rate</CardTitle>
+            <CardTitle className="text-sm font-normal">Conversion Rate</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -127,7 +127,7 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="flex items-center gap-2 text-muted-foreground text-xs">
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
               <span>
                 from <span className="text-foreground">8.9%</span>
               </span>

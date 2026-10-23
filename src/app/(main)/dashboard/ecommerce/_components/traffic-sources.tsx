@@ -100,7 +100,7 @@ function TrafficSourceIconLabel({ height, index, width, x, y }: IconLabelProps) 
 
   return (
     <foreignObject height={iconSize} x={iconX} y={iconY} width={iconSize}>
-      <SimpleIcon icon={source.icon} className="size-4 fill-foreground" />
+      <SimpleIcon icon={source.icon} className="fill-foreground size-4" />
     </foreignObject>
   );
 }
@@ -160,8 +160,8 @@ export function TrafficSources() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-normal text-muted-foreground text-sm">Traffic Sources</CardTitle>
-        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+        <CardTitle className="text-muted-foreground text-sm font-normal">Traffic Sources</CardTitle>
+        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
           14.8K visits
         </CardDescription>
         <CardAction>

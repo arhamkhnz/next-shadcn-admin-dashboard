@@ -14,14 +14,14 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
   return (
     <>
       <div className="flex flex-col gap-2">
-        <h2 className="font-heading font-medium text-base">About</h2>
+        <h2 className="font-heading text-base font-medium">About</h2>
         <p className="text-muted-foreground text-sm">{profile.bio}</p>
       </div>
 
       <Separator className="my-4" />
 
       <div className="flex flex-col gap-2">
-        <h2 className="font-heading font-medium text-base">Work details</h2>
+        <h2 className="font-heading text-base font-medium">Work details</h2>
         <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-12">
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">
@@ -71,7 +71,7 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-0.5">
-            <h2 className="font-heading font-medium text-base leading-none">Reporting line</h2>
+            <h2 className="font-heading text-base leading-none font-medium">Reporting line</h2>
             <p className="text-muted-foreground text-sm">Direct manager</p>
           </div>
           <Button size="sm" variant="outline">
@@ -84,7 +84,7 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
             <AvatarFallback>{profile.manager.initials}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium text-sm">{profile.manager.name}</p>
+            <p className="text-sm font-medium">{profile.manager.name}</p>
             <p className="text-muted-foreground text-xs">{profile.manager.role}</p>
           </div>
         </div>

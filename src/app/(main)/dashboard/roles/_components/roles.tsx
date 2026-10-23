@@ -111,7 +111,7 @@ export function Roles({ roles }: { roles: Role[] }) {
               </AlertAction>
             </Alert>
 
-            <div className="overflow-hidden rounded-xl border border-border/70 bg-background">
+            <div className="border-border/70 bg-background overflow-hidden rounded-xl border">
               <div className="flex flex-col items-stretch gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                 <InputGroup className="h-7 w-full rounded-md sm:w-82">
                   <InputGroupAddon>
@@ -198,12 +198,12 @@ export function Roles({ roles }: { roles: Role[] }) {
           </div>
         </TabsContent>
         <TabsContent value="permission-sets">
-          <div className="flex h-full items-center justify-center rounded-md border border-dashed text-muted-foreground text-sm">
+          <div className="text-muted-foreground flex h-full items-center justify-center rounded-md border border-dashed text-sm">
             Permission Sets Coming Soon
           </div>
         </TabsContent>
         <TabsContent value="access-reviews">
-          <div className="flex h-full items-center justify-center rounded-md border border-dashed text-muted-foreground text-sm">
+          <div className="text-muted-foreground flex h-full items-center justify-center rounded-md border border-dashed text-sm">
             Access Reviews Coming Soon
           </div>
         </TabsContent>

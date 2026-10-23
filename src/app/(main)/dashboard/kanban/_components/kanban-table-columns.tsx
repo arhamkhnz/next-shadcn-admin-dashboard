@@ -45,7 +45,7 @@ export function createTaskTableColumns(
           <span className="min-w-0 flex-1 truncate" title={row.original.description}>
             {row.original.title}
           </span>
-          <span className="flex shrink-0 items-center gap-2.5 text-muted-foreground text-xs tabular-nums">
+          <span className="text-muted-foreground flex shrink-0 items-center gap-2.5 text-xs tabular-nums">
             {row.original.insights
               .filter((insight) => insight.count > 0)
               .map((insight) => {
@@ -86,7 +86,7 @@ export function createTaskTableColumns(
               className="w-fit gap-1.5 border-transparent bg-transparent px-0 shadow-none"
               aria-label={`Change status for ${row.original.title}`}
             >
-              <Icon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <Icon className="text-muted-foreground size-3.5 shrink-0" aria-hidden="true" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -140,7 +140,7 @@ export function createTaskTableColumns(
               {getInitials(row.original.owner.name)}
             </AvatarFallback>
           </Avatar>
-          <span className="truncate text-muted-foreground">{row.original.owner.name}</span>
+          <span className="text-muted-foreground truncate">{row.original.owner.name}</span>
         </span>
       ),
     },

@@ -38,7 +38,7 @@ export function KanbanColumn({ column, index, tasks }: KanbanColumnProps) {
     <section
       ref={columnSortable.ref}
       className={cn(
-        "flex min-h-0 flex-col rounded-t-xl border bg-muted/50 transition-colors",
+        "bg-muted/50 flex min-h-0 flex-col rounded-t-xl border transition-colors",
         (columnSortable.isDropTarget || taskDropTarget.isDropTarget) && "bg-muted/70",
         columnSortable.isDragging && "opacity-60",
       )}
@@ -50,18 +50,18 @@ export function KanbanColumn({ column, index, tasks }: KanbanColumnProps) {
               ref={columnSortable.handleRef}
               variant="ghost"
               size="icon-xs"
-              className="-ml-2 cursor-grab text-foreground/70 active:cursor-grabbing"
+              className="text-foreground/70 -ml-2 cursor-grab active:cursor-grabbing"
               aria-label={`Drag ${column.title} column`}
             >
               <GripVertical />
             </Button>
-            <h2 className="truncate font-medium text-base leading-none">{column.title}</h2>
+            <h2 className="truncate text-base leading-none font-medium">{column.title}</h2>
           </div>
-          <p className="text-muted-foreground text-sm tabular-nums leading-none">
+          <p className="text-muted-foreground text-sm leading-none tabular-nums">
             {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
           </p>
         </div>
-        <div className="-mr-2 flex items-center gap-0.5 text-muted-foreground">
+        <div className="text-muted-foreground -mr-2 flex items-center gap-0.5">
           <Button variant="ghost" size="icon-sm" aria-label={`Add task to ${column.title}`}>
             <Plus />
           </Button>
@@ -73,7 +73,7 @@ export function KanbanColumn({ column, index, tasks }: KanbanColumnProps) {
 
       <div
         ref={taskDropTarget.ref}
-        className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3 [scrollbar-color:var(--border)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1"
+        className="[&::-webkit-scrollbar-thumb]:bg-border flex min-h-0 flex-1 scrollbar-thin [scrollbar-color:var(--border)_transparent] flex-col gap-3 overflow-y-auto px-3 pb-3 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
       >
         {tasks.map((task, taskIndex) => (
           <SortableTaskCard key={task.id} task={task} columnId={column.id} index={taskIndex} />

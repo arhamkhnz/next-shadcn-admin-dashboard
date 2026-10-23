@@ -51,7 +51,7 @@ export function SpendingBreakdown() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-1">
-          <div className="font-medium text-2xl">{formatCurrency(total, { noDecimals: true })}</div>
+          <div className="text-2xl font-medium">{formatCurrency(total, { noDecimals: true })}</div>
           <div className="flex h-6 w-full overflow-hidden rounded-md">
             {expenses.map((item, index) => {
               const width = (item.amount / total) * 100;
@@ -60,7 +60,7 @@ export function SpendingBreakdown() {
               return (
                 <div
                   key={item.key}
-                  className="h-full shrink-0 border-background border-l first:border-l-0"
+                  className="border-background h-full shrink-0 border-l first:border-l-0"
                   style={{
                     width: `${width}%`,
                     background: `color-mix(in oklch, var(--primary) ${alpha * 100}%, transparent)`,
@@ -89,7 +89,7 @@ export function SpendingBreakdown() {
                   <span className="text-muted-foreground text-sm">{item.label}</span>
                 </div>
 
-                <span className="font-medium text-sm tabular-nums">{pct}%</span>
+                <span className="text-sm font-medium tabular-nums">{pct}%</span>
               </div>
             );
           })}

@@ -67,7 +67,7 @@ function getTransportNumberLabel(mode: Shipment["mode"]) {
 
 function EmptyShipmentOverview() {
   return (
-    <div className="grid min-h-48 place-items-center rounded-lg border border-dashed text-muted-foreground text-sm">
+    <div className="text-muted-foreground grid min-h-48 place-items-center rounded-lg border border-dashed text-sm">
       Select a shipment to view details.
     </div>
   );
@@ -82,7 +82,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="flex items-center gap-2">
-          <h1 className="font-medium text-lg tabular-nums tracking-tight sm:text-xl">#{shipment.id}</h1>
+          <h1 className="text-lg font-medium tracking-tight tabular-nums sm:text-xl">#{shipment.id}</h1>
           <Button variant="ghost" size="icon-sm" aria-label="Copy shipment ID">
             <Copy />
           </Button>
@@ -111,9 +111,9 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
           </Avatar>
 
           <div className="flex flex-col gap-1">
-            <div className="font-medium text-sm leading-none">{shipment.customer.name}</div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <span className="text-xs tabular-nums leading-none tracking-tight">{shipment.customer.id}</span>{" "}
+            <div className="text-sm leading-none font-medium">{shipment.customer.name}</div>
+            <div className="text-muted-foreground flex items-center gap-2">
+              <span className="text-xs leading-none tracking-tight tabular-nums">{shipment.customer.id}</span>{" "}
               <Copy className="size-3" />
             </div>
           </div>
@@ -143,7 +143,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
         <div className="grid grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-[1.35fr_1fr_1.1fr_1.15fr_1fr]">
           <div className="col-span-2 flex flex-col gap-1 md:col-span-1 md:gap-2">
             <div className="text-muted-foreground text-xs leading-none md:invisible md:text-sm">Cargo</div>
-            <div className="whitespace-nowrap text-sm leading-none">{shipment.cargo}</div>
+            <div className="text-sm leading-none whitespace-nowrap">{shipment.cargo}</div>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -153,7 +153,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
 
           <div className="flex flex-col gap-2">
             <div className="text-muted-foreground text-xs leading-none md:text-sm">Transport mode</div>
-            <div className="text-sm capitalize leading-none">
+            <div className="text-sm leading-none capitalize">
               {shipment.mode} · {shipment.routeType}
             </div>
           </div>
@@ -176,7 +176,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
         <AlertTriangleIcon />
         <AlertTitle>{shipment.handling.label}</AlertTitle>
         <AlertDescription className="space-y-2">
-          <div className="border-amber-900 text-amber-900 leading-none dark:border-amber-50 dark:text-amber-50">
+          <div className="border-amber-900 leading-none text-amber-900 dark:border-amber-50 dark:text-amber-50">
             {shipment.handling.note}
           </div>
 
@@ -185,7 +185,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
           <div className="flex flex-wrap gap-2">
             {shipment.handling.tags.map(({ icon: TagIcon, label }) => (
               <Badge
-                className="rounded-sm border-amber-200 bg-background/50 text-amber-900 dark:border-amber-900 dark:text-amber-50"
+                className="bg-background/50 rounded-sm border-amber-200 text-amber-900 dark:border-amber-900 dark:text-amber-50"
                 key={label}
                 variant="outline"
               >
@@ -246,22 +246,22 @@ export function ShipmentDetails({ shipment }: ShipmentDetailsProps) {
               <ShipmentOverview shipment={shipment} />
             </TabsContent>
             <TabsContent className="p-4" value="route">
-              <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
+              <div className="text-muted-foreground grid h-full place-items-center rounded-md border border-dashed text-sm">
                 Route view coming soon.
               </div>
             </TabsContent>
             <TabsContent className="p-4" value="cargo">
-              <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
+              <div className="text-muted-foreground grid h-full place-items-center rounded-md border border-dashed text-sm">
                 Cargo view coming soon.
               </div>
             </TabsContent>
             <TabsContent className="p-4" value="documents">
-              <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
+              <div className="text-muted-foreground grid h-full place-items-center rounded-md border border-dashed text-sm">
                 Documents view coming soon.
               </div>
             </TabsContent>
             <TabsContent className="p-4" value="activity">
-              <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
+              <div className="text-muted-foreground grid h-full place-items-center rounded-md border border-dashed text-sm">
                 Activity view coming soon.
               </div>
             </TabsContent>

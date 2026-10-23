@@ -41,7 +41,7 @@ export function TasksToolbar<TData extends RowData>({ table }: TasksToolbarProps
             table.getColumn("title")?.setFilterValue(event.target.value);
             table.setPageIndex(0);
           }}
-          className="w-full bg-background text-foreground placeholder:text-muted-foreground sm:w-64"
+          className="bg-background text-foreground placeholder:text-muted-foreground w-full sm:w-64"
         />
         <TaskStatusFilter table={table} />
         <TaskPriorityFilter table={table} />
