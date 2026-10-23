@@ -1,17 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import {
-  ArrowUpRight,
-  BadgeCheck,
-  CalendarDays,
-  FileText,
-  Flame,
-  type LucideIcon,
-  MessageSquare,
-  Minus,
-  Paperclip,
-} from "lucide-react";
+import { BadgeCheck, CalendarDays, FileText, type LucideIcon, MessageSquare, Paperclip } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -20,33 +10,13 @@ import { Separator } from "@/components/ui/separator";
 import { getInitials } from "@/lib/utils";
 
 import { tagTones } from "./data";
-import type { ColumnId, Task, TaskInsightLabel, TaskPriority } from "./types";
+import { priorityBadgeConfig } from "./task-priority";
+import type { ColumnId, Task, TaskInsightLabel } from "./types";
 
 const taskInsightIcons: Record<TaskInsightLabel, LucideIcon> = {
   Attachments: Paperclip,
   Comments: MessageSquare,
   Documents: FileText,
-};
-
-const priorityBadgeConfig: Record<
-  TaskPriority,
-  { icon: LucideIcon; variant: "destructive" | "secondary"; className: string }
-> = {
-  High: {
-    icon: Flame,
-    variant: "destructive",
-    className: "border-transparent",
-  },
-  Low: {
-    icon: Minus,
-    variant: "secondary",
-    className: "bg-slate-500/10 text-slate-700 dark:bg-slate-500/15 dark:text-slate-300",
-  },
-  Medium: {
-    icon: ArrowUpRight,
-    variant: "secondary",
-    className: "bg-amber-500/10 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
-  },
 };
 
 export function TaskCard({
