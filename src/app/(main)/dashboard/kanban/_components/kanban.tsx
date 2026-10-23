@@ -39,6 +39,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { columnIds, columns } from "./data";
 import { KanbanColumn } from "./kanban-column";
 import { KanbanList } from "./kanban-list";
+import { KanbanListDnd } from "./kanban-list-dnd";
 import { TaskCard } from "./task-card";
 import type { BoardState, ColumnId, Task } from "./types";
 
@@ -199,7 +200,9 @@ export function Kanban({ initialBoard }: KanbanProps) {
         </DragDropProvider>
       </TabsContent>
       <TabsContent value="list" className="min-h-0 overflow-y-auto">
-        <KanbanList board={board} columns={orderedColumns} />
+        <KanbanListDnd board={board} setBoard={setBoard}>
+          <KanbanList board={board} columns={orderedColumns} />
+        </KanbanListDnd>
       </TabsContent>
     </Tabs>
   );
