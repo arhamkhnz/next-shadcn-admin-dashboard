@@ -216,7 +216,7 @@ export function Kanban({ initialBoard }: KanbanProps) {
           </DragOverlay>
         </DragDropProvider>
       </TabsContent>
-      <TabsContent value="list" className="min-h-0 overflow-y-auto">
+      <TabsContent value="list" className="relative min-h-0 overflow-y-auto overscroll-y-contain">
         <KanbanListDnd board={board} setBoard={setBoard}>
           <KanbanList board={board} columns={orderedColumns} />
         </KanbanListDnd>
