@@ -2,7 +2,6 @@
 
 import { cn } from "cn";
 import {
-  ChevronRight,
   Circle,
   CircleCheck,
   CircleDashed,
@@ -12,11 +11,14 @@ import {
   Flame,
   type LucideIcon,
   MessageSquare,
+  MoreVertical,
   Paperclip,
+  Plus,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getInitials } from "@/lib/utils";
 
@@ -50,28 +52,40 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
         return (
           <KanbanListDropGroup key={column.id} columnId={column.id}>
             <Collapsible defaultOpen className="border-b">
-              <h2>
-                <CollapsibleTrigger className="group flex min-h-10 w-full items-center gap-2 bg-muted/50 px-4 py-2 text-left font-medium text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset lg:px-6">
-                  <StatusIcon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
-                  {column.title}
-                  <span className="text-muted-foreground tabular-nums font-normal">
-                    {tasks.length}
-                    <span className="sr-only"> tasks</span>
-                  </span>
-                  <span className="ml-auto flex items-center gap-3">
+              <div className="flex items-center gap-1 bg-muted/50 pr-3 hover:bg-muted lg:pr-4.5">
+                <h2 className="min-w-0 flex-1">
+                  <CollapsibleTrigger className="flex min-h-10 w-full items-center gap-2 py-2 pr-3 pl-4 text-left font-medium text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset lg:pl-6">
+                    <StatusIcon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                    {column.title}
+                    <span className="font-normal text-muted-foreground tabular-nums">
+                      {tasks.length}
+                      <span className="sr-only"> tasks</span>
+                    </span>
                     {highPriorityCount > 0 && (
-                      <span className="hidden items-center gap-1.5 font-normal text-muted-foreground text-xs sm:flex">
+                      <span className="ml-auto hidden items-center gap-1.5 font-normal text-muted-foreground text-xs sm:flex">
                         <Flame className="size-3.5 text-destructive" aria-hidden="true" />
                         {highPriorityCount} high priority
                       </span>
                     )}
-                    <ChevronRight
-                      className="size-3.5 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </CollapsibleTrigger>
-              </h2>
+                  </CollapsibleTrigger>
+                </h2>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="text-muted-foreground"
+                  aria-label={`Add task to ${column.title}`}
+                >
+                  <Plus />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="text-muted-foreground"
+                  aria-label={`${column.title} group actions`}
+                >
+                  <MoreVertical />
+                </Button>
+              </div>
               <CollapsibleContent>
                 <ul aria-label={`${column.title} tasks`}>
                   {tasks.map((task, index) => {
