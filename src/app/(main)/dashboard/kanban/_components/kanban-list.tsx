@@ -1,20 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import {
-  Circle,
-  CircleCheck,
-  CircleDashed,
-  CircleDot,
-  CircleEllipsis,
-  FileText,
-  Flame,
-  type LucideIcon,
-  MessageSquare,
-  MoreVertical,
-  Paperclip,
-  Plus,
-} from "lucide-react";
+import { FileText, Flame, type LucideIcon, MessageSquare, MoreVertical, Paperclip, Plus } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -25,20 +12,13 @@ import { getInitials } from "@/lib/utils";
 import { tagTones } from "./data";
 import { KanbanListDropGroup, SortableListTask } from "./kanban-list-dnd";
 import { priorityBadgeConfig } from "./task-priority";
-import type { BoardState, Column, ColumnId, TaskInsightLabel } from "./types";
+import { statusIcons } from "./task-status";
+import type { BoardState, Column, TaskInsightLabel } from "./types";
 
 const insightIcons: Record<TaskInsightLabel, LucideIcon> = {
   Attachments: Paperclip,
   Comments: MessageSquare,
   Documents: FileText,
-};
-
-const statusIcons: Record<ColumnId, LucideIcon> = {
-  ideas: CircleDashed,
-  planned: Circle,
-  building: CircleDot,
-  qa: CircleEllipsis,
-  shipped: CircleCheck,
 };
 
 export function KanbanList({ board, columns }: { board: BoardState; columns: readonly Column[] }) {

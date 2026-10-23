@@ -40,6 +40,8 @@ import { columnIds, columns } from "./data";
 import { KanbanColumn } from "./kanban-column";
 import { KanbanList } from "./kanban-list";
 import { KanbanListDnd } from "./kanban-list-dnd";
+import { KanbanTable } from "./kanban-table";
+import { KanbanTableDnd } from "./kanban-table-dnd";
 import { TaskCard } from "./task-card";
 import type { BoardState, ColumnId, Task } from "./types";
 
@@ -125,7 +127,7 @@ export function Kanban({ initialBoard }: KanbanProps) {
             <List />
             List
           </TabsTrigger>
-          <TabsTrigger value="table" className="gap-2" disabled>
+          <TabsTrigger value="table" className="gap-2">
             <Table2 />
             Table
           </TabsTrigger>
@@ -203,6 +205,11 @@ export function Kanban({ initialBoard }: KanbanProps) {
         <KanbanListDnd board={board} setBoard={setBoard}>
           <KanbanList board={board} columns={orderedColumns} />
         </KanbanListDnd>
+      </TabsContent>
+      <TabsContent value="table" className="min-h-0 min-w-0 flex-col data-[state=active]:flex">
+        <KanbanTableDnd board={board} setBoard={setBoard}>
+          <KanbanTable board={board} columns={orderedColumns} />
+        </KanbanTableDnd>
       </TabsContent>
     </Tabs>
   );
