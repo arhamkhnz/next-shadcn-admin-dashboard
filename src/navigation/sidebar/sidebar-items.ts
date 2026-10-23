@@ -25,7 +25,7 @@ import {
   Users,
 } from "lucide-react";
 
-export type NavBadge = "new" | "soon";
+export type NavBadge = "new" | "updated" | "soon";
 
 export interface NavSubItem {
   id: string;
@@ -170,6 +170,7 @@ export const sidebarItems: NavGroup[] = [
         title: "Kanban",
         url: "/dashboard/kanban",
         icon: Kanban,
+        badge: "updated",
       },
       {
         id: "tasks",

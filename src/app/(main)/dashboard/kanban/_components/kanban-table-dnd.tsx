@@ -14,30 +14,29 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { TaskTableRow } from "./kanban-table-columns";
-import type { BoardState } from "./types";
 
 export function KanbanTableDnd({
-  board,
-  setBoard,
+  order,
+  setOrder,
   children,
 }: {
-  board: BoardState;
-  setBoard: Dispatch<SetStateAction<BoardState>>;
+  order: string[];
+  setOrder: Dispatch<SetStateAction<string[]>>;
   children: ReactNode;
 }) {
-  const beforeDrag = useRef(board);
+  const beforeDrag = useRef(order);
 
   return (
     <DragDropProvider
       onDragStart={() => {
-        beforeDrag.current = board;
+        beforeDrag.current = order;
       }}
       onDragOver={(event) => {
-        setBoard((current) => move(current, event));
+        setOrder((current) => move(current, event));
       }}
       onDragEnd={(event) => {
         if (event.canceled || !event.operation.target) {
-          setBoard(beforeDrag.current);
+          setOrder(beforeDrag.current);
         }
       }}
     >
@@ -58,7 +57,7 @@ export function SortableTaskTableRow({
   const { ref, handleRef, isDragging } = useSortable({
     id: row.id,
     index,
-    group: row.original.status.id,
+    group: "table-tasks",
     type: "table-task",
     accept: "table-task",
   });

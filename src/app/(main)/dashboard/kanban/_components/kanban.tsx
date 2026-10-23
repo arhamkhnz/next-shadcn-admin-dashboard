@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { useSearchParams } from "next/navigation";
+
 import { move } from "@dnd-kit/helpers";
 import {
   DragDropProvider,
@@ -74,10 +76,22 @@ function isTaskDragData(value: unknown): value is TaskDragData {
 }
 
 export function Kanban({ initialBoard }: KanbanProps) {
+  const searchParams = useSearchParams();
+  const requestedView = searchParams.get("view");
+  const view = requestedView === "list" || requestedView === "table" ? requestedView : "board";
   const [board, setBoard] = React.useState<BoardState>(initialBoard);
+  const [tableOrder, setTableOrder] = React.useState(() =>
+    columnIds.flatMap((id) => initialBoard[id].map((task) => task.id)),
+  );
   const [columnOrder, setColumnOrder] = React.useState<ColumnId[]>(columnIds);
   const boardBeforeDrag = React.useRef<BoardState>(initialBoard);
   const orderedColumns = columnOrder.flatMap((columnId) => columns.find((column) => column.id === columnId) ?? []);
+
+  function changeView(value: string) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", value);
+    window.history.pushState(null, "", url);
+  }
 
   function handleDragStart(event: DragStartEvent) {
     const { source } = event.operation;
@@ -114,7 +128,8 @@ export function Kanban({ initialBoard }: KanbanProps) {
 
   return (
     <Tabs
-      defaultValue="board"
+      value={view}
+      onValueChange={changeView}
       className="h-[calc(100dvh-var(--dashboard-header-height))] min-h-0 min-w-0 gap-0 overflow-hidden"
     >
       <div className="flex shrink-0 flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-6">
@@ -135,7 +150,7 @@ export function Kanban({ initialBoard }: KanbanProps) {
 
         <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center 2xl:justify-end">
           <InputGroup className="min-w-0 sm:w-64 2xl:w-48">
-            <InputGroupInput type="search" placeholder="Search tasks" />
+            <InputGroupInput type="text" aria-label="Search tasks" placeholder="Search tasks" />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
@@ -207,8 +222,8 @@ export function Kanban({ initialBoard }: KanbanProps) {
         </KanbanListDnd>
       </TabsContent>
       <TabsContent value="table" className="min-h-0 min-w-0 flex-col data-[state=active]:flex">
-        <KanbanTableDnd board={board} setBoard={setBoard}>
-          <KanbanTable board={board} columns={orderedColumns} />
+        <KanbanTableDnd order={tableOrder} setOrder={setTableOrder}>
+          <KanbanTable board={board} columns={orderedColumns} setBoard={setBoard} order={tableOrder} />
         </KanbanTableDnd>
       </TabsContent>
     </Tabs>

@@ -303,10 +303,13 @@ function NavItemBadge({ badge }: { badge?: NavBadge }) {
   return (
     <SidebarMenuBadge
       className={cn(
-        "rounded-sm border capitalize",
+        "rounded-sm border px-1.5 capitalize",
         badge === "new" &&
-          "border-green-600 text-green-600 peer-hover/menu-button:text-green-600 peer-data-active/menu-button:text-green-600",
-        badge === "soon" && "border-muted-foreground text-muted-foreground",
+          "border-emerald-600/20 bg-emerald-500/10 text-emerald-700 peer-hover/menu-button:text-emerald-700 peer-data-active/menu-button:text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-300 dark:peer-hover/menu-button:text-emerald-300 dark:peer-data-active/menu-button:text-emerald-300",
+        badge === "soon" &&
+          "border-zinc-500/20 bg-zinc-500/10 text-zinc-600 peer-hover/menu-button:text-zinc-600 peer-data-active/menu-button:text-zinc-600 dark:border-zinc-400/25 dark:bg-zinc-400/10 dark:text-zinc-300 dark:peer-hover/menu-button:text-zinc-300 dark:peer-data-active/menu-button:text-zinc-300",
+        badge === "updated" &&
+          "border-blue-600/20 bg-blue-500/10 text-blue-700 peer-hover/menu-button:text-blue-700 peer-data-active/menu-button:text-blue-700 dark:border-blue-400/25 dark:bg-blue-400/10 dark:text-blue-300 dark:peer-hover/menu-button:text-blue-300 dark:peer-data-active/menu-button:text-blue-300",
       )}
     >
       {badge}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { type Dispatch, type SetStateAction, useCallback, useMemo } from "react";
 
 import { useTable } from "@tanstack/react-table";
 import { cn } from "cn";
@@ -12,9 +12,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { dataTableFeatures } from "@/lib/data-table-features";
 
-import { taskTableColumns } from "./kanban-table-columns";
+import { columnIds } from "./data";
+import { createTaskTableColumns } from "./kanban-table-columns";
 import { SortableTaskTableRow } from "./kanban-table-dnd";
-import type { BoardState, Column } from "./types";
+import type { BoardState, Column, ColumnId } from "./types";
 
 const headerIcons: Record<string, typeof ListTodo> = {
   title: ListTodo,
@@ -25,15 +26,50 @@ const headerIcons: Record<string, typeof ListTodo> = {
   dueDate: CalendarDays,
 };
 
-export function KanbanTable({ board, columns }: { board: BoardState; columns: readonly Column[] }) {
-  const data = useMemo(
-    () => columns.flatMap((column) => board[column.id].map((task) => ({ ...task, status: column }))),
-    [board, columns],
+export function KanbanTable({
+  board,
+  columns,
+  setBoard,
+  order,
+}: {
+  board: BoardState;
+  columns: readonly Column[];
+  setBoard: Dispatch<SetStateAction<BoardState>>;
+  order: string[];
+}) {
+  const changeStatus = useCallback(
+    (taskId: string, status: ColumnId) => {
+      setBoard((current) => {
+        const source = columnIds.find((id) => current[id].some((task) => task.id === taskId));
+        if (!source || source === status) {
+          return current;
+        }
+
+        const task = current[source].find((item) => item.id === taskId);
+        if (!task) {
+          return current;
+        }
+
+        return {
+          ...current,
+          [source]: current[source].filter((item) => item.id !== taskId),
+          [status]: [...current[status], task],
+        };
+      });
+    },
+    [setBoard],
   );
+  const tableColumns = useMemo(() => createTaskTableColumns(columns, changeStatus), [columns, changeStatus]);
+  const data = useMemo(() => {
+    const positions = new Map(order.map((id, index) => [id, index]));
+    return columns
+      .flatMap((column) => board[column.id].map((task) => ({ ...task, status: column })))
+      .sort((a, b) => (positions.get(a.id) ?? order.length) - (positions.get(b.id) ?? order.length));
+  }, [board, columns, order]);
   const table = useTable({
     features: dataTableFeatures,
     data,
-    columns: taskTableColumns,
+    columns: tableColumns,
     getRowId: (row) => row.id,
     initialState: { pagination: { pageIndex: 0, pageSize: 10 } },
     enableSorting: false,
@@ -75,16 +111,11 @@ export function KanbanTable({ board, columns }: { board: BoardState; columns: re
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <SortableTaskTableRow
-              key={row.id}
-              row={row}
-              table={table}
-              index={board[row.original.status.id].findIndex((task) => task.id === row.id)}
-            />
+            <SortableTaskTableRow key={row.id} row={row} table={table} index={row.index} />
           ))}
           {data.length === 0 && (
             <TableRow>
-              <TableCell colSpan={taskTableColumns.length}>
+              <TableCell colSpan={tableColumns.length}>
                 <Empty>
                   <EmptyHeader>
                     <EmptyTitle>No tasks yet</EmptyTitle>
