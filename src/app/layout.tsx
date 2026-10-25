@@ -13,11 +13,19 @@ import { PreferencesStoreProvider } from "@/stores/preferences/preferences-provi
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://studio-admin.arhamkhnz.com"),
+  metadataBase: new URL(APP_CONFIG.url),
+  applicationName: APP_CONFIG.name,
+  authors: [{ name: "Arham Khan", url: "https://github.com/arhamkhnz" }],
   title: APP_CONFIG.meta.title,
   description: APP_CONFIG.meta.description,
+  openGraph: {
+    type: "website",
+    siteName: APP_CONFIG.name,
+    locale: "en_US",
+  },
   twitter: {
     card: "summary_large_image",
+    creator: "@arhamkhnz",
   },
 };
 

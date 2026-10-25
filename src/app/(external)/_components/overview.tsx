@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { APP_CONFIG } from "@/config/app-config";
+
 const includedScreens = [
   { name: "Analytics", href: "/dashboard/analytics" },
   { name: "CRM", href: "/dashboard/crm" },
@@ -46,6 +48,23 @@ export function Overview() {
             <p className="text-muted-foreground text-sm leading-6">
               Customize the fonts, themes, content width, navbar, and sidebar layout. Each edition stays native to its
               foundation while keeping the design consistent.
+            </p>
+            <p className="text-muted-foreground text-sm leading-6">
+              For setup instructions, refer to the{" "}
+              <a
+                href={`${APP_CONFIG.repository}#getting-started`}
+                className="text-foreground underline underline-offset-4"
+              >
+                setup guide on GitHub
+              </a>
+              .
+            </p>
+            <p className="text-muted-foreground text-sm leading-6">
+              If you&apos;re looking for individual blocks, please refer to{" "}
+              <a href="https://studio-blocks.arhamkhnz.com/" className="text-foreground underline underline-offset-4">
+                Studio Blocks
+              </a>
+              .
             </p>
           </div>
         </div>
