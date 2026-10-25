@@ -235,7 +235,8 @@ These serve as the fallback; there is no separate default.css file. */
 }
 
 html {
-  overscroll-behavior: none;
+  overscroll-behavior-x: auto;
+  overscroll-behavior-y: none;
 }
 
 html:has([data-landing-page]) {
