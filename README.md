@@ -8,8 +8,6 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 
 > **View demo:** [studio admin](https://studio-admin.arhamkhnz.com)
 
-If you're looking for individual blocks, please refer to [Studio Blocks](https://studio-blocks.arhamkhnz.com/).
-
 > [!NOTE]
 > Looking for the Base UI version? Check out [next-shadcn-admin-dashboard-baseui](https://github.com/arhamkhnz/next-shadcn-admin-dashboard-baseui).
 >
@@ -18,7 +16,7 @@ If you're looking for individual blocks, please refer to [Studio Blocks](https:/
 > Looking for the TanStack Start version? Check out [tanstack-shadcn-admin-dashboard](https://github.com/arhamkhnz/tanstack-shadcn-admin-dashboard).
 
 > [!TIP]
-> I’m also working on Nuxt.js and Svelte versions of this dashboard. They’ll be live soon.
+> If you're looking for individual blocks, please refer to [Studio Blocks](https://studio-blocks.arhamkhnz.com/).
 
 ## Features
 
