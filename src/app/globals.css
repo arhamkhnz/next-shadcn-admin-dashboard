@@ -213,6 +213,9 @@ These serve as the fallback; there is no separate default.css file. */
   html[data-font="jetBrainsMono"] body {
     --font-sans: var(--font-jetbrains-mono);
   }
+  html[data-font="geistSerif"] body {
+    --font-sans: var(--font-geist-serif);
+  }
   html[data-font="notoSerif"] body {
     --font-sans: var(--font-noto-serif);
   }

@@ -19,6 +19,7 @@ import {
 } from "next/font/google";
 
 import { GeistPixelSquare } from "geist/font/pixel";
+import { GeistSerif } from "geist/font/serif/variable";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -159,6 +160,10 @@ export const fontRegistry = {
   jetBrainsMono: {
     label: "JetBrains Mono",
     font: jetBrainsMono,
+  },
+  geistSerif: {
+    label: "Geist Serif",
+    font: GeistSerif,
   },
   notoSerif: {
     label: "Noto Serif",
