@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { Metadata } from "next";
 
+import { AppLogo } from "@/components/app-logo";
 import { Separator } from "@/components/ui/separator";
 import { APP_CONFIG } from "@/config/app-config";
 
@@ -49,12 +50,13 @@ export default function Home() {
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-4 sm:gap-8 sm:p-6 md:p-8">
         <header className="flex items-start justify-between gap-4 sm:items-center sm:gap-6">
           <Link
-            className="text-base font-medium tracking-tight"
+            className="inline-flex items-center gap-2 text-base font-medium tracking-tight"
             href="/"
             aria-label="Studio Admin home"
             prefetch={false}
           >
-            Studio Admin
+            <AppLogo className="size-4 shrink-0" viewBox="72 96 356 308" />
+            <span>Studio Admin</span>
           </Link>
           <LandingThemeSwitcher />
         </header>
