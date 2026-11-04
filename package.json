@@ -64,7 +64,7 @@
     "@types/topojson-client": "^3.1.5",
     "babel-plugin-react-compiler": "^1.0.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
+    "lint-staged": "^17.6.0",
     "postcss": "^8.5.32",
     "tailwindcss": "^4.1.5",
     "ts-node": "^10.9.2",
