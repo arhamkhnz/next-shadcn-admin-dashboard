@@ -1,146 +1,106 @@
-# Next.js Admin Template with TypeScript & Shadcn UI
+# Studio Admin — Template Admin com TypeScript e shadcn/ui
 
-**Studio Admin** - Includes multiple dashboards, authentication layouts, customizable theme presets, and more.
+Dashboard administrativo responsivo com múltiplos dashboards, layouts de autenticação, presets de tema customizáveis e mais.
 
-<img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard.png?version=5" alt="Dashboard Screenshot">
+![Dashboard](media/dashboard.png)
 
-Most admin templates I found, free or paid, felt cluttered, outdated, or too rigid. I built this as a cleaner alternative with features often missing in others, such as theme toggling and layout controls, while keeping the design modern, minimal, and flexible.
+## Stack técnica
 
-> **View demo:** [studio admin](https://studio-admin.arhamkhnz.com)
+- **Framework**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4
+- **Componentes de UI**: Shadcn UI
+- **Validação**: Zod
+- **Formulários e gerenciamento de estado**: React Hook Form, Zustand
+- **Tabelas e manipulação de dados**: TanStack Table
+- **Tooling e DX**: Biome, Husky
 
-> [!NOTE]
-> Looking for the Base UI version? Check out [next-shadcn-admin-dashboard-baseui](https://github.com/arhamkhnz/next-shadcn-admin-dashboard-baseui).
->
-> Looking for the React Aria version? Check out [arhamkhnz/next-shadcn-admin-dashboard-aria](https://github.com/arhamkhnz/next-shadcn-admin-dashboard-aria).
->
-> Looking for the TanStack Start version? Check out [tanstack-shadcn-admin-dashboard](https://github.com/arhamkhnz/tanstack-shadcn-admin-dashboard).
+## Telas
 
-> [!TIP]
-> I’m also working on Nuxt.js and Svelte versions of this dashboard. They’ll be live soon.
+### Disponíveis
+- Dashboard Início
+- Dashboard CRM
+- Dashboard Finanças
+- Dashboard Análises
+- Dashboard Produtividade
+- Dashboard E-commerce
+- Dashboard Academia
+- Dashboard Logística
+- Dashboard Infraestrutura
+- Gerenciador de arquivos
+- Monitoramento de pacientes
+- Página de Chat
+- Página de E-mail
+- Perfil
+- Gestão de usuários
+- Gestão de funções
+- Quadro Kanban
+- Página de tarefas
+- Página de faturas
+- Página de calendário
+- Autenticação (4 telas)
+- Legado: Início v1, CRM v1, Finanças v1, Análises v1
 
-## Features
+> **Nota:** interface traduzida para português do Brasil (veja o progresso nas [issues](https://github.com/prof-ramos/shadcn-admin-sqlite/issues)).
 
-- Built with Next.js 16, TypeScript, Tailwind CSS v4, and Shadcn UI  
-- Responsive and mobile-friendly  
-- Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)  
-- Flexible layouts (collapsible sidebar, variable content widths)  
-- Authentication flows and screens  
-- Prebuilt dashboards (Default, CRM, Finance, Analytics, Productivity) plus legacy variants  
-- Role-Based Access Control (RBAC) with config-driven UI and multi-tenant support *(planned)*  
+## Arquitetura colocation-based
 
-> [!NOTE]
-> The default dashboard uses the **shadcn neutral** theme.  
-> It also includes additional color presets inspired by [Tweakcn](https://tweakcn.com):  
->
-> - Tangerine  
-> - Neo Brutalism  
-> - Soft Pop  
->
-> You can create more presets by following the same structure as the existing ones.
+O projeto segue uma **arquitetura colocation-based**: cada feature mantém as próprias páginas, componentes e lógica dentro da pasta da rota.
+A UI compartilhada, hooks e configuração ficam no nível superior, mantendo a base de código modular, escalável e fácil de manter conforme a aplicação cresce.
 
-> Looking for the **Next.js 15** version?  
-> Check out the [`archive/next15`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/tree/archive/next15) branch.  
-> This branch contains the setup prior to upgrading to Next 16 and the React Compiler.
+## Primeiros passos
 
-> Looking for the **Next.js 14 + Tailwind CSS v3** version?  
-> Check out the [`archive/next14-tailwindv3`](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/tree/archive/next14-tailwindv3) branch.  
-> It has a different color theme and is not actively maintained, but I try to keep it updated with major changes.  
+Você pode rodar o projeto localmente ou fazer o deploy instantâneo com a Vercel.
 
-## Tech Stack
+### Deploy com Vercel
 
-- **Framework**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4  
-- **UI Components**: Shadcn UI  
-- **Validation**: Zod  
-- **Forms & State Management**: React Hook Form, Zustand  
-- **Tables & Data Handling**: TanStack Table  
-- **Tooling & DX**: Biome, Husky  
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprof-ramos%2Fshadcn-admin-sqlite)
 
-## Screens
+_Faça o deploy de sua própria cópia com um clique._
 
-### Available
-- Default Dashboard  
-- CRM Dashboard  
-- Finance Dashboard  
-- Analytics Dashboard  
-- Productivity Dashboard  
-- E-commerce Dashboard  
-- Academy Dashboard  
-- Logistics Dashboard  
-- Infrastructure Dashboard  
-- File Manager  
-- Patient Monitoring  
-- Chat Page  
-- Email Page  
-- Profile  
-- Users Management  
-- Roles Management  
-- Kanban Board  
-- Tasks Page  
-- Invoice Page  
-- Calendar Page  
-- Authentication (4 screens)  
-- Legacy: Default v1, CRM v1, Finance v1, Analytics v1
+### Rodar localmente
 
-### Planned
-I’ve added all the planned screens. Feel free to open an issue for requesting something specific.
-
-## Colocation File System Architecture
-
-This project follows a **colocation-based architecture** each feature keeps its own pages, components, and logic inside its route folder.  
-Shared UI, hooks, and configuration live at the top level, making the codebase modular, scalable, and easier to maintain as the app grows.
-
-For a full breakdown of the structure with examples, see the [Next Colocation Template](https://github.com/arhamkhnz/next-colocation-template).
-
-## Getting Started
-
-You can run this project locally, or deploy it instantly with Vercel.
-
-### Deploy with Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard)
-
-_Deploy your own copy with one click._
-
-### Run locally
-
-1. **Clone the repository**
+1. **Clonar o repositório**
    ```bash
-   git clone https://github.com/arhamkhnz/next-shadcn-admin-dashboard.git
-   ```
-   
-2. **Navigate into the project**
-   ```bash
-    cd next-shadcn-admin-dashboard
-   ```
-   
-3. **Install dependencies**
-   ```bash
-    npm install
+   git clone https://github.com/prof-ramos/shadcn-admin-sqlite.git
    ```
 
-4. **Start the development server**
+2. **Entrar no projeto**
+   ```bash
+   cd shadcn-admin-sqlite
+   ```
+
+3. **Instalar as dependências**
+   ```bash
+   npm install
+   ```
+
+4. **Iniciar o servidor de desenvolvimento**
    ```bash
    npm run dev
    ```
 
-Your app will be running at [http://localhost:3000](http://localhost:3000)
+A aplicação estará disponível em [http://localhost:3000](http://localhost:3000).
 
-### Formatting and Linting
+### Formatação e lint
 
-Format, lint, and organize imports
+Formate, faça lint e organize imports:
+
 ```bash
 npx @biomejs/biome check --write
 ```
-> For more information on available rules, fixes, and CLI options, refer to the [Biome documentation](https://biomejs.dev/).
+
+> Consulte a [documentação do Biome](https://biomejs.dev/) para regras, correções e opções da CLI.
 
 ---
 
-> [!IMPORTANT]  
-> This project is updated frequently. If you’re working from a fork or an older clone, pull the latest changes before syncing. Some updates may include breaking changes.
+> [!IMPORTANT]
+> Este projeto é atualizado com frequência. Se você trabalha a partir de um fork ou clone antigo, puxe as últimas alterações antes de sincronizar — algumas atualizações podem conter quebras de compatibilidade.
 
 ---
 
-Contributions are welcome. Feel free to open issues, feature requests, or start a discussion.
+Contribuições são bem-vindas: abra [issues](https://github.com/prof-ramos/shadcn-admin-sqlite/issues), sugira features ou inicie uma discussão.
 
+## Licença e créditos
 
-**Happy Vibe Coding!**
+Distribuído sob a licença [MIT](LICENSE).
+
+Este projeto é uma adaptação localizada do template [next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) de [arhamkhnz](https://github.com/arhamkhnz), também sob MIT. As versões Base UI, React Aria e TanStack Start do template original continuam disponíveis no repositório do autor.
