@@ -19,7 +19,7 @@ export function SimpleIcon({ icon, className, ...props }: SimpleIconProps) {
       aria-label={title}
       aria-hidden="false"
       focusable="false"
-      className={cn("size-5 fill-foreground", className)}
+      className={cn("fill-foreground size-5", className)}
       {...props}
     >
       <title>{title}</title>

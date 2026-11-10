@@ -44,7 +44,7 @@ export function QuickActions() {
             <div className="flex items-center gap-1">
               <div className="flex -space-x-2">
                 {contacts.map((contact) => (
-                  <Avatar key={contact.id} className="size-7 border-2 border-background">
+                  <Avatar key={contact.id} className="border-background size-7 border-2">
                     <AvatarFallback className="text-[10px]">{contact.initials}</AvatarFallback>
                   </Avatar>
                 ))}
@@ -82,7 +82,7 @@ export function QuickActions() {
                   <Button variant="outline" className="size-12 rounded-full">
                     <Icon className="size-5" />
                   </Button>
-                  <span className="text-center text-muted-foreground text-xs">{shortcut.label}</span>
+                  <span className="text-muted-foreground text-center text-xs">{shortcut.label}</span>
                 </div>
               );
             })}

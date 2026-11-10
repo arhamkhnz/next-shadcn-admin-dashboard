@@ -1,14 +1,17 @@
 import {
   Banknote,
+  Bitcoin,
   Calendar,
   ChartBar,
   CheckSquare,
+  ContactRound,
   Fingerprint,
   FolderOpen,
   Forklift,
   Gauge,
   GraduationCap,
   HeartPulse,
+  Hotel,
   Kanban,
   LayoutDashboard,
   ListTodo,
@@ -16,15 +19,19 @@ import {
   type LucideIcon,
   Mail,
   MessageSquare,
+  Package,
   ReceiptText,
+  ScanBarcode,
   Server,
   ShoppingBag,
   SquareArrowUpRight,
+  Stethoscope,
   UserRound,
   Users,
+  UtensilsCrossed,
 } from "lucide-react";
 
-export type NavBadge = "new" | "soon";
+export type NavBadge = "new" | "updated" | "soon";
 
 export interface NavSubItem {
   id: string;
@@ -133,12 +140,67 @@ export const sidebarItems: NavGroup[] = [
         url: "/dashboard/patient-monitoring",
         icon: HeartPulse,
       },
+      {
+        id: "crypto",
+        title: "Crypto",
+        url: "/dashboard/coming-soon",
+        icon: Bitcoin,
+        badge: "soon",
+        disabled: true,
+      },
+      {
+        id: "healthcare",
+        title: "Healthcare",
+        url: "/dashboard/coming-soon",
+        icon: Stethoscope,
+        badge: "soon",
+        disabled: true,
+      },
+      {
+        id: "pos",
+        title: "POS",
+        url: "/dashboard/coming-soon",
+        icon: ScanBarcode,
+        badge: "soon",
+        disabled: true,
+      },
+      {
+        id: "hr",
+        title: "HR",
+        url: "/dashboard/coming-soon",
+        icon: ContactRound,
+        badge: "soon",
+        disabled: true,
+      },
+      {
+        id: "restaurant",
+        title: "Restaurant",
+        url: "/dashboard/coming-soon",
+        icon: UtensilsCrossed,
+        badge: "soon",
+        disabled: true,
+      },
+      {
+        id: "hotel",
+        title: "Hotel",
+        url: "/dashboard/coming-soon",
+        icon: Hotel,
+        badge: "soon",
+        disabled: true,
+      },
     ],
   },
   {
     id: 2,
     label: "Páginas",
     items: [
+      {
+        id: "products",
+        title: "Products",
+        url: "/dashboard/products",
+        icon: Package,
+        badge: "new",
+      },
       {
         id: "email",
         title: "E-mail",
@@ -162,6 +224,7 @@ export const sidebarItems: NavGroup[] = [
         title: "Kanban",
         url: "/dashboard/kanban",
         icon: Kanban,
+        badge: "updated",
       },
       {
         id: "tasks",

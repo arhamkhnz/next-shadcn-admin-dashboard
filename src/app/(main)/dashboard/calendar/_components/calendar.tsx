@@ -52,9 +52,9 @@ export function Calendar() {
 
   return (
     <div className="flex flex-col overflow-hidden rounded-md border">
-      <div className="flex flex-col gap-4 border-b bg-sidebar p-4 text-sidebar-foreground lg:flex-row lg:items-center lg:justify-between">
+      <div className="bg-sidebar text-sidebar-foreground flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 shrink-0 flex-col gap-1">
-          <div className="font-medium text-lg leading-none">{title}</div>
+          <div className="text-lg leading-none font-medium">{title}</div>
           <p className="text-muted-foreground text-sm">
             {days} dias - {eventCount} eventos
           </p>
@@ -117,7 +117,7 @@ export function Calendar() {
         controller={controller}
         initialView={views[0].key}
         plugins={[...plugins]}
-        popoverCloseContent={() => <XIcon className="size-5 text-muted-foreground group-hover:text-foreground" />}
+        popoverCloseContent={() => <XIcon className="text-muted-foreground group-hover:text-foreground size-5" />}
         events={demoEvents}
         locale="pt-br"
         nowIndicator

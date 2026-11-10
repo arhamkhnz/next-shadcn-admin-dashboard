@@ -12,7 +12,7 @@ export function NetWorth() {
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-2">
-            <span className="grid size-7 place-content-center rounded-sm bg-muted">
+            <span className="bg-muted grid size-7 place-content-center rounded-sm">
               <SaudiRiyal className="size-5" />
             </span>
             Net Worth
@@ -22,7 +22,7 @@ export function NetWorth() {
       <CardContent className="space-y-4">
         <div className="space-y-0.5">
           <div className="flex items-center justify-between">
-            <p className="font-medium text-xl tabular-nums">{formatCurrency(84250, { noDecimals: true })}</p>
+            <p className="text-xl font-medium tabular-nums">{formatCurrency(84250, { noDecimals: true })}</p>
             <span className="text-xs">+$3,680 MoM</span>
           </div>
           <p className="text-muted-foreground text-xs">This month</p>

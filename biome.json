@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.5/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -33,6 +33,7 @@
     "ignoreUnknown": true,
     "includes": [
       "**",
+      "!**/*.md",
       "!.github",
       "!.husky",
       "!node_modules",
@@ -66,7 +67,7 @@
         "noUndeclaredDependencies": "error"
       },
       "nursery": {
-        "useSortedClasses": "on",
+        "useTailwindSortedClasses": "on",
         "useNullishCoalescing": "error",
         "noFloatingPromises": "error",
         "noMisusedPromises": "error"

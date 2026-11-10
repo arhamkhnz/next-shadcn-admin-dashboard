@@ -199,7 +199,7 @@ export function ShipmentRouteMap({ shipment }: ShipmentRouteMapProps) {
         {routePath && (
           <path
             d={routePath}
-            className="fill-none stroke-primary"
+            className="stroke-primary fill-none"
             strokeDasharray="8 8"
             strokeLinecap="round"
             strokeWidth={3}
@@ -210,7 +210,7 @@ export function ShipmentRouteMap({ shipment }: ShipmentRouteMapProps) {
             <g key={label} transform={`translate(${point[0]}, ${point[1]})`}>
               <circle className="fill-background stroke-primary" r={8} strokeWidth={3} />
               <circle className="fill-primary" r={3} />
-              <text className="fill-foreground font-medium text-[10px]" dy={-14} textAnchor="middle">
+              <text className="fill-foreground text-[10px] font-medium" dy={-14} textAnchor="middle">
                 {country}
               </text>
             </g>

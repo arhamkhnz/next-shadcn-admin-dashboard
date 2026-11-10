@@ -51,7 +51,7 @@ export function TasksSection() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border bg-background shadow-xs">
+      <div className="bg-background overflow-hidden rounded-xl border shadow-xs">
         <div className="divide-y">
           {items.map((task) => (
             <div key={task.title} className="flex items-center gap-2 p-4">
@@ -72,7 +72,7 @@ export function TasksSection() {
                       {task.tag}
                     </Badge>
                   </div>
-                  <div className="flex shrink-0 items-center gap-3 text-muted-foreground text-sm">
+                  <div className="text-muted-foreground flex shrink-0 items-center gap-3 text-sm">
                     <span>{task.time}</span>
                     <Calendar1 className="size-4" />
                   </div>

@@ -159,17 +159,17 @@ function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; rev
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
       <div className="min-w-0 space-y-2">
         <div>
-          <div className="font-medium text-muted-foreground text-sm">Revenue</div>
-          <div className="font-semibold text-3xl tabular-nums tracking-tight sm:text-4xl">$1,248,000</div>
+          <div className="text-muted-foreground text-sm font-medium">Revenue</div>
+          <div className="text-3xl font-semibold tracking-tight tabular-nums sm:text-4xl">$1,248,000</div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="secondary">+9.4%</Badge>
           <Badge variant="secondary">+$107,000</Badge>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
+        <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-sm">
           <span>Previous $1,141,000</span>
-          <Badge variant="outline" className="font-medium text-xs">
+          <Badge variant="outline" className="text-xs font-medium">
             Risk Ladder 30
           </Badge>
         </div>
@@ -197,11 +197,11 @@ function SummaryRow({ revenueSeries }: { revenueSeries: Array<{ day: string; rev
           <CardTitle>Risk summary</CardTitle>
           <CardDescription>Core risk signals vs previous period</CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0 xl:divide-x xl:[&>div:first-child]:pl-0 xl:[&>div:last-child]:pr-0 xl:[&>div]:px-5">
+        <CardContent className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0 xl:divide-x xl:[&>div]:px-5 xl:[&>div:first-child]:pl-0 xl:[&>div:last-child]:pr-0">
           {RISK_SUMMARY_METRICS.map((item) => (
             <div key={item.key} className="min-w-0 space-y-1">
               <div className="text-muted-foreground text-sm">{item.label}</div>
-              <div className="font-semibold text-2xl tabular-nums leading-tight">{item.value}</div>
+              <div className="text-2xl leading-tight font-semibold tabular-nums">{item.value}</div>
               <div className="text-muted-foreground text-xs">{item.comparatorLabel}</div>
             </div>
           ))}
@@ -228,7 +228,7 @@ function RiskViewSelect() {
         >
           <div className="flex items-center gap-2">
             <div
-              className="size-2 rounded-full bg-primary"
+              className="bg-primary size-2 rounded-full"
               style={{
                 boxShadow: "0 0 8px color-mix(in oklab, var(--primary) 50%, transparent)",
               }}
@@ -290,8 +290,8 @@ function FiltersPopover({
         <PopoverContent align="start" className="w-72">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-sm">Filters</h3>
-              <Badge variant="outline" className="font-medium text-xs tabular-nums">
+              <h3 className="text-sm font-semibold">Filters</h3>
+              <Badge variant="outline" className="text-xs font-medium tabular-nums">
                 Risk Ladder 30
               </Badge>
             </div>
@@ -331,7 +331,7 @@ function FilterToggle({
   return (
     <div className="flex cursor-pointer items-center gap-2">
       <Checkbox id={id} checked={checked} onCheckedChange={(value) => onCheckedChange(Boolean(value))} />
-      <Label htmlFor={id} className="cursor-pointer font-normal text-sm">
+      <Label htmlFor={id} className="cursor-pointer text-sm font-normal">
         {label}
       </Label>
     </div>

@@ -162,8 +162,8 @@ export function OpportunitiesSection() {
         </CardHeader>
         <CardContent className="flex flex-col gap-4 px-0">
           <div className="overflow-hidden">
-            <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4 **:data-[slot='table-cell']:py-4">
-              <TableHeader className="border-t **:data-[slot='table-head']:h-11 **:data-[slot='table-head']:font-medium **:data-[slot='table-head']:text-foreground **:data-[slot='table-head']:text-sm">
+            <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-cell']:py-4 **:data-[slot='table-head']:px-4">
+              <TableHeader className="**:data-[slot='table-head']:text-foreground border-t **:data-[slot='table-head']:h-11 **:data-[slot='table-head']:text-sm **:data-[slot='table-head']:font-medium">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (

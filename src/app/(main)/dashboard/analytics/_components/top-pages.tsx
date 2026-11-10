@@ -36,8 +36,8 @@ export function TopPages() {
               <TableRow className="hover:bg-transparent" key={page.path}>
                 <TableCell className="max-w-0 truncate py-4 font-medium">{page.path}</TableCell>
                 <TableCell className="text-right tabular-nums">{page.views}</TableCell>
-                <TableCell className="text-right text-muted-foreground tabular-nums">{page.time}</TableCell>
-                <TableCell className="text-right text-muted-foreground tabular-nums">{page.bounce}</TableCell>
+                <TableCell className="text-muted-foreground text-right tabular-nums">{page.time}</TableCell>
+                <TableCell className="text-muted-foreground text-right tabular-nums">{page.bounce}</TableCell>
               </TableRow>
             ))}
           </TableBody>

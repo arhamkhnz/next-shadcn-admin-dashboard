@@ -12,7 +12,7 @@ export function PrimaryAccount() {
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-2">
-            <span className="grid size-7 place-content-center rounded-sm bg-muted">
+            <span className="bg-muted grid size-7 place-content-center rounded-sm">
               <WalletMinimal className="size-5" />
             </span>
             Primary Account
@@ -21,7 +21,7 @@ export function PrimaryAccount() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-0.5">
-          <p className="font-medium text-xl tabular-nums">{formatCurrency(12450, { noDecimals: true })}</p>
+          <p className="text-xl font-medium tabular-nums">{formatCurrency(12450, { noDecimals: true })}</p>
 
           <p className="text-muted-foreground text-xs">Available balance</p>
         </div>

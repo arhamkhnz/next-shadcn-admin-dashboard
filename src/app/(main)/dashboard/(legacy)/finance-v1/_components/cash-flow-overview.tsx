@@ -63,8 +63,8 @@ export function CashFlowOverview() {
         <Separator />
         <div className="flex items-start justify-between gap-2 py-5 md:items-stretch md:gap-0">
           <div className="flex flex-1 items-center justify-center gap-2">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-1">
-              <ArrowDownLeft className="size-6 stroke-background" />
+            <div className="bg-chart-1 flex size-10 shrink-0 items-center justify-center rounded-full">
+              <ArrowDownLeft className="stroke-background size-6" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Income</p>
@@ -73,8 +73,8 @@ export function CashFlowOverview() {
           </div>
           <Separator orientation="vertical" className="h-auto! self-stretch" />
           <div className="flex flex-1 items-center justify-center gap-2">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-chart-2">
-              <ArrowUpRight className="size-6 stroke-background" />
+            <div className="bg-chart-2 flex size-10 shrink-0 items-center justify-center rounded-full">
+              <ArrowUpRight className="stroke-background size-6" />
             </div>
             <div>
               <p className="text-muted-foreground text-xs uppercase">Expenses</p>

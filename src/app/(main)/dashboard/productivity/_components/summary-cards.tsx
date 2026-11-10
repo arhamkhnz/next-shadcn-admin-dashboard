@@ -15,8 +15,8 @@ export function SummaryCards() {
         <Card key={item.title} className="shadow-xs">
           <CardHeader>
             <CardTitle>
-              <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                <div className="grid size-7 place-items-center rounded-lg border bg-muted">
+              <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                <div className="bg-muted grid size-7 place-items-center rounded-lg border">
                   <item.icon className="size-4" />
                 </div>
                 {item.title}
@@ -27,8 +27,8 @@ export function SummaryCards() {
             <div className="flex flex-col gap-2">
               <div className="text-2xl leading-none tracking-tight">{item.value}</div>
               <div className="flex items-center justify-between">
-                <p className="text-muted-foreground tabular-nums leading-none">{item.description}</p>
-                <ArrowRight className="size-4 text-muted-foreground" />
+                <p className="text-muted-foreground leading-none tabular-nums">{item.description}</p>
+                <ArrowRight className="text-muted-foreground size-4" />
               </div>
             </div>
           </CardContent>

@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import type { Metadata } from "next";
 
 import { initialBoard } from "./_components/data";
@@ -15,7 +17,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div data-content-padding="false">
-      <Kanban initialBoard={initialBoard} />
+      <Suspense fallback={null}>
+        <Kanban initialBoard={initialBoard} />
+      </Suspense>
     </div>
   );
 }

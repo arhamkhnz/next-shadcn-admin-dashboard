@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://studio-admin.arhamkhnz.com";
+import { APP_CONFIG } from "@/config/app-config";
 
 const PUBLIC_ROUTES = [
   "/",
@@ -10,6 +10,7 @@ const PUBLIC_ROUTES = [
   "/dashboard/analytics",
   "/dashboard/productivity",
   "/dashboard/ecommerce",
+  "/dashboard/products",
   "/dashboard/academy",
   "/dashboard/logistics",
   "/dashboard/infrastructure",
@@ -32,6 +33,6 @@ const PUBLIC_ROUTES = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return PUBLIC_ROUTES.map((route) => ({
-    url: `${SITE_URL}${route}`,
+    url: `${APP_CONFIG.url}${route}`,
   }));
 }
