@@ -12,9 +12,9 @@ import { Showcase } from "./_components/showcase";
 import styles from "./landing.module.css";
 
 export const metadata: Metadata = {
-  title: "Studio Admin: Open Source Admin Dashboard with shadcn/ui",
+  title: "Studio Admin: painel administrativo open source com shadcn/ui",
   description:
-    "A polished open source shadcn/ui admin dashboard with 25+ screens and editions for Radix UI, Base UI, React Aria, and TanStack Start.",
+    "Um painel administrativo open source e caprichado com shadcn/ui, 25+ telas e edições para Radix UI, Base UI, React Aria e TanStack Start.",
   alternates: {
     canonical: "/",
   },
@@ -29,7 +29,7 @@ export default function Home() {
           <Link
             className="font-medium text-base tracking-tight"
             href="/"
-            aria-label="Studio Admin home"
+            aria-label="Studio Admin: página inicial"
             prefetch={false}
           >
             Studio Admin

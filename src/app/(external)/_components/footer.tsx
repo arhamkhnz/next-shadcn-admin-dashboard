@@ -8,7 +8,7 @@ export function Footer() {
     <footer>
       <div className="flex flex-row items-center justify-between gap-6 text-muted-foreground text-sm">
         <p>
-          Brought to you by{" "}
+          Mantido por{" "}
           <a
             className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
             href="https://x.com/arhamkhnz"
@@ -24,13 +24,13 @@ export function Footer() {
               href="https://github.com/arhamkhnz"
               target="_blank"
               rel="noreferrer"
-              aria-label="Visit @arhamkhnz on GitHub"
+              aria-label="Visite @arhamkhnz no GitHub"
             >
               <SimpleIcon icon={siGithub} aria-hidden className="size-4.5 fill-current" />
             </a>
           </Button>
           <Button asChild size="icon-sm" variant="link">
-            <a href="https://x.com/arhamkhnz" target="_blank" rel="noreferrer" aria-label="Visit @arhamkhnz on X">
+            <a href="https://x.com/arhamkhnz" target="_blank" rel="noreferrer" aria-label="Visite @arhamkhnz no X">
               <SimpleIcon icon={siX} aria-hidden className="size-4 fill-current" />
             </a>
           </Button>
