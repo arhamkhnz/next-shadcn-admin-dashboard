@@ -50,12 +50,16 @@ const chartData = [
 
 const weekdayTicks = Array.from({ length: 7 }, (_, index) => weekStart + (index + 0.5) * DAY_MS);
 
-const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
+const weekdayFormatter = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "UTC",
   weekday: "long",
 });
 
-const formatWeekday = (value: number) => weekdayFormatter.format(new Date(value));
+const formatWeekday = (value: number) => {
+  const weekday = weekdayFormatter.format(new Date(value));
+
+  return weekday.charAt(0).toUpperCase() + weekday.slice(1);
+};
 
 const chartDomain = [weekStart, weekStart + 7 * DAY_MS];
 const formatTooltipCurrency = (value: number | string) => formatCurrency(Number(value), { noDecimals: true });
@@ -63,11 +67,11 @@ const formatTooltipCurrency = (value: number | string) => formatCurrency(Number(
 const chartConfig = {
   expense: {
     color: "var(--chart-4)",
-    label: "Expense",
+    label: "Despesa",
   },
   income: {
     color: "var(--chart-2)",
-    label: "Income",
+    label: "Receita",
   },
 } satisfies ChartConfig;
 
@@ -75,7 +79,7 @@ export function TransactionsOverviewCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-normal">Spending Overview</CardTitle>
+        <CardTitle className="font-normal">Visão geral de gastos</CardTitle>
         <CardAction>
           <Select defaultValue="weekly">
             <SelectTrigger className="w-28" size="sm">
@@ -83,9 +87,9 @@ export function TransactionsOverviewCard() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
+                <SelectItem value="weekly">Semanal</SelectItem>
+                <SelectItem value="monthly">Mensal</SelectItem>
+                <SelectItem value="yearly">Anual</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

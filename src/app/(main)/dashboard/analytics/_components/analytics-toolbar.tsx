@@ -17,45 +17,45 @@ export function AnalyticsToolbar() {
     <div className="flex items-center gap-2">
       <Select defaultValue="last-4-weeks">
         <SelectTrigger className="w-34">
-          <SelectValue placeholder="Select range" />
+          <SelectValue placeholder="Selecionar período" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="last-7-days">Last 7 days</SelectItem>
-            <SelectItem value="last-4-weeks">Last 4 weeks</SelectItem>
-            <SelectItem value="last-3-months">Last 3 months</SelectItem>
-            <SelectItem value="year-to-date">Year to date</SelectItem>
+            <SelectItem value="last-7-days">Últimos 7 dias</SelectItem>
+            <SelectItem value="last-4-weeks">Últimas 4 semanas</SelectItem>
+            <SelectItem value="last-3-months">Últimos 3 meses</SelectItem>
+            <SelectItem value="year-to-date">Desde o início do ano</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="outline" aria-label="More analytics actions">
+          <Button size="icon" variant="outline" aria-label="Mais ações de análises">
             <Ellipsis />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Analytics actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Ações de análises</DropdownMenuLabel>
             <DropdownMenuItem>
               <FileDown />
-              Export report
+              Exportar relatório
             </DropdownMenuItem>
             <DropdownMenuItem>
               <FileUp />
-              Import data
+              Importar dados
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Share2 />
-              Share dashboard
+              Compartilhar painel
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
               <RefreshCw />
-              Refresh metrics
+              Atualizar métricas
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

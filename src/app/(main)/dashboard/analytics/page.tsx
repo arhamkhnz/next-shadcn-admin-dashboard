@@ -13,9 +13,9 @@ import { TrafficQuality } from "./_components/traffic-quality";
 import "@/styles/flag-icons/flags.css";
 
 export const metadata: Metadata = {
-  title: "Open Source Analytics Dashboard with shadcn/ui",
+  title: "Painel de análises open source com shadcn/ui",
   description:
-    "Explore an open source analytics dashboard with traffic metrics, realtime visitors, page performance, and conversion insights.",
+    "Explore um painel de análises open source com métricas de tráfego, visitantes em tempo real, desempenho de páginas e insights de conversão.",
   alternates: {
     canonical: "/dashboard/analytics",
   },
@@ -25,20 +25,18 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-4">
       <div className="space-y-1">
-        <h1 className="text-3xl tracking-tight">Hello, Aiy</h1>
-        <p className="text-muted-foreground text-sm">
-          Monitor traffic, engagement, and conversion performance in one view.
-        </p>
+        <h1 className="text-3xl tracking-tight">Olá, Aiy</h1>
+        <p className="text-muted-foreground text-sm">Acompanhe tráfego, engajamento e conversões em uma única visão.</p>
       </div>
 
       <Tabs defaultValue="overview" className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <TabsList className="gap-1">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="audience">Audience</TabsTrigger>
-            <TabsTrigger value="acquisition">Acquisition</TabsTrigger>
-            <TabsTrigger value="engagement">Engagement</TabsTrigger>
-            <TabsTrigger value="conversions">Conversions</TabsTrigger>
+            <TabsTrigger value="overview">Visão geral</TabsTrigger>
+            <TabsTrigger value="audience">Público</TabsTrigger>
+            <TabsTrigger value="acquisition">Aquisição</TabsTrigger>
+            <TabsTrigger value="engagement">Engajamento</TabsTrigger>
+            <TabsTrigger value="conversions">Conversões</TabsTrigger>
           </TabsList>
 
           <AnalyticsToolbar />
@@ -68,25 +66,25 @@ export default function Page() {
 
         <TabsContent value="audience">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
-            Audience view coming soon.
+            Visualização de público em breve.
           </div>
         </TabsContent>
 
         <TabsContent value="acquisition">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
-            Acquisition view coming soon.
+            Visualização de aquisição em breve.
           </div>
         </TabsContent>
 
         <TabsContent value="engagement">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
-            Engagement view coming soon.
+            Visualização de engajamento em breve.
           </div>
         </TabsContent>
 
         <TabsContent value="conversions">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
-            Conversions view coming soon.
+            Visualização de conversões em breve.
           </div>
         </TabsContent>
       </Tabs>

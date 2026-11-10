@@ -6,9 +6,9 @@ import { PipelineActivity } from "./_components/pipeline-activity";
 import { TaskReminders } from "./_components/task-reminders";
 
 export const metadata: Metadata = {
-  title: "Open Source CRM Dashboard with shadcn/ui",
+  title: "Dashboard de CRM de código aberto com shadcn/ui",
   description:
-    "Explore an open source CRM dashboard with pipeline activity, opportunities, sales performance, and task reminders.",
+    "Explore um dashboard CRM de código aberto com atividade de pipeline, oportunidades, desempenho de vendas e lembretes de tarefas.",
   alternates: {
     canonical: "/dashboard/crm",
   },

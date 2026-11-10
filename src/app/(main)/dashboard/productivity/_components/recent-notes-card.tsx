@@ -1,4 +1,5 @@
 import { format, isToday, isYesterday, subDays } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { BookOpen, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -7,26 +8,30 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/componen
 const today = new Date();
 
 function formatNoteDate(date: Date) {
-  if (isToday(date)) return "Today";
-  if (isYesterday(date)) return "Yesterday";
-  return format(date, "MMM d");
+  if (isToday(date)) return "Hoje";
+  if (isYesterday(date)) return "Ontem";
+  return format(date, "d 'de' MMM", { locale: ptBR });
 }
 
 const recentNotes = [
-  { title: "Design principles that scale", date: formatNoteDate(today), icon: FileText },
-  { title: `Content ideas – ${format(today, "MMMM")}`, date: formatNoteDate(subDays(today, 1)), icon: FileText },
-  { title: "Lessons from the week", date: formatNoteDate(subDays(today, 4)), icon: FileText },
-  { title: "Books I’m Reading", date: formatNoteDate(subDays(today, 5)), icon: BookOpen },
+  { title: "Princípios de design escaláveis", date: formatNoteDate(today), icon: FileText },
+  {
+    title: `Ideias de conteúdo – ${format(today, "MMMM", { locale: ptBR })}`,
+    date: formatNoteDate(subDays(today, 1)),
+    icon: FileText,
+  },
+  { title: "Lições da semana", date: formatNoteDate(subDays(today, 4)), icon: FileText },
+  { title: "Livros que estou lendo", date: formatNoteDate(subDays(today, 5)), icon: BookOpen },
 ] as const;
 
 export function RecentNotesCard() {
   return (
     <Card className="shadow-xs">
       <CardHeader>
-        <CardTitle>Recent Notes</CardTitle>
+        <CardTitle>Notas recentes</CardTitle>
         <CardAction>
           <Button variant="ghost" size="sm" className="text-muted-foreground">
-            View all
+            Ver todas
           </Button>
         </CardAction>
       </CardHeader>

@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { startOfMonth, startOfToday } from "date-fns";
-import { enGB } from "date-fns/locale";
+import { ptBR } from "date-fns/locale";
 
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,7 +23,7 @@ export function CalendarPanel() {
           month={currentMonth}
           onMonthChange={setCurrentMonth}
           fixedWeeks
-          locale={enGB}
+          locale={ptBR}
           className="w-full p-0"
         />
       </CardContent>

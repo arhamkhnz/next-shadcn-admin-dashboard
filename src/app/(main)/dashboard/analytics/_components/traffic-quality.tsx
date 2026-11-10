@@ -96,11 +96,11 @@ const qualitySeries = [
 const chartConfig = {
   actualQuality: {
     color: "var(--chart-3)",
-    label: "Actual quality",
+    label: "Qualidade atual",
   },
   baselineQuality: {
     color: "var(--muted-foreground)",
-    label: "Baseline quality",
+    label: "Qualidade de referência",
   },
 } satisfies ChartConfig;
 
@@ -114,14 +114,14 @@ const weeklyTicks = [4, 11, 18, 25];
 function formatWeek(value: number) {
   const weekIndex = weeklyTicks.indexOf(value);
 
-  return weekIndex >= 0 ? `Week ${weekIndex + 1}` : "";
+  return weekIndex >= 0 ? `Semana ${weekIndex + 1}` : "";
 }
 
 export function TrafficQuality() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="font-normal">Traffic Quality</CardTitle>
+        <CardTitle className="font-normal">Qualidade do tráfego</CardTitle>
         <CardAction>
           <Ellipsis className="size-4" />
         </CardAction>
@@ -152,7 +152,7 @@ export function TrafficQuality() {
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent className="w-40" labelFormatter={() => "Traffic quality"} />}
+              content={<ChartTooltipContent className="w-40" labelFormatter={() => "Qualidade do tráfego"} />}
             />
             <Line
               dataKey="baselineQuality"

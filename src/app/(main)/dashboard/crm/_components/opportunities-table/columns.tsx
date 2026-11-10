@@ -18,13 +18,13 @@ const healthStripSlots = Array.from({ length: 18 }, (_, index) => ({
 
 function getHealthScore(health: OpportunityRow["health"]) {
   switch (health) {
-    case "On Track":
+    case "Em dia":
       return 18;
-    case "Needs Review":
+    case "Precisa de revisão":
       return 11;
-    case "At Risk":
+    case "Em risco":
       return 7;
-    case "On Hold":
+    case "Em pausa":
       return 4;
     default:
       return 0;
@@ -46,7 +46,7 @@ export const opportunitiesColumns: ColumnDef<DataTableFeatures, OpportunityRow>[
           <Checkbox
             checked={checked}
             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all opportunities"
+            aria-label="Selecionar todas as oportunidades"
           />
         )}
       </Subscribe>
@@ -57,7 +57,7 @@ export const opportunitiesColumns: ColumnDef<DataTableFeatures, OpportunityRow>[
           <Checkbox
             checked={checked}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label={`Select ${row.original.account}`}
+            aria-label={`Selecionar ${row.original.account}`}
           />
         )}
       </Subscribe>
@@ -72,12 +72,12 @@ export const opportunitiesColumns: ColumnDef<DataTableFeatures, OpportunityRow>[
   },
   {
     accessorKey: "account",
-    header: "Account",
+    header: "Conta",
     cell: ({ row }) => <div className="font-medium text-sm">{row.original.account}</div>,
   },
   {
     accessorKey: "stage",
-    header: "Stage",
+    header: "Estágio",
     cell: ({ row }) => (
       <Badge variant="outline" className="rounded-full px-2.5">
         {row.original.stage}
@@ -87,12 +87,12 @@ export const opportunitiesColumns: ColumnDef<DataTableFeatures, OpportunityRow>[
   },
   {
     accessorKey: "priority",
-    header: "Priority",
+    header: "Prioridade",
     cell: ({ row }) => <div className="text-sm">{row.original.priority}</div>,
   },
   {
     accessorKey: "health",
-    header: "Health",
+    header: "Saúde",
     cell: ({ row }) => (
       <div className="flex items-end gap-0.5" title={row.original.health}>
         <span className="sr-only">{row.original.health}</span>
@@ -111,12 +111,12 @@ export const opportunitiesColumns: ColumnDef<DataTableFeatures, OpportunityRow>[
   },
   {
     accessorKey: "value",
-    header: "Value",
+    header: "Valor",
     cell: ({ row }) => <div className="font-medium text-sm tabular-nums">{row.original.value}</div>,
   },
   {
     id: "actions",
-    header: () => <div className="text-right">Edit</div>,
+    header: () => <div className="text-right">Editar</div>,
     cell: () => (
       <div className="text-right">
         <Button
@@ -125,7 +125,7 @@ export const opportunitiesColumns: ColumnDef<DataTableFeatures, OpportunityRow>[
           className="size-8 rounded-full text-muted-foreground hover:bg-transparent focus-visible:bg-transparent"
         >
           <Pencil />
-          <span className="sr-only">Edit opportunity</span>
+          <span className="sr-only">Editar oportunidade</span>
         </Button>
       </div>
     ),

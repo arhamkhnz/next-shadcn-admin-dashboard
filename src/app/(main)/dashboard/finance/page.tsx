@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Download, RotateCw, Settings2 } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -15,44 +16,45 @@ import { UpcomingTransactions } from "./_components/upcoming-transactions";
 import { Wallet } from "./_components/wallet";
 
 export const metadata: Metadata = {
-  title: "Open Source Finance Dashboard with shadcn/ui",
+  title: "Painel de finanças pessoais com shadcn/ui",
   description:
-    "Explore an open source personal finance dashboard with net worth, spending, income sources, account allocation, transactions, and wallets.",
+    "Explore um painel de código aberto para finanças pessoais: patrimônio líquido, gastos, fontes de renda, alocação de contas, transações e carteiras.",
   alternates: {
     canonical: "/dashboard/finance",
   },
 };
 
 export default function Page() {
-  const formattedDate = format(new Date(), "EEEE, do MMMM yyyy");
+  const formattedDate = format(new Date(), "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR });
+  const displayDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
 
   return (
     <div className="flex flex-col gap-4">
       <div className="space-y-1">
-        <h1 className="text-3xl tracking-tight">Personal Finances</h1>
-        <p className="text-muted-foreground text-sm">{formattedDate}</p>
+        <h1 className="text-3xl tracking-tight">Finanças pessoais</h1>
+        <p className="text-muted-foreground text-sm">{displayDate}</p>
       </div>
 
       <Tabs defaultValue="30-days" className="flex flex-col gap-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <TabsList variant="line">
-            <TabsTrigger value="30-days">Dashboard</TabsTrigger>
-            <TabsTrigger value="12-months">Accounts</TabsTrigger>
-            <TabsTrigger value="custom">Transactions</TabsTrigger>
+            <TabsTrigger value="30-days">Painel</TabsTrigger>
+            <TabsTrigger value="12-months">Contas</TabsTrigger>
+            <TabsTrigger value="custom">Transações</TabsTrigger>
           </TabsList>
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
               <RotateCw className="size-4" />
-              <span>Updated 5 min ago</span>
+              <span>Atualizado há 5 minutos</span>
             </div>
             <Button size="sm" variant="outline">
               <Settings2 />
-              Settings
+              Configurações
             </Button>
             <Button size="sm" variant="outline">
               <Download data-icon="inline-start" />
-              Export
+              Exportar
             </Button>
           </div>
         </div>
@@ -93,13 +95,13 @@ export default function Page() {
 
         <TabsContent value="12-months">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
-            Accounts view coming soon.
+            Visualização de contas em breve.
           </div>
         </TabsContent>
 
         <TabsContent value="custom">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
-            Transactions view coming soon.
+            Visualização de transações em breve.
           </div>
         </TabsContent>
       </Tabs>

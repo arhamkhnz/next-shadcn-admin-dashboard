@@ -72,6 +72,22 @@ Tradução não deve alterar comportamento, filtros, ordenação ou teclas de at
 | Sort | Ordenar |
 | Actions | Ações |
 | Edit / Manage / Resend | Editar / Gerenciar / Reenviar |
+| Balance / Wallet | Saldo / Carteira |
+| Net worth / Savings rate | Patrimônio líquido / Taxa de poupança |
+| Stage / Health | Estágio / Saúde |
+| Opportunity / Deal | Oportunidade / Negócio |
+| On Track / Needs Review / At Risk / On Hold | Em dia / Precisa de revisão / Em risco / Em pausa |
+| Autopay | Débito automático |
+| Realtime / Unique Visitors | Visitantes em tempo real / únicos |
+| Pageviews | Visualizações de página |
+| Traffic sources / Referrers | Fontes de tráfego / Indicadores |
+| Organic Search / Direct / Referral / Paid | Busca orgânica / Direto / Indicação / Pago |
+| Traffic Quality / Baseline | Qualidade do tráfego / Qualidade de referência |
+| Year to date | Desde o início do ano |
+| Deep Work | Trabalho profundo |
+
+**Ficam em inglês por consenso do Lote A:** Retargeting, Onboarding, design system, "Q" → "T"
+(roadmap T2), formato "3m 12s", marcas dos mocks (Product Hunt, Linear Plus Plan, Ledger Nano X).
 
 Terminologia do shell já fixada: Painéis, Páginas, Legado, Diversos, Funções (Roles),
 Faturas (Invoice), Gestão de usuários (Users).
