@@ -2,6 +2,7 @@ import { cn } from "cn";
 import { differenceInDays } from "date-fns/differenceInDays";
 import { format } from "date-fns/format";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { ptBR } from "date-fns/locale";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -106,8 +107,8 @@ function formatMailDate(date: string) {
   const mailDate = new Date(date);
 
   if (differenceInDays(new Date(), mailDate) <= 3) {
-    return formatDistanceToNow(mailDate, { addSuffix: true });
+    return formatDistanceToNow(mailDate, { addSuffix: true, locale: ptBR });
   }
 
-  return format(mailDate, "d MMM yyyy");
+  return format(mailDate, "d MMM yyyy", { locale: ptBR });
 }

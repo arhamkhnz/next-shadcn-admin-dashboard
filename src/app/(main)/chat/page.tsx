@@ -4,9 +4,9 @@ import { Chat } from "./_components/chat";
 import { conversations } from "./_components/data";
 
 export const metadata: Metadata = {
-  title: "Open Source Chat Interface with shadcn/ui",
+  title: "Interface de chat open source com shadcn/ui",
   description:
-    "Explore an open source chat interface with conversation search, message threads, internal notes, and contact details.",
+    "Explore uma interface de chat open source com busca de conversas, threads de mensagens, notas internas e detalhes do contato.",
   alternates: {
     canonical: "/chat",
   },

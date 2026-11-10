@@ -10,20 +10,20 @@ export function ChatHeader() {
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <h1 className="text-nowrap font-medium text-base">Studio Chat</h1>
           <InputGroup className="h-7 w-full max-w-sm">
-            <InputGroupInput className="h-7" placeholder="Search conversations..." />
+            <InputGroupInput className="h-7" placeholder="Buscar conversas..." />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
           </InputGroup>
         </div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon-sm" aria-label="New conversation">
+          <Button variant="ghost" size="icon-sm" aria-label="Nova conversa">
             <MessageSquarePlus />
           </Button>
-          <Button variant="ghost" size="icon-sm" aria-label="Notifications">
+          <Button variant="ghost" size="icon-sm" aria-label="Notificações">
             <Bell />
           </Button>
-          <Button variant="ghost" size="icon-sm" aria-label="Settings">
+          <Button variant="ghost" size="icon-sm" aria-label="Configurações">
             <Settings />
           </Button>
         </div>

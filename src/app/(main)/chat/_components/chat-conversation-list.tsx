@@ -51,7 +51,7 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
             {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
           </Button>
           <Separator orientation="vertical" className="mr-1.5 h-4 data-vertical:self-center" />
-          <h1 className="font-medium text-xl leading-none">Inbox</h1>
+          <h1 className="font-medium text-xl leading-none">Caixa de entrada</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon-sm">
@@ -65,18 +65,18 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
       <Tabs defaultValue="all">
         <TabsList variant="line" className="w-full border-b px-0 **:data-[slot=tabs-trigger]:border-x-0">
           <TabsTrigger value="all">
-            All
+            Todas
             <span className="text-muted-foreground text-xs">(24)</span>
           </TabsTrigger>
           <TabsTrigger value="open">
-            Open
+            Abertas
             <span className="text-muted-foreground text-xs">(18)</span>
           </TabsTrigger>
           <TabsTrigger value="snoozed">
-            Snoozed
+            Adiadas
             <span className="text-muted-foreground text-xs">(2)</span>
           </TabsTrigger>
-          <TabsTrigger value="closed">Closed</TabsTrigger>
+          <TabsTrigger value="closed">Fechadas</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -142,7 +142,7 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
                                 </div>
 
                                 <div className="flex items-center gap-1">
-                                  {conversation.group === "Pinned" && (
+                                  {conversation.group === "Fixado" && (
                                     <div className="grid size-5 place-items-center">
                                       <Pin className="size-3 fill-current opacity-70" />
                                     </div>

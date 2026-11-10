@@ -2,6 +2,7 @@
 
 import { cn } from "cn";
 import { format } from "date-fns/format";
+import { ptBR } from "date-fns/locale";
 import {
   Archive,
   ChevronDown,
@@ -59,29 +60,29 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Close message" onClick={handleClose}>
+              <Button variant="ghost" size="icon-sm" aria-label="Fechar mensagem" onClick={handleClose}>
                 <X />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Close message</TooltipContent>
+            <TooltipContent>Fechar mensagem</TooltipContent>
           </Tooltip>
           <Separator className="h-4 data-vertical:self-center" orientation="vertical" />
           <div className="flex items-center gap-0">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon-sm" aria-label="Previous message">
+                <Button variant="ghost" size="icon-sm" aria-label="Mensagem anterior">
                   <ChevronLeft />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Previous message</TooltipContent>
+              <TooltipContent>Mensagem anterior</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon-sm" aria-label="Next message">
+                <Button variant="ghost" size="icon-sm" aria-label="Próxima mensagem">
                   <ChevronRight />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Next message</TooltipContent>
+              <TooltipContent>Próxima mensagem</TooltipContent>
             </Tooltip>
           </div>
         </div>
@@ -89,33 +90,33 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
         <div className="ml-auto flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Pin thread">
+              <Button variant="ghost" size="icon-sm" aria-label="Fixar conversa">
                 <Pin />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Pin thread</TooltipContent>
+            <TooltipContent>Fixar conversa</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Archive">
+              <Button variant="ghost" size="icon-sm" aria-label="Arquivar">
                 <Archive />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Archive</TooltipContent>
+            <TooltipContent>Arquivar</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Reply">
+              <Button variant="ghost" size="icon-sm" aria-label="Responder">
                 <Reply />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Reply</TooltipContent>
+            <TooltipContent>Responder</TooltipContent>
           </Tooltip>
           <Tooltip>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon-sm" aria-label="More actions">
+                  <Button variant="ghost" size="icon-sm" aria-label="Mais ações">
                     <EllipsisVertical />
                   </Button>
                 </TooltipTrigger>
@@ -124,36 +125,36 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <ReplyAll />
-                    Reply all
+                    Responder a todos
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Forward />
-                    Forward
+                    Encaminhar
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <MailOpen />
-                    Mark as unread
+                    Marcar como não lida
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Tag />
-                    Add label
+                    Adicionar marcador
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            <TooltipContent>More actions</TooltipContent>
+            <TooltipContent>Mais ações</TooltipContent>
           </Tooltip>
           <Separator className="h-4 data-vertical:self-center" orientation="vertical" />
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Move to trash">
+              <Button variant="ghost" size="icon-sm" aria-label="Mover para a lixeira">
                 <Trash2 className="text-destructive" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Move to trash</TooltipContent>
+            <TooltipContent>Mover para a lixeira</TooltipContent>
           </Tooltip>
         </div>
       </div>
@@ -167,7 +168,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
               <div className="font-medium leading-none">{mail.subject}</div>
 
               <div className="text-muted-foreground text-xs leading-none">
-                {format(new Date(mail.receivedAt), "EEE, d MMM yyyy, h:mm a")}
+                {format(new Date(mail.receivedAt), "EEE, d 'de' MMM 'de' yyyy, HH:mm", { locale: ptBR })}
               </div>
             </div>
 
@@ -186,7 +187,8 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="text-muted-foreground text-xs">
-                    To: <span className="text-foreground">{mail.to.map((recipient) => recipient.name).join(", ")}</span>
+                    Para:{" "}
+                    <span className="text-foreground">{mail.to.map((recipient) => recipient.name).join(", ")}</span>
                   </div>
 
                   {mail.cc?.length ? (
@@ -214,7 +216,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                         "data-[state=open]:bg-transparent data-[state=open]:text-muted-foreground",
                       )}
                     >
-                      Attachments ({mail.attachments.length})
+                      Anexos ({mail.attachments.length})
                       <ChevronDown className="group-data-[state=open]:rotate-180" />
                     </Button>
                   </CollapsibleTrigger>
@@ -244,7 +246,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                 <InputGroupAddon align="inline-start">
                   <Reply />
                 </InputGroupAddon>
-                <InputGroupInput className="text-xs" placeholder={`Reply ${mail.from.name}...`} />
+                <InputGroupInput className="text-xs" placeholder={`Responder ${mail.from.name}...`} />
                 <InputGroupAddon className="gap-1" align="inline-end">
                   <InputGroupButton variant="ghost">
                     <Smile />
@@ -260,7 +262,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
             </div>
           </div>
         ) : (
-          <div className="grid h-full place-items-center text-muted-foreground text-sm">No email selected</div>
+          <div className="grid h-full place-items-center text-muted-foreground text-sm">Nenhum e-mail selecionado</div>
         )}
       </div>
     </div>
