@@ -68,7 +68,7 @@ export const profile: ProfileRecord = {
   initials: "AK",
   avatar: "https://avatars.githubusercontent.com/u/43849669",
   engagementStatus: "Ativo",
-  jobTitle: "Engenheiro de Software",
+  jobTitle: "Engenheiro de software",
   jobLevel: "Sênior",
   department: "Produto",
   team: "Produto",

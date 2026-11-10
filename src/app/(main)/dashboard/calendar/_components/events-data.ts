@@ -11,7 +11,7 @@ export const demoEvents = [
   { title: "Check-in de cliente", start: dt(4, 15), end: dt(4, 15, 45) },
   { title: "Workshop de produto", start: d(7), end: d(9), allDay: true },
   { groupId: "standup", title: "Daily da equipe", start: dt(9, 10) },
-  { title: "Alinhamento de financeiro", start: dt(10, 14, 30), end: dt(10, 15) },
+  { title: "Alinhamento do financeiro", start: dt(10, 14, 30), end: dt(10, 15) },
   { title: "Bloco de foco", start: dt(12, 9), end: dt(12, 12), display: "background" },
   { title: "Planejamento de sprint", start: dt(15, 9, 30), end: dt(15, 11) },
   { groupId: "standup", title: "Daily da equipe", start: dt(16, 10) },

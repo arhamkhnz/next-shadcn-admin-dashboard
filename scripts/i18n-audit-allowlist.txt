@@ -1,0 +1,10 @@
+# Exceções aprovadas (permanecem em inglês por decisão documentada em PLANO-TRADUCAO.md).
+# Uma regex extendida por linha. Adicione a nova exceção aqui em vez de apagar o resultado.
+CRM|KPI|SKU|POS|PDV|QA|IT|HR|RH|ETA|USD|ECG|ARR|MRR
+Devolvido|Atendido|Reembolsado|Pago|Pendente|Arquivado|Alta|Média|Baixa|Cancelado|Revisão
+Weblabs|Acme|Product Hunt|Studio Blocks|Geist|Radix|Base UI|React Aria|TanStack|GitHub|Google|Vercel
+Organic|Cotton|Linen|Tote|Planter|Overshirt|Sweatshirt|Tee|Blazer
+Latency|Uptime value flag
+Live demo|Retargeting|Onboarding|white-label|design system
+George|Koray|Olivia|Ontario|Tara|Ethan|Nora|Vikram|Hannah|Rohan|Candice|Steven|Whitten|Romberg|Pierre|Lana
+Aiy|Figma|Linear|Notion|OpenAI|Shopify|Stripe|Slack

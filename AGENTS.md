@@ -50,11 +50,18 @@ npm run check:fix
 npm run generate:presets
 ```
 
-Atualmente não há comando de testes automatizados. Rode build, lint, check ou outros comandos de validação apenas quando o usuário solicitar explicitamente essa validação.
+Atualmente há uma suite de testes de dados/filtros: `npm test` (vitest, `test/`). CI em `.github/workflows/ci.yml` (tsc + biome + test + build). Audite de i18n: `npm run i18n:audit`. Rodar build/lint/check só quando o usuário solicitar explicitamente essa validação.
 
 ## Estrutura colocation-based
 
 Mantenha o código de cada feature perto da rota à qual ela pertence.
+
+Mapa rápido do repo: telas de dashboard ficam em `src/app/(main)/dashboard/<tela>/page.tsx`
+(componentes em `_components/` ao lado); as rotas completas de e-mail/chat vivem fora do dashboard, em
+`src/app/(main)/mail/` e `src/app/(main)/chat/`; **autenticação fica em `src/app/(main)/auth/` (v1/v2), e não
+em `(auth)`**; páginas institucionais e de erro ficam em `src/app/(external)/`, `not-found.tsx` e
+`src/app/(main)/unauthorized/`. Rotas `(legacy)` permanecem em inglês por decisão do
+`PLANO-TRADUCAO.md`.
 
 - Rotas de dashboard: `src/app/(main)/dashboard/<tela>/page.tsx`
 - Componentes, dados e schemas específicos da tela: `src/app/(main)/dashboard/<tela>/_components/`
