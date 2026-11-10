@@ -11,17 +11,17 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z
   .object({
-    email: z.email({ message: "Please enter a valid email address." }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters." }),
-    confirmPassword: z.string().min(6, { message: "Confirm Password must be at least 6 characters." }),
+    email: z.email({ message: "Informe um e-mail válido." }),
+    password: z.string().min(6, { message: "A senha deve ter no mínimo 6 caracteres." }),
+    confirmPassword: z.string().min(6, { message: "A confirmação de senha deve ter no mínimo 6 caracteres." }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
+    message: "As senhas não coincidem.",
     path: ["confirmPassword"],
   });
 
 function onSubmit(data: z.infer<typeof formSchema>) {
-  toast("You submitted the following values", {
+  toast("Você enviou os seguintes valores", {
     description: (
       <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
         <code className="text-white">{JSON.stringify(data, null, 2)}</code>
@@ -48,7 +48,7 @@ export function RegisterForm() {
           name="email"
           render={({ field, fieldState }) => (
             <Field className="gap-1.5" data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="register-email">Email Address</FieldLabel>
+              <FieldLabel htmlFor="register-email">E-mail</FieldLabel>
               <Input
                 {...field}
                 id="register-email"
@@ -66,7 +66,7 @@ export function RegisterForm() {
           name="password"
           render={({ field, fieldState }) => (
             <Field className="gap-1.5" data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="register-password">Password</FieldLabel>
+              <FieldLabel htmlFor="register-password">Senha</FieldLabel>
               <Input
                 {...field}
                 id="register-password"
@@ -84,7 +84,7 @@ export function RegisterForm() {
           name="confirmPassword"
           render={({ field, fieldState }) => (
             <Field className="gap-1.5" data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="register-confirm-password">Confirm Password</FieldLabel>
+              <FieldLabel htmlFor="register-confirm-password">Confirmar senha</FieldLabel>
               <Input
                 {...field}
                 id="register-confirm-password"
@@ -99,7 +99,7 @@ export function RegisterForm() {
         />
       </FieldGroup>
       <Button className="w-full" type="submit">
-        Register
+        Criar conta
       </Button>
     </form>
   );
