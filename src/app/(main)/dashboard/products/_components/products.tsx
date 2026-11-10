@@ -27,14 +27,14 @@ export function Products() {
       {
         ...product,
         id,
-        name: `${product.name} (copy)`,
+        name: `${product.name} (cópia)`,
         sku: `COPY-${id.replaceAll("-", "")}`,
-        status: "Draft",
+        status: "Rascunho",
         sold: 0,
       },
       ...current,
     ]);
-    toast.success("Product duplicated as a draft.");
+    toast.success("Produto duplicado como rascunho.");
   }, []);
   const columns = useMemo(() => createProductsColumns(editProduct, duplicateProduct), [editProduct, duplicateProduct]);
 
@@ -53,11 +53,11 @@ export function Products() {
   });
 
   const search = (table.getColumn("search")?.getFilterValue() as string | undefined) ?? "";
-  const status = (table.getColumn("status")?.getFilterValue() as string | undefined) ?? "All";
-  const category = (table.getColumn("category")?.getFilterValue() as string | undefined) ?? "All";
+  const status = (table.getColumn("status")?.getFilterValue() as string | undefined) ?? "Todos";
+  const category = (table.getColumn("category")?.getFilterValue() as string | undefined) ?? "Todos";
 
   function filterColumn(id: string, value: string) {
-    table.getColumn(id)?.setFilterValue(!value || (id !== "search" && value === "All") ? undefined : value);
+    table.getColumn(id)?.setFilterValue(!value || (id !== "search" && value === "Todos") ? undefined : value);
     table.setPageIndex(0);
   }
 
@@ -76,25 +76,25 @@ export function Products() {
           <InputGroupInput
             className="h-7"
             type="text"
-            aria-label="Search products"
-            placeholder="Search products…"
+            aria-label="Buscar produtos"
+            placeholder="Buscar produtos…"
             value={search}
             onChange={(event) => filterColumn("search", event.target.value)}
           />
         </InputGroup>
         <div className="flex flex-wrap items-center gap-2">
-          {(search || status !== "All" || category !== "All") && (
+          {(search || status !== "Todos" || category !== "Todos") && (
             <Button variant="ghost" size="sm" onClick={resetFilters}>
-              Clear filters
+              Limpar filtros
             </Button>
           )}
           <Select value={status} onValueChange={(value) => filterColumn("status", value)}>
-            <SelectTrigger size="sm" aria-label="Filter product status" className="w-36">
+            <SelectTrigger size="sm" aria-label="Filtrar status do produto" className="w-36">
               <SelectValue />
             </SelectTrigger>
             <SelectContent align="end">
               <SelectGroup>
-                <SelectItem value="All">All statuses</SelectItem>
+                <SelectItem value="Todos">Todos os status</SelectItem>
                 {statuses.map((item) => (
                   <SelectItem key={item} value={item}>
                     {item}
@@ -104,12 +104,12 @@ export function Products() {
             </SelectContent>
           </Select>
           <Select value={category} onValueChange={(value) => filterColumn("category", value)}>
-            <SelectTrigger size="sm" aria-label="Filter product category" className="w-44">
+            <SelectTrigger size="sm" aria-label="Filtrar categoria do produto" className="w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent align="end">
               <SelectGroup>
-                <SelectItem value="All">All categories</SelectItem>
+                <SelectItem value="Todos">Todas as categorias</SelectItem>
                 {categories.map((item) => (
                   <SelectItem key={item} value={item}>
                     {item}
@@ -131,7 +131,7 @@ export function Products() {
             setProducts((current) => current.map((p) => (p.id === product.id ? product : p)));
             setEditor(null);
             resetFilters();
-            toast.success("Product saved in this demo session.");
+            toast.success("Produto salvo nesta sessão de demonstração.");
           }}
         />
       )}

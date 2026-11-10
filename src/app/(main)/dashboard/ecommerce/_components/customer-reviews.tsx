@@ -10,9 +10,9 @@ export function CustomerReviews() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="text-muted-foreground text-sm font-normal">Reviews</CardTitle>
-        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
-          4.6 average rating
+        <CardTitle className="font-normal text-muted-foreground text-sm">Avaliações</CardTitle>
+        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+          Avaliação média de 4,6
         </CardDescription>
         <CardAction>
           <ArrowUpRight className="size-4" />
@@ -20,10 +20,10 @@ export function CustomerReviews() {
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
-        <div className="bg-muted rounded-lg p-4">
+        <div className="rounded-lg bg-muted p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col gap-2">
-              <div className="text-foreground flex gap-0.5">
+              <div className="flex gap-0.5 text-foreground">
                 <Star className="size-3.5 fill-current" />
                 <Star className="size-3.5 fill-current" />
                 <Star className="size-3.5 fill-current" />
@@ -31,18 +31,18 @@ export function CustomerReviews() {
                 <Star className="size-3.5 fill-current" />
               </div>
               <div>
-                <div className="text-sm font-medium">Melody Macy</div>
-                <p className="text-muted-foreground mt-2 line-clamp-3 min-h-[4.5em] text-sm">
-                  The linen overshirt arrived faster than expected and the fit was exactly right.
+                <div className="font-medium text-sm">Melody Macy</div>
+                <p className="mt-2 line-clamp-3 min-h-[4.5em] text-muted-foreground text-sm">
+                  A overshirt de linho chegou mais rápido do que o esperado e a modelagem ficou exatamente como pedida.
                 </p>
               </div>
             </div>
 
             <div className="flex gap-1">
-              <Button aria-label="Previous review" size="icon-xs" variant="outline">
+              <Button aria-label="Avaliação anterior" size="icon-xs" variant="outline">
                 <ArrowLeft />
               </Button>
-              <Button aria-label="Next review" size="icon-xs" variant="outline">
+              <Button aria-label="Próxima avaliação" size="icon-xs" variant="outline">
                 <ArrowRight />
               </Button>
             </div>
@@ -51,8 +51,8 @@ export function CustomerReviews() {
 
         <div className="flex items-center justify-between gap-4 rounded-lg border px-4 py-3">
           <div className="min-w-0">
-            <div className="text-sm font-medium">12.8K reviews</div>
-            <div className="text-muted-foreground line-clamp-2 min-h-[3em] text-xs">Customers reviewed this month</div>
+            <div className="font-medium text-sm">12,8 mil avaliações</div>
+            <div className="line-clamp-2 min-h-[3em] text-muted-foreground text-xs">Clientes avaliaram neste mês</div>
           </div>
 
           <AvatarGroup>

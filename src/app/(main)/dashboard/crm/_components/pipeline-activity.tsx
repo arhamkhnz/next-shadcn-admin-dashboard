@@ -11,13 +11,19 @@ const pipelineChartValues = [34, 38, 31, 47, 42, 51, 44, 40, 58, 46, 43, 49] as 
 
 const pipelineChartConfig = {
   qualified: {
-    label: "Qualified",
+    label: "Qualificados",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 
-const axisMonthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
-const tooltipMonthFormatter = new Intl.DateTimeFormat("en-US", { month: "short", year: "2-digit" });
+const axisMonthFormatter = new Intl.DateTimeFormat("pt-BR", { month: "short" });
+const tooltipMonthFormatter = new Intl.DateTimeFormat("pt-BR", { month: "short", year: "2-digit" });
+
+const formatMonthAxis = (value: number) => {
+  const month = axisMonthFormatter.format(new Date(String(value)));
+
+  return month.charAt(0).toUpperCase() + month.slice(1);
+};
 
 function getRollingMonthData(values: readonly number[]) {
   return values.map((qualified, index) => {
@@ -41,17 +47,17 @@ export function PipelineActivity() {
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
       <Card className="xl:col-span-12">
         <CardHeader>
-          <CardTitle>Qualified Lead Flow</CardTitle>
+          <CardTitle>Fluxo de leads qualificados</CardTitle>
           <CardAction>
             <Select defaultValue="last-12-months">
               <SelectTrigger size="sm" className="min-w-40">
-                <SelectValue placeholder="Select range" />
+                <SelectValue placeholder="Selecionar período" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="last-30-days">Last 30 days</SelectItem>
-                  <SelectItem value="last-quarter">Last quarter</SelectItem>
-                  <SelectItem value="last-12-months">Last 12 months</SelectItem>
+                  <SelectItem value="last-30-days">Últimos 30 dias</SelectItem>
+                  <SelectItem value="last-quarter">Último trimestre</SelectItem>
+                  <SelectItem value="last-12-months">Últimos 12 meses</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -87,7 +93,7 @@ export function PipelineActivity() {
                   tickLine={false}
                   tickMargin={10}
                   axisLine={false}
-                  tickFormatter={(value) => axisMonthFormatter.format(new Date(String(value)))}
+                  tickFormatter={formatMonthAxis}
                 />
                 <YAxis hide />
                 <ChartTooltip
@@ -111,34 +117,36 @@ export function PipelineActivity() {
 
             <div className="flex flex-col gap-5 rounded-lg p-4 lg:col-span-4">
               <div className="flex flex-col gap-1">
-                <div className="text-4xl leading-none font-medium tabular-nums">
-                  {totalQualified} <span className="text-muted-foreground text-lg font-normal">leads</span>
+                <div className="font-medium text-4xl tabular-nums leading-none">
+                  {totalQualified} <span className="font-normal text-lg text-muted-foreground">leads</span>
                 </div>
-                <p className="text-muted-foreground text-sm">Total qualified leads captured over the last 12 months.</p>
+                <p className="text-muted-foreground text-sm">
+                  Total de leads qualificados capturados nos últimos 12 meses.
+                </p>
               </div>
 
-              <div className="border-border/60 flex flex-col gap-3 rounded-lg border p-3">
-                <div className="text-muted-foreground text-[11px] tracking-widest uppercase">
-                  Discovery Calls Booked
+              <div className="flex flex-col gap-3 rounded-lg border border-border/60 p-3">
+                <div className="text-[11px] text-muted-foreground uppercase tracking-widest">
+                  Reuniões de descoberta agendadas
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <div className="text-2xl leading-none font-medium tabular-nums">
-                    {discoveryCallsBooked} <span className="text-muted-foreground text-sm font-normal">meetings</span>
+                  <div className="font-medium text-2xl tabular-nums leading-none">
+                    {discoveryCallsBooked} <span className="font-normal text-muted-foreground text-sm">reuniões</span>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    {discoveryProgress}% of qualified leads booked a first call.
+                    {discoveryProgress}% dos leads qualificados agendaram uma primeira reunião.
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-2 pt-0.5">
                   <Progress
                     value={discoveryProgress}
-                    className="bg-chart-2/12 *:data-[slot='progress-indicator']:bg-chart-2 h-2.5"
+                    className="h-2.5 bg-chart-2/12 *:data-[slot='progress-indicator']:bg-chart-2"
                   />
                   <div className="flex items-center justify-between text-xs">
-                    <div className="font-medium tabular-nums">{discoveryCallsBooked} booked</div>
-                    <div className="text-muted-foreground tabular-nums">{totalQualified} qualified</div>
+                    <div className="font-medium tabular-nums">{discoveryCallsBooked} agendadas</div>
+                    <div className="text-muted-foreground tabular-nums">{totalQualified} qualificados</div>
                   </div>
                 </div>
               </div>

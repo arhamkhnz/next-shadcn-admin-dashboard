@@ -38,13 +38,13 @@ export function GitHubRepositoriesMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" aria-label="Open project repositories on GitHub">
+        <Button size="icon" aria-label="Abrir repositórios do projeto no GitHub">
           <SimpleIcon icon={siGithub} className="fill-primary-foreground" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Project versions</DropdownMenuLabel>
+          <DropdownMenuLabel>Versões do projeto</DropdownMenuLabel>
           {repositories.map((repository) => (
             <DropdownMenuItem key={repository.href} asChild>
               <Link prefetch={false} href={repository.href} target="_blank" rel="noreferrer">

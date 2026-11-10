@@ -1,4 +1,4 @@
-export const orderFilters = ["All", "Needs action", "Unfulfilled", "Unpaid", "Returns"] as const;
+export const orderFilters = ["Todos", "Precisa de ação", "Não atendido", "Não pago", "Devoluções"] as const;
 
 export type OrderFilter = (typeof orderFilters)[number];
 
@@ -6,8 +6,8 @@ export type OrderRow = {
   id: string;
   date: string;
   customer: string;
-  payment: "Paid" | "Pending" | "Refunded";
+  payment: "Pago" | "Pendente" | "Reembolsado";
   total: string;
   items: string;
-  fulfillment: "Fulfilled" | "Returned" | "Unfulfilled";
+  fulfillment: "Atendido" | "Devolvido" | "Não atendido";
 };

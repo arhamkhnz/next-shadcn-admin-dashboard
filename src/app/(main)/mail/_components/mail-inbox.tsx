@@ -25,7 +25,7 @@ export function MailInbox({ mails, onSelectMail }: MailInboxProps) {
         <div className="flex items-center">
           <SidebarTrigger />
           <Separator orientation="vertical" className="mr-2 ml-1 h-4 data-vertical:self-center" />
-          <h1 className="text-xl leading-none font-medium">Inbox</h1>
+          <h1 className="font-medium text-xl leading-none">Caixa de entrada</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon-sm">
@@ -46,7 +46,7 @@ export function MailInbox({ mails, onSelectMail }: MailInboxProps) {
 
       <div className="px-2">
         <InputGroup className="h-7 w-full rounded-md">
-          <InputGroupInput className="h-7" placeholder="Search..." />
+          <InputGroupInput className="h-7" placeholder="Buscar…" />
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
@@ -58,12 +58,12 @@ export function MailInbox({ mails, onSelectMail }: MailInboxProps) {
           groups={[
             {
               id: "pinned",
-              title: "Pinned",
+              title: "Fixados",
               items: pinnedMails,
             },
             {
               id: "inbox",
-              title: "Inbox",
+              title: "Caixa de entrada",
               items: unpinnedMails,
             },
           ]}

@@ -22,30 +22,30 @@ const chartData = [
 ];
 
 function SubmittedLegendIcon() {
-  return <span className="bg-chart-3 block size-2 rounded-[2px]" />;
+  return <span className="block size-2 rounded-[2px] bg-chart-3" />;
 }
 
 function PendingLegendIcon() {
-  return <span className="bg-chart-2 block size-2 rounded-[2px]" />;
+  return <span className="block size-2 rounded-[2px] bg-chart-2" />;
 }
 
 function OverdueLegendIcon() {
-  return <span className="bg-destructive block size-2 rounded-[2px]" />;
+  return <span className="block size-2 rounded-[2px] bg-destructive" />;
 }
 
 const chartConfig = {
   submitted: {
-    label: "Submitted",
+    label: "Entregues",
     color: "var(--chart-3)",
     icon: SubmittedLegendIcon,
   },
   pending: {
-    label: "Pending",
+    label: "Pendentes",
     color: "var(--chart-2)",
     icon: PendingLegendIcon,
   },
   overdue: {
-    label: "Overdue",
+    label: "Em atraso",
     color: "var(--destructive)",
     icon: OverdueLegendIcon,
   },
@@ -65,9 +65,9 @@ export function AssignmentStatus() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="text-sm">Assignment Status</CardTitle>
-        <CardAction className="text-muted-foreground flex items-center gap-1 text-xs">
-          View Report <ArrowRight className="size-4" />
+        <CardTitle className="text-sm">Status das atividades</CardTitle>
+        <CardAction className="flex items-center gap-1 text-muted-foreground text-xs">
+          Ver relatório <ArrowRight className="size-4" />
         </CardAction>
       </CardHeader>
       <CardContent>

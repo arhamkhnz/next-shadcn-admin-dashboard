@@ -1,4 +1,5 @@
 import { addDays, format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { ClipboardCheck, Globe, Orbit, Plus } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -11,27 +12,27 @@ const today = new Date();
 
 const projects = [
   {
-    title: "Q2 Roadmap",
-    status: "In Progress",
-    description: "Ship better, ship smarter.",
+    title: "Roadmap T2",
+    status: "Em andamento",
+    description: "Entregar melhor, entregar com inteligência.",
     progress: 68,
-    due: `Due ${format(addDays(today, 9), "MMM d")}`,
+    due: `Prazo ${format(addDays(today, 9), "d 'de' MMM", { locale: ptBR })}`,
     icon: Orbit,
   },
   {
-    title: "Website Redesign",
-    status: "Planning",
-    description: "Clean, modern, and fast.",
+    title: "Redesign do site",
+    status: "Planejamento",
+    description: "Clean, moderno e rápido.",
     progress: 42,
-    due: `Due ${format(addDays(today, 21), "MMM d")}`,
+    due: `Prazo ${format(addDays(today, 21), "d 'de' MMM", { locale: ptBR })}`,
     icon: Globe,
   },
   {
     title: "Onboarding",
-    status: "Planning",
-    description: "Trim first-run steps.",
+    status: "Planejamento",
+    description: "Reduzir as etapas iniciais.",
     progress: 31,
-    due: `Due ${format(addDays(today, 18), "MMM d")}`,
+    due: `Prazo ${format(addDays(today, 18), "d 'de' MMM", { locale: ptBR })}`,
     icon: ClipboardCheck,
   },
 ] as const;
@@ -40,23 +41,23 @@ export function ProjectsSection() {
   return (
     <section className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl tracking-tight">Projects</h2>
+        <h2 className="text-xl tracking-tight">Projetos</h2>
         <div className="flex items-center gap-2">
           <Select defaultValue="active">
             <SelectTrigger className="w-28">
-              <SelectValue placeholder="Active" />
+              <SelectValue placeholder="Ativos" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="planning">Planning</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="active">Ativos</SelectItem>
+                <SelectItem value="planning">Planejamento</SelectItem>
+                <SelectItem value="completed">Concluídos</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
           <Button variant="outline">
             <Plus data-icon="inline-start" />
-            New
+            Novo
           </Button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Subscribe } from "@tanstack/react-table";
 import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -19,27 +20,27 @@ import type { DataTableFeatures } from "@/lib/data-table-features";
 import type { OrderRow } from "./schema";
 
 function formatOrderDate(date: string) {
-  return format(parseISO(date), "h:mm a, d MMM yyyy");
+  return format(parseISO(date), "HH:mm, d MMM yyyy", { locale: ptBR });
 }
 
 function PaymentBadge({ status }: { status: OrderRow["payment"] }) {
-  if (status === "Paid") {
+  if (status === "Pago") {
     return (
       <Badge
         className="border-green-700/25 text-green-700 dark:border-green-300/25 dark:text-green-300"
         variant="outline"
       >
         <span className="size-1.5 rounded-full bg-current" />
-        Paid
+        Pago
       </Badge>
     );
   }
 
-  if (status === "Refunded") {
+  if (status === "Reembolsado") {
     return (
       <Badge variant="destructive">
         <span className="size-1.5 rounded-full bg-current" />
-        Refunded
+        Reembolsado
       </Badge>
     );
   }
@@ -50,29 +51,29 @@ function PaymentBadge({ status }: { status: OrderRow["payment"] }) {
       variant="outline"
     >
       <span className="size-1.5 rounded-full bg-current" />
-      Pending
+      Pendente
     </Badge>
   );
 }
 
 function FulfillmentBadge({ status }: { status: OrderRow["fulfillment"] }) {
-  if (status === "Fulfilled") {
+  if (status === "Atendido") {
     return (
       <Badge
         className="border-green-700/25 text-green-700 dark:border-green-300/25 dark:text-green-300"
         variant="outline"
       >
         <span className="size-1.5 rounded-full bg-current" />
-        Fulfilled
+        Atendido
       </Badge>
     );
   }
 
-  if (status === "Returned") {
+  if (status === "Devolvido") {
     return (
       <Badge variant="destructive">
         <span className="size-1.5 rounded-full bg-current" />
-        Returned
+        Devolvido
       </Badge>
     );
   }
@@ -80,7 +81,7 @@ function FulfillmentBadge({ status }: { status: OrderRow["fulfillment"] }) {
   return (
     <Badge variant="destructive">
       <span className="size-1.5 rounded-full bg-current" />
-      Unfulfilled
+      Não atendido
     </Badge>
   );
 }
@@ -99,7 +100,7 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
         >
           {(checked) => (
             <Checkbox
-              aria-label="Select all orders"
+              aria-label="Selecionar todos os pedidos"
               checked={checked}
               onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
             />
@@ -112,7 +113,7 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
         <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
           {(checked) => (
             <Checkbox
-              aria-label={`Select order ${row.original.id}`}
+              aria-label={`Selecionar o pedido ${row.original.id}`}
               checked={checked}
               onCheckedChange={(value) => row.toggleSelected(!!value)}
             />
@@ -125,10 +126,10 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
   },
   {
     accessorKey: "id",
-    header: "Order",
+    header: "Pedido",
     cell: ({ row }) => (
       <div className="flex flex-col gap-0.5">
-        <div className="leading-none font-medium">{row.original.id}</div>
+        <div className="font-medium leading-none">{row.original.id}</div>
         <div className="text-muted-foreground text-xs">{row.original.items}</div>
       </div>
     ),
@@ -136,7 +137,7 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
   },
   {
     accessorKey: "customer",
-    header: "Customer",
+    header: "Cliente",
   },
   {
     id: "statusSummary",
@@ -148,25 +149,25 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
       </div>
     ),
     filterFn: (row, _columnId, value) => {
-      if (value === "Needs action") {
+      if (value === "Precisa de ação") {
         return (
-          row.original.payment === "Pending" ||
-          row.original.payment === "Refunded" ||
-          row.original.fulfillment === "Unfulfilled" ||
-          row.original.fulfillment === "Returned"
+          row.original.payment === "Pendente" ||
+          row.original.payment === "Reembolsado" ||
+          row.original.fulfillment === "Não atendido" ||
+          row.original.fulfillment === "Devolvido"
         );
       }
 
-      if (value === "Unfulfilled") {
-        return row.original.fulfillment === "Unfulfilled";
+      if (value === "Não atendido") {
+        return row.original.fulfillment === "Não atendido";
       }
 
-      if (value === "Unpaid") {
-        return row.original.payment === "Pending";
+      if (value === "Não pago") {
+        return row.original.payment === "Pendente";
       }
 
-      if (value === "Returns") {
-        return row.original.payment === "Refunded" || row.original.fulfillment === "Returned";
+      if (value === "Devoluções") {
+        return row.original.payment === "Reembolsado" || row.original.fulfillment === "Devolvido";
       }
 
       return true;
@@ -179,27 +180,27 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
   },
   {
     accessorKey: "date",
-    header: () => <div className="w-44">Date</div>,
-    cell: ({ row }) => <div className="text-muted-foreground w-44">{formatOrderDate(row.original.date)}</div>,
+    header: () => <div className="w-44">Data</div>,
+    cell: ({ row }) => <div className="w-44 text-muted-foreground">{formatOrderDate(row.original.date)}</div>,
   },
   {
     id: "actions",
-    header: () => <div className="flex w-full justify-end">Actions</div>,
+    header: () => <div className="flex w-full justify-end">Ações</div>,
     cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex w-full justify-end">
-            <Button aria-label="Open order actions" size="icon-sm" variant="ghost">
+            <Button aria-label="Abrir ações do pedido" size="icon-sm" variant="ghost">
               <MoreHorizontal />
             </Button>
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuLabel>Order Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>Ações do pedido</DropdownMenuLabel>
           <DropdownMenuGroup>
-            <DropdownMenuItem>View order</DropdownMenuItem>
-            <DropdownMenuItem>Contact customer</DropdownMenuItem>
-            <DropdownMenuItem>Copy order ID</DropdownMenuItem>
+            <DropdownMenuItem>Ver pedido</DropdownMenuItem>
+            <DropdownMenuItem>Contatar cliente</DropdownMenuItem>
+            <DropdownMenuItem>Copiar ID do pedido</DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

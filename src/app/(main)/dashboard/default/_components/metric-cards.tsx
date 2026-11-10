@@ -13,7 +13,7 @@ export function MetricCards() {
               <DollarSign className="size-4" />
             </div>
           </CardTitle>
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Receita total</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -23,7 +23,7 @@ export function MetricCards() {
               +12.5%
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm">Visitors for the last 6 months</p>
+          <p className="text-muted-foreground text-sm">Visitantes nos últimos 6 meses</p>
         </CardContent>
       </Card>
 
@@ -34,7 +34,7 @@ export function MetricCards() {
               <UserPlus className="size-4" />
             </div>
           </CardTitle>
-          <CardDescription>New Customers</CardDescription>
+          <CardDescription>Novos clientes</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -44,7 +44,7 @@ export function MetricCards() {
               -20%
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm">Acquisition needs attention</p>
+          <p className="text-muted-foreground text-sm">Aquisição exige atenção</p>
         </CardContent>
       </Card>
 
@@ -55,7 +55,7 @@ export function MetricCards() {
               <Users className="size-4" />
             </div>
           </CardTitle>
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>Contas ativas</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -65,7 +65,7 @@ export function MetricCards() {
               +12.5%
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm">Engagement exceeds targets</p>
+          <p className="text-muted-foreground text-sm">Engajamento acima das metas</p>
         </CardContent>
       </Card>
 
@@ -76,7 +76,7 @@ export function MetricCards() {
               <Waves className="size-4" />
             </div>
           </CardTitle>
-          <CardDescription>Growth Rate</CardDescription>
+          <CardDescription>Taxa de crescimento</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -86,7 +86,7 @@ export function MetricCards() {
               +4.5%
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm">Meets growth projections</p>
+          <p className="text-muted-foreground text-sm">Dentro das projeções de crescimento</p>
         </CardContent>
       </Card>
     </div>

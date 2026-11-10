@@ -2,7 +2,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Subscribe } from "@tanstack/react-table";
 import { cn } from "cn";
-import { parse } from "date-fns";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Check, Clock, MoreHorizontal, X } from "lucide-react";
 
 import { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@/components/ui/avatar";
@@ -110,7 +111,7 @@ function WorkspaceCell({ workspaces }: { workspaces: string[] }) {
         </Avatar>
       ) : null}
       {remainingCount > 0 ? (
-        <AvatarGroupCount className="ring-card rounded-sm border">+{remainingCount}</AvatarGroupCount>
+        <AvatarGroupCount className="rounded-sm border ring-card">+{remainingCount}</AvatarGroupCount>
       ) : null}
     </AvatarGroup>
   );
@@ -130,7 +131,7 @@ export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
         >
           {(checked) => (
             <Checkbox
-              aria-label="Select all users"
+              aria-label="Selecionar todos os usuários"
               checked={checked}
               onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
             />
@@ -143,7 +144,7 @@ export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
         <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
           {(checked) => (
             <Checkbox
-              aria-label={`Select ${row.original.name}`}
+              aria-label={`Selecionar ${row.original.name}`}
               checked={checked}
               onCheckedChange={(value) => row.toggleSelected(!!value)}
             />
@@ -162,32 +163,32 @@ export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
   },
   {
     accessorKey: "name",
-    header: "User",
+    header: "Usuário",
     cell: ({ row }) => (
       <div className="flex items-center gap-3">
         <AvatarCell name={row.original.name} lastActive={row.original.lastActive} />
         <div className="min-w-0">
-          <div className="text-foreground truncate text-sm font-medium">{row.original.name}</div>
-          <div className="text-muted-foreground truncate text-sm">{row.original.email}</div>
+          <div className="truncate font-medium text-foreground text-sm">{row.original.name}</div>
+          <div className="truncate text-muted-foreground text-sm">{row.original.email}</div>
         </div>
       </div>
     ),
   },
   {
     accessorKey: "role",
-    header: "Role / Team",
+    header: "Função / Equipe",
     filterFn: "equalsString",
     cell: ({ row }) => <RoleCell role={row.original.role} team={row.original.team} />,
   },
   {
     accessorKey: "team",
-    header: "Team",
+    header: "Equipe",
     filterFn: "equalsString",
     cell: ({ row }) => <div className="text-sm">{row.original.team}</div>,
   },
   {
     accessorKey: "workspace",
-    header: "Workspace",
+    header: "Espaço de trabalho",
     filterFn: "arrIncludes",
     cell: ({ row }) => <WorkspaceCell workspaces={row.original.workspace} />,
   },
@@ -199,20 +200,24 @@ export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
   },
   {
     id: "joinedDate",
-    accessorFn: (row) => parse(row.joinedDate, "dd MMM yyyy, h:mm a", new Date()).getTime(),
-    header: "Joined date",
-    cell: ({ row }) => <div className="text-foreground text-sm">{row.original.joinedDate}</div>,
+    accessorFn: (row) => parseISO(row.joinedDate).getTime(),
+    header: "Data de entrada",
+    cell: ({ row }) => (
+      <div className="text-foreground text-sm">
+        {format(parseISO(row.original.joinedDate), "d 'de' MMMM 'de' yyyy, HH:mm", { locale: ptBR })}
+      </div>
+    ),
   },
   {
     id: "actions",
-    header: () => <div className="text-right">Actions</div>,
+    header: () => <div className="text-right">Ações</div>,
     cell: ({ row }) => (
       <div className="text-right">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              aria-label={`Open actions for ${row.original.name}`}
-              className="text-muted-foreground hover:bg-muted/50 size-8 rounded-md"
+              aria-label={`Abrir ações de ${row.original.name}`}
+              className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
               size="icon-sm"
               variant="ghost"
             >
@@ -220,12 +225,12 @@ export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>View profile</DropdownMenuItem>
-            <DropdownMenuItem>Edit user</DropdownMenuItem>
-            <DropdownMenuItem>Manage team</DropdownMenuItem>
-            <DropdownMenuItem>Resend invite</DropdownMenuItem>
+            <DropdownMenuItem>Ver perfil</DropdownMenuItem>
+            <DropdownMenuItem>Editar usuário</DropdownMenuItem>
+            <DropdownMenuItem>Gerenciar equipe</DropdownMenuItem>
+            <DropdownMenuItem>Reenviar convite</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Deactivate user</DropdownMenuItem>
+            <DropdownMenuItem variant="destructive">Desativar usuário</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

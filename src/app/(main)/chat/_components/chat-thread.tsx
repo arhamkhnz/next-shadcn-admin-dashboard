@@ -67,7 +67,7 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
                 variant="ghost"
                 size="icon-sm"
                 className="md:hidden"
-                aria-label="Back to conversations"
+                aria-label="Voltar às conversas"
                 onClick={onBack}
               >
                 <ArrowLeft />
@@ -86,31 +86,31 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
           <div className="flex items-center gap-1">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon-sm" aria-label="Call">
+                <Button variant="ghost" size="icon-sm" aria-label="Ligar">
                   <PhoneCall />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Call</TooltipContent>
+              <TooltipContent>Ligar</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon-sm" aria-label="Tag">
+                <Button variant="ghost" size="icon-sm" aria-label="Marcador">
                   <Tag />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Tag</TooltipContent>
+              <TooltipContent>Marcador</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon-sm" aria-label="Snooze">
+                <Button variant="ghost" size="icon-sm" aria-label="Adiar">
                   <AlarmClock />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Snooze</TooltipContent>
+              <TooltipContent>Adiar</TooltipContent>
             </Tooltip>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon-sm" aria-label="More actions">
+                <Button variant="ghost" size="icon-sm" aria-label="Mais ações">
                   <MoreHorizontal />
                 </Button>
               </DropdownMenuTrigger>
@@ -118,20 +118,20 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
                 <DropdownMenuGroup>
                   <DropdownMenuItem onSelect={onOpenContact}>
                     <UserRound />
-                    View profile
+                    Ver perfil
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Copy />
-                    Copy email
+                    Copiar e-mail
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Flag />
-                    Mark priority
+                    Marcar como prioridade
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive">Block contact</DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive">Bloquear contato</DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -146,7 +146,7 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
           <MessageScrollerViewport>
             <MessageScrollerContent className="gap-6 px-2 py-8">
               <Marker variant="separator">
-                <MarkerContent>May 6, 2026</MarkerContent>
+                <MarkerContent>6 de maio de 2026</MarkerContent>
               </Marker>
 
               {messages.map((message) => {
@@ -179,7 +179,7 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
                           <Bubble variant={isOutbound ? "default" : "muted"} align={message.align}>
                             <BubbleContent>{message.text}</BubbleContent>
                             {message.reaction ? (
-                              <BubbleReactions aria-label={`Reaction: ${message.reaction}`} align={reactionAlign}>
+                              <BubbleReactions aria-label={`Reação: ${message.reaction}`} align={reactionAlign}>
                                 <span>{message.reaction}</span>
                               </BubbleReactions>
                             ) : null}
@@ -204,18 +204,18 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
             className="w-full justify-start gap-2 border-b px-3 group-data-horizontal/tabs:h-10 **:data-[slot=tabs-trigger]:border-x-0 **:data-[slot=tabs-trigger]:px-6"
           >
             <TabsTrigger value="reply" className="flex-none px-1">
-              Reply
+              Responder
             </TabsTrigger>
             <TabsTrigger value="note" className="flex-none px-1">
-              Internal note
+              Nota interna
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="reply" className="m-0">
-            <MessageComposer placeholder="Type your message..." />
+            <MessageComposer placeholder="Digite sua mensagem..." />
           </TabsContent>
           <TabsContent value="note" className="m-0">
-            <MessageComposer placeholder="Write an internal note..." />
+            <MessageComposer placeholder="Escreva uma nota interna..." />
           </TabsContent>
         </Tabs>
       </div>
@@ -237,24 +237,24 @@ function MessageComposer({ placeholder }: { placeholder: string }) {
           className="min-h-14 px-3 py-2.5 text-sm ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:aria-invalid:ring-0"
         />
         <InputGroupAddon align="block-end">
-          <InputGroupButton aria-label="Format" type="button" size="icon-sm">
+          <InputGroupButton aria-label="Formatar" type="button" size="icon-sm">
             <Type />
           </InputGroupButton>
           <InputGroupButton aria-label="Emoji" type="button" size="icon-sm">
             <Smile />
           </InputGroupButton>
-          <InputGroupButton aria-label="Attach file" type="button" size="icon-sm">
+          <InputGroupButton aria-label="Anexar arquivo" type="button" size="icon-sm">
             <Paperclip />
           </InputGroupButton>
-          <InputGroupButton aria-label="Insert link" type="button" size="icon-sm">
+          <InputGroupButton aria-label="Inserir link" type="button" size="icon-sm">
             <Link />
           </InputGroupButton>
-          <InputGroupButton aria-label="AI assist" type="button" size="icon-sm" variant="outline">
+          <InputGroupButton aria-label="Assistente de IA" type="button" size="icon-sm" variant="outline">
             <Sparkles />
           </InputGroupButton>
           <InputGroupButton type="submit" variant="default" size="icon-sm" className="ml-auto">
             <Send />
-            <span className="sr-only">Send</span>
+            <span className="sr-only">Enviar</span>
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>

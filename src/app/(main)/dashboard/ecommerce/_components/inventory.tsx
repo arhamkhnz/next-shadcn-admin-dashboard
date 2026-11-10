@@ -38,32 +38,32 @@ const gaugeSegments = Array.from({ length: gaugeSegmentCount }, (_, index) => {
 const inventorySummary = [
   {
     icon: PackageCheck,
-    label: "In stock",
+    label: "Em estoque",
     value: chartData[0]["in-stock"],
   },
   {
     icon: TriangleAlert,
-    label: "Low stock",
+    label: "Estoque baixo",
     value: chartData[0]["low-stock"],
   },
   {
     icon: PackageX,
-    label: "Out",
+    label: "Esgotado",
     value: chartData[0]["out-of-stock"],
   },
 ] as const;
 
 const chartConfig = {
   "in-stock": {
-    label: "In stock",
+    label: "Em estoque",
     color: "var(--chart-2)",
   },
   "low-stock": {
-    label: "Low stock",
+    label: "Estoque baixo",
     color: "var(--chart-1)",
   },
   "out-of-stock": {
-    label: "Out of stock",
+    label: "Esgotado",
     color: "var(--destructive)",
   },
 } satisfies ChartConfig;
@@ -72,9 +72,9 @@ export function Inventory() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="text-muted-foreground text-sm font-normal">Inventory</CardTitle>
-        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
-          {availablePercent}% available
+        <CardTitle className="font-normal text-muted-foreground text-sm">Estoque</CardTitle>
+        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+          {availablePercent}% disponível
         </CardDescription>
         <CardAction>
           <ArrowUpRight className="size-4" />
@@ -103,14 +103,14 @@ export function Inventory() {
                     return (
                       <text textAnchor="middle" x={viewBox.cx} y={viewBox.cy}>
                         <tspan
-                          className="fill-foreground text-2xl font-medium tabular-nums"
+                          className="fill-foreground font-medium text-2xl tabular-nums"
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 22}
                         >
                           {availablePercent}%
                         </tspan>
                         <tspan className="fill-muted-foreground text-xs" x={viewBox.cx} y={(viewBox.cy || 0) + 38}>
-                          Available
+                          Disponível
                         </tspan>
                       </text>
                     );
@@ -125,12 +125,12 @@ export function Inventory() {
         <div className="grid grid-cols-3 divide-x">
           {inventorySummary.map((item, _index) => (
             <div key={item.label} className="flex flex-col items-center gap-3 text-center">
-              <div className="bg-muted grid size-9 place-items-center rounded-full">
-                <item.icon className="text-muted-foreground size-4" />
+              <div className="grid size-9 place-items-center rounded-full bg-muted">
+                <item.icon className="size-4 text-muted-foreground" />
               </div>
               <div>
                 <div className="text-muted-foreground text-xs leading-none">{item.label}</div>
-                <div className="text-sm font-medium tabular-nums">{item.value.toLocaleString()}</div>
+                <div className="font-medium text-sm tabular-nums">{item.value.toLocaleString("pt-BR")}</div>
               </div>
             </div>
           ))}

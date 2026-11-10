@@ -7,16 +7,16 @@ export function KpiCards() {
   return (
     <section className="space-y-5">
       <div className="space-y-1">
-        <h2 className="text-3xl tracking-tight">Pipeline Overview</h2>
+        <h2 className="text-3xl tracking-tight">Visão geral do pipeline</h2>
         <p className="text-muted-foreground text-sm">
-          Keep tabs on lead quality, open opportunities, and conversion rates across the current sales cycle.
+          Acompanhe a qualidade dos leads, as oportunidades abertas e as taxas de conversão do ciclo de vendas atual.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
           <CardHeader>
-            <CardDescription>Lead Pipeline Value</CardDescription>
+            <CardDescription>Valor do pipeline de leads</CardDescription>
             <CardAction>
               <ArrowUpRight className="size-4" />
             </CardAction>
@@ -34,15 +34,15 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="text-foreground font-medium">$254,200</span>{" "}
-              <span className="text-muted-foreground">last month</span>
+              <span className="font-medium text-foreground">$254,200</span>{" "}
+              <span className="text-muted-foreground">no mês anterior</span>
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardDescription>Qualified Lead Rate</CardDescription>
+            <CardDescription>Taxa de leads qualificados</CardDescription>
             <CardAction>
               <ArrowUpRight className="size-4" />
             </CardAction>
@@ -57,15 +57,15 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="text-foreground font-medium">30.9%</span>{" "}
-              <span className="text-muted-foreground">last month</span>
+              <span className="font-medium text-foreground">30.9%</span>{" "}
+              <span className="text-muted-foreground">no mês anterior</span>
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardDescription>Open Opportunities</CardDescription>
+            <CardDescription>Oportunidades abertas</CardDescription>
             <CardAction>
               <ArrowUpRight className="size-4" />
             </CardAction>
@@ -83,15 +83,15 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="text-foreground font-medium">35</span>{" "}
-              <span className="text-muted-foreground">last month</span>
+              <span className="font-medium text-foreground">35</span>{" "}
+              <span className="text-muted-foreground">no mês anterior</span>
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardDescription>Lead-to-Deal Rate</CardDescription>
+            <CardDescription>Taxa de conversão de leads</CardDescription>
             <CardAction>
               <ArrowUpRight className="size-4" />
             </CardAction>
@@ -109,8 +109,8 @@ export function KpiCards() {
               </Badge>
             </div>
             <p className="text-sm">
-              <span className="text-foreground font-medium">16.5%</span>{" "}
-              <span className="text-muted-foreground">last month</span>
+              <span className="font-medium text-foreground">16.5%</span>{" "}
+              <span className="text-muted-foreground">no mês anterior</span>
             </p>
           </CardContent>
         </Card>

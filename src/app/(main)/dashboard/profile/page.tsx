@@ -21,9 +21,9 @@ import { ProfileStatusSidebar } from "./_components/profile-status-sidebar";
 import { TimeOffDetails } from "./_components/profile-time-off-details";
 
 export const metadata: Metadata = {
-  title: "Open Source Employee Profile Dashboard with shadcn/ui",
+  title: "Dashboard de Perfil de Funcionário de Código Aberto com shadcn/ui",
   description:
-    "Explore an open source employee profile dashboard with personal details, employment information, time off, documents, and reporting lines.",
+    "Explore um dashboard de perfil de funcionário de código aberto com dados pessoais, informações de contratação, licenças, documentos e hierarquia de reporte.",
   alternates: {
     canonical: "/dashboard/profile",
   },
@@ -35,15 +35,15 @@ export default function Page() {
       <Breadcrumb className="px-4">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <span>Dashboard</span>
+            <span>Painéis</span>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <span>People</span>
+            <span>Equipe</span>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <span>Employee directory</span>
+            <span>Diretório de funcionários</span>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -51,24 +51,24 @@ export default function Page() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Profile details</BreadcrumbPage>
+            <BreadcrumbPage>Detalhes do perfil</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <ProfileHeader profile={profile} />
 
       <Tabs className="min-h-0 flex-1 gap-0" defaultValue="overview">
-        <div className="touch-pan-x scrollbar-none overflow-x-auto overscroll-x-contain border-y">
+        <div className="scrollbar-none touch-pan-x overflow-x-auto overscroll-x-contain border-y">
           <TabsList
             className="w-max min-w-full justify-start gap-4 px-4 *:data-[slot=tabs-trigger]:flex-none"
             variant="line"
           >
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="personal">Personal</TabsTrigger>
-            <TabsTrigger value="employment">Employment</TabsTrigger>
-            <TabsTrigger value="compensation">Compensation</TabsTrigger>
-            <TabsTrigger value="time-off">Time off</TabsTrigger>
-            <TabsTrigger value="documents">Documents</TabsTrigger>
+            <TabsTrigger value="overview">Visão geral</TabsTrigger>
+            <TabsTrigger value="personal">Pessoal</TabsTrigger>
+            <TabsTrigger value="employment">Contratação</TabsTrigger>
+            <TabsTrigger value="compensation">Remuneração</TabsTrigger>
+            <TabsTrigger value="time-off">Licenças</TabsTrigger>
+            <TabsTrigger value="documents">Documentos</TabsTrigger>
           </TabsList>
         </div>
 
@@ -95,11 +95,11 @@ export default function Page() {
 
           <TabsContent className="py-4" value="compensation">
             <div className="flex items-start gap-3">
-              <LockKeyhole aria-hidden="true" className="text-muted-foreground size-4" />
+              <LockKeyhole aria-hidden="true" className="size-4 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">Restricted information</p>
-                <p className="text-muted-foreground mt-0.5 text-sm">
-                  Visible to people administrators and authorized finance roles.
+                <p className="font-medium text-sm">Informação restrita</p>
+                <p className="mt-0.5 text-muted-foreground text-sm">
+                  Visível para administradores e funções autorizadas de financeiro.
                 </p>
               </div>
             </div>

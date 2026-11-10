@@ -9,9 +9,9 @@ import { RegisterForm } from "../../_components/register-form";
 import { GoogleButton } from "../../_components/social-auth/google-button";
 
 export const metadata: Metadata = {
-  title: "Open Source Branded Registration Page with shadcn/ui",
+  title: "Página de cadastro com marca open source com shadcn/ui",
   description:
-    "Explore an open source branded registration page with a two-column layout, social sign-up, and account details.",
+    "Explore uma página de cadastro open source com layout em duas colunas, cadastro social e dados da conta.",
   alternates: {
     canonical: "/auth/v2/register",
   },
@@ -22,13 +22,13 @@ export default function RegisterV2() {
     <>
       <div className="mx-auto flex w-full flex-col justify-center space-y-8 sm:w-[350px]">
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-medium">Create your account</h1>
-          <p className="text-muted-foreground text-sm">Please enter your details to register.</p>
+          <h1 className="font-medium text-3xl">Crie sua conta</h1>
+          <p className="text-muted-foreground text-sm">Informe seus dados para criar sua conta.</p>
         </div>
         <div className="space-y-4">
           <GoogleButton className="w-full" />
-          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-            <span className="bg-background text-muted-foreground relative z-10 px-2">Or continue with</span>
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t">
+            <span className="relative z-10 bg-background px-2 text-muted-foreground">Ou continue com</span>
           </div>
           <RegisterForm />
         </div>
@@ -36,9 +36,9 @@ export default function RegisterV2() {
 
       <div className="absolute top-5 flex w-full justify-end px-10">
         <div className="text-muted-foreground text-sm">
-          Already have an account?{" "}
+          Já tem uma conta?{" "}
           <Link prefetch={false} className="text-foreground" href="login">
-            Login
+            Entrar
           </Link>
         </div>
       </div>
@@ -46,7 +46,7 @@ export default function RegisterV2() {
       <div className="absolute bottom-5 flex w-full justify-between px-10">
         <div className="text-sm">{APP_CONFIG.copyright}</div>
         <div className="flex items-center gap-1 text-sm">
-          <Globe className="text-muted-foreground size-4" />
+          <Globe className="size-4 text-muted-foreground" />
           ENG
         </div>
       </div>

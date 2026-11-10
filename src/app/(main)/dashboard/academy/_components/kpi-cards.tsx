@@ -9,67 +9,67 @@ export function KpiCards() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Students Taught</CardTitle>
+            <CardTitle className="text-sm">Alunos atendidos</CardTitle>
             <CardAction>
-              <Info className="text-muted-foreground size-3" />
+              <Info className="size-3 text-muted-foreground" />
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-foreground text-3xl leading-none tracking-tight">128</span>
-              <Badge className="rounded-sm border-green-600/50 bg-green-500/10 px-1 text-xs font-normal text-green-700 dark:border-green-800/50 dark:bg-green-500/15 dark:text-green-300">
+              <span className="text-3xl text-foreground leading-none tracking-tight">128</span>
+              <Badge className="rounded-sm border-green-600/50 bg-green-500/10 px-1 font-normal text-green-700 text-xs dark:border-green-800/50 dark:bg-green-500/15 dark:text-green-300">
                 <ArrowUp />
                 2.8%
               </Badge>
             </div>
-            <div className="text-muted-foreground text-right text-xs">across 5 Grade 11 sections</div>
+            <div className="text-right text-muted-foreground text-xs">em 5 turmas da 11ª série</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Avg. Attendance</CardTitle>
+            <CardTitle className="text-sm">Frequência média</CardTitle>
             <CardAction>
-              <Info className="text-muted-foreground size-3" />
+              <Info className="size-3 text-muted-foreground" />
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-foreground text-3xl leading-none tracking-tight">94.2%</span>
-              <Badge className="rounded-sm border-green-600/50 bg-green-500/10 px-1 text-xs font-normal text-green-700 dark:border-green-800/50 dark:bg-green-500/15 dark:text-green-300">
+              <span className="text-3xl text-foreground leading-none tracking-tight">94.2%</span>
+              <Badge className="rounded-sm border-green-600/50 bg-green-500/10 px-1 font-normal text-green-700 text-xs dark:border-green-800/50 dark:bg-green-500/15 dark:text-green-300">
                 <ArrowUp />
                 1.1%
               </Badge>
             </div>
-            <div className="text-muted-foreground text-right text-xs">vs last month</div>
+            <div className="text-right text-muted-foreground text-xs">vs. mês anterior</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Assignments</CardTitle>
+            <CardTitle className="text-sm">Atividades</CardTitle>
             <CardAction>
-              <Info className="text-muted-foreground size-3" />
+              <Info className="size-3 text-muted-foreground" />
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
-            <div className="text-foreground text-3xl leading-none tracking-tight">81</div>
+            <div className="text-3xl text-foreground leading-none tracking-tight">81</div>
 
-            <div className="text-muted-foreground text-right text-xs">63 pending · 18 overdue</div>
+            <div className="text-right text-muted-foreground text-xs">63 pendentes · 18 em atraso</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Classes Today</CardTitle>
+            <CardTitle className="text-sm">Aulas hoje</CardTitle>
             <CardAction>
-              <Info className="text-muted-foreground size-3" />
+              <Info className="size-3 text-muted-foreground" />
             </CardAction>
           </CardHeader>
           <CardContent className="flex flex-col">
-            <div className="text-foreground text-3xl leading-none tracking-tight">5</div>
+            <div className="text-3xl text-foreground leading-none tracking-tight">5</div>
 
-            <div className="text-muted-foreground text-right text-xs">1 in progress · 3 upcoming · 1 cancelled</div>
+            <div className="text-right text-muted-foreground text-xs">1 em andamento · 3 próximas · 1 cancelada</div>
           </CardContent>
         </Card>
       </div>

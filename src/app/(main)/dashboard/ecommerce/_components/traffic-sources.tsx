@@ -11,35 +11,35 @@ import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 const trafficSources = [
   {
     name: "Meta",
-    visits: "5,640",
+    visits: "5.640",
     share: 38,
     change: "+18%",
     icon: siMeta,
   },
   {
     name: "Google",
-    visits: "3,740",
+    visits: "3.740",
     share: 25,
     change: "-6%",
     icon: siGoogle,
   },
   {
     name: "Shopify",
-    visits: "2,960",
+    visits: "2.960",
     share: 20,
     change: "+7%",
     icon: siShopify,
   },
   {
     name: "TikTok",
-    visits: "1,340",
+    visits: "1.340",
     share: 10,
     change: "+9%",
     icon: siTiktok,
   },
   {
     name: "eBay",
-    visits: "1,080",
+    visits: "1.080",
     share: 7,
     change: "-3%",
     icon: siEbay,
@@ -48,7 +48,7 @@ const trafficSources = [
 
 const trafficSourcesConfig = {
   share: {
-    label: "Visits",
+    label: "Visitas",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
@@ -100,7 +100,7 @@ function TrafficSourceIconLabel({ height, index, width, x, y }: IconLabelProps) 
 
   return (
     <foreignObject height={iconSize} x={iconX} y={iconY} width={iconSize}>
-      <SimpleIcon icon={source.icon} className="fill-foreground size-4" />
+      <SimpleIcon icon={source.icon} className="size-4 fill-foreground" />
     </foreignObject>
   );
 }
@@ -160,9 +160,9 @@ export function TrafficSources() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-muted-foreground text-sm font-normal">Traffic Sources</CardTitle>
-        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
-          14.8K visits
+        <CardTitle className="font-normal text-muted-foreground text-sm">Fontes de tráfego</CardTitle>
+        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+          14,8 mil visitas
         </CardDescription>
         <CardAction>
           <ArrowUpRight className="size-4" />
@@ -206,7 +206,7 @@ export function TrafficSources() {
               dataKey="share"
               fill="var(--color-share)"
               fillOpacity={0.5}
-              name="Visits"
+              name="Visitas"
               radius={8}
               stroke="var(--color-share)"
               strokeOpacity={0.1}

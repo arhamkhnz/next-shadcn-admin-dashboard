@@ -17,11 +17,11 @@ type Task = {
 };
 
 const tasks: Task[] = [
-  { title: "Finalize Q2 roadmap", tag: "Work", time: "10:00 AM", checked: false },
-  { title: "Review design system updates", tag: "Design", time: "11:30 AM", checked: true },
-  { title: "Reply to important emails", tag: "Admin", time: "2:00 PM", checked: false },
-  { title: "Plan creator content for this week", tag: "Content", time: "4:30 PM", checked: false },
-  { title: "Prepare weekly team sync notes", tag: "Planning", time: "6:00 PM", checked: false },
+  { title: "Finalizar roadmap do T2", tag: "Trabalho", time: "10:00", checked: false },
+  { title: "Revisar atualizações do design system", tag: "Design", time: "11:30", checked: true },
+  { title: "Responder e-mails importantes", tag: "Administrativo", time: "14:00", checked: false },
+  { title: "Planejar conteúdo da semana", tag: "Conteúdo", time: "16:30", checked: false },
+  { title: "Preparar notas da reunião semanal", tag: "Planejamento", time: "18:00", checked: false },
 ];
 
 export function TasksSection() {
@@ -30,23 +30,23 @@ export function TasksSection() {
   return (
     <section className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl tracking-tight">Tasks</h2>
+        <h2 className="text-xl tracking-tight">Tarefas</h2>
         <div className="flex items-center gap-2">
           <Select defaultValue="today">
             <SelectTrigger className="w-30">
-              <SelectValue placeholder="Today" />
+              <SelectValue placeholder="Hoje" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="today">Today</SelectItem>
-                <SelectItem value="tomorrow">Tomorrow</SelectItem>
-                <SelectItem value="this-week">This Week</SelectItem>
+                <SelectItem value="today">Hoje</SelectItem>
+                <SelectItem value="tomorrow">Amanhã</SelectItem>
+                <SelectItem value="this-week">Esta semana</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
           <Button>
             <Plus data-icon="inline-start" />
-            New Task
+            Nova tarefa
           </Button>
         </div>
       </div>

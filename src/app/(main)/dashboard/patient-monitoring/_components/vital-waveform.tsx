@@ -22,7 +22,7 @@ interface VitalWaveformProps {
 
 const waveformChartConfig = {
   signal: {
-    label: "Signal",
+    label: "Sinal",
     color: "currentColor",
   },
 } satisfies ChartConfig;

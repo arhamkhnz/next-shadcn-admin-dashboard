@@ -80,7 +80,7 @@ export function KanbanTable({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col *:data-[slot=table-container]:min-h-0 *:data-[slot=table-container]:flex-1 *:data-[slot=table-container]:overflow-auto">
-      <Table aria-label="Kanban tasks" className="min-w-280 table-fixed border-separate border-spacing-0">
+      <Table aria-label="Tarefas do Kanban" className="min-w-280 table-fixed border-separate border-spacing-0">
         <TableHeader className="bg-background sticky top-0 z-10">
           {table.getHeaderGroups().map((group) => (
             <TableRow key={group.id} className="hover:bg-transparent">
@@ -118,8 +118,8 @@ export function KanbanTable({
               <TableCell colSpan={tableColumns.length}>
                 <Empty>
                   <EmptyHeader>
-                    <EmptyTitle>No tasks yet</EmptyTitle>
-                    <EmptyDescription>Tasks from your board appear here.</EmptyDescription>
+                    <EmptyTitle>Nenhuma tarefa ainda</EmptyTitle>
+                    <EmptyDescription>As tarefas do seu quadro aparecem aqui.</EmptyDescription>
                   </EmptyHeader>
                 </Empty>
               </TableCell>
@@ -130,11 +130,11 @@ export function KanbanTable({
       <footer className="text-muted-foreground flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-3 border-t px-6 py-2 text-sm">
         <div className="flex flex-wrap items-center gap-4">
           <span className="tabular-nums" aria-live="polite">
-            {data.length ? pageIndex * pageSize + 1 : 0}–{Math.min((pageIndex + 1) * pageSize, data.length)} of{" "}
-            {data.length} tasks
+            {data.length ? pageIndex * pageSize + 1 : 0}–{Math.min((pageIndex + 1) * pageSize, data.length)} de{" "}
+            {data.length} tarefas
           </span>
           <div className="flex items-center gap-2">
-            <label htmlFor="kanban-page-size">Rows per page</label>
+            <label htmlFor="kanban-page-size">Linhas por página</label>
             <Select
               value={String(pageSize)}
               onValueChange={(value) => {
@@ -159,12 +159,12 @@ export function KanbanTable({
         </div>
         <div className="flex items-center gap-2">
           <span className="mr-2 text-xs tabular-nums">
-            Page {pageIndex + 1} of {pageCount}
+            Página {pageIndex + 1} de {pageCount}
           </span>
           <Button
             variant="outline"
             size="icon-sm"
-            aria-label="Previous page"
+            aria-label="Página anterior"
             disabled={!table.getCanPreviousPage()}
             onClick={() => table.previousPage()}
           >
@@ -173,7 +173,7 @@ export function KanbanTable({
           <Button
             variant="outline"
             size="icon-sm"
-            aria-label="Next page"
+            aria-label="Próxima página"
             disabled={!table.getCanNextPage()}
             onClick={() => table.nextPage()}
           >

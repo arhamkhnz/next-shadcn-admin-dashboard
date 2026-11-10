@@ -15,7 +15,7 @@ export function TopPages() {
   return (
     <Card className="h-full gap-2">
       <CardHeader>
-        <CardTitle className="font-normal">Page Performance</CardTitle>
+        <CardTitle className="font-normal">Desempenho de páginas</CardTitle>
         <CardAction>
           <Ellipsis className="size-4" />
         </CardAction>
@@ -26,9 +26,9 @@ export function TopPages() {
           <TableHeader className="[&_tr]:border-border/50">
             <TableRow className="hover:bg-transparent">
               <TableHead className="h-8" />
-              <TableHead className="h-8 w-24 text-right font-normal">Views</TableHead>
-              <TableHead className="h-8 w-24 text-right font-normal">Avg Time</TableHead>
-              <TableHead className="h-8 w-20 text-right font-normal">Bounce</TableHead>
+              <TableHead className="h-8 w-24 text-right font-normal">Visualizações</TableHead>
+              <TableHead className="h-8 w-24 text-right font-normal">Tempo médio</TableHead>
+              <TableHead className="h-8 w-20 text-right font-normal">Rejeição</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="[&_tr]:border-border/50">

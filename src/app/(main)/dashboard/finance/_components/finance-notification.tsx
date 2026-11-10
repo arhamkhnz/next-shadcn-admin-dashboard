@@ -10,12 +10,12 @@ export function FinanceNotification() {
         <TrendingUp />
       </ItemMedia>
       <ItemContent>
-        <ItemTitle>Credit score updated</ItemTitle>
-        <ItemDescription>Your score increased by 14 points to 782.</ItemDescription>
+        <ItemTitle>Score de crédito atualizado</ItemTitle>
+        <ItemDescription>Sua pontuação aumentou 14 pontos, para 782.</ItemDescription>
       </ItemContent>
       <ItemActions>
         <Button size="sm" variant="outline">
-          View details
+          Ver detalhes
         </Button>
       </ItemActions>
     </Item>

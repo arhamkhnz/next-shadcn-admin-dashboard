@@ -33,7 +33,9 @@ export function MailComponent({ mails, defaultLayout = [...DEFAULT_MAIL_LAYOUT] 
 
   if (!isMounted) {
     return (
-      <div className="text-muted-foreground flex size-full items-center justify-center text-sm">Loading mail...</div>
+      <div className="flex size-full items-center justify-center text-muted-foreground text-sm">
+        Carregando e-mails...
+      </div>
     );
   }
 
@@ -55,8 +57,8 @@ function MailMobileLayout({ mails }: Pick<MailProps, "mails">) {
 
       <Drawer open={isMailOpen} onOpenChange={setIsMailOpen}>
         <DrawerContent>
-          <DrawerTitle className="sr-only">Mail message</DrawerTitle>
-          <DrawerDescription className="sr-only">Read the selected email message</DrawerDescription>
+          <DrawerTitle className="sr-only">Mensagem de e-mail</DrawerTitle>
+          <DrawerDescription className="sr-only">Leia a mensagem de e-mail selecionada</DrawerDescription>
           <MailView mail={selectedMail} onClose={() => setIsMailOpen(false)} />
         </DrawerContent>
       </Drawer>

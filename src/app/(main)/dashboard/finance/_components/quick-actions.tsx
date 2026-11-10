@@ -24,14 +24,14 @@ const contacts = [
 ];
 
 const shortcuts = [
-  { id: 1, label: "Scan QR", icon: QrCode },
-  { id: 2, label: "Transfer", icon: SendHorizontal },
-  { id: 3, label: "Pay Bills", icon: Banknote },
-  { id: 4, label: "History", icon: History },
-  { id: 5, label: "Mobile", icon: Smartphone },
-  { id: 6, label: "Electricity", icon: Lightbulb },
-  { id: 7, label: "Water", icon: Droplet },
-  { id: 8, label: "More", icon: MoreHorizontal },
+  { id: 1, label: "Escanear QR", icon: QrCode },
+  { id: 2, label: "Transferir", icon: SendHorizontal },
+  { id: 3, label: "Pagar contas", icon: Banknote },
+  { id: 4, label: "Histórico", icon: History },
+  { id: 5, label: "Celular", icon: Smartphone },
+  { id: 6, label: "Luz", icon: Lightbulb },
+  { id: 7, label: "Água", icon: Droplet },
+  { id: 8, label: "Mais", icon: MoreHorizontal },
 ];
 
 export function QuickActions() {
@@ -39,7 +39,7 @@ export function QuickActions() {
     <div className="flex flex-col gap-4">
       <Card>
         <CardHeader>
-          <CardTitle className="font-normal">Quick Transfer</CardTitle>
+          <CardTitle className="font-normal">Transferência rápida</CardTitle>
           <CardAction>
             <div className="flex items-center gap-1">
               <div className="flex -space-x-2">
@@ -64,14 +64,14 @@ export function QuickActions() {
                 <InputGroupText>USD</InputGroupText>
               </InputGroupAddon>
             </InputGroup>
-            <Button>Send</Button>
+            <Button>Enviar</Button>
           </Field>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-normal">Shortcuts</CardTitle>
+          <CardTitle className="font-normal">Atalhos</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-4">

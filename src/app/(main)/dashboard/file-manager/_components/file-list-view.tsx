@@ -3,6 +3,8 @@
 import { useState } from "react";
 
 import { cn } from "cn";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Star } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -28,12 +30,12 @@ export function FileListView({ files }: FileListViewProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="pl-0">Name</TableHead>
-          <TableHead className="hidden md:table-cell">Owner</TableHead>
-          <TableHead className="hidden lg:table-cell">Modified</TableHead>
-          <TableHead className="hidden sm:table-cell">Size</TableHead>
+          <TableHead className="pl-0">Nome</TableHead>
+          <TableHead className="hidden md:table-cell">Proprietário</TableHead>
+          <TableHead className="hidden lg:table-cell">Modificado</TableHead>
+          <TableHead className="hidden sm:table-cell">Tamanho</TableHead>
           <TableHead className="w-20">
-            <span className="sr-only">Actions</span>
+            <span className="sr-only">Ações</span>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -45,13 +47,13 @@ export function FileListView({ files }: FileListViewProps) {
             <TableRow key={file.id}>
               <TableCell className="pl-0">
                 <div className="flex min-w-0 items-center gap-3">
-                  <FileIcon className="text-muted-foreground size-5 shrink-0" />
+                  <FileIcon className="size-5 shrink-0 text-muted-foreground" />
                   <Button variant="link" size="sm" className="h-auto max-w-72 justify-start px-0">
                     <span className="truncate">{file.name}</span>
                   </Button>
                   {file.shared && (
                     <Badge variant="outline" className="hidden xl:inline-flex">
-                      Shared
+                      Compartilhado
                     </Badge>
                   )}
                 </div>
@@ -64,14 +66,16 @@ export function FileListView({ files }: FileListViewProps) {
                   <span>{file.owner}</span>
                 </div>
               </TableCell>
-              <TableCell className="text-muted-foreground hidden lg:table-cell">{file.modifiedAt}</TableCell>
-              <TableCell className="text-muted-foreground hidden sm:table-cell">{file.size}</TableCell>
+              <TableCell className="hidden text-muted-foreground lg:table-cell">
+                {format(parseISO(file.modifiedAt), "d 'de' MMMM 'de' yyyy, HH:mm", { locale: ptBR })}
+              </TableCell>
+              <TableCell className="hidden text-muted-foreground sm:table-cell">{file.size}</TableCell>
               <TableCell>
                 <div className="flex items-center justify-end">
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={file.starred ? `Unstar ${file.name}` : `Star ${file.name}`}
+                    aria-label={file.starred ? `Desfavoritar ${file.name}` : `Favoritar ${file.name}`}
                     onClick={() => toggleStar(file.id)}
                   >
                     <Star className={cn(file.starred && "fill-current")} />

@@ -36,7 +36,7 @@ export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
   return (
     <Collapsible
       defaultOpen
-      className="bg-card text-card-foreground flex flex-col overflow-hidden rounded-xl border py-3 data-[state=open]:gap-3 data-[state=open]:pb-0"
+      className="flex flex-col overflow-hidden rounded-xl border bg-card py-3 text-card-foreground data-[state=open]:gap-3 data-[state=open]:pb-0"
     >
       <div className="flex flex-col gap-2 px-4 sm:flex-row sm:items-center">
         <CollapsibleTrigger asChild>
@@ -46,15 +46,15 @@ export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
           >
             <ChevronDown className="group-data-[state=open]:rotate-180" />
             <div className="flex min-w-0 items-baseline gap-1.5 text-left">
-              <span className="shrink-0 leading-none font-medium">{group.organization}</span>
-              <span className="text-muted-foreground min-w-0 truncate text-sm">({group.name})</span>
+              <span className="shrink-0 font-medium leading-none">{group.organization}</span>
+              <span className="min-w-0 truncate text-muted-foreground text-sm">({group.name})</span>
             </div>
           </Button>
         </CollapsibleTrigger>
         <div className="flex w-full items-center justify-between gap-2 sm:ml-auto sm:w-auto sm:justify-end">
           <Button variant="ghost" size="sm" className="-ml-1.5 sm:ml-0">
             <Plus data-icon="inline-start" />
-            Add Environment
+            Adicionar ambiente
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -67,31 +67,31 @@ export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
                 {group.rows.length > 0 ? (
                   <DropdownMenuItem>
                     <FileText />
-                    Activity Logs
+                    Registros de atividade
                   </DropdownMenuItem>
                 ) : null}
                 <DropdownMenuItem>
                   <Terminal />
-                  Open Console
+                  Abrir console
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Settings />
-                  Project Settings
+                  Configurações do projeto
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <RefreshCw />
-                  Sync Status
+                  Sincronizar status
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Bell />
-                  Manage Alerts
+                  Gerenciar alertas
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <Copy />
-                  Copy Project ID
+                  Copiar ID do projeto
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -108,7 +108,7 @@ export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
 
 function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
   return (
-    <div className="[&::-webkit-scrollbar-thumb]:bg-border scrollbar-thin [scrollbar-color:var(--border)_transparent] overflow-x-auto **:data-[slot=table-container]:overflow-visible [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
+    <div className="scrollbar-thin overflow-x-auto [scrollbar-color:var(--border)_transparent] **:data-[slot=table-container]:overflow-visible [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
       <Table className="min-w-[1700px] table-fixed **:data-[slot='table-cell']:px-5 **:data-[slot='table-head']:px-5">
         <colgroup>
           <col className="w-90" />
@@ -125,16 +125,16 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
           <TableRow>
             <TableHead className="font-medium">
               <span className="inline-flex items-center gap-1">
-                Domain <ArrowUpDown className="size-4" />
+                Domínio <ArrowUpDown className="size-4" />
               </span>
             </TableHead>
-            <TableHead>Platform</TableHead>
-            <TableHead>Environment</TableHead>
-            <TableHead>Health</TableHead>
-            <TableHead>Latency</TableHead>
+            <TableHead>Plataforma</TableHead>
+            <TableHead>Ambiente</TableHead>
+            <TableHead>Saúde</TableHead>
+            <TableHead>Latência</TableHead>
             <TableHead>Uptime</TableHead>
-            <TableHead>Resources</TableHead>
-            <TableHead>Server</TableHead>
+            <TableHead>Recursos</TableHead>
+            <TableHead>Servidor</TableHead>
             <TableHead />
           </TableRow>
         </TableHeader>
@@ -147,17 +147,17 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                 </span>
               </TableCell>
               <TableCell>
-                <span className="text-muted-foreground flex items-center gap-2 font-medium">
+                <span className="flex items-center gap-2 font-medium text-muted-foreground">
                   <SimpleIcon icon={row.platform.icon} className="size-4 fill-current" />
                   {row.platform.name}
                 </span>
               </TableCell>
               <TableCell>
                 <Badge
-                  variant={row.environment === "Expired" ? "destructive" : "secondary"}
+                  variant={row.environment === "Expirado" ? "destructive" : "secondary"}
                   className={cn(
                     "rounded-sm px-1.5 py-0.5",
-                    row.environment === "Production" && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+                    row.environment === "Produção" && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
                     row.environment === "Staging" && "bg-sky-500/10 text-sky-600 dark:text-sky-400",
                   )}
                 >
@@ -182,13 +182,13 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                 </Badge>
               </TableCell>
               <TableCell>
-                <span className="text-muted-foreground inline-flex items-center gap-1.5 tabular-nums">
+                <span className="inline-flex items-center gap-1.5 text-muted-foreground tabular-nums">
                   <CircleGauge className="size-4" />
                   {row.latency}
                 </span>
               </TableCell>
               <TableCell>
-                <span className="text-muted-foreground inline-flex items-center gap-1.5 tabular-nums">
+                <span className="inline-flex items-center gap-1.5 text-muted-foreground tabular-nums">
                   <Clock3 className="size-4" />
                   {row.uptime}
                 </span>
@@ -197,16 +197,16 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                 <div className="grid grid-cols-3 gap-4">
                   <ResourceMeter label="CPU" value={row.resources.cpu} />
                   <ResourceMeter label="RAM" value={row.resources.ram} />
-                  <ResourceMeter label="Disk" value={row.resources.disk} />
+                  <ResourceMeter label="Disco" value={row.resources.disk} />
                 </div>
               </TableCell>
               <TableCell>
                 <span className="flex flex-col font-medium">
                   {row.server}
-                  <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                  <span className="flex items-center gap-1.5 text-muted-foreground text-xs">
                     <span
                       aria-hidden="true"
-                      className={cn("ring-foreground/10 shrink-0 rounded-xs text-sm ring-1", `flag:${row.countryCode}`)}
+                      className={cn("shrink-0 rounded-xs text-sm ring-1 ring-foreground/10", `flag:${row.countryCode}`)}
                     />
                     {row.countryCode} · {row.plan}
                   </span>
@@ -223,11 +223,11 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                     <DropdownMenuGroup>
                       <DropdownMenuItem>
                         <FileText />
-                        View Logs
+                        Ver registros
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Terminal />
-                        Open Console
+                        Abrir console
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <RefreshCw />
@@ -259,7 +259,7 @@ function ResourceMeter({ label, value }: { label: string; value: number }) {
   return (
     <span className="min-w-0 space-y-1">
       <span className="flex items-baseline justify-between gap-2 text-xs">
-        <span className="text-muted-foreground font-medium">{label}</span>
+        <span className="font-medium text-muted-foreground">{label}</span>
         <span
           className={cn(
             "font-medium text-emerald-600 tabular-nums dark:text-emerald-400",
@@ -270,7 +270,7 @@ function ResourceMeter({ label, value }: { label: string; value: number }) {
           {value}%
         </span>
       </span>
-      <span className="bg-muted-foreground/20 block h-1.5 overflow-hidden rounded-full">
+      <span className="block h-1.5 overflow-hidden rounded-full bg-muted-foreground/20">
         <span
           className={cn(
             "block h-full rounded-full bg-emerald-500",
@@ -286,10 +286,10 @@ function ResourceMeter({ label, value }: { label: string; value: number }) {
 
 function EmptyProjectState() {
   return (
-    <div className="bg-muted/50 flex min-h-24 items-center justify-center border-t p-4">
+    <div className="flex min-h-24 items-center justify-center border-t bg-muted/50 p-4">
       <div className="flex items-center gap-2">
         <CircleDashed className="size-4" />
-        <p className="text-sm font-medium">No environments in this project</p>
+        <p className="font-medium text-sm">Nenhum ambiente neste projeto</p>
       </div>
     </div>
   );

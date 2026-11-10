@@ -5,11 +5,11 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/componen
 
 export function AnalyticsKpiStrip() {
   return (
-    <div className="bg-card ring-foreground/10 overflow-hidden rounded-xl shadow-xs ring-1">
+    <div className="overflow-hidden rounded-xl bg-card shadow-xs ring-1 ring-foreground/10">
       <div className="grid divide-y *:data-[slot=card]:rounded-none *:data-[slot=card]:ring-0 md:grid-cols-2 md:divide-x md:divide-y-0 xl:grid-cols-5">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-normal">Unique Visitors</CardTitle>
+            <CardTitle className="font-normal text-sm">Visitantes únicos</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -23,19 +23,19 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs">
               <span>
-                from <span className="text-foreground">207.3k</span>
+                vs. <span className="text-foreground">207.3k</span>
               </span>
               <span>•</span>
-              <span>last 4 weeks</span>
+              <span>últimas 4 semanas</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-normal">Sessions</CardTitle>
+            <CardTitle className="font-normal text-sm">Sessões</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -49,19 +49,19 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs">
               <span>
-                from <span className="text-foreground">243.5k</span>
+                vs. <span className="text-foreground">243.5k</span>
               </span>
               <span>•</span>
-              <span>last 4 weeks</span>
+              <span>últimas 4 semanas</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-normal">Pageviews</CardTitle>
+            <CardTitle className="font-normal text-sm">Visualizações de página</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -75,19 +75,19 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs">
               <span>
-                from <span className="text-foreground">566.8k</span>
+                vs. <span className="text-foreground">566.8k</span>
               </span>
               <span>•</span>
-              <span>last 4 weeks</span>
+              <span>últimas 4 semanas</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-normal">Engagement Rate</CardTitle>
+            <CardTitle className="font-normal text-sm">Taxa de engajamento</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -101,19 +101,19 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs">
               <span>
-                from <span className="text-foreground">58.9%</span>
+                vs. <span className="text-foreground">58.9%</span>
               </span>
               <span>•</span>
-              <span>last 4 weeks</span>
+              <span>últimas 4 semanas</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-normal">Conversion Rate</CardTitle>
+            <CardTitle className="font-normal text-sm">Taxa de conversão</CardTitle>
             <CardAction>
               <Ellipsis className="size-4" />
             </CardAction>
@@ -127,12 +127,12 @@ export function AnalyticsKpiStrip() {
               </Badge>
             </div>
 
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs">
               <span>
-                from <span className="text-foreground">8.9%</span>
+                vs. <span className="text-foreground">8.9%</span>
               </span>
               <span>•</span>
-              <span>last 4 weeks</span>
+              <span>últimas 4 semanas</span>
             </div>
           </CardContent>
         </Card>

@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { Calendar } from "./_components/calendar";
 
 export const metadata: Metadata = {
-  title: "Open Source Calendar with shadcn/ui",
-  description: "Explore an open source calendar interface for organizing events, schedules, and daily activities.",
+  title: "Calendário open-source com shadcn/ui",
+  description:
+    "Explore uma interface de calendário open-source para organizar eventos, agendamentos e atividades do dia a dia.",
   alternates: {
     canonical: "/dashboard/calendar",
   },

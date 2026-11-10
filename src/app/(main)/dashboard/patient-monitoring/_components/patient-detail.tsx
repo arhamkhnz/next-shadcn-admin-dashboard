@@ -76,14 +76,14 @@ export function PatientDetail({ hasActiveAlarm, patient }: PatientDetailProps) {
         <TraceRow calibration="25 mm/s · 10 mm/mV" kind="ecg" label="ECG II" lead="II" patient={patient} />
         <TraceRow calibration="25 mm/s · 10 mm/mV" kind="ecg" label="ECG V5" lead="V5" patient={patient} />
         <TraceRow kind="pleth" label="Pleth" patient={patient} />
-        <TraceRow calibration="10 mm/mV" kind="respiration" label="Resp" patient={patient} />
+        <TraceRow calibration="10 mm/mV" kind="respiration" label="FR" patient={patient} />
         <TraceRow calibration="mmHg" kind="arterial" label="ART" patient={patient} />
       </div>
 
       <dl className="xl:grid xl:grid-rows-6">
         <NumericVital
           color={hasActiveAlarm ? "text-amber-500 dark:text-amber-400" : "text-lime-500 dark:text-lime-400"}
-          label="HR"
+          label="FC"
           limits="50–100"
           unit="bpm"
           value={patient.heartRate}
@@ -97,7 +97,7 @@ export function PatientDetail({ hasActiveAlarm, patient }: PatientDetailProps) {
         />
         <NumericVital
           color="text-amber-500 dark:text-amber-400"
-          label="RR"
+          label="FR"
           limits="8–30"
           unit="/min"
           value={patient.respirationRate}

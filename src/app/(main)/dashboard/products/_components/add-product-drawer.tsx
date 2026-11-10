@@ -25,34 +25,34 @@ import { categories, statuses } from "./data";
 import { maxProductImageSize, ProductImagesField, productImageTypes } from "./product-images-field";
 
 const productSchema = z.object({
-  name: z.string().trim().min(1, "Enter a product name.").max(100, "Use 100 characters or fewer."),
-  description: z.string().trim().min(1, "Enter a product description.").max(2000, "Use 2,000 characters or fewer."),
+  name: z.string().trim().min(1, "Informe o nome do produto.").max(100, "Use 100 caracteres ou menos."),
+  description: z.string().trim().min(1, "Informe a descrição do produto.").max(2000, "Use 2.000 caracteres ou menos."),
   images: z
     .array(z.custom<File>((value) => typeof File !== "undefined" && value instanceof File))
-    .max(5, "Select up to 5 images.")
-    .refine((files) => files.every((file) => productImageTypes.includes(file.type)), "Use JPG, PNG, or WebP images.")
+    .max(5, "Selecione até 5 imagens.")
+    .refine((files) => files.every((file) => productImageTypes.includes(file.type)), "Use imagens JPG, PNG ou WebP.")
     .refine(
       (files) => files.every((file) => file.size > 0 && file.size <= maxProductImageSize),
-      "Each image must be non-empty and no larger than 5 MB.",
+      "Cada imagem não pode estar vazia e deve ter no máximo 5 MB.",
     ),
   sku: z
     .string()
     .trim()
-    .min(1, "Enter a SKU.")
-    .max(40, "Use 40 characters or fewer.")
-    .regex(/^[A-Za-z0-9_-]+$/, "Use letters, numbers, hyphens, or underscores."),
+    .min(1, "Informe o SKU.")
+    .max(40, "Use 40 caracteres ou menos.")
+    .regex(/^[A-Za-z0-9_-]+$/, "Use letras, números, hífens ou sublinhados."),
   category: z.enum(categories),
   status: z.enum(statuses),
   price: z
     .string()
-    .min(1, "Enter a price.")
-    .regex(/^\d+(\.\d{1,2})?$/, "Enter a non-negative price with up to two decimal places.")
-    .refine((value) => Number(value) <= 1_000_000, "Price must not exceed $1,000,000."),
+    .min(1, "Informe o preço.")
+    .regex(/^\d+(\.\d{1,2})?$/, "Informe um preço não negativo com até duas casas decimais.")
+    .refine((value) => Number(value) <= 1_000_000, "O preço não pode exceder US$ 1.000.000,00."),
   stock: z
     .string()
-    .min(1, "Enter a stock quantity.")
-    .regex(/^\d+$/, "Enter a non-negative whole number.")
-    .refine((value) => Number(value) <= 1_000_000, "Stock must not exceed 1,000,000."),
+    .min(1, "Informe a quantidade em estoque.")
+    .regex(/^\d+$/, "Informe um número inteiro não negativo.")
+    .refine((value) => Number(value) <= 1_000_000, "O estoque não pode exceder 1.000.000."),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -66,8 +66,8 @@ export function AddProductDrawer() {
       description: "",
       images: [],
       sku: "",
-      category: "Clothing",
-      status: "Draft",
+      category: "Roupas",
+      status: "Rascunho",
       price: "",
       stock: "0",
     },
@@ -84,18 +84,18 @@ export function AddProductDrawer() {
       <DrawerTrigger asChild>
         <Button size="sm">
           <PackagePlus data-icon="inline-start" />
-          Add product
+          Adicionar produto
         </Button>
       </DrawerTrigger>
       <DrawerContent className="data-[vaul-drawer-direction=right]:w-full data-[vaul-drawer-direction=right]:sm:max-w-lg">
         <DrawerHeader className="shrink-0 border-b">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col gap-1">
-              <DrawerTitle>Add product</DrawerTitle>
-              <DrawerDescription>Enter product details, pricing, and inventory.</DrawerDescription>
+              <DrawerTitle>Adicionar produto</DrawerTitle>
+              <DrawerDescription>Informe nome/detalhes, preços e estoque do produto.</DrawerDescription>
             </div>
             <DrawerClose asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Close add product">
+              <Button variant="ghost" size="icon-sm" aria-label="Fechar adição de produto">
                 <X />
               </Button>
             </DrawerClose>
@@ -105,10 +105,10 @@ export function AddProductDrawer() {
           <div className="min-h-0 flex-1 overflow-y-auto p-4">
             <FieldGroup>
               <Field data-invalid={!!errors.name}>
-                <FieldLabel htmlFor="add-product-name">Product name</FieldLabel>
+                <FieldLabel htmlFor="add-product-name">Nome do produto</FieldLabel>
                 <Input
                   id="add-product-name"
-                  placeholder="e.g. Organic Cotton Crew Tee"
+                  placeholder="ex.: Organic Cotton Crew Tee"
                   autoComplete="off"
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? "add-product-name-error" : undefined}
@@ -117,12 +117,12 @@ export function AddProductDrawer() {
                 {errors.name && <FieldError id="add-product-name-error">{errors.name.message}</FieldError>}
               </Field>
               <Field data-invalid={!!errors.description}>
-                <FieldLabel htmlFor="add-product-description">Description</FieldLabel>
+                <FieldLabel htmlFor="add-product-description">Descrição</FieldLabel>
                 <Textarea
                   id="add-product-description"
                   rows={4}
                   className="max-h-48 min-h-24"
-                  placeholder="Describe the product, materials, and key features."
+                  placeholder="Descreva o produto, materiais e principais características."
                   aria-invalid={!!errors.description}
                   aria-describedby={errors.description ? "add-product-description-error" : undefined}
                   {...form.register("description")}
@@ -151,7 +151,7 @@ export function AddProductDrawer() {
                 <FieldLabel htmlFor="add-product-sku">SKU</FieldLabel>
                 <Input
                   id="add-product-sku"
-                  placeholder="e.g. CL-TEE-105"
+                  placeholder="ex.: CL-TEE-105"
                   autoComplete="off"
                   aria-invalid={!!errors.sku}
                   aria-describedby={errors.sku ? "add-product-sku-error" : undefined}
@@ -165,7 +165,7 @@ export function AddProductDrawer() {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="add-product-category">Category</FieldLabel>
+                      <FieldLabel htmlFor="add-product-category">Categoria</FieldLabel>
                       <Select name={field.name} value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger
                           id="add-product-category"
@@ -227,7 +227,7 @@ export function AddProductDrawer() {
                   )}
                 />
                 <Field data-invalid={!!errors.price}>
-                  <FieldLabel htmlFor="add-product-price">Price (USD)</FieldLabel>
+                  <FieldLabel htmlFor="add-product-price">Preço (USD)</FieldLabel>
                   <Input
                     id="add-product-price"
                     type="number"
@@ -242,7 +242,7 @@ export function AddProductDrawer() {
                   {errors.price && <FieldError id="add-product-price-error">{errors.price.message}</FieldError>}
                 </Field>
                 <Field data-invalid={!!errors.stock}>
-                  <FieldLabel htmlFor="add-product-stock">Stock quantity</FieldLabel>
+                  <FieldLabel htmlFor="add-product-stock">Quantidade em estoque</FieldLabel>
                   <Input
                     id="add-product-stock"
                     type="number"
@@ -257,17 +257,17 @@ export function AddProductDrawer() {
                 </Field>
               </FieldGroup>
               {form.formState.isSubmitSuccessful && form.formState.isValid && (
-                <FieldDescription role="status">Product details are valid.</FieldDescription>
+                <FieldDescription role="status">Dados do produto válidos.</FieldDescription>
               )}
             </FieldGroup>
           </div>
           <DrawerFooter className="shrink-0 border-t sm:flex-row sm:justify-end">
             <DrawerClose asChild>
               <Button type="button" variant="outline">
-                Cancel
+                Cancelar
               </Button>
             </DrawerClose>
-            <Button type="submit">Validate product</Button>
+            <Button type="submit">Validar produto</Button>
           </DrawerFooter>
         </form>
       </DrawerContent>

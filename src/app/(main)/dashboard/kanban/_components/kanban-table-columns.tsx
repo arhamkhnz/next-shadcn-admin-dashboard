@@ -18,9 +18,9 @@ import type { Column, ColumnId, Task, TaskInsightLabel } from "./types";
 export type TaskTableRow = Task & { status: Column };
 
 const insightIcons: Record<TaskInsightLabel, LucideIcon> = {
-  Attachments: Paperclip,
-  Comments: MessageSquare,
-  Documents: FileText,
+  Anexos: Paperclip,
+  Comentários: MessageSquare,
+  Documentos: FileText,
 };
 
 export function createTaskTableColumns(
@@ -38,7 +38,7 @@ export function createTaskTableColumns(
     },
     {
       accessorKey: "title",
-      header: "Task",
+      header: "Tarefa",
       size: 360,
       cell: ({ row }) => (
         <div className="flex min-w-0 items-center gap-4">
@@ -84,7 +84,7 @@ export function createTaskTableColumns(
             <SelectTrigger
               size="sm"
               className="w-fit gap-1.5 border-transparent bg-transparent px-0 shadow-none"
-              aria-label={`Change status for ${row.original.title}`}
+              aria-label={`Alterar status de ${row.original.title}`}
             >
               <Icon className="text-muted-foreground size-3.5 shrink-0" aria-hidden="true" />
               <SelectValue />
@@ -104,7 +104,7 @@ export function createTaskTableColumns(
     },
     {
       accessorKey: "priority",
-      header: "Priority",
+      header: "Prioridade",
       size: 120,
       cell: ({ row }) => {
         const priority = priorityBadgeConfig[row.original.priority];
@@ -120,7 +120,7 @@ export function createTaskTableColumns(
     },
     {
       accessorKey: "team",
-      header: "Team",
+      header: "Equipe",
       size: 140,
       cell: ({ row }) => (
         <Badge variant="secondary" className={tagTones[row.original.team]}>
@@ -131,7 +131,7 @@ export function createTaskTableColumns(
     {
       id: "owner",
       accessorFn: (task) => task.owner.name,
-      header: "Owner",
+      header: "Responsável",
       size: 190,
       cell: ({ row }) => (
         <span className="flex items-center gap-1.5">
@@ -146,7 +146,7 @@ export function createTaskTableColumns(
     },
     {
       accessorKey: "dueDate",
-      header: "Due date",
+      header: "Vencimento",
       size: 160,
       cell: ({ row }) => <span className="text-muted-foreground tabular-nums">{row.original.dueDate}</span>,
     },

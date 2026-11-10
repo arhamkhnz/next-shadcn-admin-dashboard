@@ -19,6 +19,13 @@ import type { DataTableFeatures } from "@/lib/data-table-features";
 import { TaskPriorityFilter } from "./task-priority-filter";
 import { TaskStatusFilter } from "./task-status-filter";
 
+const colunasVisiveis: Record<string, string> = {
+  id: "Id",
+  title: "Título",
+  status: "Status",
+  priority: "Prioridade",
+};
+
 interface TasksToolbarProps<TData extends RowData> {
   table: ReactTable<DataTableFeatures, TData>;
 }
@@ -35,7 +42,7 @@ export function TasksToolbar<TData extends RowData>({ table }: TasksToolbarProps
     <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex flex-1 flex-wrap items-center gap-2">
         <Input
-          placeholder="Filter tasks..."
+          placeholder="Filtrar tarefas..."
           value={searchValue}
           onChange={(event) => {
             table.getColumn("title")?.setFilterValue(event.target.value);
@@ -54,7 +61,7 @@ export function TasksToolbar<TData extends RowData>({ table }: TasksToolbarProps
             }}
           >
             <X data-icon="inline-start" />
-            Reset
+            Limpar
           </Button>
         )}
       </div>
@@ -67,21 +74,21 @@ export function TasksToolbar<TData extends RowData>({ table }: TasksToolbarProps
               className={cn("ml-auto hidden lg:flex", hiddenColumns.length > 0 && "bg-muted text-foreground")}
             >
               <Settings2 data-icon="inline-start" />
-              View
+              Visualização
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-38">
-            <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+            <DropdownMenuLabel>Mostrar colunas</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               {hideableColumns.map((column) => (
                 <DropdownMenuCheckboxItem
-                  key={column.id}
+                  key={colunasVisiveis[column.id]}
                   className="capitalize"
                   checked={column.getIsVisible()}
                   onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 >
-                  {column.id}
+                  {colunasVisiveis[column.id]}
                 </DropdownMenuCheckboxItem>
               ))}
             </DropdownMenuGroup>

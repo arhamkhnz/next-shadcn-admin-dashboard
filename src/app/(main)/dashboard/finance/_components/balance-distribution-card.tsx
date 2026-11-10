@@ -18,25 +18,25 @@ const balanceData: {
   percentage: number;
 }[] = [
   {
-    account: "Main Wallet",
+    account: "Carteira principal",
     amount: 122_540,
     key: "main",
     percentage: 52.2,
   },
   {
-    account: "Savings Account",
+    account: "Conta de poupança",
     amount: 48_320,
     key: "savings",
     percentage: 20.6,
   },
   {
-    account: "Investment Account",
+    account: "Conta de investimentos",
     amount: 36_780,
     key: "investment",
     percentage: 15.7,
   },
   {
-    account: "Reserve Account",
+    account: "Conta de reserva",
     amount: 27_256,
     key: "reserve",
     percentage: 11.5,
@@ -45,35 +45,35 @@ const balanceData: {
 
 const chartConfig = {
   amount: {
-    label: "Balance",
+    label: "Saldo",
   },
   investment: {
     color: "var(--chart-1)",
-    label: "Investment Account",
+    label: "Conta de investimentos",
   },
   main: {
     color: "var(--chart-2)",
-    label: "Main Wallet",
+    label: "Carteira principal",
   },
   reserve: {
     color: "var(--chart-3)",
-    label: "Reserve Account",
+    label: "Conta de reserva",
   },
   savings: {
     color: "var(--chart-4)",
-    label: "Savings Account",
+    label: "Conta de poupança",
   },
 } satisfies ChartConfig;
 
 const currencies = {
   EUR: {
-    label: "Euro Balance",
+    label: "Saldo em euro",
   },
   GBP: {
-    label: "GBP Balance",
+    label: "Saldo em GBP",
   },
   USD: {
-    label: "USD Balance",
+    label: "Saldo em USD",
   },
 } as const;
 
@@ -97,7 +97,7 @@ export function BalanceDistributionCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-normal">Account Allocation</CardTitle>
+        <CardTitle className="font-normal">Alocação de contas</CardTitle>
         <CardAction>
           <Select onValueChange={(value) => setCurrency(value as Currency)} value={currency}>
             <SelectTrigger className="w-36" size="sm">

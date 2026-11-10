@@ -84,7 +84,7 @@ export function Tasks({ data }: TasksProps) {
   const canNextPage = table.getCanNextPage();
 
   return (
-    <div className="border-border/70 bg-background overflow-hidden rounded-xl border">
+    <div className="overflow-hidden rounded-xl border border-border/70 bg-background">
       <div className="border-b px-4 py-4">
         <TasksToolbar table={table} />
       </div>
@@ -93,7 +93,7 @@ export function Tasks({ data }: TasksProps) {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="text-muted-foreground h-11 font-medium" colSpan={header.colSpan}>
+                <TableHead key={header.id} className="h-11 font-medium text-muted-foreground" colSpan={header.colSpan}>
                   {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                 </TableHead>
               ))}
@@ -118,7 +118,7 @@ export function Tasks({ data }: TasksProps) {
           ) : (
             <TableRow>
               <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                No results.
+                Nenhum resultado.
               </TableCell>
             </TableRow>
           )}
@@ -126,12 +126,12 @@ export function Tasks({ data }: TasksProps) {
       </Table>
       <div className="flex flex-col gap-3 border-t px-4 py-4 md:flex-row md:items-center md:justify-between">
         <div className="text-muted-foreground text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
+          {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} linha(s)
+          selecionada(s).
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end sm:gap-6 lg:gap-8">
           <div className="flex items-center gap-2">
-            <p className="text-muted-foreground text-sm font-medium">Rows per page</p>
+            <p className="font-medium text-muted-foreground text-sm">Linhas por página</p>
             <Select
               value={`${table.state.pagination.pageSize}`}
               onValueChange={(value) => {
@@ -152,15 +152,15 @@ export function Tasks({ data }: TasksProps) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex w-24 items-center justify-start text-sm font-medium sm:justify-center">
-            Page {currentPage} of {pageCount}
+          <div className="flex w-24 items-center justify-start font-medium text-sm sm:justify-center">
+            Página {currentPage} de {pageCount}
           </div>
           <Pagination className="mx-0 w-auto justify-start sm:justify-end">
             <PaginationContent className="gap-1">
               <PaginationItem className="hidden lg:block">
                 <PaginationLink
                   href="#"
-                  aria-label="Go to first page"
+                  aria-label="Ir para a primeira página"
                   aria-disabled={!canPreviousPage}
                   className={cn(!canPreviousPage && "pointer-events-none opacity-50")}
                   onClick={(event) => {
@@ -174,7 +174,7 @@ export function Tasks({ data }: TasksProps) {
               <PaginationItem>
                 <PaginationPrevious
                   href="#"
-                  text="Prev"
+                  text="Anterior"
                   aria-disabled={!canPreviousPage}
                   className={cn(!canPreviousPage && "pointer-events-none opacity-50")}
                   onClick={(event) => {
@@ -210,6 +210,7 @@ export function Tasks({ data }: TasksProps) {
               <PaginationItem>
                 <PaginationNext
                   href="#"
+                  text="Próxima"
                   aria-disabled={!canNextPage}
                   className={cn(!canNextPage && "pointer-events-none opacity-50")}
                   onClick={(event) => {
@@ -221,7 +222,7 @@ export function Tasks({ data }: TasksProps) {
               <PaginationItem className="hidden lg:block">
                 <PaginationLink
                   href="#"
-                  aria-label="Go to last page"
+                  aria-label="Ir para a última página"
                   aria-disabled={!canNextPage}
                   className={cn(!canNextPage && "pointer-events-none opacity-50")}
                   onClick={(event) => {

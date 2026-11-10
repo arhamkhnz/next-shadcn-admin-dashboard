@@ -7,18 +7,18 @@ export type Column = {
 
 export type TaskTeam =
   | "Backend"
-  | "Data"
+  | "Dados"
   | "Design"
   | "Docs"
-  | "Finance Ops"
-  | "Platform"
-  | "Product"
+  | "Operações Financeiras"
+  | "Plataforma"
+  | "Produto"
   | "QA"
-  | "Security";
+  | "Segurança";
 
-export type TaskPriority = "High" | "Medium" | "Low";
+export type TaskPriority = "Alta" | "Média" | "Baixa";
 
-export type TaskInsightLabel = "Attachments" | "Comments" | "Documents";
+export type TaskInsightLabel = "Anexos" | "Comentários" | "Documentos";
 
 export type TaskInsight = {
   label: TaskInsightLabel;

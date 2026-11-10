@@ -1,6 +1,7 @@
 "use client";
 
 import { format, parse } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { ArrowUpRight, DollarSign, PackageCheck, ReceiptText, RotateCcw, ShoppingBag, Users } from "lucide-react";
 import { Area, Bar, CartesianGrid, ComposedChart, XAxis, YAxis } from "recharts";
 
@@ -25,7 +26,8 @@ const revenueBucketValues = [
   [6900, 7400, 8100, 8600, 8200, 9360],
 ] as const;
 
-const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
+// Rótulo do mês no eixo: "jan. 26" — parse em pt-BR
+const monthFormatter = new Intl.DateTimeFormat("pt-BR", { month: "short" });
 
 function getRollingRevenueBuckets() {
   const currentMonth = new Date();
@@ -52,11 +54,11 @@ const revenueOverviewData = getRollingRevenueBuckets().flatMap(({ month, values 
 
 const revenueOverviewConfig = {
   revenue: {
-    label: "Revenue",
+    label: "Receita",
     color: "var(--foreground)",
   },
   profit: {
-    label: "Profit",
+    label: "Lucro",
     color: "var(--muted-foreground)",
   },
 } satisfies ChartConfig;
@@ -72,129 +74,129 @@ function formatMonthTick(value: string) {
 function formatTooltipLabel(value: string) {
   const parts = value.split(" ");
   const range = parts.at(-1);
-  const month = parse(parts.slice(0, -1).join(" "), "MMM yy", new Date());
+  const month = parse(parts.slice(0, -1).join(" "), "MMM yy", new Date(), { locale: ptBR });
   const [start, end] = String(range).split("-");
   const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
   const startDate = new Date(month.getFullYear(), month.getMonth(), Number(start));
   const endDate = new Date(month.getFullYear(), month.getMonth(), Math.min(Number(end), lastDayOfMonth));
 
-  return `${format(month, "MMM")} ${format(startDate, "do")} - ${format(endDate, "do")}, ${format(month, "yyyy")}`;
+  return `${format(startDate, "d")} - ${format(endDate, "d")} de ${format(month, "MMMM 'de' yyyy", { locale: ptBR })}`;
 }
 
 function formatCurrencyTooltipValue(value: unknown) {
-  return typeof value === "number" ? `$${value.toLocaleString()}` : String(value ?? "");
+  return typeof value === "number" ? `$${value.toLocaleString("pt-BR")}` : String(value ?? "");
 }
 
 export function KpiStrip() {
   return (
-    <div className="bg-card ring-foreground/10 h-full overflow-hidden rounded-xl ring-1 xl:col-span-12">
+    <div className="h-full overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 xl:col-span-12">
       <div>
         <div className="grid grid-cols-1 xl:grid-cols-12">
           <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 xl:col-span-5 xl:border-r">
-            <Card className="border-border h-full rounded-none border-0 border-b ring-0 md:border-r">
+            <Card className="h-full rounded-none border-0 border-border border-b ring-0 md:border-r">
               <CardHeader>
-                <CardTitle className="text-sm font-normal">Total Sales</CardTitle>
-                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
+                <CardTitle className="font-normal text-sm">Vendas totais</CardTitle>
+                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
                   $48,560.00
                 </CardDescription>
-                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
-                  <DollarSign className="text-foreground size-3" />
+                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
+                  <DollarSign className="size-3 text-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-sm">
                   <span className="text-green-700 dark:text-green-300">+15.8%</span>
-                  <span className="text-muted-foreground"> vs last week</span>
+                  <span className="text-muted-foreground"> vs. semana anterior</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border h-full rounded-none border-0 border-b ring-0">
+            <Card className="h-full rounded-none border-0 border-border border-b ring-0">
               <CardHeader>
-                <CardTitle className="text-sm font-normal">Total Orders</CardTitle>
-                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
+                <CardTitle className="font-normal text-sm">Pedidos totais</CardTitle>
+                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
                   379
                 </CardDescription>
-                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
-                  <ShoppingBag className="text-foreground size-3" />
+                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
+                  <ShoppingBag className="size-3 text-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-sm">
                   <span className="text-green-700 dark:text-green-300">+8.3%</span>
-                  <span className="text-muted-foreground"> vs last week</span>
+                  <span className="text-muted-foreground"> vs. semana anterior</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border h-full rounded-none border-0 border-b ring-0 md:border-r">
+            <Card className="h-full rounded-none border-0 border-border border-b ring-0 md:border-r">
               <CardHeader>
-                <CardTitle className="text-sm font-normal">Customer Growth</CardTitle>
-                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
+                <CardTitle className="font-normal text-sm">Crescimento de clientes</CardTitle>
+                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
                   820
                 </CardDescription>
-                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
-                  <Users className="text-foreground size-3" />
+                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
+                  <Users className="size-3 text-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-sm">
                   <span className="text-green-700 dark:text-green-300">+12.5%</span>
-                  <span className="text-muted-foreground"> vs last month</span>
+                  <span className="text-muted-foreground"> vs. mês anterior</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border h-full rounded-none border-0 border-b ring-0">
+            <Card className="h-full rounded-none border-0 border-border border-b ring-0">
               <CardHeader>
-                <CardTitle className="text-sm font-normal">Average Order</CardTitle>
-                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
+                <CardTitle className="font-normal text-sm">Ticket médio</CardTitle>
+                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
                   $128
                 </CardDescription>
-                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
-                  <ReceiptText className="text-foreground size-3" />
+                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
+                  <ReceiptText className="size-3 text-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-sm">
                   <span className="text-destructive">-$4.20</span>
-                  <span className="text-muted-foreground"> vs last week</span>
+                  <span className="text-muted-foreground"> vs. semana anterior</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border h-full rounded-none border-0 border-b ring-0 md:border-r md:border-b-0">
+            <Card className="h-full rounded-none border-0 border-border border-b ring-0 md:border-r md:border-b-0">
               <CardHeader>
-                <CardTitle className="text-sm font-normal">Return Requests</CardTitle>
-                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
+                <CardTitle className="font-normal text-sm">Solicitações de devolução</CardTitle>
+                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
                   18
                 </CardDescription>
-                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
-                  <RotateCcw className="text-foreground size-3" />
+                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
+                  <RotateCcw className="size-3 text-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-sm">
                   <span className="text-destructive">+0.6%</span>
-                  <span className="text-muted-foreground"> vs last month</span>
+                  <span className="text-muted-foreground"> vs. mês anterior</span>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="h-full rounded-none border-0 ring-0">
               <CardHeader>
-                <CardTitle className="text-sm font-normal">Stock Accuracy</CardTitle>
-                <CardDescription className="text-foreground text-3xl leading-none tracking-tight tabular-nums">
+                <CardTitle className="font-normal text-sm">Exatidão de estoque</CardTitle>
+                <CardDescription className="text-3xl text-foreground tabular-nums leading-none tracking-tight">
                   97%
                 </CardDescription>
-                <CardAction className="bg-muted grid size-6 place-items-center rounded-sm">
-                  <PackageCheck className="text-foreground size-3" />
+                <CardAction className="grid size-6 place-items-center rounded-sm bg-muted">
+                  <PackageCheck className="size-3 text-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-sm">
                   <span className="text-green-700 dark:text-green-300">+2.4 pts</span>
-                  <span className="text-muted-foreground"> vs last audit</span>
+                  <span className="text-muted-foreground"> vs. última auditoria</span>
                 </div>
               </CardContent>
             </Card>
@@ -202,7 +204,7 @@ export function KpiStrip() {
 
           <Card className="h-full rounded-none border-0 ring-0 xl:col-span-7">
             <CardHeader>
-              <CardTitle className="font-normal">Sales Overview</CardTitle>
+              <CardTitle className="font-normal">Visão geral de vendas</CardTitle>
               <CardAction>
                 <ArrowUpRight className="size-4" />
               </CardAction>
@@ -255,7 +257,7 @@ export function KpiStrip() {
                             />
                             <div className="flex flex-1 items-center justify-between leading-none">
                               <span className="text-muted-foreground">{String(name ?? "")}</span>
-                              <span className="text-foreground font-mono font-medium tabular-nums">
+                              <span className="font-medium font-mono text-foreground tabular-nums">
                                 {formatCurrencyTooltipValue(value)}
                               </span>
                             </div>
@@ -273,7 +275,7 @@ export function KpiStrip() {
                     barSize={4}
                     dataKey="profit"
                     fill="var(--color-profit)"
-                    name="Profit"
+                    name="Lucro"
                     opacity={0.18}
                     radius={[6, 6, 0, 0]}
                   />
@@ -282,7 +284,7 @@ export function KpiStrip() {
                     dataKey="revenue"
                     fill="none"
                     filter="url(#sales-line-glow)"
-                    name="Revenue"
+                    name="Receita"
                     stroke="var(--color-revenue)"
                     strokeWidth={1.8}
                     type="linear"

@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { fontOptions } from "@/lib/fonts/registry";
-import { PREFERENCE_REGISTRY } from "@/lib/preferences/preferences-config";
-import { THEME_PRESET_OPTIONS } from "@/lib/preferences/theme";
+import { type FontKey, fontOptions } from "@/lib/fonts/registry";
+import type { ContentLayout, NavbarStyle, SidebarCollapsible, SidebarVariant } from "@/lib/preferences/layout";
+import { THEME_PRESET_OPTIONS, type ThemeMode, type ThemePreset } from "@/lib/preferences/theme";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 export function LayoutControls() {
@@ -33,46 +33,38 @@ export function LayoutControls() {
     font,
   } = values;
 
-  const onThemePresetChange = (value: string) => {
-    const preset = PREFERENCE_REGISTRY.theme_preset.values.find((preset) => preset === value);
-    if (!preset) return;
+  const onThemePresetChange = (preset: ThemePreset) => {
     setPreference("theme_preset", preset);
   };
 
-  const onThemeModeChange = (value: string) => {
-    const mode = PREFERENCE_REGISTRY.theme_mode.values.find((mode) => mode === value);
+  const onThemeModeChange = (mode: ThemeMode | "") => {
     if (!mode) return;
     setPreference("theme_mode", mode);
   };
 
-  const onContentLayoutChange = (value: string) => {
-    const layout = PREFERENCE_REGISTRY.content_layout.values.find((layout) => layout === value);
+  const onContentLayoutChange = (layout: ContentLayout | "") => {
     if (!layout) return;
     setPreference("content_layout", layout);
   };
 
-  const onNavbarStyleChange = (value: string) => {
-    const style = PREFERENCE_REGISTRY.navbar_style.values.find((style) => style === value);
+  const onNavbarStyleChange = (style: NavbarStyle | "") => {
     if (!style) return;
     setPreference("navbar_style", style);
   };
 
-  const onSidebarStyleChange = (value: string) => {
-    const variant = PREFERENCE_REGISTRY.sidebar_variant.values.find((variant) => variant === value);
-    if (!variant) return;
-    setPreference("sidebar_variant", variant);
+  const onSidebarStyleChange = (value: SidebarVariant | "") => {
+    if (!value) return;
+    setPreference("sidebar_variant", value);
   };
 
-  const onSidebarCollapseModeChange = (value: string) => {
-    const collapsible = PREFERENCE_REGISTRY.sidebar_collapsible.values.find((collapsible) => collapsible === value);
-    if (!collapsible) return;
-    setPreference("sidebar_collapsible", collapsible);
+  const onSidebarCollapseModeChange = (value: SidebarCollapsible | "") => {
+    if (!value) return;
+    setPreference("sidebar_collapsible", value);
   };
 
-  const onFontChange = (value: string) => {
-    const font = PREFERENCE_REGISTRY.font.values.find((font) => font === value);
-    if (!font) return;
-    setPreference("font", font);
+  const onFontChange = (value: FontKey | "") => {
+    if (!value) return;
+    setPreference("font", value);
   };
 
   return (
@@ -85,15 +77,15 @@ export function LayoutControls() {
       <PopoverContent align="end">
         <div className="flex flex-col gap-5">
           <div className="space-y-1.5">
-            <h4 className="text-sm leading-none font-medium">Preferences</h4>
-            <p className="text-muted-foreground text-xs">Customize your dashboard layout preferences.</p>
+            <h4 className="font-medium text-sm leading-none">Preferências</h4>
+            <p className="text-muted-foreground text-xs">Personalize as preferências de layout do seu dashboard.</p>
           </div>
           <div className="space-y-3 **:data-[slot=toggle-group]:w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs">
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Theme Preset</Label>
+              <Label className="font-medium text-xs">Tema predefinido</Label>
               <Select value={themePreset} onValueChange={onThemePresetChange}>
                 <SelectTrigger size="sm" className="w-full text-xs">
-                  <SelectValue placeholder="Preset" />
+                  <SelectValue placeholder="Predefinido" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -114,10 +106,10 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Fonts</Label>
+              <Label className="font-medium text-xs">Fontes</Label>
               <Select value={font} onValueChange={onFontChange}>
                 <SelectTrigger size="sm" className="w-full text-xs">
-                  <SelectValue placeholder="Select font" />
+                  <SelectValue placeholder="Selecione a fonte" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -132,7 +124,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Theme Mode</Label>
+              <Label className="font-medium text-xs">Modo de tema</Label>
               <ToggleGroup
                 size="sm"
                 spacing={0}
@@ -141,20 +133,20 @@ export function LayoutControls() {
                 value={themeMode}
                 onValueChange={onThemeModeChange}
               >
-                <ToggleGroupItem value="light" aria-label="Toggle light">
-                  Light
+                <ToggleGroupItem value="light" aria-label="Alternar claro">
+                  Claro
                 </ToggleGroupItem>
-                <ToggleGroupItem value="dark" aria-label="Toggle dark">
-                  Dark
+                <ToggleGroupItem value="dark" aria-label="Alternar escuro">
+                  Escuro
                 </ToggleGroupItem>
-                <ToggleGroupItem value="system" aria-label="Toggle system">
-                  System
+                <ToggleGroupItem value="system" aria-label="Alternar sistema">
+                  Sistema
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Page Layout</Label>
+              <Label className="font-medium text-xs">Layout da página</Label>
               <ToggleGroup
                 size="sm"
                 spacing={0}
@@ -163,17 +155,17 @@ export function LayoutControls() {
                 value={contentLayout}
                 onValueChange={onContentLayoutChange}
               >
-                <ToggleGroupItem value="centered" aria-label="Toggle centered">
-                  Centered
+                <ToggleGroupItem value="centered" aria-label="Alternar centralizado">
+                  Centralizado
                 </ToggleGroupItem>
-                <ToggleGroupItem value="full-width" aria-label="Toggle full-width">
-                  Full Width
+                <ToggleGroupItem value="full-width" aria-label="Alternar largura total">
+                  Largura total
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Navbar Behavior</Label>
+              <Label className="font-medium text-xs">Comportamento da barra</Label>
               <ToggleGroup
                 size="sm"
                 spacing={0}
@@ -182,17 +174,17 @@ export function LayoutControls() {
                 value={navbarStyle}
                 onValueChange={onNavbarStyleChange}
               >
-                <ToggleGroupItem value="sticky" aria-label="Toggle sticky">
-                  Sticky
+                <ToggleGroupItem value="sticky" aria-label="Alternar fixo">
+                  Fixo
                 </ToggleGroupItem>
-                <ToggleGroupItem value="scroll" aria-label="Toggle scroll">
-                  Scroll
+                <ToggleGroupItem value="scroll" aria-label="Alternar rolagem">
+                  Rolagem
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Sidebar Style</Label>
+              <Label className="font-medium text-xs">Estilo da barra lateral</Label>
               <ToggleGroup
                 size="sm"
                 spacing={0}
@@ -201,20 +193,20 @@ export function LayoutControls() {
                 value={variant}
                 onValueChange={onSidebarStyleChange}
               >
-                <ToggleGroupItem value="inset" aria-label="Toggle inset">
-                  Inset
+                <ToggleGroupItem value="inset" aria-label="Alternar interno">
+                  Interno
                 </ToggleGroupItem>
-                <ToggleGroupItem value="sidebar" aria-label="Toggle sidebar">
-                  Sidebar
+                <ToggleGroupItem value="sidebar" aria-label="Alternar barra lateral">
+                  Barra lateral
                 </ToggleGroupItem>
-                <ToggleGroupItem value="floating" aria-label="Toggle floating">
-                  Floating
+                <ToggleGroupItem value="floating" aria-label="Alternar flutuante">
+                  Flutuante
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-medium">Sidebar Collapse Mode</Label>
+              <Label className="font-medium text-xs">Modo de recolhimento da barra lateral</Label>
               <ToggleGroup
                 size="sm"
                 spacing={0}
@@ -223,17 +215,17 @@ export function LayoutControls() {
                 value={collapsible}
                 onValueChange={onSidebarCollapseModeChange}
               >
-                <ToggleGroupItem value="icon" aria-label="Toggle icon">
-                  Icon
+                <ToggleGroupItem value="icon" aria-label="Alternar ícone">
+                  Ícone
                 </ToggleGroupItem>
-                <ToggleGroupItem value="offcanvas" aria-label="Toggle offcanvas">
-                  OffCanvas
+                <ToggleGroupItem value="offcanvas" aria-label="Alternar off-canvas">
+                  Off-canvas
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
 
             <Button type="button" size="sm" variant="outline" className="w-full text-xs" onClick={resetPreferences}>
-              Restore Defaults
+              Restaurar padrões
             </Button>
           </div>
         </div>

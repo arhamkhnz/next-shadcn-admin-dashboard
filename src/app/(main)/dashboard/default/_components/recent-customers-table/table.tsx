@@ -38,28 +38,28 @@ import { recentCustomersColumns } from "./columns";
 import type { RecentCustomerRow } from "./schema";
 
 const statusOptions = [
-  { value: "all", label: "All" },
-  { value: "Subscribed", label: "Subscribed" },
-  { value: "Inactive", label: "Inactive" },
-  { value: "Unsubscribed", label: "Unsubscribed" },
+  { value: "all", label: "Todos" },
+  { value: "Assinante", label: "Assinante" },
+  { value: "Inativo", label: "Inativo" },
+  { value: "Descadastrado", label: "Descadastrado" },
 ] as const;
 const billingOptions = [
-  { value: "all", label: "All" },
-  { value: "Paid", label: "Paid" },
-  { value: "Pending", label: "Pending" },
-  { value: "Overdue", label: "Overdue" },
-  { value: "Trial", label: "Trial" },
+  { value: "all", label: "Todos" },
+  { value: "Pago", label: "Pago" },
+  { value: "Pendente", label: "Pendente" },
+  { value: "Em atraso", label: "Em atraso" },
+  { value: "Teste", label: "Teste" },
 ] as const;
 const joinedDateOptions = [
-  { value: "all", label: "All time" },
-  { value: "30", label: "Last 30 days" },
-  { value: "90", label: "Last 90 days" },
+  { value: "all", label: "Todo o período" },
+  { value: "30", label: "Últimos 30 dias" },
+  { value: "90", label: "Últimos 90 dias" },
 ] as const;
 const sortOptions = [
-  { value: "newest", label: "Newest first" },
-  { value: "oldest", label: "Oldest first" },
-  { value: "name-asc", label: "Name A-Z" },
-  { value: "name-desc", label: "Name Z-A" },
+  { value: "newest", label: "Mais recentes primeiro" },
+  { value: "oldest", label: "Mais antigos primeiro" },
+  { value: "name-asc", label: "Nome A-Z" },
+  { value: "name-desc", label: "Nome Z-A" },
 ] as const;
 const sortOptionState = {
   newest: [{ id: "joined", desc: true }],
@@ -121,10 +121,10 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
       <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative w-full lg:w-80">
-            <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
+            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               className="h-7 rounded-[min(var(--radius-md),12px)] pl-8"
-              placeholder="Search customers..."
+              placeholder="Buscar clientes..."
               value={searchQuery}
               onChange={(event) => {
                 table.getColumn("search")?.setFilterValue(event.target.value || undefined);
@@ -159,7 +159,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <CalendarDays />
-                Joined date
+                Data de cadastro
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="start">
@@ -184,7 +184,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <CreditCard />
-                Billing
+                Cobrança
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -207,7 +207,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <ArrowUpDown />
-                Sort
+                Ordenar
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -229,7 +229,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
         </div>
       </div>
 
-      <div className="bg-card overflow-hidden rounded-lg border">
+      <div className="overflow-hidden rounded-lg border bg-card">
         <Table>
           <TableHeader className="bg-muted/15">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -256,7 +256,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
             ) : (
               <TableRow>
                 <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                  No results.
+                  Nenhum resultado.
                 </TableCell>
               </TableRow>
             )}
@@ -265,14 +265,14 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
       </div>
 
       <div className="flex items-center justify-between px-1">
-        <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
+        <div className="hidden flex-1 text-muted-foreground text-sm lg:flex">
+          {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} linha(s)
+          selecionada(s).
         </div>
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
-            <Label htmlFor="recent-customers-rows-per-page" className="text-sm font-medium">
-              Rows per page
+            <Label htmlFor="recent-customers-rows-per-page" className="font-medium text-sm">
+              Linhas por página
             </Label>
             <Select
               value={`${table.state.pagination.pageSize}`}
@@ -294,8 +294,8 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex w-fit items-center justify-center text-sm font-medium">
-            Page {table.state.pagination.pageIndex + 1} of {table.getPageCount()}
+          <div className="flex w-fit items-center justify-center font-medium text-sm">
+            Página {table.state.pagination.pageIndex + 1} de {table.getPageCount()}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -305,7 +305,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">Go to first page</span>
+              <span className="sr-only">Ir para a primeira página</span>
               <ChevronsLeft className="size-4" />
             </Button>
             <Button
@@ -315,7 +315,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">Go to previous page</span>
+              <span className="sr-only">Ir para a página anterior</span>
               <ChevronLeft className="size-4" />
             </Button>
             <Button
@@ -325,7 +325,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">Go to next page</span>
+              <span className="sr-only">Ir para a próxima página</span>
               <ChevronRight className="size-4" />
             </Button>
             <Button
@@ -335,7 +335,7 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">Go to last page</span>
+              <span className="sr-only">Ir para a última página</span>
               <ChevronsRight className="size-4" />
             </Button>
           </div>

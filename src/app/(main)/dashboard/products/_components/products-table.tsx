@@ -48,7 +48,7 @@ export function ProductsTable({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col *:data-[slot=table-container]:min-h-0 *:data-[slot=table-container]:flex-1 *:data-[slot=table-container]:overflow-auto">
-      <Table aria-label="Products" className="border-border/60 min-w-280 border-separate border-spacing-0 border-b">
+      <Table aria-label="Produtos" className="border-border/60 min-w-280 border-separate border-spacing-0 border-b">
         <TableHeader className="bg-background sticky top-0 z-10">
           {table.getHeaderGroups().map((group) => (
             <TableRow key={group.id} className="border-border/60 hover:bg-transparent">
@@ -119,11 +119,11 @@ export function ProductsTable({
               <TableCell colSpan={table.getVisibleLeafColumns().length}>
                 <Empty>
                   <EmptyHeader>
-                    <EmptyTitle>No products found</EmptyTitle>
-                    <EmptyDescription>Try another search or clear your filters.</EmptyDescription>
+                    <EmptyTitle>Nenhum produto encontrado</EmptyTitle>
+                    <EmptyDescription>Tente outra busca ou limpe os filtros.</EmptyDescription>
                   </EmptyHeader>
                   <Button variant="outline" size="sm" onClick={onReset}>
-                    Clear filters
+                    Limpar filtros
                   </Button>
                 </Empty>
               </TableCell>
@@ -134,11 +134,11 @@ export function ProductsTable({
       <footer className="bg-background flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-3 border-t px-4 py-2 text-sm">
         <div className="text-muted-foreground flex flex-wrap items-center gap-4">
           <span className="tabular-nums" aria-live="polite">
-            {total ? pageIndex * pageSize + 1 : 0} – {Math.min((pageIndex + 1) * pageSize, total)} of {total} products
-            {selected > 0 && ` · ${selected} selected`}
+            {total ? pageIndex * pageSize + 1 : 0} – {Math.min((pageIndex + 1) * pageSize, total)} de {total} produtos
+            {selected > 0 && ` · ${selected} selecionado(s)`}
           </span>
           <div className="flex items-center gap-2">
-            <label htmlFor="products-page-size">Rows per page</label>
+            <label htmlFor="products-page-size">Linhas por página</label>
             <Select
               value={String(pageSize)}
               onValueChange={(value) => {
@@ -161,11 +161,11 @@ export function ProductsTable({
             </Select>
           </div>
         </div>
-        <nav aria-label="Product pages" className="flex items-center gap-1">
+        <nav aria-label="Páginas de produto" className="flex items-center gap-1">
           <Button
             variant="outline"
             size="icon-sm"
-            aria-label="Previous page"
+            aria-label="Página anterior"
             disabled={!table.getCanPreviousPage()}
             onClick={() => table.previousPage()}
           >
@@ -176,7 +176,7 @@ export function ProductsTable({
               key={page}
               variant={page === pageIndex ? "secondary" : "ghost"}
               size="icon-sm"
-              aria-label={`Page ${page + 1}`}
+              aria-label={`Página ${page + 1}`}
               aria-current={page === pageIndex ? "page" : undefined}
               onClick={() => table.setPageIndex(page)}
             >
@@ -186,7 +186,7 @@ export function ProductsTable({
           <Button
             variant="outline"
             size="icon-sm"
-            aria-label="Next page"
+            aria-label="Próxima página"
             disabled={!table.getCanNextPage()}
             onClick={() => table.nextPage()}
           >

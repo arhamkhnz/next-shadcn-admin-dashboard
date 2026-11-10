@@ -8,9 +8,9 @@ import { ProjectEnvironments } from "./_components/project-environments";
 import "@/styles/flag-icons/flags.css";
 
 export const metadata: Metadata = {
-  title: "Open Source Infrastructure Dashboard with shadcn/ui",
+  title: "Dashboard open source de infraestrutura com shadcn/ui",
   description:
-    "Explore an open source infrastructure dashboard with environments, server health, uptime, resource usage, and deployment status.",
+    "Explore um dashboard open source de infraestrutura com ambientes, saúde dos servidores, uptime, uso de recursos e status de deployment.",
   alternates: {
     canonical: "/dashboard/infrastructure",
   },

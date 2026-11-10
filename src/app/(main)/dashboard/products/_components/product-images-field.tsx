@@ -42,9 +42,9 @@ export function ProductImagesField({ files, onChange, onBlur, inputRef, error }:
 
   useEffect(() => {
     const images = files.map((file): ProductImagePreview => {
-      if (!productImageTypes.includes(file.type)) return { file, rejection: "Use JPG, PNG, or WebP images." };
-      if (file.size === 0) return { file, rejection: "This file is empty." };
-      if (file.size > maxProductImageSize) return { file, rejection: "Image exceeds the 5 MB limit." };
+      if (!productImageTypes.includes(file.type)) return { file, rejection: "Use imagens JPG, PNG ou WebP." };
+      if (file.size === 0) return { file, rejection: "Este arquivo está vazio." };
+      if (file.size > maxProductImageSize) return { file, rejection: "A imagem excede o limite de 5 MB." };
       return { file, url: URL.createObjectURL(file) };
     });
     setPreviews(images);
@@ -57,7 +57,7 @@ export function ProductImagesField({ files, onChange, onBlur, inputRef, error }:
 
   return (
     <Field data-invalid={!!error}>
-      <FieldLabel htmlFor="add-product-images-trigger">Product images (optional)</FieldLabel>
+      <FieldLabel htmlFor="add-product-images-trigger">Imagens do produto (opcional)</FieldLabel>
       <input
         ref={fileInputRef}
         type="file"
@@ -91,12 +91,12 @@ export function ProductImagesField({ files, onChange, onBlur, inputRef, error }:
         aria-describedby={error ? "add-product-images-help add-product-images-error" : "add-product-images-help"}
       >
         <ImagePlus data-icon="inline-start" />
-        Add images
+        Adicionar imagens
       </Button>
-      <FieldDescription id="add-product-images-help">Up to 5 JPG, PNG, or WebP images, 5 MB each.</FieldDescription>
+      <FieldDescription id="add-product-images-help">Até 5 imagens JPG, PNG ou WebP, de 5 MB cada.</FieldDescription>
       {error && <FieldError id="add-product-images-error">{error}</FieldError>}
       {previews.length > 0 && (
-        <AttachmentGroup aria-label="Selected product images">
+        <AttachmentGroup aria-label="Imagens do produto selecionadas">
           {previews.map(({ file, url, rejection }, index) => (
             <Attachment
               key={`${file.name}-${file.size}-${file.lastModified}`}
@@ -114,7 +114,7 @@ export function ProductImagesField({ files, onChange, onBlur, inputRef, error }:
                   {rejection}
                   {!rejection && (
                     <>
-                      {Math.max(1, Math.round(file.size / 1024))} KB{index === 0 && " · Cover image"}
+                      {Math.max(1, Math.round(file.size / 1024))} KB{index === 0 && " · Imagem de capa"}
                     </>
                   )}
                 </AttachmentDescription>
@@ -123,7 +123,7 @@ export function ProductImagesField({ files, onChange, onBlur, inputRef, error }:
                 <AttachmentAction
                   type="button"
                   variant="secondary"
-                  aria-label={`Remove ${file.name}`}
+                  aria-label={`Remover ${file.name}`}
                   onClick={() => onChange(files.filter((item) => item !== file))}
                 >
                   <X />
@@ -135,7 +135,7 @@ export function ProductImagesField({ files, onChange, onBlur, inputRef, error }:
       )}
       {files.length > 0 && (
         <Button type="button" variant="ghost" size="sm" className="w-fit" onClick={() => onChange([])}>
-          Clear images
+          Limpar imagens
         </Button>
       )}
     </Field>

@@ -1,127 +1,124 @@
-# Contributing to Studio Admin
+# Contribuindo com o Studio Admin
 
-Thanks for showing interest in improving **Studio Admin** (repo: `next-shadcn-admin-dashboard`).  
-This guide will help you set up your environment and understand how to contribute.
-
----
-
-## Overview
-
-This project is built with **Next.js 16**, **TypeScript**, **Tailwind CSS v4**, and **Shadcn UI**.  
-The goal is to keep the codebase modular, scalable, and easy to extend.
+Obrigado por demonstrar interesse em melhorar o **Studio Admin** (repo: `shadcn-admin-sqlite`).
+Este guia vai ajudar você a configurar seu ambiente e entender como contribuir.
 
 ---
 
-## Project Layout
+## Visão geral
 
-We use a **colocation-based file system**. Each feature keeps its own pages, components, and logic.
+Este projeto é construído com **Next.js 16**, **TypeScript**, **Tailwind CSS v4** e **Shadcn UI**.
+O objetivo é manter a base de código modular, escalável e fácil de estender.
+
+---
+
+## Estrutura do projeto
+
+Usamos um **sistema de arquivos colocation-based**. Cada feature mantém suas próprias páginas, componentes e lógica.
 
 ```
 src
-├── app               # Next.js routes (App Router)
-│   ├── (auth)        # Auth layouts & screens
-│   ├── (main)        # Main dashboard routes
+├── app               # Rotas Next.js (App Router)
+│   ├── (auth)        # Layouts e telas de autenticação
+│   ├── (main)        # Rotas principais do dashboard
 │   │   └── (dashboard)
 │   │       ├── crm
 │   │       ├── finance
 │   │       ├── default
 │   │       └── ...
 │   └── layout.tsx
-├── components        # Shared UI components
-├── hooks             # Reusable hooks
-├── lib               # Config & utilities
-├── styles            # Tailwind / theme setup
-└── types             # TypeScript definitions
+├── components        # Componentes de UI compartilhados
+├── hooks             # Hooks reutilizáveis
+├── lib               # Configurações e utilitários
+├── styles            # Tailwind / configuração de tema
+└── types             # Definições TypeScript
 ```
-
-If you’d like a more detailed example of this setup, check out the [Next Colocation Template](https://github.com/arhamkhnz/next-colocation-template), where the full structure is explained with examples.
 
 ---
 
-## Getting Started
+## Primeiros passos
 
-### Fork and Clone the Repository
+### Dê fork e clone o repositório
 
-1. Fork the Repository
-   
-   Click [here](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/fork) to fork the repository.
+1. Dê fork no repositório
 
-2. Clone the Repository  
+   Clique [aqui](https://github.com/prof-ramos/shadcn-admin-sqlite/fork) para fazer o fork do repositório.
+
+2. Clone o repositório
    ```bash
-   git clone https://github.com/YOUR_USERNAME/next-shadcn-admin-dashboard.git
-   ```
-   
-3. Navigate into the Project  
-   ```bash
-   cd next-shadcn-admin-dashboard
+   git clone https://github.com/SEU_USUARIO/shadcn-admin-sqlite.git
    ```
 
-4. **Install dependencies**
+3. Entre no projeto
+   ```bash
+   cd shadcn-admin-sqlite
+   ```
+
+4. **Instale as dependências**
    ```bash
    npm install
    ```
 
-5. **Run the dev server**
+5. **Rode o servidor de dev**
    ```bash
    npm run dev
    ```
-   App will be available at [http://localhost:3000](http://localhost:3000).
+   O app estará disponível em [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Contribution Flow
+## Fluxo de contribuição
 
-- Always create a new branch before working on changes:
+- Sempre crie uma branch nova antes de trabalhar em alterações:
   ```bash
-  git checkout -b feature/my-update
+  git checkout -b feature/minha-atualizacao
   ```
 
-- Use clear commit messages:
+- Use mensagens de commit claras:
   ```bash
   git commit -m "feat: add finance dashboard screen"
   ```
 
-- Open a Pull Request once ready.
-- If your change adds a new UI screen or component, include a screenshot in your PR description.
+- Abra um Pull Request quando estiver pronto.
+- Se sua alteração adiciona uma nova tela ou componente de UI, inclua um screenshot na descrição do PR.
 
 ---
 
-## Where to Contribute
+## Onde contribuir
 
-- **External Pages**: Landing pages or other non-dashboard routes → `src/app/(external)/`  
-- **Auth Screens**: Login, register, and authentication layouts → `src/app/(main)/auth/`  
-- **Dashboard Screens**: Feature dashboards like CRM, Finance, Analytics → `src/app/(main)/dashboard/`
-- **Components**: Reusable UI goes in `src/components/`  
-- **Hooks**: Custom logic goes in `src/hooks/`  
-- **Themes**: New presets under `src/styles/presets/`  
-
----
-
-## Guidelines
-
-- Prefer **TypeScript types** over `any`
-- Husky pre-commit hooks are enabled - linting and formatting run automatically when you commit, and if there are errors the commit will be blocked until they are fixed. 
-- Follow **Shadcn UI** style & Tailwind v4 conventions
-- Keep accessibility in mind (ARIA, keyboard nav)
-- Use clear commit messages with conventional prefixes (`feat:`, `fix:`, `chore:`, etc.)
-- Avoid unnecessary dependencies — prefer existing utilities where possible
+- **Páginas externas**: páginas de landing ou outras rotas fora do dashboard → `src/app/(external)/`
+- **Telas de auth**: login, registro e layouts de autenticação → `src/app/(main)/auth/`
+- **Telas de dashboard**: dashboards de feature como CRM, Finance, Analytics → `src/app/(main)/dashboard/`
+- **Componentes**: UI reutilizável fica em `src/components/`
+- **Hooks**: lógica customizada fica em `src/hooks/`
+- **Temas**: presets novos em `src/styles/presets/`
+- **Tradução pt-BR**: siga o glossário e o protocolo em `PLANO-TRADUCAO.md`
 
 ---
 
-## Submitting PRs
+## Diretrizes
 
-- Open a Pull Request once your changes are ready.  
-- Ensure your branch is up to date with `main` before submitting.  
-- Reference any related issue in your PR for context.
-
----
-
-## Questions & Support
-
-- Report bugs, suggestions, or issues via [GitHub Issues](https://github.com/arhamkhnz/next-shadcn-admin-dashboard/issues)
+- Prefira **tipos TypeScript** a `any`
+- Hooks de pre-commit do Husky estão habilitados — linting e formatação rodam automaticamente quando você commita, e, se houver erros, o commit será bloqueado até que sejam corrigidos.
+- Siga o estilo do **Shadcn UI** e as convenções do Tailwind v4
+- Tenha acessibilidade em mente (ARIA, navegação por teclado)
+- Use mensagens de commit claras com prefixos convencionais (`feat:`, `fix:`, `chore:`, etc.)
+- Evite dependências desnecessárias — prefira utilitários existentes quando possível
 
 ---
 
-Your contributions keep this project growing. 🚀
+## Enviando PRs
 
-**Happy Vibe Coding!**
+- Abra um Pull Request quando suas alterações estiverem prontas.
+- Garanta que sua branch esteja atualizada com a `main` antes de enviar.
+- Referencie qualquer issue relacionada no seu PR para dar contexto.
+
+---
+
+## Dúvidas e suporte
+
+- Reporte bugs, sugestões ou issues via [GitHub Issues](https://github.com/prof-ramos/shadcn-admin-sqlite/issues)
+
+---
+
+Suas contribuições mantêm este projeto crescendo. 🚀

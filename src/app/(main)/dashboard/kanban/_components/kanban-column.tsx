@@ -38,7 +38,7 @@ export function KanbanColumn({ column, index, tasks }: KanbanColumnProps) {
     <section
       ref={columnSortable.ref}
       className={cn(
-        "bg-muted/50 flex min-h-0 flex-col rounded-t-xl border transition-colors",
+        "flex min-h-0 flex-col rounded-t-xl border bg-muted/50 transition-colors",
         (columnSortable.isDropTarget || taskDropTarget.isDropTarget) && "bg-muted/70",
         columnSortable.isDragging && "opacity-60",
       )}
@@ -50,22 +50,22 @@ export function KanbanColumn({ column, index, tasks }: KanbanColumnProps) {
               ref={columnSortable.handleRef}
               variant="ghost"
               size="icon-xs"
-              className="text-foreground/70 -ml-2 cursor-grab active:cursor-grabbing"
-              aria-label={`Drag ${column.title} column`}
+              className="-ml-2 cursor-grab text-foreground/70 active:cursor-grabbing"
+              aria-label={`Arrastar coluna ${column.title}`}
             >
               <GripVertical />
             </Button>
-            <h2 className="truncate text-base leading-none font-medium">{column.title}</h2>
+            <h2 className="truncate font-medium text-base leading-none">{column.title}</h2>
           </div>
-          <p className="text-muted-foreground text-sm leading-none tabular-nums">
-            {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+          <p className="text-muted-foreground text-sm tabular-nums leading-none">
+            {tasks.length} {tasks.length === 1 ? "tarefa" : "tarefas"}
           </p>
         </div>
-        <div className="text-muted-foreground -mr-2 flex items-center gap-0.5">
-          <Button variant="ghost" size="icon-sm" aria-label={`Add task to ${column.title}`}>
+        <div className="-mr-2 flex items-center gap-0.5 text-muted-foreground">
+          <Button variant="ghost" size="icon-sm" aria-label={`Adicionar tarefa em ${column.title}`}>
             <Plus />
           </Button>
-          <Button variant="ghost" size="icon-sm" aria-label={`${column.title} column actions`}>
+          <Button variant="ghost" size="icon-sm" aria-label={`Ações da coluna ${column.title}`}>
             <MoreVertical />
           </Button>
         </div>
@@ -73,7 +73,7 @@ export function KanbanColumn({ column, index, tasks }: KanbanColumnProps) {
 
       <div
         ref={taskDropTarget.ref}
-        className="[&::-webkit-scrollbar-thumb]:bg-border flex min-h-0 flex-1 scrollbar-thin [scrollbar-color:var(--border)_transparent] flex-col gap-3 overflow-y-auto px-3 pb-3 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
+        className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3 [scrollbar-color:var(--border)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1"
       >
         {tasks.map((task, taskIndex) => (
           <SortableTaskCard key={task.id} task={task} columnId={column.id} index={taskIndex} />

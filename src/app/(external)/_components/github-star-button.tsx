@@ -18,12 +18,12 @@ export function GitHubStarButton({ initialCount, repositoryUrl }: GitHubStarButt
     <Button asChild className="pe-0" variant="outline">
       <a href={repositoryUrl} target="_blank" rel="noreferrer">
         <StarIcon aria-hidden="true" data-icon="inline-start" />
-        Star
+        Estrela
         <span
           className="text-muted-foreground before:bg-border relative ms-1 px-2 text-xs font-medium before:absolute before:inset-y-0 before:left-0 before:w-px"
           aria-live="polite"
         >
-          {starCount === null ? "—" : new Intl.NumberFormat("en-US").format(starCount)}
+          {starCount === null ? "—" : new Intl.NumberFormat("pt-BR").format(starCount)}
         </span>
       </a>
     </Button>

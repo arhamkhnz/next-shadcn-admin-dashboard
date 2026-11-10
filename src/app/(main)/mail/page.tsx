@@ -7,9 +7,9 @@ import { MailComponent } from "./_components/mail";
 import { DEFAULT_MAIL_LAYOUT, MAIL_LAYOUT_COOKIE } from "./_components/mail-layout-config";
 
 export const metadata: Metadata = {
-  title: "Open Source Email Client with shadcn/ui",
+  title: "Cliente de e-mail open source com shadcn/ui",
   description:
-    "Explore an open source email client with inbox navigation, message search, reading, replying, and archiving.",
+    "Explore um cliente de e-mail open source com navegação por caixa de entrada, busca de mensagens, leitura, resposta e arquivamento.",
   alternates: {
     canonical: "/mail",
   },

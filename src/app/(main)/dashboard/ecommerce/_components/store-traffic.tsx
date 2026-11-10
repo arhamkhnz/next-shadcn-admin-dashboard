@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { format, subMinutes } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { ArrowUpRight } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, Line, XAxis, YAxis } from "recharts";
 
@@ -128,17 +129,17 @@ function getTrafficData() {
 
 const trafficConfig = {
   visitors: {
-    label: "Visitors",
+    label: "Visitantes",
     color: "var(--chart-3)",
   },
   anomalies: {
-    label: "Anomalies",
+    label: "Anomalias",
     color: "var(--destructive)",
   },
 } satisfies ChartConfig;
 
 function formatTrafficTooltipLabel(value: string) {
-  return format(new Date(value), "h:mm a, do MMMM yyyy");
+  return format(new Date(value), "HH:mm, d 'de' MMMM 'de' yyyy", { locale: ptBR });
 }
 
 export function StoreTraffic() {
@@ -148,18 +149,18 @@ export function StoreTraffic() {
 
   function formatTrafficTick(value: string) {
     if (value === firstTrafficTimestamp) {
-      return "24h ago";
+      return "24h atrás";
     }
 
-    return value === lastTrafficTimestamp ? "now" : "";
+    return value === lastTrafficTimestamp ? "agora" : "";
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-muted-foreground text-sm font-normal">Store Traffic</CardTitle>
-        <CardDescription className="text-foreground text-xl leading-none tracking-tight tabular-nums">
-          12.9K visits
+        <CardTitle className="font-normal text-muted-foreground text-sm">Tráfego da loja</CardTitle>
+        <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+          12,9 mil visitas
         </CardDescription>
         <CardAction>
           <ArrowUpRight className="size-4" />

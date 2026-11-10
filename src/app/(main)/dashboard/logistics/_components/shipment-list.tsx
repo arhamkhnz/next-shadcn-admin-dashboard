@@ -16,18 +16,18 @@ const modeIcons = {
 } as const;
 
 const progressRingClasses: Record<Shipment["status"], string> = {
-  Scheduled: "text-muted-foreground",
-  "In Transit": "text-primary",
-  "Out for Delivery": "text-primary",
-  Delivered: "text-green-600",
-  Delayed: "text-destructive",
-  "On Hold": "text-amber-500",
-  "Customs Hold": "text-amber-500",
+  Agendado: "text-muted-foreground",
+  "Em trânsito": "text-primary",
+  "Saiu para entrega": "text-primary",
+  Entregue: "text-green-600",
+  Atrasado: "text-destructive",
+  "Em pausa": "text-amber-500",
+  "Retenção aduaneira": "text-amber-500",
 };
 
 function getProgressRingClass(status: Shipment["status"]) {
   return cn(
-    "grid size-3 place-items-center rounded-full bg-[conic-gradient(currentColor_0deg_var(--angle),transparent_var(--angle)_360deg)] p-[0.5px]",
+    "grid size-3 place-items-center rounded-full p-[0.5px] bg-[conic-gradient(currentColor_0deg_var(--angle),transparent_var(--angle)_360deg)]",
     progressRingClasses[status],
   );
 }
@@ -58,7 +58,7 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
       }}
       className={cn(
         "flex w-full flex-col gap-5 rounded-xl border p-3 text-left transition-colors",
-        "hover:bg-muted/50 focus-visible:ring-ring/50 focus-visible:ring-3 focus-visible:outline-none",
+        "hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         active && "border-primary bg-muted/50",
       )}
     >
@@ -70,7 +70,7 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
             style={{ "--angle": `${angle}deg` } as React.CSSProperties}
             className={getProgressRingClass(shipment.status)}
           >
-            <div className="bg-card grid size-2 place-items-center rounded-full">
+            <div className="grid size-2 place-items-center rounded-full bg-card">
               <div className="size-1 rounded-full bg-current" />
             </div>
           </div>
@@ -82,14 +82,14 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
         <div className="flex items-center gap-1.5">
           <div className={cn(`flag:${shipment.origin.countryCode.toUpperCase()}`, "rounded-xs text-3xl outline")} />
           <div className="flex flex-col gap-0.5">
-            <div className="text-xs leading-none font-medium">{shipment.origin.country},</div>
+            <div className="font-medium text-xs leading-none">{shipment.origin.country},</div>
             <div className="text-muted-foreground text-xs">{shipment.origin.display}</div>
           </div>
         </div>
 
         <div className="flex items-center gap-1.5 text-right">
           <div className="flex flex-col gap-0.5">
-            <div className="text-xs leading-none font-medium">{shipment.destination.country},</div>
+            <div className="font-medium text-xs leading-none">{shipment.destination.country},</div>
             <div className="text-muted-foreground text-xs">{shipment.destination.display}</div>
           </div>
           <div
@@ -100,27 +100,27 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
 
       <div className="flex items-center gap-0.5">
         <span
-          className="border-foreground h-px min-w-0 border-t border-dashed"
+          className="h-px min-w-0 border-foreground border-t border-dashed"
           style={{ flexGrow: shipment.progress, flexBasis: 0 }}
         />
         <Icon className={cn("size-3.5", shipment.mode === "air" && "rotate-45")} />
         <span
-          className="border-border h-px min-w-0 border-t border-dashed"
+          className="h-px min-w-0 border-border border-t border-dashed"
           style={{ flexGrow: 100 - shipment.progress, flexBasis: 0 }}
         />
       </div>
 
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-muted-foreground text-xs leading-none">Cargo</div>
+          <div className="text-muted-foreground text-xs leading-none">Carga</div>
           <div className="truncate text-sm tracking-tight">{shipment.cargo}</div>
         </div>
         <div className="text-right">
           <div className="text-muted-foreground text-xs leading-none">ETA</div>
-          <div className="text-sm tracking-tight tabular-nums">
+          <div className="text-sm tabular-nums tracking-tight">
             {shipment.eta}
             {shipment.etaMeta && (
-              <span className="text-muted-foreground ml-1 text-xs font-normal">{shipment.etaMeta}</span>
+              <span className="ml-1 font-normal text-muted-foreground text-xs">{shipment.etaMeta}</span>
             )}
           </div>
         </div>
@@ -133,7 +133,7 @@ export function ShipmentList({ shipments, selectedShipmentId, onSelectShipment }
   return (
     <Card className="h-full rounded-none ring-0">
       <CardHeader>
-        <CardTitle className="text-xl font-normal">Shipments</CardTitle>
+        <CardTitle className="font-normal text-xl">Envios</CardTitle>
         <CardAction>
           <Button size="icon-sm" variant="ghost">
             <SlidersHorizontal />
@@ -144,23 +144,23 @@ export function ShipmentList({ shipments, selectedShipmentId, onSelectShipment }
         <Tabs defaultValue="all">
           <TabsList className="w-full border-b px-4" variant="line">
             <TabsTrigger className="text-xs" value="all">
-              All (156)
+              Todos (156)
             </TabsTrigger>
             <TabsTrigger className="text-xs" value="in-transit">
-              In Transit (32)
+              Em trânsito (32)
             </TabsTrigger>
             <TabsTrigger className="text-xs" value="delivered">
-              Delivered (98)
+              Entregues (98)
             </TabsTrigger>
             <TabsTrigger className="text-xs" value="delayed">
-              Delayed (9)
+              Atrasados (9)
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
         <div className="px-4">
           <InputGroup className="h-8">
-            <InputGroupInput className="h-8" aria-label="Search shipments" placeholder="Search shipments..." />
+            <InputGroupInput className="h-8" aria-label="Buscar envios" placeholder="Buscar envios..." />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
