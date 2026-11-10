@@ -99,6 +99,19 @@ Tradução não deve alterar comportamento, filtros, ordenação ou teclas de at
 | Central Patient Monitoring / Acknowledge(d) | Central de monitoramento de pacientes / Reconhecer / Reconhecido |
 | Full disclosure / Event review | Registro completo / Revisão de eventos |
 | HR / RR (clínico) / Resp | FC / FR |
+| Kanban (Ideas/Planned/Building/QA/Shipped) | Ideias / Planejado / Em execução / QA / Entregue |
+| Kanban prioridades (Low/Medium/High) | Baixa / Média / Alta |
+| Teams (Data/Finance Ops/Platform/Product/Security) | Dados / Operações Financeiras / Plataforma / Produto / Segurança |
+| Tasks (backlog, To do/In progress/Done/Cancelled) | backlog / A fazer / Em progresso / Concluído / Cancelado |
+| Invoice (Due date, Amount due, Bill to, Line items) | Fatura (Vencimento, Valor devido, Cliente/Destinatário, Itens) |
+| Roles (Granted/Revoked; status Active) | Concedido / Revogado; status Ativa |
+| Sign in / Create account / Continue with Google | Entrar / Criar conta / Continuar com Google |
+| Quick Create / Page not found / Go back home | Criar rápido / Página não encontrada / Voltar ao início |
+| Inbox / Drafts / Sent / Archive / Trash | Caixa de entrada / Rascunhos / Enviados / Arquivo / Lixeira |
+| Pinned (grupo) / Snoozed / Mentions / Unassigned | Fixado / Adiado(s) / Menções / Sem atribuição |
+| VIP Customers / Orders & Returns / Product Feedback | Clientes VIP / Pedidos e devoluções / Feedback de produto |
+| Qualified / At-Risk / Lead | Qualificado / Em risco / Lead |
+| Internal note | Nota interna |
 
 **Ficam em inglês por consenso do Lote A:** Retargeting, Onboarding, design system, "Q" → "T"
 (roadmap T2), formato "3m 12s", marcas dos mocks (Product Hunt, Linear Plus Plan, Ledger Nano X).
@@ -114,10 +127,10 @@ Faturas (Invoice), Gestão de usuários (Users).
 |---|---|---|---|---|
 | A (Financeiro/produção) | `finance`, `crm`, `analytics`, `productivity` | 9+8+7+10 = 34 | Média | ✅ Concluído (bbfdbb9) |
 | B (Operação) | `ecommerce`, `academy`, `logistics`, `infrastructure`, `file-manager`, `patient-monitoring` | 12+6+6+4+7+12 = 47 | Média | ✅ Concluído (em integração) |
-| C (Colaboração) | `mail` (rota principal), `chat` (rota principal + dashboard), `calendar`, `kanban`, `tasks` | ~2+9+3+8+7 = 29 | Alta | Muito texto conversacional; repeat render; cuidado com `data` mockados |
-| D (Documentos/conta) | `invoice`, `profile`, `roles`, `coming-soon`, `unauthorized` | 12+9+5+1+1 = 28 | Média | Faturas = números/formatos de dinheiro + vencimento |
-| E (Auth) | `auth/v1` e `auth/v2` (login/register) | ~10 | Baixa | Formulários, validações (Zod → mensagens de erro!) |
-| F (Erros e shell) | `[...not-found]`, `unauthorized`, restos do shell/footer/toolbar | — | Baixa | Ver decisão sobre legado abaixo |
+| C (Colaboração) | `mail` (rota principal), `chat` (rota principal + dashboard), `calendar`, `kanban`, `tasks` | ~2+9+3+8+7 = 29 | Alta | ✅ Concluído (91bcc22, 324062c) |
+| D (Documentos/conta) | `invoice`, `profile`, `roles`, `coming-soon`, `unauthorized` | 12+9+5+1+1 = 28 | Média | ✅ Concluído (870c1be) |
+| E (Auth) | `auth/v1` e `auth/v2` (login/register) | ~10 | Baixa | ✅ Concluído (88e28e0); auth fica em `(main)/auth` |
+| F (Erros e shell) | `[...not-found]`, `unauthorized`, restos do shell/footer/toolbar | — | Baixa | ✅ Concluído (075097c) |
 
 **Decisão recomendada — telas legadas (`src/app/(main)/dashboard/(legacy)`):** manter em inglês
 (não são referência e estão em manutenção mínima); a navegação já está traduzida.
