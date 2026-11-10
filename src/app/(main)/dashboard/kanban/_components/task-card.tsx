@@ -23,26 +23,26 @@ import { tagTones } from "./data";
 import type { ColumnId, Task, TaskInsightLabel, TaskPriority } from "./types";
 
 const taskInsightIcons: Record<TaskInsightLabel, LucideIcon> = {
-  Attachments: Paperclip,
-  Comments: MessageSquare,
-  Documents: FileText,
+  Anexos: Paperclip,
+  Comentários: MessageSquare,
+  Documentos: FileText,
 };
 
 const priorityBadgeConfig: Record<
   TaskPriority,
   { icon: LucideIcon; variant: "destructive" | "secondary"; className: string }
 > = {
-  High: {
+  Alta: {
     icon: Flame,
     variant: "destructive",
     className: "border-transparent",
   },
-  Low: {
+  Baixa: {
     icon: Minus,
     variant: "secondary",
     className: "bg-slate-500/10 text-slate-700 dark:bg-slate-500/15 dark:text-slate-300",
   },
-  Medium: {
+  Média: {
     icon: ArrowUpRight,
     variant: "secondary",
     className: "bg-amber-500/10 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
@@ -108,14 +108,14 @@ export function TaskCard({
         <div className="flex flex-col gap-3">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-muted-foreground text-xs">
-              <span className="leading-none">Progress</span>
+              <span className="leading-none">Progresso</span>
               <span className="tabular-nums leading-none">{task.progress}%</span>
             </div>
             <Progress value={task.progress} />
           </div>
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-muted-foreground text-sm">Owner</span>
+              <span className="text-muted-foreground text-sm">Responsável</span>
               <div className="flex items-center gap-1.5">
                 <span className="truncate text-muted-foreground text-sm">{owner.name}</span>
                 <Avatar className={cn("size-5 after:rounded-sm", owner.tone)}>
@@ -125,7 +125,7 @@ export function TaskCard({
             </div>
 
             <div className="flex items-center justify-between gap-3">
-              <span className="text-muted-foreground text-sm">Due date</span>
+              <span className="text-muted-foreground text-sm">Prazo</span>
               <span className="flex items-center gap-1.5 text-muted-foreground">
                 <span className="truncate text-sm">{task.dueDate}</span>
                 <CalendarDays className="size-3" />
@@ -133,7 +133,7 @@ export function TaskCard({
             </div>
 
             <div className="flex items-center justify-between gap-3">
-              <span className="text-muted-foreground text-sm">Team</span>
+              <span className="text-muted-foreground text-sm">Equipe</span>
               <Badge
                 variant="secondary"
                 className={cn("rounded-md border-transparent px-2 font-medium", tagTones[task.team])}
@@ -151,7 +151,7 @@ export function TaskCard({
         {isDone ? (
           <div className="flex items-center gap-1 font-medium text-green-700 text-sm dark:text-green-600">
             <BadgeCheck className="size-4" />
-            Done
+            Concluído
           </div>
         ) : null}
 

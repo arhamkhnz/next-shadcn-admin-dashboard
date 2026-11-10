@@ -115,58 +115,58 @@ export function Kanban({ initialBoard }: KanbanProps) {
           <TabsList className="w-full *:data-[slot=tabs-trigger]:flex-1 sm:w-fit sm:*:data-[slot=tabs-trigger]:flex-none">
             <TabsTrigger value="board" className="gap-2">
               <KanbanIcon />
-              Board
+              Quadro
             </TabsTrigger>
             <TabsTrigger value="list" className="gap-2">
               <List />
-              List
+              Lista
             </TabsTrigger>
             <TabsTrigger value="table" className="gap-2">
               <Table2 />
-              Table
+              Tabela
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
         <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center 2xl:justify-end">
           <InputGroup className="min-w-0 sm:w-64 2xl:w-48">
-            <InputGroupInput type="search" placeholder="Search tasks" />
+            <InputGroupInput type="search" placeholder="Buscar tarefas" />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
           </InputGroup>
           <Button variant="outline" className="w-full sm:w-auto">
             <SlidersHorizontal data-icon="inline-start" />
-            Filter
+            Filtrar
           </Button>
           <Button variant="outline" className="w-full sm:w-auto">
             <ArrowUpDown data-icon="inline-start" />
-            Sort
+            Ordenar
           </Button>
           <ButtonGroup className="w-full sm:w-fit">
             <Button className="flex-1 sm:flex-none">
               <Plus data-icon="inline-start" />
-              Add task
+              Adicionar tarefa
             </Button>
             <ButtonGroupSeparator />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open add task menu">
+                <Button aria-label="Abrir menu de adição de tarefa">
                   <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem>
                   <Upload />
-                  Import CSV
+                  Importar CSV
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <LayoutTemplate />
-                  Add from template
+                  Adicionar de modelo
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Bot />
-                  Create automation
+                  Criar automação
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

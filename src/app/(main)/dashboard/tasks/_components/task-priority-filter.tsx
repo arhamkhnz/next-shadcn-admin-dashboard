@@ -56,7 +56,7 @@ export function TaskPriorityFilter<TData extends RowData>({ table }: TaskPriorit
           className={cn("border-dashed", selectedValues.size > 0 && "border-solid bg-muted text-foreground")}
         >
           <ListFilter data-icon="inline-start" />
-          Priority
+          Prioridade
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-50">
@@ -83,7 +83,7 @@ export function TaskPriorityFilter<TData extends RowData>({ table }: TaskPriorit
             <DropdownMenuGroup>
               <DropdownMenuItem onSelect={clearFilter} className="justify-center text-center">
                 <X />
-                Clear filters
+                Limpar filtros
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </>

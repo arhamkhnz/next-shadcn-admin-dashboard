@@ -51,21 +51,21 @@ export function KanbanColumn({ column, index, tasks }: KanbanColumnProps) {
               variant="ghost"
               size="icon-xs"
               className="-ml-2 cursor-grab text-foreground/70 active:cursor-grabbing"
-              aria-label={`Drag ${column.title} column`}
+              aria-label={`Arrastar coluna ${column.title}`}
             >
               <GripVertical />
             </Button>
             <h2 className="truncate font-medium text-base leading-none">{column.title}</h2>
           </div>
           <p className="text-muted-foreground text-sm tabular-nums leading-none">
-            {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+            {tasks.length} {tasks.length === 1 ? "tarefa" : "tarefas"}
           </p>
         </div>
         <div className="-mr-2 flex items-center gap-0.5 text-muted-foreground">
-          <Button variant="ghost" size="icon-sm" aria-label={`Add task to ${column.title}`}>
+          <Button variant="ghost" size="icon-sm" aria-label={`Adicionar tarefa em ${column.title}`}>
             <Plus />
           </Button>
-          <Button variant="ghost" size="icon-sm" aria-label={`${column.title} column actions`}>
+          <Button variant="ghost" size="icon-sm" aria-label={`Ações da coluna ${column.title}`}>
             <MoreVertical />
           </Button>
         </div>

@@ -27,10 +27,10 @@ import { labels, priorities, statuses, type Task } from "./data";
 
 const statusStyles: Record<string, string> = {
   backlog: "border-muted-foreground/20 bg-muted text-muted-foreground",
-  todo: "border-sky-500/20 bg-sky-500/10 text-sky-700 dark:text-sky-300",
-  "in progress": "border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  done: "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-300",
-  canceled: "border-muted-foreground/20 bg-muted text-muted-foreground",
+  "a fazer": "border-sky-500/20 bg-sky-500/10 text-sky-700 dark:text-sky-300",
+  "em progresso": "border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300",
+  concluído: "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-300",
+  cancelado: "border-muted-foreground/20 bg-muted text-muted-foreground",
 };
 
 function SortIcon({ sortDirection }: { sortDirection: false | "asc" | "desc" }) {
@@ -50,23 +50,23 @@ function TitleColumnHeader({ column }: { column: Column<DataTableFeatures, Task,
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="-ml-3 text-muted-foreground data-[state=open]:bg-accent">
-          Title
+          Título
           <SortIcon sortDirection={column.getIsSorted()} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         <DropdownMenuItem onSelect={() => column.toggleSorting(false)}>
           <ArrowUp />
-          Asc
+          Crescente
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={() => column.toggleSorting(true)}>
           <ArrowDown />
-          Desc
+          Decrescente
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={() => column.clearSorting()}>
           <RotateCcw />
-          Reset
+          Redefinir
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -88,7 +88,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
           <Checkbox
             checked={checked}
             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
+            aria-label="Selecionar tudo"
             className="translate-y-0.5"
           />
         )}
@@ -100,7 +100,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
           <Checkbox
             checked={checked}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
+            aria-label="Selecionar linha"
             className="translate-y-0.5"
           />
         )}
@@ -111,7 +111,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
   },
   {
     accessorKey: "id",
-    header: "Task",
+    header: "Tarefa",
     cell: ({ row }) => <div className="w-20 font-mono text-muted-foreground text-sm">{row.getValue("id")}</div>,
     enableSorting: false,
     enableHiding: false,
@@ -157,7 +157,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
   },
   {
     accessorKey: "priority",
-    header: "Priority",
+    header: "Prioridade",
     cell: ({ row }) => {
       const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
@@ -187,16 +187,16 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon-sm" className="text-muted-foreground data-[state=open]:bg-muted">
                 <MoreHorizontal />
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Abrir menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Make a copy</DropdownMenuItem>
-              <DropdownMenuItem>Favorite</DropdownMenuItem>
+              <DropdownMenuItem>Editar</DropdownMenuItem>
+              <DropdownMenuItem>Duplicar</DropdownMenuItem>
+              <DropdownMenuItem>Favoritar</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger>Rótulos</DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuRadioGroup value={task.label}>
                     {labels.map((label) => (
@@ -209,7 +209,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
               </DropdownMenuSub>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                Delete
+                Excluir
                 <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuContent>
