@@ -73,21 +73,21 @@ export function AccountSwitcher({
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <BadgeCheck />
-            Account
+            Conta
           </DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCard />
-            Billing
+            Cobrança
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Bell />
-            Notifications
+            Notificações
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogOut />
-          Log out
+          Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

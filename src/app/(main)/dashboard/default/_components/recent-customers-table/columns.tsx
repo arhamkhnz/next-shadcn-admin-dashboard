@@ -2,6 +2,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Subscribe } from "@tanstack/react-table";
 import { addMinutes, differenceInCalendarDays, endOfToday, format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { CircleAlertIcon, CircleCheckIcon, Clock3Icon, LoaderIcon, UserRound } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,13 +13,13 @@ import type { RecentCustomerRow } from "./schema";
 
 function billingIcon(billing: string) {
   switch (billing) {
-    case "Paid":
+    case "Pago":
       return <CircleCheckIcon className="fill-green-500 stroke-primary-foreground dark:fill-green-600" />;
-    case "Pending":
+    case "Pendente":
       return <LoaderIcon />;
-    case "Overdue":
+    case "Em atraso":
       return <CircleAlertIcon className="text-amber-600 dark:text-amber-500" />;
-    case "Trial":
+    case "Teste":
       return <Clock3Icon className="text-muted-foreground" />;
     default:
       return null;
@@ -41,7 +42,7 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
             <Checkbox
               checked={checked}
               onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-              aria-label="Select all customers on this page"
+              aria-label="Selecionar todos os clientes desta página"
             />
           )}
         </Subscribe>
@@ -54,7 +55,7 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
             <Checkbox
               checked={checked}
               onCheckedChange={(value) => row.toggleSelected(!!value)}
-              aria-label={`Select ${row.original.name}`}
+              aria-label={`Selecionar ${row.original.name}`}
             />
           )}
         </Subscribe>
@@ -64,7 +65,7 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
   },
   {
     accessorKey: "name",
-    header: "Customer",
+    header: "Cliente",
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <span className="flex size-8 items-center justify-center rounded-md border bg-muted">
@@ -100,7 +101,7 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
   },
   {
     accessorKey: "billing",
-    header: "Billing",
+    header: "Cobrança",
     filterFn: "equalsString",
     cell: ({ row }) => (
       <Badge variant="outline" className="px-1.5 text-muted-foreground">
@@ -111,7 +112,7 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
   },
   {
     accessorKey: "plan",
-    header: "Plan",
+    header: "Plano",
     cell: ({ row }) => <span className="text-sm">{row.original.plan}</span>,
   },
   {
@@ -128,15 +129,15 @@ export const recentCustomersColumns: ColumnDef<DataTableFeatures, RecentCustomer
   },
   {
     accessorKey: "joined",
-    header: "Joined",
+    header: "Cadastro",
     cell: ({ row }) => {
       const baseDate = parseISO(row.original.joined);
       const joinedAt = addMinutes(baseDate, 9 * 60 + (Number(row.original.id) % 12) * 17);
 
       return (
         <div className="grid gap-0.5">
-          <span className="text-sm">{format(joinedAt, "do MMMM yyyy")}</span>
-          <span className="text-muted-foreground text-xs">at {format(joinedAt, "h:mm a")}</span>
+          <span className="text-sm">{format(joinedAt, "d 'de' MMMM 'de' yyyy", { locale: ptBR })}</span>
+          <span className="text-muted-foreground text-xs">às {format(joinedAt, "HH:mm")}</span>
         </div>
       );
     },

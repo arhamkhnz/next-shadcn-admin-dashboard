@@ -112,7 +112,7 @@ export function NavMain({ items }: NavMainProps) {
                 className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
               >
                 <PlusCircleIcon />
-                <span>Quick Create</span>
+                <span>Criar rápido</span>
               </SidebarMenuButton>
               <Button
                 size="icon"
@@ -309,7 +309,7 @@ function NavItemBadge({ badge }: { badge?: NavBadge }) {
         badge === "soon" && "border-muted-foreground text-muted-foreground",
       )}
     >
-      {badge}
+      {badge === "new" ? "novo" : "em breve"}
     </SidebarMenuBadge>
   );
 }

@@ -74,7 +74,7 @@ export function UsersTable({ table }: { table: ReactTable<DataTableFeatures, Use
             ) : (
               <TableRow>
                 <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                  No results.
+                  Nenhum resultado.
                 </TableCell>
               </TableRow>
             )}
@@ -87,7 +87,7 @@ export function UsersTable({ table }: { table: ReactTable<DataTableFeatures, Use
       <div className="flex items-center justify-between px-4">
         <div className="flex items-center gap-4 text-muted-foreground text-sm">
           <div className="flex items-center gap-2">
-            <span>Rows per page</span>
+            <span>Linhas por página</span>
             <Select
               value={`${table.state.pagination.pageSize}`}
               onValueChange={(value) => table.setPageSize(Number(value))}
@@ -107,7 +107,7 @@ export function UsersTable({ table }: { table: ReactTable<DataTableFeatures, Use
             </Select>
           </div>
           <span>
-            Page {currentPage} of {pageCount}
+            Página {currentPage} de {pageCount}
           </span>
         </div>
 

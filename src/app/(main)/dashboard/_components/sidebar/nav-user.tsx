@@ -68,21 +68,21 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <CircleUser />
-                Account
+                Conta
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Billing
+                Cobrança
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <MessageSquareDot />
-                Notifications
+                Notificações
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              Log out
+              Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
