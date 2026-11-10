@@ -142,7 +142,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         id: "crypto",
-        title: "Crypto",
+        title: "Cripto",
         url: "/dashboard/coming-soon",
         icon: Bitcoin,
         badge: "soon",
@@ -150,7 +150,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         id: "healthcare",
-        title: "Healthcare",
+        title: "Saúde",
         url: "/dashboard/coming-soon",
         icon: Stethoscope,
         badge: "soon",
@@ -158,7 +158,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         id: "pos",
-        title: "POS",
+        title: "PDV",
         url: "/dashboard/coming-soon",
         icon: ScanBarcode,
         badge: "soon",
@@ -166,7 +166,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         id: "hr",
-        title: "HR",
+        title: "RH",
         url: "/dashboard/coming-soon",
         icon: ContactRound,
         badge: "soon",
@@ -174,7 +174,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         id: "restaurant",
-        title: "Restaurant",
+        title: "Restaurante",
         url: "/dashboard/coming-soon",
         icon: UtensilsCrossed,
         badge: "soon",
@@ -196,7 +196,7 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         id: "products",
-        title: "Products",
+        title: "Produtos",
         url: "/dashboard/products",
         icon: Package,
         badge: "new",

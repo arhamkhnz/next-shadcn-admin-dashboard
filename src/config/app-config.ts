@@ -4,6 +4,8 @@ const currentYear = new Date().getFullYear();
 
 export const APP_CONFIG = {
   name: "Studio Admin",
+  url: "https://studio-admin.arhamkhnz.com",
+  repository: "https://github.com/arhamkhnz/next-shadcn-admin-dashboard",
   version: packageJson.version,
   copyright: `© ${currentYear}, Studio Admin.`,
   meta: {

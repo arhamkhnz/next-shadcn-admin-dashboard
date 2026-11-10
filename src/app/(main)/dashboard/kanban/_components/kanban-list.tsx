@@ -16,9 +16,9 @@ import { statusIcons } from "./task-status";
 import type { BoardState, Column, TaskInsightLabel } from "./types";
 
 const insightIcons: Record<TaskInsightLabel, LucideIcon> = {
-  Attachments: Paperclip,
-  Comments: MessageSquare,
-  Documents: FileText,
+  Anexos: Paperclip,
+  Comentários: MessageSquare,
+  Documentos: FileText,
 };
 
 export function KanbanList({ board, columns }: { board: BoardState; columns: readonly Column[] }) {
@@ -27,7 +27,7 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
       {columns.map((column) => {
         const tasks = board[column.id];
         const StatusIcon = statusIcons[column.id];
-        const highPriorityCount = tasks.filter((task) => task.priority === "High").length;
+        const highPriorityCount = tasks.filter((task) => task.priority === "Alta").length;
 
         return (
           <KanbanListDropGroup key={column.id} columnId={column.id}>

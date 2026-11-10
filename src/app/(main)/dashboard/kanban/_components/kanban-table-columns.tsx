@@ -18,9 +18,9 @@ import type { Column, ColumnId, Task, TaskInsightLabel } from "./types";
 export type TaskTableRow = Task & { status: Column };
 
 const insightIcons: Record<TaskInsightLabel, LucideIcon> = {
-  Attachments: Paperclip,
-  Comments: MessageSquare,
-  Documents: FileText,
+  Anexos: Paperclip,
+  Comentários: MessageSquare,
+  Documentos: FileText,
 };
 
 export function createTaskTableColumns(
