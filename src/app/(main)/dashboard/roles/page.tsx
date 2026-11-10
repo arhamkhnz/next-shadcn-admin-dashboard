@@ -4,8 +4,9 @@ import { Roles } from "./_components/roles";
 import { roles } from "./_components/roles-table/data";
 
 export const metadata: Metadata = {
-  title: "Open Source Roles and Permissions UI with shadcn/ui",
-  description: "Explore an open source roles and permissions interface for reviewing access levels and managing roles.",
+  title: "UI de Funções e Permissões de Código Aberto com shadcn/ui",
+  description:
+    "Explore uma interface de funções e permissões de código aberto para revisar níveis de acesso e gerenciar funções.",
   alternates: {
     canonical: "/dashboard/roles",
   },

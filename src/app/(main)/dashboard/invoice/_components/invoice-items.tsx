@@ -37,20 +37,20 @@ export function InvoiceItems() {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-medium tracking-tight">Invoice Items</h2>
+        <h2 className="font-medium tracking-tight">Itens da Fatura</h2>
         <Button type="button" variant="ghost" size="sm" onClick={handleAddItem}>
           <Plus data-icon="inline-start" />
-          Add Item
+          Adicionar item
         </Button>
       </div>
 
       <div className="flex flex-col gap-2">
         <div className="hidden items-center gap-2 px-1 font-medium text-muted-foreground text-xs md:grid md:grid-cols-[24px_minmax(0,1fr)_64px_112px_112px_32px]">
           <span />
-          <span>Description</span>
-          <span className="px-2">Units</span>
-          <span className="px-2">Unit cost</span>
-          <span className="text-right">Line Total</span>
+          <span>Descrição</span>
+          <span className="px-2">Unidades</span>
+          <span className="px-2">Custo unitário</span>
+          <span className="text-right">Total do item</span>
           <span />
         </div>
 
@@ -109,31 +109,31 @@ function SortableInvoiceItemRow({
         variant="ghost"
         size="icon-sm"
         className="-ml-2 cursor-grab text-muted-foreground active:cursor-grabbing"
-        aria-label={`Reorder ${id}`}
+        aria-label={`Reordenar ${id}`}
       >
         <GripVertical />
       </Button>
       <Input
         className="min-w-0 text-sm max-md:col-span-3"
-        aria-label={`Item ${index + 1} description`}
+        aria-label={`Descrição do item ${index + 1}`}
         {...register(`items.${index}.description` as const)}
       />
       <Input
         type="number"
         step="1"
         className="text-sm max-md:col-start-2 max-md:row-start-2"
-        aria-label={`Item ${index + 1} quantity`}
+        aria-label={`Quantidade do item ${index + 1}`}
         {...register(`items.${index}.quantity` as const, { valueAsNumber: true })}
       />
       <Input
         type="number"
         step="0.01"
         className="text-sm max-md:col-start-3 max-md:row-start-2"
-        aria-label={`Item ${index + 1} unit price`}
+        aria-label={`Preço unitário do item ${index + 1}`}
         {...register(`items.${index}.unitPrice` as const, { valueAsNumber: true })}
       />
       <div className="min-w-0 text-right font-medium text-sm max-md:col-span-3 max-md:col-start-2 max-md:row-start-3 max-md:flex max-md:items-center max-md:justify-between max-md:text-left">
-        <span className="hidden text-muted-foreground max-md:inline">Line total</span>
+        <span className="hidden text-muted-foreground max-md:inline">Total do item</span>
         <span>{formatInvoiceCurrency(getLineAmount(item))}</span>
       </div>
       <Button
@@ -141,7 +141,7 @@ function SortableInvoiceItemRow({
         variant="ghost"
         size="icon-sm"
         className="max-md:col-start-4 max-md:row-start-2"
-        aria-label={`Remove item ${index + 1}`}
+        aria-label={`Remover item ${index + 1}`}
         onClick={onRemove}
       >
         <Trash2 />

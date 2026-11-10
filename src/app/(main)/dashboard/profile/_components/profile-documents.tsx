@@ -13,21 +13,21 @@ export function ProfileDocuments({ documents }: { documents: ProfileDocument[] }
         <h2 className="font-heading font-medium text-base">Documents</h2>
         <Button size="sm">
           <FileText data-icon="inline-start" />
-          Add document
+          Adicionar documento
         </Button>
       </div>
 
       <Table className="border-y">
-        <TableCaption className="sr-only">Documents attached to this contractor profile</TableCaption>
+        <TableCaption className="sr-only">Documentos anexados a este perfil de terceiro</TableCaption>
         <TableHeader className="[&_th]:h-8">
           <TableRow className="hover:bg-transparent">
             <TableHead className="w-2/5">
-              <span className="sr-only">Document</span>
+              <span className="sr-only">Documento</span>
             </TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Updated</TableHead>
+            <TableHead>Categoria</TableHead>
+            <TableHead>Atualizado</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="text-right">Access</TableHead>
+            <TableHead className="text-right">Acesso</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -43,12 +43,12 @@ export function ProfileDocuments({ documents }: { documents: ProfileDocument[] }
               </TableCell>
               <TableCell className="text-right">
                 {document.isRestricted ? (
-                  <span className="inline-flex items-center gap-1.5 text-muted-foreground text-xs" title="Restricted">
+                  <span className="inline-flex items-center gap-1.5 text-muted-foreground text-xs" title="Restrito">
                     <LockKeyhole aria-hidden="true" className="size-3.5" />
-                    Restricted
+                    Restrito
                   </span>
                 ) : (
-                  <Button aria-label={`Download ${document.name}`} size="icon-sm" variant="ghost">
+                  <Button aria-label={`Baixar ${document.name}`} size="icon-sm" variant="ghost">
                     <Download />
                   </Button>
                 )}

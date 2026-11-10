@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { CalendarIcon, Hash } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -19,12 +20,12 @@ const dateFields: Array<{
 }> = [
   {
     id: "issued-date",
-    label: "Issued Date",
+    label: "Data de emissão",
     name: "issuedDate",
   },
   {
     id: "payment-due-date",
-    label: "Due Date",
+    label: "Vencimento",
     name: "paymentDueDate",
   },
 ];
@@ -37,7 +38,7 @@ export function InvoiceDetails() {
       <FieldGroup>
         <Field className="gap-1">
           <FieldLabel className="text-xs" htmlFor="reference-number">
-            Reference Number
+            Referência
           </FieldLabel>
           <InputGroup>
             <InputGroupInput id="reference-number" {...register("referenceNumber")} />
@@ -82,7 +83,7 @@ function DatePicker({ id, value, onChange }: { id: string; value: string; onChan
           data-empty={!date}
           className="w-full justify-between text-left font-normal data-[empty=true]:text-muted-foreground"
         >
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {date ? format(date, "d 'de' MMMM 'de' yyyy", { locale: ptBR }) : <span>Escolha uma data</span>}
           <CalendarIcon className="text-muted-foreground" />
         </Button>
       </PopoverTrigger>

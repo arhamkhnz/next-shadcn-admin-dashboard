@@ -86,7 +86,7 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
           ) : (
             <TableRow>
               <TableCell colSpan={colCount} className="h-24 text-center text-muted-foreground">
-                No results.
+                Nenhum resultado.
               </TableCell>
             </TableRow>
           )}
@@ -95,7 +95,7 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
 
       <div className="flex items-center border-border/70 border-t p-4">
         <div className="text-muted-foreground text-sm">
-          Showing {start} to {end} of {filteredRows.length} roles
+          Showing {start}–{end} de {filteredRows.length} funções
         </div>
 
         <div className="mx-auto">
@@ -142,7 +142,7 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground text-sm">Rows per page</span>
+          <span className="text-muted-foreground text-sm">Linhas por página</span>
           <Select
             value={`${pageSize}`}
             onValueChange={(v) => {
@@ -181,7 +181,7 @@ function TableBodyGroup({
         <TableCell className="px-4 text-foreground/60 text-sm" colSpan={colCount}>
           {group.label}{" "}
           <Badge variant="outline" className="ml-2 rounded-sm bg-transparent text-muted-foreground text-xs">
-            {group.rows.length} of {totalCount}
+            {group.rows.length} de {totalCount}
           </Badge>
         </TableCell>
       </TableRow>

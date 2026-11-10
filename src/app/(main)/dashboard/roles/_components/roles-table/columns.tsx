@@ -32,7 +32,7 @@ export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
   {
     id: "role",
     accessorKey: "role",
-    header: "Role",
+    header: "Função",
     size: 180,
     minSize: 180,
     cell: ({ row }) => <span className="font-medium text-sm">{row.original.role}</span>,
@@ -40,7 +40,7 @@ export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
   {
     id: "accessLevel",
     accessorKey: "accessLevel",
-    header: "Access level",
+    header: "Nível de acesso",
     size: 120,
     cell: ({ row }) => (
       <Badge className="rounded-sm" variant="outline">
@@ -51,14 +51,14 @@ export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
   {
     id: "users",
     accessorKey: "users",
-    header: "Users",
+    header: "Usuários",
     size: 70,
     cell: ({ row }) => <span className="text-sm">{row.original.users}</span>,
   },
   {
     id: "permissionSets",
     accessorFn: (row) => row.permissionSets.join(" "),
-    header: "Permission sets",
+    header: "Conjuntos de permissões",
     size: 310,
     cell: ({ row }) => (
       <div className="flex flex-wrap items-center justify-start gap-2">
@@ -76,14 +76,14 @@ export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
   {
     id: "lastReview",
     accessorKey: "lastReview",
-    header: "Last review",
+    header: "Última revisão",
     size: 120,
     cell: ({ row }) => <span className="text-sm">{row.original.lastReview}</span>,
   },
   {
     id: "owner",
     accessorKey: "owner",
-    header: "Owner",
+    header: "Proprietário",
     size: 110,
     filterFn: "equalsString",
     cell: ({ row }) => <span className="text-sm">{row.original.owner}</span>,
@@ -105,8 +105,8 @@ export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
     header: "",
     size: 70,
     cell: ({ row }) => {
-      const isSystemRole = row.original.group === "System roles";
-      const needsReview = row.original.status === "Needs review";
+      const isSystemRole = row.original.group === "Funções do sistema";
+      const needsReview = row.original.status === "Precisa de revisão";
 
       return (
         <DropdownMenu>
@@ -117,20 +117,20 @@ export const rolesColumns: ColumnDef<DataTableFeatures, Role>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-48" align="end">
             <DropdownMenuGroup>
-              {needsReview ? <DropdownMenuItem>Review changes</DropdownMenuItem> : null}
-              <DropdownMenuItem>View details</DropdownMenuItem>
-              <DropdownMenuItem disabled={isSystemRole}>Edit role</DropdownMenuItem>
-              <DropdownMenuItem disabled={isSystemRole}>Duplicate role</DropdownMenuItem>
+              {needsReview ? <DropdownMenuItem>Revisar alterações</DropdownMenuItem> : null}
+              <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
+              <DropdownMenuItem disabled={isSystemRole}>Editar função</DropdownMenuItem>
+              <DropdownMenuItem disabled={isSystemRole}>Duplicar função</DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>Review permissions</DropdownMenuItem>
-              <DropdownMenuItem>Manage members</DropdownMenuItem>
+              <DropdownMenuItem>Revisar permissões</DropdownMenuItem>
+              <DropdownMenuItem>Gerenciar membros</DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem disabled={isSystemRole} variant="destructive">
-                Archive role
+                Arquivar função
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

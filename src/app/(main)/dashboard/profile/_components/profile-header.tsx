@@ -23,7 +23,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
     <div className="flex flex-col gap-5 px-4 lg:flex-row lg:items-end lg:justify-between">
       <div className="flex min-w-0 items-center gap-4">
         <div className="grid size-18 shrink-0 place-items-center sm:size-23">
-          <span className="sr-only">Profile 92% complete</span>
+          <span className="sr-only">Perfil 92% completo</span>
           <svg aria-hidden="true" className="col-start-1 row-start-1 size-full -rotate-90" viewBox="0 0 100 100">
             <circle
               className="fill-none stroke-green-500 dark:stroke-green-600"
@@ -56,11 +56,11 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
               className="rounded-sm border-amber-600/20 bg-amber-500/10 text-amber-700 dark:text-amber-300"
               variant="secondary"
             >
-              92% Complete
+              92% Completo
             </Badge>
             <Badge className="rounded-sm bg-green-600 text-white" variant="default">
               <BadgeCheck data-icon="inline-start" />
-              Verified
+              Verificado
             </Badge>
             <Badge className="rounded-sm" variant="outline">
               {profile.employmentType}
@@ -79,16 +79,16 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
         <Button size="sm" asChild variant="outline">
           <a href={`mailto:${profile.workEmail}`}>
             <Mail data-icon="inline-start" />
-            Email
+            E-mail
           </a>
         </Button>
         <Button size="sm">
           <Pencil data-icon="inline-start" />
-          Edit profile
+          Editar perfil
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button aria-label="More profile actions" size="icon-sm" variant="outline">
+            <Button aria-label="Mais ações do perfil" size="icon-sm" variant="outline">
               <Ellipsis />
             </Button>
           </DropdownMenuTrigger>
@@ -96,14 +96,14 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Eye />
-                View as employee
+                Ver como funcionário
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem variant="destructive">
                 <UserRoundX />
-                Deactivate profile
+                Desativar perfil
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
