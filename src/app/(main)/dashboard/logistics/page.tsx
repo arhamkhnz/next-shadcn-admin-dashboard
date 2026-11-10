@@ -6,9 +6,9 @@ import { Logistics } from "./_components/logistics";
 import "@/styles/flag-icons/flags.css";
 
 export const metadata: Metadata = {
-  title: "Open Source Logistics Dashboard with shadcn/ui",
+  title: "Painel de logística open source com shadcn/ui",
   description:
-    "Explore an open source logistics dashboard with shipment tracking, delivery status, route maps, cargo details, and transport information.",
+    "Explore um painel de logística open source com rastreio de envios, status de entrega, mapas de rota, detalhes de carga e informações de transporte.",
   alternates: {
     canonical: "/dashboard/logistics",
   },

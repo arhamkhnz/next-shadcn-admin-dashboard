@@ -57,7 +57,7 @@ export function RecentOrders() {
     onPaginationChange: setPagination,
   });
 
-  const activeFilter = (table.getColumn("statusSummary")?.getFilterValue() as OrderFilter | undefined) ?? "All";
+  const activeFilter = (table.getColumn("statusSummary")?.getFilterValue() as OrderFilter | undefined) ?? "Todos";
   const orderCount = table.getFilteredRowModel().rows.length;
   const selectedOrderCount = table.getSelectedRowModel().rows.length;
   const visibleOrderCount = table.getRowModel().rows.length;
@@ -79,15 +79,15 @@ export function RecentOrders() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-normal text-muted-foreground text-sm">Recent Orders</CardTitle>
+        <CardTitle className="font-normal text-muted-foreground text-sm">Pedidos recentes</CardTitle>
         <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
           {orderCountDescription}
         </CardDescription>
         <CardAction className="flex items-center gap-1">
-          <Button aria-label="Open orders" size="icon-sm" variant="outline">
+          <Button aria-label="Abrir pedidos" size="icon-sm" variant="outline">
             <ArrowUpRight />
           </Button>
-          <Button aria-label="Download orders" size="icon-sm" variant="outline">
+          <Button aria-label="Baixar pedidos" size="icon-sm" variant="outline">
             <Download />
           </Button>
           <Button size="icon-sm" variant="outline">
@@ -102,7 +102,7 @@ export function RecentOrders() {
             className="bg-muted p-0.75 text-muted-foreground **:data-[slot=toggle-group-item]:rounded-md **:data-[slot=toggle-group-item]:border **:data-[slot=toggle-group-item]:border-transparent **:data-[slot=toggle-group-item]:text-foreground/60 **:data-[slot=toggle-group-item]:hover:text-foreground [&_[data-slot=toggle-group-item][data-state=on]]:bg-background [&_[data-slot=toggle-group-item][data-state=on]]:text-foreground [&_[data-slot=toggle-group-item][data-state=on]]:shadow-sm dark:[&_[data-slot=toggle-group-item][data-state=on]]:border-input dark:[&_[data-slot=toggle-group-item][data-state=on]]:bg-input/30"
             onValueChange={(value) => {
               if (!value) return;
-              table.getColumn("statusSummary")?.setFilterValue(value === "All" ? undefined : value);
+              table.getColumn("statusSummary")?.setFilterValue(value === "Todos" ? undefined : value);
               table.setPageIndex(0);
             }}
             size="sm"
@@ -153,7 +153,7 @@ export function RecentOrders() {
               ) : (
                 <TableRow>
                   <TableCell className="h-24 text-center" colSpan={table.getVisibleLeafColumns().length}>
-                    No orders found.
+                    Nenhum pedido encontrado.
                   </TableCell>
                 </TableRow>
               )}
@@ -163,7 +163,7 @@ export function RecentOrders() {
 
         <div className="flex items-center justify-between gap-4 px-4 pb-1">
           <p className="text-muted-foreground text-sm">
-            Viewing {visibleOrderCount} out of {orderCount.toLocaleString()} orders
+            Exibindo {visibleOrderCount} de {orderCount.toLocaleString("pt-BR")} pedidos
           </p>
 
           <Pagination className="mx-0 w-auto justify-end">

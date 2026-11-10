@@ -45,8 +45,8 @@ export function Logistics() {
           className="gap-0 p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-none data-[side=right]:md:w-3/4"
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>{selectedShipment ? `Shipment ${selectedShipment.id}` : "Shipment details"}</SheetTitle>
-            <SheetDescription>Selected shipment details and route map.</SheetDescription>
+            <SheetTitle>{selectedShipment ? `Envio ${selectedShipment.id}` : "Detalhes do envio"}</SheetTitle>
+            <SheetDescription>Detalhes do envio selecionado e mapa da rota.</SheetDescription>
           </SheetHeader>
           <ShipmentDetails shipment={selectedShipment} />
         </SheetContent>

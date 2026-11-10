@@ -1,7 +1,8 @@
 # Planejamento — Localização (pt-BR) do shadcn-admin-sqlite
 
 > Criado em 2026-11-09. Refere-se ao estado do repositório em d4f8a58.
-> Piloto concluído: telas **Default** e **Users**, sidebar e header já traduzidos (ver diff não commitado).
+> Piloto concluído: telas **Default** e **Users**, sidebar e header já traduzidos (commit 1ae140e).
+> Lote A concluído: finance, crm, analytics, productivity (commit bbfdbb9).
 
 ---
 
@@ -85,6 +86,19 @@ Tradução não deve alterar comportamento, filtros, ordenação ou teclas de at
 | Traffic Quality / Baseline | Qualidade do tráfego / Qualidade de referência |
 | Year to date | Desde o início do ano |
 | Deep Work | Trabalho profundo |
+| Out for Delivery / Customs Hold / On Hold (envio) | Saiu para entrega / Retenção aduaneira / Em pausa |
+| Fulfilled / Unfulfilled / Refunded / Returned | Atendido / Não atendido / Reembolsado / Devolvido |
+| Needs action / Returns (filtro) | Precisa de ação / Devoluções |
+| Inventory / In stock / Low stock / Out of stock | Estoque / Em estoque / Estoque baixo / Esgotado |
+| Stock Accuracy / Average Order / Return Requests | Exatidão de estoque / Ticket médio / Solicitações de devolução |
+| Top Products / Store Traffic / Anomalies | Produtos mais vendidos / Tráfego da loja / Anomalias |
+| Gradebook / Assignment / Avg. Attendance | Diário de notas / Atividade / Frequência média |
+| Most Improved / Top Performer | Maior evolução / Melhor desempenho |
+| Shipment / Tier (Priority/Standard/Non-priority) | Envio / Prioridade / Padrão / Sem prioridade |
+| Transport mode (land/air/sea, road/flight/ship) | terrestre · aéreo · marítimo / rodoviário · aéreo · marítimo |
+| Central Patient Monitoring / Acknowledge(d) | Central de monitoramento de pacientes / Reconhecer / Reconhecido |
+| Full disclosure / Event review | Registro completo / Revisão de eventos |
+| HR / RR (clínico) / Resp | FC / FR |
 
 **Ficam em inglês por consenso do Lote A:** Retargeting, Onboarding, design system, "Q" → "T"
 (roadmap T2), formato "3m 12s", marcas dos mocks (Product Hunt, Linear Plus Plan, Ledger Nano X).
@@ -98,8 +112,8 @@ Faturas (Invoice), Gestão de usuários (Users).
 
 | Lote | Telas | Arquivos | Complexidade | Notas |
 |---|---|---|---|---|
-| A (Financeiro/produção) | `finance`, `crm`, `analytics`, `productivity` | 9+8+7+10 = 34 | Média | Gráficos (recharts), transações, funil; datas |
-| B (Operação) | `ecommerce`, `academy`, `logistics`, `infrastructure`, `file-manager`, `patient-monitoring` | 12+6+6+4+7+12 = 47 | Média | Tabelas + cartões; unidades (peso, consumo) precisam glossário |
+| A (Financeiro/produção) | `finance`, `crm`, `analytics`, `productivity` | 9+8+7+10 = 34 | Média | ✅ Concluído (bbfdbb9) |
+| B (Operação) | `ecommerce`, `academy`, `logistics`, `infrastructure`, `file-manager`, `patient-monitoring` | 12+6+6+4+7+12 = 47 | Média | ✅ Concluído (em integração) |
 | C (Colaboração) | `mail` (rota principal), `chat` (rota principal + dashboard), `calendar`, `kanban`, `tasks` | ~2+9+3+8+7 = 29 | Alta | Muito texto conversacional; repeat render; cuidado com `data` mockados |
 | D (Documentos/conta) | `invoice`, `profile`, `roles`, `coming-soon`, `unauthorized` | 12+9+5+1+1 = 28 | Média | Faturas = números/formatos de dinheiro + vencimento |
 | E (Auth) | `auth/v1` e `auth/v2` (login/register) | ~10 | Baixa | Formulários, validações (Zod → mensagens de erro!) |

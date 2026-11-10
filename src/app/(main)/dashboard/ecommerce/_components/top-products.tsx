@@ -5,17 +5,17 @@ import { Separator } from "@/components/ui/separator";
 
 const categories = [
   {
-    name: "Apparel",
+    name: "Vestuário",
     share: 44,
     color: "var(--chart-3)",
   },
   {
-    name: "Accessories",
+    name: "Acessórios",
     share: 32,
     color: "var(--chart-2)",
   },
   {
-    name: "Home",
+    name: "Casa",
     share: 24,
     color: "var(--chart-1)",
   },
@@ -24,19 +24,19 @@ const categories = [
 const products = [
   {
     name: "Linen Overshirt",
-    category: "Apparel",
+    category: "Vestuário",
     share: "31%",
     sales: "$14,820",
   },
   {
     name: "Everyday Tote",
-    category: "Accessories",
+    category: "Acessórios",
     share: "24%",
     sales: "$11,460",
   },
   {
     name: "Ceramic Planter",
-    category: "Home",
+    category: "Casa",
     share: "18%",
     sales: "$8,930",
   },
@@ -46,9 +46,9 @@ export function TopProducts() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="font-normal text-muted-foreground text-sm">Top Products</CardTitle>
+        <CardTitle className="font-normal text-muted-foreground text-sm">Produtos mais vendidos</CardTitle>
         <CardDescription className="text-foreground text-xl tabular-nums leading-none tracking-tight">
-          73% of sales
+          73% das vendas
         </CardDescription>
         <CardAction>
           <ArrowUpRight className="size-4" />
@@ -57,7 +57,7 @@ export function TopProducts() {
 
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <div aria-label="Sales by category" className="flex h-2 gap-1 overflow-hidden bg-muted" role="img">
+          <div aria-label="Vendas por categoria" className="flex h-2 gap-1 overflow-hidden bg-muted" role="img">
             {categories.map((category) => (
               <div
                 aria-hidden="true"
@@ -84,9 +84,9 @@ export function TopProducts() {
         <Separator />
 
         <div className="grid grid-cols-[1fr_auto_auto] gap-x-4 gap-y-3">
-          <div className="text-muted-foreground text-xs">Products</div>
-          <div className="text-muted-foreground text-xs">Share</div>
-          <div className="text-muted-foreground text-xs">Sales</div>
+          <div className="text-muted-foreground text-xs">Produtos</div>
+          <div className="text-muted-foreground text-xs">Participação</div>
+          <div className="text-muted-foreground text-xs">Vendas</div>
 
           {products.map((product) => (
             <div className="contents text-sm" key={product.name}>

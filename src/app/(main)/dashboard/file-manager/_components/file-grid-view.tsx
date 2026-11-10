@@ -3,6 +3,8 @@
 import { useState } from "react";
 
 import { cn } from "cn";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -39,7 +41,7 @@ export function FileGridView({ files }: FileGridViewProps) {
                     "absolute top-2 right-2 opacity-0 focus-visible:opacity-100 group-hover/file:opacity-100",
                     file.starred && "opacity-100",
                   )}
-                  aria-label={file.starred ? `Unstar ${file.name}` : `Star ${file.name}`}
+                  aria-label={file.starred ? `Desfavoritar ${file.name}` : `Favoritar ${file.name}`}
                   onClick={() => toggleStar(file.id)}
                 >
                   <Star className={cn(file.starred && "fill-current")} />
@@ -53,7 +55,8 @@ export function FileGridView({ files }: FileGridViewProps) {
             <CardHeader>
               <CardTitle className="truncate">{file.name}</CardTitle>
               <CardDescription className="truncate">
-                Modified {file.modifiedAt} by {file.owner}
+                Modificado em {format(parseISO(file.modifiedAt), "d 'de' MMMM 'de' yyyy, HH:mm", { locale: ptBR })} por{" "}
+                {file.owner}
               </CardDescription>
               <CardAction>
                 <FileActions file={file} onToggleStar={() => toggleStar(file.id)} />

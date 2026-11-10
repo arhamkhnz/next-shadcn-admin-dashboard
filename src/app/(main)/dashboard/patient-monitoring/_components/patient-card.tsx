@@ -19,7 +19,7 @@ export function PatientCard({ active, acknowledged, onSelect, patient }: Patient
 
   return (
     <button
-      aria-label={`Open ${patient.bed}, ${patient.name}`}
+      aria-label={`Abrir leito ${patient.bed}, ${patient.name}`}
       aria-pressed={active}
       className={cn(
         "flex min-h-36 min-w-0 flex-col bg-card p-2 text-left text-card-foreground",
@@ -39,7 +39,7 @@ export function PatientCard({ active, acknowledged, onSelect, patient }: Patient
             className="h-auto shrink-0 rounded-none border-amber-500 text-[10px] text-amber-700 dark:border-amber-400 dark:text-amber-300"
             variant="outline"
           >
-            HR HIGH {patient.heartRate}
+            FC ALTA {patient.heartRate}
           </Badge>
         )}
       </div>
@@ -50,7 +50,7 @@ export function PatientCard({ active, acknowledged, onSelect, patient }: Patient
 
       <dl className="mt-auto grid grid-cols-2 divide-x divide-border tabular-nums">
         <div className="pr-2">
-          <dt className="text-lime-500 text-xs dark:text-lime-400">HR</dt>
+          <dt className="text-lime-500 text-xs dark:text-lime-400">FC</dt>
           <dd
             className={cn(
               "text-right font-medium text-3xl text-lime-500 leading-none dark:text-lime-400",

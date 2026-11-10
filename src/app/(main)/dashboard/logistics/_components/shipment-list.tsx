@@ -16,13 +16,13 @@ const modeIcons = {
 } as const;
 
 const progressRingClasses: Record<Shipment["status"], string> = {
-  Scheduled: "text-muted-foreground",
-  "In Transit": "text-primary",
-  "Out for Delivery": "text-primary",
-  Delivered: "text-green-600",
-  Delayed: "text-destructive",
-  "On Hold": "text-amber-500",
-  "Customs Hold": "text-amber-500",
+  Agendado: "text-muted-foreground",
+  "Em trânsito": "text-primary",
+  "Saiu para entrega": "text-primary",
+  Entregue: "text-green-600",
+  Atrasado: "text-destructive",
+  "Em pausa": "text-amber-500",
+  "Retenção aduaneira": "text-amber-500",
 };
 
 function getProgressRingClass(status: Shipment["status"]) {
@@ -112,7 +112,7 @@ function ShipmentCard({ shipment, active, onSelectShipment }: ShipmentCardProps)
 
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-muted-foreground text-xs leading-none">Cargo</div>
+          <div className="text-muted-foreground text-xs leading-none">Carga</div>
           <div className="truncate text-sm tracking-tight">{shipment.cargo}</div>
         </div>
         <div className="text-right">
@@ -133,7 +133,7 @@ export function ShipmentList({ shipments, selectedShipmentId, onSelectShipment }
   return (
     <Card className="h-full rounded-none ring-0">
       <CardHeader>
-        <CardTitle className="font-normal text-xl">Shipments</CardTitle>
+        <CardTitle className="font-normal text-xl">Envios</CardTitle>
         <CardAction>
           <Button size="icon-sm" variant="ghost">
             <SlidersHorizontal />
@@ -144,23 +144,23 @@ export function ShipmentList({ shipments, selectedShipmentId, onSelectShipment }
         <Tabs defaultValue="all">
           <TabsList className="w-full border-b px-4" variant="line">
             <TabsTrigger className="text-xs" value="all">
-              All (156)
+              Todos (156)
             </TabsTrigger>
             <TabsTrigger className="text-xs" value="in-transit">
-              In Transit (32)
+              Em trânsito (32)
             </TabsTrigger>
             <TabsTrigger className="text-xs" value="delivered">
-              Delivered (98)
+              Entregues (98)
             </TabsTrigger>
             <TabsTrigger className="text-xs" value="delayed">
-              Delayed (9)
+              Atrasados (9)
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
         <div className="px-4">
           <InputGroup className="h-8">
-            <InputGroupInput className="h-8" aria-label="Search shipments" placeholder="Search shipments..." />
+            <InputGroupInput className="h-8" aria-label="Buscar envios" placeholder="Buscar envios..." />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>

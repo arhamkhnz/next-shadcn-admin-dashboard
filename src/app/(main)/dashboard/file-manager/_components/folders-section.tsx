@@ -1,3 +1,5 @@
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Clock, Folder, MoreVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -21,8 +23,8 @@ export function FoldersSection({ folders }: FoldersSectionProps) {
   return (
     <section className="flex flex-col gap-2" aria-labelledby="folders-heading">
       <div className="flex items-center justify-between">
-        <h2 className="font-medium text-lg">Folders</h2>
-        <span className="text-muted-foreground text-sm">{folders.length} folders</span>
+        <h2 className="font-medium text-lg">Pastas</h2>
+        <span className="text-muted-foreground text-sm">{folders.length} pastas</span>
       </div>
       {folders.length > 0 ? (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -35,21 +37,21 @@ export function FoldersSection({ folders }: FoldersSectionProps) {
                   </div>
                   <div className="flex min-w-0 flex-col gap-1">
                     <CardTitle className="truncate leading-none">{folder.name}</CardTitle>
-                    <CardDescription className="text-xs">{folder.fileCount} files</CardDescription>
+                    <CardDescription className="text-xs">{folder.fileCount} arquivos</CardDescription>
                   </div>
                 </div>
                 <CardAction>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${folder.name}`}>
+                      <Button variant="ghost" size="icon-sm" aria-label={`Ações para ${folder.name}`}>
                         <MoreVertical />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuGroup>
-                        <DropdownMenuItem>Open folder</DropdownMenuItem>
-                        <DropdownMenuItem>Copy share link</DropdownMenuItem>
-                        <DropdownMenuItem>Rename</DropdownMenuItem>
+                        <DropdownMenuItem>Abrir pasta</DropdownMenuItem>
+                        <DropdownMenuItem>Copiar link de compartilhamento</DropdownMenuItem>
+                        <DropdownMenuItem>Renomear</DropdownMenuItem>
                       </DropdownMenuGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -58,7 +60,9 @@ export function FoldersSection({ folders }: FoldersSectionProps) {
               <CardContent className="flex items-center justify-between gap-3 text-muted-foreground text-xs">
                 <div className="flex items-center gap-1.5">
                   <Clock className="size-3.5" />
-                  <span>Updated {folder.updatedAt}</span>
+                  <span>
+                    Atualizado em {format(parseISO(folder.updatedAt), "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                  </span>
                 </div>
                 <span>{folder.size}</span>
               </CardContent>
@@ -71,8 +75,8 @@ export function FoldersSection({ folders }: FoldersSectionProps) {
             <EmptyMedia variant="icon">
               <Folder />
             </EmptyMedia>
-            <EmptyTitle>No folders yet</EmptyTitle>
-            <EmptyDescription>Create a folder to organize your files.</EmptyDescription>
+            <EmptyTitle>Nenhuma pasta ainda</EmptyTitle>
+            <EmptyDescription>Crie uma pasta para organizar seus arquivos.</EmptyDescription>
           </EmptyHeader>
         </Empty>
       )}

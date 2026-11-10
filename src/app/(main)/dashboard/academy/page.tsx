@@ -10,9 +10,9 @@ import { PerformanceHighlights } from "./_components/performance-highlights";
 import { UpcomingEvents } from "./_components/upcoming-events";
 
 export const metadata: Metadata = {
-  title: "Open Source Education Dashboard with shadcn/ui",
+  title: "Painel de academia open source com shadcn/ui",
   description:
-    "Explore an open source education dashboard with class schedules, assignments, performance insights, and upcoming events.",
+    "Explore um painel de academia open source com grade de aulas, atividades, insights de desempenho e próximos eventos.",
   alternates: {
     canonical: "/dashboard/academy",
   },
@@ -23,24 +23,24 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl tracking-tight">Academy Dashboard</h1>
+          <h1 className="text-3xl tracking-tight">Painel da Academia</h1>
           <p className="text-muted-foreground text-sm">
-            Good morning, Teacher. Here's a quick overview of today's activity.
+            Bom dia, professor. Aqui está um resumo rápido da agenda de hoje.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 lg:w-fit">
           <Button size="sm">
             <Megaphone />
-            New Announcement
+            Novo anúncio
           </Button>
           <Button size="sm" variant="outline">
             <BookOpenCheck />
-            Gradebook
+            Diário de notas
           </Button>
           <Button size="sm" variant="outline">
             <Plus />
-            Add Assignment
+            Adicionar atividade
           </Button>
         </div>
       </div>

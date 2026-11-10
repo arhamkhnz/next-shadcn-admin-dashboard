@@ -35,17 +35,17 @@ function OverdueLegendIcon() {
 
 const chartConfig = {
   submitted: {
-    label: "Submitted",
+    label: "Entregues",
     color: "var(--chart-3)",
     icon: SubmittedLegendIcon,
   },
   pending: {
-    label: "Pending",
+    label: "Pendentes",
     color: "var(--chart-2)",
     icon: PendingLegendIcon,
   },
   overdue: {
-    label: "Overdue",
+    label: "Em atraso",
     color: "var(--destructive)",
     icon: OverdueLegendIcon,
   },
@@ -65,9 +65,9 @@ export function AssignmentStatus() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="text-sm">Assignment Status</CardTitle>
+        <CardTitle className="text-sm">Status das atividades</CardTitle>
         <CardAction className="flex items-center gap-1 text-muted-foreground text-xs">
-          View Report <ArrowRight className="size-4" />
+          Ver relatório <ArrowRight className="size-4" />
         </CardAction>
       </CardHeader>
       <CardContent>

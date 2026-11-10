@@ -17,24 +17,36 @@ const modeIcons = {
   sea: Ship,
 } as const;
 
+const transportModeLabels = {
+  land: "terrestre",
+  air: "aéreo",
+  sea: "marítimo",
+} as const;
+
+const routeTypeLabels = {
+  road: "rodoviário",
+  flight: "aéreo",
+  ship: "marítimo",
+} as const;
+
 const progressRingClasses: Record<Shipment["status"], string> = {
-  Scheduled: "text-muted-foreground",
-  "In Transit": "text-primary",
-  "Out for Delivery": "text-primary",
-  Delivered: "text-green-600",
-  Delayed: "text-destructive",
-  "On Hold": "text-amber-500",
-  "Customs Hold": "text-amber-500",
+  Agendado: "text-muted-foreground",
+  "Em trânsito": "text-primary",
+  "Saiu para entrega": "text-primary",
+  Entregue: "text-green-600",
+  Atrasado: "text-destructive",
+  "Em pausa": "text-amber-500",
+  "Retenção aduaneira": "text-amber-500",
 };
 
 const statusBadgeClasses: Record<Shipment["status"], string> = {
-  Scheduled: "border-muted bg-muted/50 text-muted-foreground",
-  "In Transit": "border-primary/20 bg-primary/10 text-primary",
-  "Out for Delivery": "border-primary/20 bg-primary/10 text-primary",
-  Delivered: "border-green-600/20 bg-green-600/10 text-green-600",
-  Delayed: "border-destructive/20 bg-destructive/10 text-destructive",
-  "On Hold": "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  "Customs Hold": "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  Agendado: "border-muted bg-muted/50 text-muted-foreground",
+  "Em trânsito": "border-primary/20 bg-primary/10 text-primary",
+  "Saiu para entrega": "border-primary/20 bg-primary/10 text-primary",
+  Entregue: "border-green-600/20 bg-green-600/10 text-green-600",
+  Atrasado: "border-destructive/20 bg-destructive/10 text-destructive",
+  "Em pausa": "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  "Retenção aduaneira": "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
 };
 
 type ShipmentDetailsProps = {
@@ -43,32 +55,32 @@ type ShipmentDetailsProps = {
 
 function getContactLabel(mode: Shipment["mode"]) {
   if (mode === "land") {
-    return "Call Driver";
+    return "Ligar para motorista";
   }
 
   if (mode === "air") {
-    return "Call Airline Support";
+    return "Ligar para suporte aéreo";
   }
 
-  return "Call Captain";
+  return "Ligar para o capitão";
 }
 
 function getTransportNumberLabel(mode: Shipment["mode"]) {
   if (mode === "land") {
-    return "Vehicle number";
+    return "Número do veículo";
   }
 
   if (mode === "air") {
-    return "Flight number";
+    return "Número do voo";
   }
 
-  return "Vessel number";
+  return "Número do navio";
 }
 
 function EmptyShipmentOverview() {
   return (
     <div className="grid min-h-48 place-items-center rounded-lg border border-dashed text-muted-foreground text-sm">
-      Select a shipment to view details.
+      Selecione um envio para ver os detalhes.
     </div>
   );
 }
@@ -83,7 +95,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="flex items-center gap-2">
           <h1 className="font-medium text-lg tabular-nums tracking-tight sm:text-xl">#{shipment.id}</h1>
-          <Button variant="ghost" size="icon-sm" aria-label="Copy shipment ID">
+          <Button variant="ghost" size="icon-sm" aria-label="Copiar ID do envio">
             <Copy />
           </Button>
         </div>
@@ -94,7 +106,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
             {shipment.status}
           </Badge>
           <span className="text-muted-foreground">·</span>
-          <span className="text-foreground tabular-nums">{shipment.progress}% complete</span>
+          <span className="text-foreground tabular-nums">{shipment.progress}% concluído</span>
           <span className="text-muted-foreground">·</span>
           <span className="text-foreground tabular-nums">
             ETA: {shipment.eta} {shipment.etaMeta}
@@ -132,7 +144,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
 
       <div className="flex flex-col gap-8">
         <div className="flex items-start justify-between gap-4">
-          <h2 className="font-medium">Cargo details</h2>
+          <h2 className="font-medium">Detalhes da carga</h2>
 
           <Button variant="outline" size="sm">
             <ContactIcon data-icon="inline-start" />
@@ -147,14 +159,14 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="text-muted-foreground text-xs leading-none md:text-sm">Total weight</div>
+            <div className="text-muted-foreground text-xs leading-none md:text-sm">Peso total</div>
             <div className="text-sm leading-none">{shipment.weight}</div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="text-muted-foreground text-xs leading-none md:text-sm">Transport mode</div>
+            <div className="text-muted-foreground text-xs leading-none md:text-sm">Modo de transporte</div>
             <div className="text-sm capitalize leading-none">
-              {shipment.mode} · {shipment.routeType}
+              {transportModeLabels[shipment.mode]} · {routeTypeLabels[shipment.routeType]}
             </div>
           </div>
 
@@ -165,7 +177,7 @@ function ShipmentOverview({ shipment }: { shipment: Shipment }) {
 
           <div className="flex flex-col gap-2 md:text-right">
             <div className="text-muted-foreground text-xs leading-none md:text-sm">Status</div>
-            <div className="text-sm leading-none">{shipment.progress}% complete</div>
+            <div className="text-sm leading-none">{shipment.progress}% concluído</div>
           </div>
         </div>
       </div>
@@ -227,19 +239,19 @@ export function ShipmentDetails({ shipment }: ShipmentDetailsProps) {
               variant="line"
             >
               <TabsTrigger className="flex-none" value="overview">
-                Overview
+                Visão geral
               </TabsTrigger>
               <TabsTrigger className="flex-none" value="route">
-                Route
+                Rota
               </TabsTrigger>
               <TabsTrigger className="flex-none" value="cargo">
-                Cargo
+                Carga
               </TabsTrigger>
               <TabsTrigger className="flex-none" value="documents">
-                Documents
+                Documentos
               </TabsTrigger>
               <TabsTrigger className="flex-none" value="activity">
-                Activity
+                Atividade
               </TabsTrigger>
             </TabsList>
             <TabsContent className="min-h-0 overflow-auto p-4" value="overview">
@@ -247,22 +259,22 @@ export function ShipmentDetails({ shipment }: ShipmentDetailsProps) {
             </TabsContent>
             <TabsContent className="p-4" value="route">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
-                Route view coming soon.
+                Visualização da rota em breve.
               </div>
             </TabsContent>
             <TabsContent className="p-4" value="cargo">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
-                Cargo view coming soon.
+                Visualização da carga em breve.
               </div>
             </TabsContent>
             <TabsContent className="p-4" value="documents">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
-                Documents view coming soon.
+                Visualização de documentos em breve.
               </div>
             </TabsContent>
             <TabsContent className="p-4" value="activity">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
-                Activity view coming soon.
+                Visualização da atividade em breve.
               </div>
             </TabsContent>
           </Tabs>

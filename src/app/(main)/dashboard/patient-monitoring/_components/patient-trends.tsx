@@ -21,7 +21,7 @@ interface VitalTrendChartProps {
 
 const trendChartConfig = {
   value: {
-    label: "Value",
+    label: "Valor",
     color: "currentColor",
   },
 } satisfies ChartConfig;
@@ -113,7 +113,7 @@ export function PatientTrends({ patient }: PatientTrendsProps) {
   return (
     <div className="grid h-full min-h-36 xl:grid-cols-[minmax(0,1fr)_13.5rem]">
       <div className="min-w-0 border-border xl:border-r">
-        <TrendStrip kind="heart-rate" label="HR" patient={patient} unit="bpm" value={patient.heartRate} />
+        <TrendStrip kind="heart-rate" label="FC" patient={patient} unit="bpm" value={patient.heartRate} />
         <TrendStrip kind="spo2" label="SpO₂" patient={patient} unit="%" value={patient.spo2} />
         <TrendStrip kind="map" label="MAP" patient={patient} unit="mmHg" value={patient.arterialMap} />
         <div className="grid grid-cols-[4rem_2rem_minmax(0,1fr)_2.5rem] gap-1 py-0.5">
@@ -128,7 +128,7 @@ export function PatientTrends({ patient }: PatientTrendsProps) {
         </div>
       </div>
       <div className="px-3 py-2">
-        <div className="mb-2 font-medium text-xs">Recent events</div>
+        <div className="mb-2 font-medium text-xs">Eventos recentes</div>
         <div className="flex flex-col gap-2">
           {patient.recentEvents.map((event) => (
             <div className="grid grid-cols-[3rem_1fr] text-[11px]" key={`${event.time}-${event.label}`}>

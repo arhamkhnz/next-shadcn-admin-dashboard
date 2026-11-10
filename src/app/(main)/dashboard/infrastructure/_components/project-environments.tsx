@@ -54,7 +54,7 @@ export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
         <div className="flex w-full items-center justify-between gap-2 sm:ml-auto sm:w-auto sm:justify-end">
           <Button variant="ghost" size="sm" className="-ml-1.5 sm:ml-0">
             <Plus data-icon="inline-start" />
-            Add Environment
+            Adicionar ambiente
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -67,31 +67,31 @@ export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
                 {group.rows.length > 0 ? (
                   <DropdownMenuItem>
                     <FileText />
-                    Activity Logs
+                    Registros de atividade
                   </DropdownMenuItem>
                 ) : null}
                 <DropdownMenuItem>
                   <Terminal />
-                  Open Console
+                  Abrir console
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Settings />
-                  Project Settings
+                  Configurações do projeto
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <RefreshCw />
-                  Sync Status
+                  Sincronizar status
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Bell />
-                  Manage Alerts
+                  Gerenciar alertas
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <Copy />
-                  Copy Project ID
+                  Copiar ID do projeto
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -125,16 +125,16 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
           <TableRow>
             <TableHead className="font-medium">
               <span className="inline-flex items-center gap-1">
-                Domain <ArrowUpDown className="size-4" />
+                Domínio <ArrowUpDown className="size-4" />
               </span>
             </TableHead>
-            <TableHead>Platform</TableHead>
-            <TableHead>Environment</TableHead>
-            <TableHead>Health</TableHead>
-            <TableHead>Latency</TableHead>
+            <TableHead>Plataforma</TableHead>
+            <TableHead>Ambiente</TableHead>
+            <TableHead>Saúde</TableHead>
+            <TableHead>Latência</TableHead>
             <TableHead>Uptime</TableHead>
-            <TableHead>Resources</TableHead>
-            <TableHead>Server</TableHead>
+            <TableHead>Recursos</TableHead>
+            <TableHead>Servidor</TableHead>
             <TableHead />
           </TableRow>
         </TableHeader>
@@ -154,10 +154,10 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
               </TableCell>
               <TableCell>
                 <Badge
-                  variant={row.environment === "Expired" ? "destructive" : "secondary"}
+                  variant={row.environment === "Expirado" ? "destructive" : "secondary"}
                   className={cn(
                     "rounded-sm px-1.5 py-0.5",
-                    row.environment === "Production" && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+                    row.environment === "Produção" && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
                     row.environment === "Staging" && "bg-sky-500/10 text-sky-600 dark:text-sky-400",
                   )}
                 >
@@ -197,7 +197,7 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                 <div className="grid grid-cols-3 gap-4">
                   <ResourceMeter label="CPU" value={row.resources.cpu} />
                   <ResourceMeter label="RAM" value={row.resources.ram} />
-                  <ResourceMeter label="Disk" value={row.resources.disk} />
+                  <ResourceMeter label="Disco" value={row.resources.disk} />
                 </div>
               </TableCell>
               <TableCell>
@@ -223,11 +223,11 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                     <DropdownMenuGroup>
                       <DropdownMenuItem>
                         <FileText />
-                        View Logs
+                        Ver registros
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Terminal />
-                        Open Console
+                        Abrir console
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <RefreshCw />
@@ -289,7 +289,7 @@ function EmptyProjectState() {
     <div className="flex min-h-24 items-center justify-center border-t bg-muted/50 p-4">
       <div className="flex items-center gap-2">
         <CircleDashed className="size-4" />
-        <p className="font-medium text-sm">No environments in this project</p>
+        <p className="font-medium text-sm">Nenhum ambiente neste projeto</p>
       </div>
     </div>
   );

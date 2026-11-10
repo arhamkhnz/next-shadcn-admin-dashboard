@@ -166,13 +166,26 @@ function createTrendWindow(patient: PatientRecord, definition: TrendDefinition, 
   });
 }
 
+const trendKindLabels = {
+  "heart-rate": "FC",
+  map: "MAP",
+  spo2: "SpO₂",
+} satisfies Record<TrendKind, string>;
+
+const waveformKindLabels = {
+  arterial: "ART",
+  ecg: "ECG",
+  pleth: "Pleth",
+  respiration: "respiração",
+} satisfies Record<WaveformKind, string>;
+
 export function usePatientTrendSeries({ kind, patient }: PatientTrendSeriesOptions) {
   const tick = useTrendTick();
   const definition = trendDefinitions[kind];
   const data = useMemo(() => createTrendWindow(patient, definition, tick), [definition, patient, tick]);
 
   return {
-    ariaLabel: `${patient.bed} ${kind} trend`,
+    ariaLabel: `Leito ${patient.bed}: tendência de ${trendKindLabels[kind]}`,
     data,
     domain: definition.domain,
     ticks: definition.ticks,
@@ -194,7 +207,7 @@ export function usePatientWaveformSeries({
   );
 
   return {
-    ariaLabel: `${patient.bed} ${lead} ${kind} waveform`,
+    ariaLabel: `Leito ${patient.bed}: forma de onda ${waveformKindLabels[kind]}${kind === "ecg" ? `, derivação ${lead}` : ""}`,
     data,
     domain: getSignalDomain(patient, kind),
   };

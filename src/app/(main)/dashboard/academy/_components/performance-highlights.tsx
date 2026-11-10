@@ -13,50 +13,50 @@ const performanceHighlights = [
     className: "G11A",
     start: 1.25,
     duration: 1.45,
-    subject: "Pure Math",
+    subject: "Matemática",
     score: 84,
     students: [
-      { initials: "OD", name: "Olivia Davis", achievement: "Top Performer", score: 96 },
-      { initials: "EM", name: "Ethan Miller", achievement: "Problem-Solving Excellence", score: 91 },
-      { initials: "SW", name: "Sophia Wilson", achievement: "Most Improved", score: 88 },
+      { initials: "OD", name: "Olivia Davis", achievement: "Melhor desempenho", score: 96 },
+      { initials: "EM", name: "Ethan Miller", achievement: "Excelência em resolução de problemas", score: 91 },
+      { initials: "SW", name: "Sophia Wilson", achievement: "Maior evolução", score: 88 },
     ],
   },
   {
     className: "G11B",
     start: 0.72,
     duration: 1.75,
-    subject: "Literature",
+    subject: "Literatura",
     score: 78,
-    students: [{ initials: "IA", name: "Isabella Anderson", achievement: "Critical Analysis Award", score: 93 }],
+    students: [{ initials: "IA", name: "Isabella Anderson", achievement: "Prêmio de análise crítica", score: 93 }],
   },
   {
     className: "G11C",
     start: 1.35,
     duration: 1.9,
-    subject: "Physics",
+    subject: "Física",
     score: 80,
     students: [
-      { initials: "AB", name: "Alexander Brown", achievement: "Top Performer", score: 95 },
-      { initials: "MG", name: "Mia Garcia", achievement: "Laboratory Excellence", score: 92 },
-      { initials: "NM", name: "Noah Martinez", achievement: "Most Improved", score: 87 },
+      { initials: "AB", name: "Alexander Brown", achievement: "Melhor desempenho", score: 95 },
+      { initials: "MG", name: "Mia Garcia", achievement: "Excelência em laboratório", score: 92 },
+      { initials: "NM", name: "Noah Martinez", achievement: "Maior evolução", score: 87 },
     ],
   },
   {
     className: "G11D",
     start: 2.22,
     duration: 1.66,
-    subject: "History",
+    subject: "História",
     score: 73,
     students: [
-      { initials: "ET", name: "Emma Taylor", achievement: "Research Excellence", score: 90 },
-      { initials: "WJ", name: "William Johnson", achievement: "Consistent Performer", score: 86 },
+      { initials: "ET", name: "Emma Taylor", achievement: "Excelência em pesquisa", score: 90 },
+      { initials: "WJ", name: "William Johnson", achievement: "Desempenho consistente", score: 86 },
     ],
   },
 ];
 
 const chartConfig = {
   duration: {
-    label: "Score",
+    label: "Nota",
     color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
@@ -167,9 +167,9 @@ export function PerformanceHighlights() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="text-sm">Performance Highlights</CardTitle>
+        <CardTitle className="text-sm">Destaques de desempenho</CardTitle>
         <CardAction className="flex items-center gap-1 text-muted-foreground text-xs">
-          View Insights <ArrowRight className="size-4" />
+          Ver insights <ArrowRight className="size-4" />
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -184,7 +184,7 @@ export function PerformanceHighlights() {
             <XAxis
               axisLine={false}
               domain={[0, 4]}
-              tickFormatter={(value) => ["Mon", "Tue", "Wed", "Thu", "Fri"][Number(value)] ?? ""}
+              tickFormatter={(value) => ["Seg", "Ter", "Qua", "Qui", "Sex"][Number(value)] ?? ""}
               tickLine={false}
               tickMargin={10}
               ticks={[0, 1, 2, 3, 4]}
