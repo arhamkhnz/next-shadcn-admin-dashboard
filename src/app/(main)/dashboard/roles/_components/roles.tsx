@@ -165,7 +165,7 @@ export function Roles({ roles }: { roles: Role[] }) {
                     <SelectContent position="popper" align="start">
                       <SelectGroup>
                         <SelectItem value="Todos">Todos</SelectItem>
-                        <SelectItem value="System">Sistema</SelectItem>
+                        <SelectItem value="Sistema">Sistema</SelectItem>
                         <SelectItem value="Jane Doe">Jane Doe</SelectItem>
                         <SelectItem value="Alex Kim">Alex Kim</SelectItem>
                         <SelectItem value="Chris Lee">Chris Lee</SelectItem>

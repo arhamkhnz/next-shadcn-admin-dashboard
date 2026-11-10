@@ -2,6 +2,7 @@
 
 import { format } from "date-fns/format";
 import { ptBR } from "date-fns/locale";
+import { parseISO } from "date-fns/parseISO";
 import {
   Building2,
   Calendar,
@@ -120,7 +121,7 @@ export function ChatProfileDetails({ contact, onClose }: ChatProfileDetailsProps
             <Calendar className="size-4 shrink-0 text-muted-foreground" />
             <span className="text-muted-foreground text-sm">Qualificado desde</span>
             <span className="ml-auto truncate text-sm">
-              {format(new Date(contact.qualifiedAt), "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
+              {format(parseISO(contact.qualifiedAt), "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
             </span>
           </div>
           <div className="flex items-center gap-2">

@@ -95,7 +95,7 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
 
       <div className="flex items-center border-border/70 border-t p-4">
         <div className="text-muted-foreground text-sm">
-          Showing {start}–{end} de {filteredRows.length} funções
+          Exibindo {start}–{end} de {filteredRows.length} funções
         </div>
 
         <div className="mx-auto">

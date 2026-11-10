@@ -20,7 +20,7 @@ export function FileManagerToolbar() {
   return (
     <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
       <InputGroup className="md:max-w-lg">
-        <InputGroupInput placeholder="Buscar arquivos e pastas…" aria-label="Search files and folders" />
+        <InputGroupInput placeholder="Buscar arquivos e pastas…" aria-label="Buscar arquivos e pastas" />
         <InputGroupAddon>
           <Search />
         </InputGroupAddon>

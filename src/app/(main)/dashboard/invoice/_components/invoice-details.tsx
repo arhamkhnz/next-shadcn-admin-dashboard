@@ -89,6 +89,7 @@ function DatePicker({ id, value, onChange }: { id: string; value: string; onChan
       </PopoverTrigger>
       <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
         <Calendar
+          locale={ptBR}
           className="w-full"
           mode="single"
           selected={date}
