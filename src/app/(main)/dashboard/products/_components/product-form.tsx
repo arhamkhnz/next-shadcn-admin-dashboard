@@ -26,8 +26,8 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ product, products, onClose, onSave }: ProductFormProps) {
-  const [category, setCategory] = useState<Category>(product?.category ?? "Clothing");
-  const [status, setStatus] = useState<ProductStatus>(product?.status ?? "Draft");
+  const [category, setCategory] = useState<Category>(product?.category ?? "Roupas");
+  const [status, setStatus] = useState<ProductStatus>(product?.status ?? "Rascunho");
   const [error, setError] = useState("");
 
   return (
@@ -39,8 +39,10 @@ export function ProductForm({ product, products, onClose, onSave }: ProductFormP
     >
       <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{product ? "Edit product" : "Add product"}</DialogTitle>
-          <DialogDescription>Update your demo catalog. Changes last until you reload this page.</DialogDescription>
+          <DialogTitle>{product ? "Editar produto" : "Adicionar produto"}</DialogTitle>
+          <DialogDescription>
+            Atualize seu catálogo de demonstração. As alterações valem até recarregar a página.
+          </DialogDescription>
         </DialogHeader>
         <form
           className="flex flex-col gap-5"
@@ -54,11 +56,11 @@ export function ProductForm({ product, products, onClose, onSave }: ProductFormP
             const price = Number(form.get("price"));
             const stock = Number(form.get("stock"));
             if (!name || !sku || !Number.isFinite(price) || price < 0 || !Number.isSafeInteger(stock) || stock < 0) {
-              setError("Enter a name, unique SKU, valid price, and whole-number stock quantity.");
+              setError("Informe um nome, SKU único, preço válido e quantidade de estoque em número inteiro.");
               return;
             }
             if (products.some((p) => p.id !== product?.id && p.sku.toUpperCase() === sku)) {
-              setError("This SKU is already in use. Enter a unique SKU.");
+              setError("Este SKU já está em uso. Informe um SKU único.");
               return;
             }
             onSave({
@@ -75,7 +77,7 @@ export function ProductForm({ product, products, onClose, onSave }: ProductFormP
         >
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="product-name">Product name</FieldLabel>
+              <FieldLabel htmlFor="product-name">Nome do produto</FieldLabel>
               <Input id="product-name" name="name" defaultValue={product?.name} required maxLength={100} />
             </Field>
             <Field data-invalid={!!error}>
@@ -94,7 +96,7 @@ export function ProductForm({ product, products, onClose, onSave }: ProductFormP
             </Field>
             <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field>
-                <FieldLabel htmlFor="product-category">Category</FieldLabel>
+                <FieldLabel htmlFor="product-category">Categoria</FieldLabel>
                 <Select value={category} onValueChange={(value) => setCategory(value as Category)}>
                   <SelectTrigger id="product-category" className="w-full">
                     <SelectValue />
@@ -128,7 +130,7 @@ export function ProductForm({ product, products, onClose, onSave }: ProductFormP
                 </Select>
               </Field>
               <Field>
-                <FieldLabel htmlFor="product-price">Price (USD)</FieldLabel>
+                <FieldLabel htmlFor="product-price">Preço (USD)</FieldLabel>
                 <Input
                   id="product-price"
                   name="price"
@@ -141,7 +143,7 @@ export function ProductForm({ product, products, onClose, onSave }: ProductFormP
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor="product-stock">Stock quantity</FieldLabel>
+                <FieldLabel htmlFor="product-stock">Quantidade em estoque</FieldLabel>
                 <Input
                   id="product-stock"
                   name="stock"
@@ -158,10 +160,10 @@ export function ProductForm({ product, products, onClose, onSave }: ProductFormP
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="outline">
-                Cancel
+                Cancelar
               </Button>
             </DialogClose>
-            <Button type="submit">{product ? "Save changes" : "Add product"}</Button>
+            <Button type="submit">{product ? "Salvar alterações" : "Adicionar produto"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

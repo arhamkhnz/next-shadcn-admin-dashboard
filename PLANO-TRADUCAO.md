@@ -112,6 +112,10 @@ Tradução não deve alterar comportamento, filtros, ordenação ou teclas de at
 | VIP Customers / Orders & Returns / Product Feedback | Clientes VIP / Pedidos e devoluções / Feedback de produto |
 | Qualified / At-Risk / Lead | Qualificado / Em risco / Lead |
 | Internal note | Nota interna |
+| Products / Inventory / Units sold | Produtos / Estoque / Vendidos |
+| Draft / Archived / Out of stock | Rascunho / Arquivado / Sem estoque |
+| Duplicate / Cover image | Duplicar / Imagem de capa |
+| Owner | Responsável |
 
 **Ficam em inglês por consenso do Lote A:** Retargeting, Onboarding, design system, "Q" → "T"
 (roadmap T2), formato "3m 12s", marcas dos mocks (Product Hunt, Linear Plus Plan, Ledger Nano X).

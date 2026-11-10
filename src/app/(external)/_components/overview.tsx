@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const includedScreens = [
-  { name: "Analytics", href: "/dashboard/analytics" },
+  { name: "Análises", href: "/dashboard/analytics" },
   { name: "CRM", href: "/dashboard/crm" },
   { name: "Financeiro", href: "/dashboard/finance" },
   { name: "E-commerce", href: "/dashboard/ecommerce" },

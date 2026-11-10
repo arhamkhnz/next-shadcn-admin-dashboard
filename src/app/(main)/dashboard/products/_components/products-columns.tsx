@@ -19,9 +19,9 @@ import type { DataTableFeatures } from "@/lib/data-table-features";
 import { currency, number, type Product, type ProductStatus } from "./data";
 
 const statusColors: Record<ProductStatus, string> = {
-  Active: "bg-emerald-200 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-400",
-  Draft: "bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
-  Archived: "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+  Ativo: "bg-emerald-200 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-400",
+  Rascunho: "bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
+  Arquivado: "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
 };
 
 export function createProductsColumns(
@@ -46,7 +46,7 @@ export function createProductsColumns(
           {({ checked, disabled }) => (
             <Checkbox
               className="mx-auto"
-              aria-label="Select all products on this page"
+              aria-label="Selecionar todos os produtos desta página"
               checked={checked}
               disabled={disabled}
               onCheckedChange={(value) => table.toggleAllPageRowsSelected(value === true)}
@@ -59,7 +59,7 @@ export function createProductsColumns(
           {(checked) => (
             <Checkbox
               className="mx-auto"
-              aria-label={`Select ${row.original.name}`}
+              aria-label={`Selecionar ${row.original.name}`}
               checked={checked}
               onCheckedChange={(value) => row.toggleSelected(value === true)}
             />
@@ -77,7 +77,7 @@ export function createProductsColumns(
     },
     {
       accessorKey: "name",
-      header: "Product",
+      header: "Produto",
       cell: ({ row }) => (
         <button
           type="button"
@@ -93,7 +93,7 @@ export function createProductsColumns(
       header: "SKU",
       cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.sku}</span>,
     },
-    { accessorKey: "category", header: "Category", filterFn: "equalsString" },
+    { accessorKey: "category", header: "Categoria", filterFn: "equalsString" },
     {
       accessorKey: "status",
       header: "Status",
@@ -106,7 +106,7 @@ export function createProductsColumns(
     },
     {
       accessorKey: "stock",
-      header: "Inventory",
+      header: "Estoque",
       cell: ({ row }) => (
         <Badge
           variant="secondary"
@@ -117,11 +117,11 @@ export function createProductsColumns(
             "bg-sky-200 text-sky-800 dark:bg-sky-950 dark:text-sky-400": row.original.stock > 10,
           })}
         >
-          {row.original.stock === 0 && "Out of stock"}
+          {row.original.stock === 0 && "Sem estoque"}
           {row.original.stock > 0 && (
             <>
-              {number.format(row.original.stock)} in stock
-              {row.original.stock <= 10 && " · Low stock"}
+              {number.format(row.original.stock)} em estoque
+              {row.original.stock <= 10 && " · Estoque baixo"}
             </>
           )}
         </Badge>
@@ -129,12 +129,12 @@ export function createProductsColumns(
     },
     {
       accessorKey: "price",
-      header: "Price",
+      header: "Preço",
       cell: ({ row }) => <span className="tabular-nums">{currency.format(row.original.price)}</span>,
     },
     {
       accessorKey: "sold",
-      header: "Units sold",
+      header: "Vendidos",
       cell: ({ row }) => <span className="tabular-nums">{number.format(row.original.sold)}</span>,
     },
     {
@@ -142,14 +142,14 @@ export function createProductsColumns(
       size: 56,
       minSize: 56,
       maxSize: 56,
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">Ações</span>,
       enableSorting: false,
       enableHiding: false,
       cell: ({ row }) => (
         <div className="flex justify-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${row.original.name}`}>
+              <Button variant="ghost" size="icon-sm" aria-label={`Ações para ${row.original.name}`}>
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -157,7 +157,7 @@ export function createProductsColumns(
               <DropdownMenuGroup>
                 <DropdownMenuItem onSelect={() => onEdit(row.original)}>
                   <Pencil />
-                  Edit product
+                  Editar produto
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
@@ -167,7 +167,7 @@ export function createProductsColumns(
                   }}
                 >
                   <Copy />
-                  Duplicate
+                  Duplicar
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>

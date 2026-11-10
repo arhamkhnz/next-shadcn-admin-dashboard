@@ -39,12 +39,12 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                     {column.title}
                     <span className="text-muted-foreground font-normal tabular-nums">
                       {tasks.length}
-                      <span className="sr-only"> tasks</span>
+                      <span className="sr-only"> tarefas</span>
                     </span>
                     {highPriorityCount > 0 && (
                       <span className="text-muted-foreground ml-auto hidden items-center gap-1.5 text-xs font-normal sm:flex">
                         <Flame className="text-destructive size-3.5" aria-hidden="true" />
-                        {highPriorityCount} high priority
+                        {highPriorityCount} alta prioridade
                       </span>
                     )}
                   </CollapsibleTrigger>
@@ -53,7 +53,7 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                   variant="ghost"
                   size="icon-sm"
                   className="text-muted-foreground"
-                  aria-label={`Add task to ${column.title}`}
+                  aria-label={`Adicionar tarefa em ${column.title}`}
                 >
                   <Plus />
                 </Button>
@@ -61,13 +61,13 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                   variant="ghost"
                   size="icon-sm"
                   className="text-muted-foreground"
-                  aria-label={`${column.title} group actions`}
+                  aria-label={`Ações do grupo ${column.title}`}
                 >
                   <MoreVertical />
                 </Button>
               </div>
               <CollapsibleContent>
-                <ul aria-label={`${column.title} tasks`}>
+                <ul aria-label={`Tarefas de ${column.title}`}>
                   {tasks.map((task, index) => {
                     const priority = priorityBadgeConfig[task.priority];
                     const PriorityIcon = priority.icon;
@@ -77,10 +77,10 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                         <Badge
                           variant={priority.variant}
                           className={cn("size-5 rounded-sm p-0", priority.className)}
-                          title={`${task.priority} priority`}
+                          title={`Prioridade ${task.priority}`}
                         >
                           <PriorityIcon aria-hidden="true" />
-                          <span className="sr-only">{task.priority} priority</span>
+                          <span className="sr-only">Prioridade {task.priority}</span>
                         </Badge>
                         <div className="flex min-w-0 flex-1 flex-col items-start gap-2.5 sm:flex-row sm:items-center sm:gap-4">
                           <span className="w-full truncate text-sm font-normal sm:w-auto sm:flex-1" title={task.title}>
@@ -110,21 +110,23 @@ export function KanbanList({ board, columns }: { board: BoardState; columns: rea
                             })}
                         </span>
                         <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
-                          <span className="sr-only">Due </span>
+                          <span className="sr-only">Vencimento </span>
                           {task.dueDate}
                         </span>
                         <div className="flex shrink-0 items-center gap-1.5" title={task.owner.name}>
                           <Avatar className={cn("size-6 after:rounded-sm", task.owner.tone)}>
                             <AvatarFallback className="rounded-sm text-[11px]">
                               <span aria-hidden="true">{getInitials(task.owner.name)}</span>
-                              <span className="sr-only">Assigned to {task.owner.name}</span>
+                              <span className="sr-only">Atribuído a {task.owner.name}</span>
                             </AvatarFallback>
                           </Avatar>
                         </div>
                       </SortableListTask>
                     );
                   })}
-                  {tasks.length === 0 && <li className="text-muted-foreground px-4 py-6 text-sm lg:px-6">No tasks.</li>}
+                  {tasks.length === 0 && (
+                    <li className="text-muted-foreground px-4 py-6 text-sm lg:px-6">Nenhuma tarefa.</li>
+                  )}
                 </ul>
               </CollapsibleContent>
             </Collapsible>
