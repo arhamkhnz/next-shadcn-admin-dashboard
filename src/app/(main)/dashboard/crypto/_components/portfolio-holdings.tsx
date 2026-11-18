@@ -4,14 +4,14 @@ import { SimpleIcon } from "@/components/simple-icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { cryptoAssets, totalBalanceCents } from "./data";
+import { cryptoAssets, portfolioBalanceUsd } from "./data";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 const amountFormatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 8 });
-const formattedTotalBalance = currencyFormatter.format(totalBalanceCents / 100);
+const formattedTotalBalance = currencyFormatter.format(portfolioBalanceUsd);
 const [balanceWhole, balanceFraction] = formattedTotalBalance.split(".");
 
-export function HoldingsStrip() {
+export function PortfolioHoldings() {
   return (
     <section aria-label="Portfolio holdings" className="min-w-0">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-12">
@@ -40,9 +40,11 @@ export function HoldingsStrip() {
                 <ArrowUpFromLine data-icon="inline-start" />
                 Withdraw
               </Button>
-              <Button size="sm" variant="outline" type="button" className="col-span-2">
-                View activity
-                <ArrowRight data-icon="inline-end" />
+              <Button size="sm" variant="outline" asChild className="col-span-2">
+                <a href="#crypto-activity">
+                  View activity
+                  <ArrowRight data-icon="inline-end" />
+                </a>
               </Button>
             </div>
           </CardContent>
@@ -60,7 +62,7 @@ export function HoldingsStrip() {
                 {amountFormatter.format(holding.amount)} {holding.symbol}
               </p>
               <p className="text-2xl leading-none tracking-tight tabular-nums">
-                {currencyFormatter.format(holding.valueCents / 100)}
+                {currencyFormatter.format(holding.valueUsd)}
               </p>
             </CardContent>
           </Card>

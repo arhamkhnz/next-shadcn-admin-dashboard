@@ -1,24 +1,21 @@
 "use client";
 
+import { useState } from "react";
+
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-import { type CryptoAsset, chartColors, cryptoAssets, getOrderBook } from "./data";
+import { type CryptoAsset, chartColors, cryptoAssets, orderBooks } from "./data";
 
 const amountFormatter = new Intl.NumberFormat("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
 const totalFormatter = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-export function OrderBook({
-  asset,
-  onAssetChange,
-}: {
-  asset: CryptoAsset;
-  onAssetChange: (symbol: CryptoAsset["symbol"]) => void;
-}) {
-  const book = getOrderBook(asset);
-  const asks = [...book.asks].reverse();
+export function OrderBook() {
+  const [assetSymbol, setAssetSymbol] = useState<CryptoAsset["symbol"]>("BTC");
+  const asset = cryptoAssets.find((item) => item.symbol === assetSymbol) ?? cryptoAssets[0];
+  const book = orderBooks[assetSymbol];
   const priceFormatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: asset.priceUsd < 10 ? 4 : 2,
     maximumFractionDigits: asset.priceUsd < 10 ? 4 : 2,
@@ -32,7 +29,7 @@ export function OrderBook({
           Last price <span className="text-foreground ml-1 tabular-nums">${priceFormatter.format(asset.priceUsd)}</span>
         </CardDescription>
         <CardAction>
-          <Select value={asset.symbol} onValueChange={(value) => onAssetChange(value as CryptoAsset["symbol"])}>
+          <Select value={asset.symbol} onValueChange={(value) => setAssetSymbol(value as CryptoAsset["symbol"])}>
             <SelectTrigger size="sm" aria-label="Order book pair">
               <SelectValue />
             </SelectTrigger>
@@ -53,7 +50,7 @@ export function OrderBook({
           <Separator orientation="vertical" className="absolute inset-y-0 left-1/2 hidden h-full sm:block" />
           {(["bids", "asks"] as const).map((side) => {
             const isBuy = side === "bids";
-            const levels = isBuy ? book.bids : asks;
+            const levels = book[side];
             const color = isBuy ? chartColors.up : chartColors.down;
             const direction = isBuy ? "left" : "right";
 
@@ -85,7 +82,7 @@ export function OrderBook({
                   </TableHeader>
                   <TableBody>
                     {levels.map((level) => {
-                      const width = (level.totalUsd / book.maxTotal) * 100;
+                      const width = level.depthPercent;
 
                       return (
                         <TableRow

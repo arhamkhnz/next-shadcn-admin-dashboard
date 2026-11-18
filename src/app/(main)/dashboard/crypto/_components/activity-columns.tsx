@@ -5,9 +5,7 @@ import { SimpleIcon } from "@/components/simple-icon";
 import { Badge } from "@/components/ui/badge";
 import type { DataTableFeatures } from "@/lib/data-table-features";
 
-import { chartColors, cryptoAssets, type recentActivity } from "./data";
-
-type AccountActivity = (typeof recentActivity)[number];
+import { type AccountActivity, chartColors, cryptoAssets } from "./data";
 
 const quantityFormatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 8 });
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -47,7 +45,7 @@ export const activityColumns: ColumnDef<DataTableFeatures, AccountActivity>[] = 
             <SimpleIcon icon={asset.icon} className={cn("size-4", asset.iconClassName)} aria-hidden="true" />
           </div>
           <span className="font-medium">{asset.name}</span>
-          <span className="text-muted-foreground text-xs">{asset.symbol}</span>
+          {asset.name !== asset.symbol && <span className="text-muted-foreground text-xs">{asset.symbol}</span>}
         </div>
       );
     },

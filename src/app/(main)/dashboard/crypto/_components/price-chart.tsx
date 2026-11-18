@@ -27,7 +27,7 @@ import {
   chartColors,
   chartRanges,
   cryptoAssets,
-  getMarketCandles,
+  generateMarketCandles,
   type MarketCandle,
 } from "./data";
 
@@ -54,7 +54,6 @@ const fullDateFormatter = new Intl.DateTimeFormat("en-US", {
 const dayFormatter = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 const hourFormatter = new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
 
-// Recharts' candlestick example uses a range Bar for the body and ErrorBar for the wick.
 const candleBody = (entry: MarketCandle): [number, number] => [
   Math.min(entry.open, entry.close),
   Math.max(entry.open, entry.close),
@@ -152,24 +151,23 @@ function ReferencePriceLabel({
   );
 }
 
-export function MarketChart() {
+export function PriceChart() {
   const [assetSymbol, setAssetSymbol] = useState<CryptoAsset["symbol"]>("BTC");
-  const [rangeValue, setRangeValue] = useState<ChartRange["value"]>("1D");
+  const [rangeValue, setRangeValue] = useState<ChartRange>("1D");
   const asset = cryptoAssets.find((item) => item.symbol === assetSymbol);
-  const range = chartRanges.find((item) => item.value === rangeValue);
-  if (!asset || !range) return null;
+  if (!asset) return null;
 
-  const data = getMarketCandles(asset, range);
-  const last = data[data.length - 1];
-  if (!last) return null;
+  const data = generateMarketCandles(asset, rangeValue);
+  const latestCandle = data[data.length - 1];
+  if (!latestCandle) return null;
 
   const averageBuyPrice = asset.averageBuyPrice;
   const low = Math.min(averageBuyPrice, ...data.map((candle) => candle.low));
   const high = Math.max(averageBuyPrice, ...data.map((candle) => candle.high));
   const padding = (high - low) * 0.08;
-  const tickFormatter = (time: number) => (range.value === "1D" ? hourFormatter : dayFormatter).format(time);
+  const tickFormatter = (time: number) => (rangeValue === "1D" ? hourFormatter : dayFormatter).format(time);
   const referencePrices = [
-    { label: "Latest price", price: last.close, color: last.fill, dash: "3 3" },
+    { label: "Latest price", price: latestCandle.close, color: latestCandle.fill, dash: "3 3" },
     { label: "Average buy price", price: averageBuyPrice, color: chartColors.averageBuy, dash: "5 4" },
   ];
   const markerPrices = referencePrices.map((reference) => reference.price);
@@ -209,30 +207,32 @@ export function MarketChart() {
             size="sm"
             variant="outline"
             spacing={0}
-            value={range.value}
+            value={rangeValue}
             aria-label="Chart time range"
             onValueChange={(value) => {
-              const selectedRange = chartRanges.find((item) => item.value === value);
-              if (selectedRange) setRangeValue(selectedRange.value);
+              const selectedRange = chartRanges.find((item) => item === value);
+              if (selectedRange) setRangeValue(selectedRange);
             }}
           >
             {chartRanges.map((item) => (
-              <ToggleGroupItem key={item.value} value={item.value} className="min-w-10">
-                {item.value}
+              <ToggleGroupItem key={item} value={item} className="min-w-10">
+                {item}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
         </div>
         <div className="flex flex-col gap-1.5">
           <p className="text-muted-foreground text-xs">{asset.symbol}/USD</p>
-          <p className="text-2xl leading-none tracking-tight tabular-nums">{priceFormatter.format(last.close)}</p>
+          <p className="text-2xl leading-none tracking-tight tabular-nums">
+            {priceFormatter.format(latestCandle.close)}
+          </p>
         </div>
       </CardHeader>
       <CardContent>
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-72 w-full sm:h-80"
-          aria-label={`${asset.name} price chart, ${range.value}. Illustrative data.`}
+          aria-label={`${asset.name} price chart, ${rangeValue}. Illustrative data.`}
         >
           <ComposedChart data={data} margin={{ top: 8, right: 0, bottom: 0, left: 0 }}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />

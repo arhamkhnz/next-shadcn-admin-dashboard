@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -24,14 +23,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { dataTableFeatures } from "@/lib/data-table-features";
 
 import { activityColumns } from "./activity-columns";
-import { recentActivity } from "./data";
+import { accountActivities } from "./data";
 
-export function YourActivity() {
+export function AccountActivityTable() {
   const [globalFilter, setGlobalFilter] = useState("");
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const table = useTable({
     features: dataTableFeatures,
-    data: recentActivity,
+    data: accountActivities,
     columns: activityColumns,
     state: { globalFilter, pagination },
     onGlobalFilterChange: setGlobalFilter,
@@ -40,11 +39,6 @@ export function YourActivity() {
     getRowId: (row) => row.id,
   });
   const activityCount = table.getFilteredRowModel().rows.length;
-  const pageCount = Math.max(1, table.getPageCount());
-  const currentPage = pagination.pageIndex + 1;
-  const pageNumbers = Array.from(new Set([1, currentPage - 1, currentPage, currentPage + 1, pageCount]))
-    .filter((page) => page >= 1 && page <= pageCount)
-    .sort((a, b) => a - b);
   const firstRow = activityCount ? pagination.pageIndex * pagination.pageSize + 1 : 0;
   const lastRow = Math.min((pagination.pageIndex + 1) * pagination.pageSize, activityCount);
 
@@ -151,20 +145,19 @@ export function YourActivity() {
                   }}
                 />
               </PaginationItem>
-              {pageNumbers.map((page, index) => (
-                <PaginationItem key={page} className="flex items-center">
-                  {index > 0 && page - pageNumbers[index - 1] > 1 && <PaginationEllipsis />}
+              {table.getPageOptions().map((pageIndex) => (
+                <PaginationItem key={pageIndex}>
                   <PaginationLink
                     href="#crypto-activity"
                     size="icon-sm"
-                    aria-label={`Go to page ${page}`}
-                    isActive={currentPage === page}
+                    aria-label={`Go to page ${pageIndex + 1}`}
+                    isActive={pagination.pageIndex === pageIndex}
                     onClick={(event) => {
                       event.preventDefault();
-                      table.setPageIndex(page - 1);
+                      table.setPageIndex(pageIndex);
                     }}
                   >
-                    {page}
+                    {pageIndex + 1}
                   </PaginationLink>
                 </PaginationItem>
               ))}
