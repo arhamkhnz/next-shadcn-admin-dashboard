@@ -53,6 +53,7 @@ export function OrderBook() {
             const isBuy = side === "bids";
             const levels = isBuy ? book.bids : asks;
             const color = isBuy ? chartColors.up : chartColors.down;
+            const direction = isBuy ? "left" : "right";
 
             return (
               <section
@@ -89,7 +90,7 @@ export function OrderBook() {
                           key={level.price}
                           className="border-0"
                           style={{
-                            backgroundImage: `linear-gradient(to ${isBuy ? "left" : "right"}, color-mix(in oklab, ${color} 18%, transparent) ${width}%, transparent ${width}%)`,
+                            backgroundImage: `linear-gradient(to ${direction}, color-mix(in oklab, ${color} 14%, transparent) ${width}%, transparent 0)`,
                           }}
                         >
                           <TableCell className="px-(--card-spacing) py-3 text-left" style={{ color }}>
@@ -98,7 +99,7 @@ export function OrderBook() {
                           <TableCell className="px-(--card-spacing) py-3 text-right">
                             {amountFormatter.format(level.amount)}
                           </TableCell>
-                          <TableCell className="text-muted-foreground px-(--card-spacing) py-3 text-right">
+                          <TableCell className="px-(--card-spacing) py-3 text-right">
                             {totalFormatter.format(level.totalUsd)}
                           </TableCell>
                         </TableRow>
