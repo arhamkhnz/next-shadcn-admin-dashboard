@@ -73,7 +73,7 @@ export function HoldingsStrip() {
             <CardTitle className="leading-none group-data-[size=sm]/card:text-base">My portfolio</CardTitle>
             <CardDescription>{holdings.length} assets</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-1 flex-col justify-between">
+          <CardContent className="flex flex-1 flex-col justify-between gap-4">
             <div className="flex flex-col gap-2">
               <p className="text-muted-foreground text-sm leading-none">Total balance</p>
               <p className="text-3xl leading-none tracking-tight tabular-nums">
