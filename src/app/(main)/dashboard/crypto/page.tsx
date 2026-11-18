@@ -4,7 +4,9 @@ import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+import { displayCurrencies } from "./_components/data";
 import { HoldingsStrip } from "./_components/holdings-strip";
+import { MarketChart } from "./_components/market-chart";
 
 export const metadata: Metadata = {
   title: "Crypto Dashboard",
@@ -29,16 +31,11 @@ export default function Page() {
             </SelectTrigger>
             <SelectContent position="popper" align="end">
               <SelectGroup>
-                <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR" disabled>
-                  EUR
-                </SelectItem>
-                <SelectItem value="GBP" disabled>
-                  GBP
-                </SelectItem>
-                <SelectItem value="INR" disabled>
-                  INR
-                </SelectItem>
+                {displayCurrencies.map((currency) => (
+                  <SelectItem key={currency} value={currency} disabled={currency !== "USD"}>
+                    {currency}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -49,6 +46,7 @@ export default function Page() {
         </div>
       </div>
       <HoldingsStrip />
+      <MarketChart />
     </div>
   );
 }

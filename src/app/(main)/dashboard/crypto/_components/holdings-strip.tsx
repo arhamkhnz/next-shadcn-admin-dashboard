@@ -1,66 +1,13 @@
 import { ArrowDownToLine, ArrowRight, ArrowUpFromLine } from "lucide-react";
-import { siBitcoin, siEthereum, siLitecoin, siSolana, siTon, siXrp } from "simple-icons";
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { marketPrices } from "./market-prices";
-
-const holdings = [
-  {
-    symbol: "BTC",
-    name: "Bitcoin",
-    amount: 0.8,
-    priceUsd: marketPrices.BTC,
-    icon: siBitcoin,
-    iconClassName: "fill-orange-500",
-  },
-  {
-    symbol: "ETH",
-    name: "Ethereum",
-    amount: 10,
-    priceUsd: marketPrices.ETH,
-    icon: siEthereum,
-    iconClassName: "fill-indigo-400",
-  },
-  {
-    symbol: "SOL",
-    name: "Solana",
-    amount: 100,
-    priceUsd: marketPrices.SOL,
-    icon: siSolana,
-    iconClassName: "fill-teal-500",
-  },
-  {
-    symbol: "LTC",
-    name: "Litecoin",
-    amount: 25,
-    priceUsd: marketPrices.LTC,
-    icon: siLitecoin,
-    iconClassName: "fill-blue-500",
-  },
-  {
-    symbol: "XRP",
-    name: "XRP",
-    amount: 2000,
-    priceUsd: marketPrices.XRP,
-    icon: siXrp,
-    iconClassName: "fill-foreground",
-  },
-  {
-    symbol: "TON",
-    name: "Toncoin",
-    amount: 500,
-    priceUsd: marketPrices.TON,
-    icon: siTon,
-    iconClassName: "fill-sky-500",
-  },
-].map((holding) => ({ ...holding, valueCents: Math.round(holding.amount * holding.priceUsd * 100) }));
+import { cryptoAssets, totalBalanceCents } from "./data";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 const amountFormatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 8 });
-const totalBalanceCents = holdings.reduce((total, holding) => total + holding.valueCents, 0);
 const formattedTotalBalance = currencyFormatter.format(totalBalanceCents / 100);
 const [balanceWhole, balanceFraction] = formattedTotalBalance.split(".");
 
@@ -71,7 +18,7 @@ export function HoldingsStrip() {
         <Card size="sm" className="min-w-0 gap-4 sm:col-span-2 xl:col-span-3 xl:row-span-2">
           <CardHeader>
             <CardTitle className="leading-none group-data-[size=sm]/card:text-base">My portfolio</CardTitle>
-            <CardDescription>{holdings.length} assets</CardDescription>
+            <CardDescription>{cryptoAssets.length} assets</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-1 flex-col justify-between gap-4">
             <div className="flex flex-col gap-2">
@@ -100,7 +47,7 @@ export function HoldingsStrip() {
             </div>
           </CardContent>
         </Card>
-        {holdings.map((holding) => (
+        {cryptoAssets.map((holding) => (
           <Card size="sm" key={holding.symbol} className="min-w-0 xl:col-span-3">
             <CardHeader>
               <CardTitle>{holding.name}</CardTitle>
