@@ -143,10 +143,9 @@ export const sidebarItems: NavGroup[] = [
       {
         id: "crypto",
         title: "Crypto",
-        url: "/dashboard/coming-soon",
+        url: "/dashboard/crypto",
         icon: Bitcoin,
-        badge: "soon",
-        disabled: true,
+        badge: "new",
       },
       {
         id: "healthcare",
