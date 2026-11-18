@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { displayCurrencies } from "./_components/data";
 import { HoldingsStrip } from "./_components/holdings-strip";
 import { MarketChart } from "./_components/market-chart";
+import { OrderBook } from "./_components/order-book";
 
 export const metadata: Metadata = {
   title: "Crypto Dashboard",
@@ -47,6 +48,11 @@ export default function Page() {
       </div>
       <HoldingsStrip />
       <MarketChart />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+        <div className="min-w-0 lg:col-span-8">
+          <OrderBook />
+        </div>
+      </div>
     </div>
   );
 }

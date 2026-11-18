@@ -65,6 +65,92 @@ export const cryptoAssets = assets.map((asset) => ({
 
 export type CryptoAsset = (typeof cryptoAssets)[number];
 export const totalBalanceCents = cryptoAssets.reduce((total, asset) => total + asset.valueCents, 0);
+
+export type CryptoOrder = {
+  id: string;
+  time: string;
+  symbol: CryptoAsset["symbol"];
+  type: "Limit" | "Market";
+  side: "Buy" | "Sell";
+  price: number;
+  amount: number;
+  filled: number;
+  status: "Open" | "Partially filled" | "Filled" | "Cancelled";
+};
+
+export const cryptoOrders: CryptoOrder[] = [
+  {
+    id: "ORD-108",
+    time: "2026-11-18T12:20:00Z",
+    symbol: "BTC",
+    type: "Limit",
+    side: "Buy",
+    price: 74500,
+    amount: 0.05,
+    filled: 0,
+    status: "Open",
+  },
+  {
+    id: "ORD-107",
+    time: "2026-11-18T11:45:00Z",
+    symbol: "ETH",
+    type: "Limit",
+    side: "Sell",
+    price: 2300,
+    amount: 2,
+    filled: 0.5,
+    status: "Partially filled",
+  },
+  {
+    id: "ORD-106",
+    time: "2026-11-18T10:30:00Z",
+    symbol: "SOL",
+    type: "Limit",
+    side: "Buy",
+    price: 86,
+    amount: 20,
+    filled: 0,
+    status: "Open",
+  },
+  {
+    id: "ORD-105",
+    time: "2026-11-17T15:10:00Z",
+    symbol: "BTC",
+    type: "Market",
+    side: "Buy",
+    price: 73980,
+    amount: 0.1,
+    filled: 0.1,
+    status: "Filled",
+  },
+  {
+    id: "ORD-104",
+    time: "2026-11-17T09:25:00Z",
+    symbol: "XRP",
+    type: "Limit",
+    side: "Sell",
+    price: 1.25,
+    amount: 500,
+    filled: 0,
+    status: "Cancelled",
+  },
+  {
+    id: "ORD-103",
+    time: "2026-11-16T14:40:00Z",
+    symbol: "ETH",
+    type: "Market",
+    side: "Buy",
+    price: 2150,
+    amount: 3,
+    filled: 3,
+    status: "Filled",
+  },
+];
+
+export function isOpenOrder(order: CryptoOrder) {
+  return order.status === "Open" || order.status === "Partially filled";
+}
+
 export const displayCurrencies = ["USD", "EUR", "GBP", "INR"] as const;
 
 export const chartRanges = [
@@ -91,6 +177,32 @@ export const chartColors = {
   down: "var(--color-red-500)",
   averageBuy: "var(--color-amber-600)",
 };
+
+// Illustrative order-book levels, derived from the dashboard quote rather than a live exchange feed.
+export function getOrderBook(asset: CryptoAsset) {
+  const precision = asset.priceUsd < 10 ? 10000 : 100;
+  const step = Math.max(1 / precision, Math.round(asset.priceUsd * 0.0001 * precision) / precision);
+  const createSide = (direction: number) => {
+    let totalUsd = 0;
+    return Array.from({ length: 6 }, (_, index) => {
+      const price = Math.round((asset.priceUsd + direction * step * (index + 1)) * precision) / precision;
+      const amount = Number(
+        ((12000 / asset.priceUsd) * (0.65 + ((index * 7 + (direction > 0 ? 3 : 1)) % 11) / 10)).toFixed(4),
+      );
+      totalUsd += price * amount;
+      return { price, amount, totalUsd };
+    });
+  };
+  const asks = createSide(1);
+  const bids = createSide(-1);
+
+  return {
+    asks: asks.toReversed(),
+    bids,
+    spread: asks[0].price - bids[0].price,
+    maxTotal: Math.max(...asks.map((level) => level.totalUsd), ...bids.map((level) => level.totalUsd)),
+  };
+}
 
 // Deterministic illustration, not historical market data. Every range ends at the asset's quote.
 export function getMarketCandles(asset: CryptoAsset, range: ChartRange): MarketCandle[] {
