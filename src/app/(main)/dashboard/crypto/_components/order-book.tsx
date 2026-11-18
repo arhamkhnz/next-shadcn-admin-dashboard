@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
@@ -12,9 +10,13 @@ import { type CryptoAsset, chartColors, cryptoAssets, getOrderBook } from "./dat
 const amountFormatter = new Intl.NumberFormat("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
 const totalFormatter = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-export function OrderBook() {
-  const [symbol, setSymbol] = useState<CryptoAsset["symbol"]>("BTC");
-  const asset = cryptoAssets.find((item) => item.symbol === symbol) ?? cryptoAssets[0];
+export function OrderBook({
+  asset,
+  onAssetChange,
+}: {
+  asset: CryptoAsset;
+  onAssetChange: (symbol: CryptoAsset["symbol"]) => void;
+}) {
   const book = getOrderBook(asset);
   const asks = [...book.asks].reverse();
   const priceFormatter = new Intl.NumberFormat("en-US", {
@@ -30,7 +32,7 @@ export function OrderBook() {
           Last price <span className="text-foreground ml-1 tabular-nums">${priceFormatter.format(asset.priceUsd)}</span>
         </CardDescription>
         <CardAction>
-          <Select value={symbol} onValueChange={(value) => setSymbol(value as CryptoAsset["symbol"])}>
+          <Select value={asset.symbol} onValueChange={(value) => onAssetChange(value as CryptoAsset["symbol"])}>
             <SelectTrigger size="sm" aria-label="Order book pair">
               <SelectValue />
             </SelectTrigger>
