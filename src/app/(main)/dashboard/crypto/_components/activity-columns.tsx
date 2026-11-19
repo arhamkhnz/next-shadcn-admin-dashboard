@@ -5,9 +5,20 @@ import { SimpleIcon } from "@/components/simple-icon";
 import { Badge } from "@/components/ui/badge";
 import type { DataTableFeatures } from "@/lib/data-table-features";
 
-import { type AccountActivity, chartColors, cryptoAssets } from "./data";
+import { type AccountActivity, cryptoAssets } from "./data";
 
-const quantityFormatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 8 });
+const quantityFormatter = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 8 });
+const statusClasses = {
+  Completed: "bg-green-100 text-green-800 dark:bg-green-500/15 dark:text-green-400",
+  Pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-500/15 dark:text-yellow-300",
+};
+const activityClasses = {
+  Buy: "bg-teal-100 text-teal-800 dark:bg-teal-500/15 dark:text-teal-300",
+  Deposit: "bg-teal-100 text-teal-800 dark:bg-teal-500/15 dark:text-teal-300",
+  Sell: "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-400",
+  Withdrawal: "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-400",
+  Transfer: "bg-blue-100 text-blue-800 dark:bg-blue-500/15 dark:text-blue-300",
+};
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -16,12 +27,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   hour12: false,
   timeZone: "UTC",
 });
-
-function activityColor(type: AccountActivity["type"]) {
-  if (type === "Buy" || type === "Deposit") return chartColors.up;
-  if (type === "Sell" || type === "Withdrawal") return chartColors.down;
-  return undefined;
-}
 
 export const activityColumns: ColumnDef<DataTableFeatures, AccountActivity>[] = [
   {
@@ -53,17 +58,11 @@ export const activityColumns: ColumnDef<DataTableFeatures, AccountActivity>[] = 
   {
     accessorKey: "type",
     header: "Activity",
-    cell: ({ row }) => {
-      const color = activityColor(row.original.type);
-      return (
-        <Badge
-          variant="secondary"
-          style={color ? { color, backgroundColor: `color-mix(in oklab, ${color} 12%, transparent)` } : undefined}
-        >
-          {row.original.type}
-        </Badge>
-      );
-    },
+    cell: ({ row }) => (
+      <Badge variant="secondary" className={cn("rounded-sm", activityClasses[row.original.type])}>
+        {row.original.type}
+      </Badge>
+    ),
   },
   {
     accessorKey: "amount",
@@ -77,10 +76,12 @@ export const activityColumns: ColumnDef<DataTableFeatures, AccountActivity>[] = 
       else if (outgoing) sign = "−";
 
       return (
-        <div className="text-right font-medium tabular-nums" style={{ color: activityColor(type) }}>
-          {sign}
-          {quantityFormatter.format(amount)}
-          <span className="text-muted-foreground ml-1 text-xs font-normal">{symbol}</span>
+        <div className="flex items-baseline justify-end gap-2 text-right">
+          <span className="font-mono tabular-nums">
+            {sign}
+            {quantityFormatter.format(amount)}
+          </span>
+          <span className="text-muted-foreground w-7 shrink-0 text-left text-xs">{symbol}</span>
         </div>
       );
     },
@@ -88,7 +89,11 @@ export const activityColumns: ColumnDef<DataTableFeatures, AccountActivity>[] = 
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.status}</span>,
+    cell: ({ row }) => (
+      <Badge variant="secondary" className={cn("rounded-sm", statusClasses[row.original.status])}>
+        {row.original.status}
+      </Badge>
+    ),
   },
   {
     accessorKey: "time",

@@ -71,8 +71,41 @@ export const cryptoAssets = [
 
 export type CryptoAsset = (typeof cryptoAssets)[number];
 
+export const exchangeFeePercent = 0.1;
+
 export const portfolioBalanceUsd =
   cryptoAssets.reduce((totalCents, asset) => totalCents + Math.round(asset.valueUsd * 100), 0) / 100;
+
+export const exchangeAllocations = [
+  {
+    key: "binance",
+    name: "Binance",
+    valueUsd: 43386.41,
+    fill: "var(--color-blue-500)",
+    textColor: "var(--color-white)",
+  },
+  {
+    key: "coinbase",
+    name: "Coinbase",
+    valueUsd: 28924.27,
+    fill: "var(--color-violet-400)",
+    textColor: "var(--color-neutral-950)",
+  },
+  {
+    key: "kraken",
+    name: "Kraken",
+    valueUsd: 14462.14,
+    fill: "var(--color-amber-400)",
+    textColor: "var(--color-neutral-950)",
+  },
+  {
+    key: "okx",
+    name: "OKX",
+    valueUsd: 9641.42,
+    fill: "var(--color-slate-300)",
+    textColor: "var(--color-neutral-950)",
+  },
+];
 
 export const displayCurrencies = ["USD", "EUR", "GBP", "INR"] as const;
 
@@ -278,6 +311,198 @@ export const accountActivities: AccountActivity[] = [
     time: "2026-11-09T11:20:00Z",
     status: "Completed",
   },
+  {
+    id: "ORD-108",
+    symbol: "ETH",
+    type: "Buy",
+    amount: 1.25,
+    status: "Completed",
+    time: "2026-11-08T14:10:00Z",
+  },
+  {
+    id: "TX-099",
+    symbol: "BTC",
+    type: "Withdrawal",
+    amount: 0.035,
+    status: "Completed",
+    time: "2026-11-06T10:45:00Z",
+  },
+  {
+    id: "ORD-107",
+    symbol: "TON",
+    type: "Sell",
+    amount: 80,
+    status: "Completed",
+    time: "2026-11-03T16:30:00Z",
+  },
+  {
+    id: "TX-098",
+    symbol: "SOL",
+    type: "Deposit",
+    amount: 25,
+    status: "Completed",
+    time: "2026-10-28T09:20:00Z",
+  },
+  {
+    id: "ORD-106",
+    symbol: "XRP",
+    type: "Buy",
+    amount: 450,
+    status: "Completed",
+    time: "2026-10-19T13:15:00Z",
+  },
+  {
+    id: "TX-097",
+    symbol: "ETH",
+    type: "Transfer",
+    amount: 0.75,
+    status: "Completed",
+    time: "2026-10-07T11:05:00Z",
+  },
+  {
+    id: "ORD-105",
+    symbol: "BTC",
+    type: "Sell",
+    amount: 0.06,
+    status: "Completed",
+    time: "2026-09-24T15:40:00Z",
+  },
+  {
+    id: "TX-096",
+    symbol: "LTC",
+    type: "Deposit",
+    amount: 12.5,
+    status: "Completed",
+    time: "2026-09-09T08:30:00Z",
+  },
+  {
+    id: "ORD-104",
+    symbol: "SOL",
+    type: "Buy",
+    amount: 18,
+    status: "Completed",
+    time: "2026-08-27T12:55:00Z",
+  },
+  {
+    id: "TX-095",
+    symbol: "TON",
+    type: "Withdrawal",
+    amount: 60,
+    status: "Completed",
+    time: "2026-08-14T17:10:00Z",
+  },
+  {
+    id: "TX-094",
+    symbol: "XRP",
+    type: "Transfer",
+    amount: 300,
+    status: "Completed",
+    time: "2026-07-30T10:25:00Z",
+  },
+  {
+    id: "ORD-103",
+    symbol: "ETH",
+    type: "Sell",
+    amount: 0.8,
+    status: "Completed",
+    time: "2026-07-12T14:35:00Z",
+  },
+  {
+    id: "TX-093",
+    symbol: "BTC",
+    type: "Deposit",
+    amount: 0.12,
+    status: "Completed",
+    time: "2026-06-23T09:50:00Z",
+  },
+  {
+    id: "ORD-102",
+    symbol: "LTC",
+    type: "Buy",
+    amount: 6,
+    status: "Completed",
+    time: "2026-06-05T16:20:00Z",
+  },
+  {
+    id: "TX-092",
+    symbol: "SOL",
+    type: "Withdrawal",
+    amount: 7.5,
+    status: "Completed",
+    time: "2026-05-25T11:40:00Z",
+  },
+  {
+    id: "ORD-101",
+    symbol: "TON",
+    type: "Buy",
+    amount: 150,
+    status: "Completed",
+    time: "2026-05-08T13:05:00Z",
+  },
+  {
+    id: "TX-091",
+    symbol: "ETH",
+    type: "Deposit",
+    amount: 2,
+    status: "Completed",
+    time: "2026-04-21T08:45:00Z",
+  },
+  {
+    id: "ORD-100",
+    symbol: "XRP",
+    type: "Sell",
+    amount: 200,
+    status: "Completed",
+    time: "2026-04-03T15:15:00Z",
+  },
+  {
+    id: "TX-090",
+    symbol: "BTC",
+    type: "Transfer",
+    amount: 0.045,
+    status: "Completed",
+    time: "2026-03-18T12:30:00Z",
+  },
+  {
+    id: "ORD-099",
+    symbol: "SOL",
+    type: "Buy",
+    amount: 30,
+    status: "Completed",
+    time: "2026-03-02T10:10:00Z",
+  },
+  {
+    id: "TX-089",
+    symbol: "LTC",
+    type: "Withdrawal",
+    amount: 4,
+    status: "Completed",
+    time: "2026-02-16T14:50:00Z",
+  },
+  {
+    id: "ORD-098",
+    symbol: "ETH",
+    type: "Buy",
+    amount: 1.5,
+    status: "Completed",
+    time: "2026-01-27T09:35:00Z",
+  },
+  {
+    id: "TX-088",
+    symbol: "TON",
+    type: "Deposit",
+    amount: 200,
+    status: "Completed",
+    time: "2025-12-18T11:55:00Z",
+  },
+  {
+    id: "ORD-097",
+    symbol: "BTC",
+    type: "Buy",
+    amount: 0.08,
+    status: "Completed",
+    time: "2025-12-04T16:05:00Z",
+  },
 ];
 
 export const chartColors = {
@@ -286,130 +511,24 @@ export const chartColors = {
   averageBuy: "var(--color-amber-600)",
 } as const;
 
+const pnlCurrentDate = new Date();
+const pnlMonthFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+export const monthlyPnl = [980, -420, 1560, 820, 1240, 2180, -620, 1890, 3180, -960, 2410, 1760].map(
+  (value, index) => ({
+    month: pnlMonthFormatter.format(
+      new Date(Date.UTC(pnlCurrentDate.getUTCFullYear(), pnlCurrentDate.getUTCMonth() - 11 + index, 1)),
+    ),
+    value,
+  }),
+);
+
 export const chartRanges = ["1D", "7D", "1M", "3M", "1Y"] as const;
 export type ChartRange = (typeof chartRanges)[number];
-
-export const marketTrades = [
-  { symbol: "BTC", time: 1795004435000, price: 75700.3, amount: 0.0297, color: chartColors.up },
-  { symbol: "ETH", time: 1795004434500, price: 2234.19, amount: 1.0071, color: chartColors.down },
-  { symbol: "SOL", time: 1795004434000, price: 89.34, amount: 25.1847, color: chartColors.up },
-  { symbol: "LTC", time: 1795004433500, price: 52.68, amount: 42.7107, color: chartColors.down },
-  { symbol: "XRP", time: 1795004433000, price: 1.2038, amount: 1869.0812, color: chartColors.up },
-  { symbol: "TON", time: 1795004432500, price: 1.707, amount: 1318.1019, color: chartColors.down },
-];
-
-export type OrderBookLevel = { price: number; amount: number; totalUsd: number; depthPercent: number };
-
-export const orderBooks: Record<CryptoAsset["symbol"], { bids: OrderBookLevel[]; asks: OrderBookLevel[] }> = {
-  BTC: {
-    bids: [
-      { price: 75692.73, amount: 0.1189, totalUsd: 8999.87, depthPercent: 10.13 },
-      { price: 75685.16, amount: 0.2299, totalUsd: 26399.88, depthPercent: 29.72 },
-      { price: 75677.59, amount: 0.1664, totalUsd: 38992.63, depthPercent: 43.9 },
-      { price: 75670.02, amount: 0.103, totalUsd: 46786.65, depthPercent: 52.67 },
-      { price: 75662.45, amount: 0.214, totalUsd: 62978.41, depthPercent: 70.9 },
-      { price: 75654.88, amount: 0.1506, totalUsd: 74372.04, depthPercent: 83.73 },
-    ],
-    asks: [
-      { price: 75707.87, amount: 0.1506, totalUsd: 11401.61, depthPercent: 12.84 },
-      { price: 75715.44, amount: 0.2616, totalUsd: 31208.76, depthPercent: 35.13 },
-      { price: 75723.01, amount: 0.1981, totalUsd: 46209.49, depthPercent: 52.02 },
-      { price: 75730.58, amount: 0.1347, totalUsd: 56410.4, depthPercent: 63.51 },
-      { price: 75738.15, amount: 0.2457, totalUsd: 75019.27, depthPercent: 84.45 },
-      { price: 75745.72, amount: 0.1823, totalUsd: 88827.71, depthPercent: 100 },
-    ],
-  },
-  ETH: {
-    bids: [
-      { price: 2233.97, amount: 4.0283, totalUsd: 8999.1, depthPercent: 10.13 },
-      { price: 2233.75, amount: 7.7881, totalUsd: 26395.77, depthPercent: 29.71 },
-      { price: 2233.53, amount: 5.6396, totalUsd: 38991.99, depthPercent: 43.89 },
-      { price: 2233.31, amount: 3.4912, totalUsd: 46788.92, depthPercent: 52.67 },
-      { price: 2233.09, amount: 7.251, totalUsd: 62981.05, depthPercent: 70.9 },
-      { price: 2232.87, amount: 5.1025, totalUsd: 74374.27, depthPercent: 83.73 },
-    ],
-    asks: [
-      { price: 2234.41, amount: 5.1025, totalUsd: 11401.08, depthPercent: 12.83 },
-      { price: 2234.63, amount: 8.8623, totalUsd: 31205.04, depthPercent: 35.13 },
-      { price: 2234.85, amount: 6.7138, totalUsd: 46209.37, depthPercent: 52.02 },
-      { price: 2235.07, amount: 4.5654, totalUsd: 56413.36, depthPercent: 63.51 },
-      { price: 2235.29, amount: 8.3252, totalUsd: 75022.6, depthPercent: 84.46 },
-      { price: 2235.51, amount: 6.1767, totalUsd: 88830.67, depthPercent: 100 },
-    ],
-  },
-  SOL: {
-    bids: [
-      { price: 89.33, amount: 100.7388, totalUsd: 8999, depthPercent: 10.13 },
-      { price: 89.32, amount: 194.7616, totalUsd: 26395.1, depthPercent: 29.71 },
-      { price: 89.31, amount: 141.0343, totalUsd: 38990.88, depthPercent: 43.89 },
-      { price: 89.3, amount: 87.3069, totalUsd: 46787.38, depthPercent: 52.67 },
-      { price: 89.29, amount: 181.3298, totalUsd: 62978.32, depthPercent: 70.89 },
-      { price: 89.28, amount: 127.6024, totalUsd: 74370.66, depthPercent: 83.72 },
-    ],
-    asks: [
-      { price: 89.35, amount: 127.6024, totalUsd: 11401.27, depthPercent: 12.83 },
-      { price: 89.36, amount: 221.6253, totalUsd: 31205.71, depthPercent: 35.13 },
-      { price: 89.37, amount: 167.8979, totalUsd: 46210.75, depthPercent: 52.02 },
-      { price: 89.38, amount: 114.1706, totalUsd: 56415.31, depthPercent: 63.51 },
-      { price: 89.39, amount: 208.1934, totalUsd: 75025.72, depthPercent: 84.46 },
-      { price: 89.4, amount: 154.4661, totalUsd: 88834.99, depthPercent: 100 },
-    ],
-  },
-  LTC: {
-    bids: [
-      { price: 52.67, amount: 170.8428, totalUsd: 8998.29, depthPercent: 10.13 },
-      { price: 52.66, amount: 330.2961, totalUsd: 26391.68, depthPercent: 29.7 },
-      { price: 52.65, amount: 239.18, totalUsd: 38984.51, depthPercent: 43.87 },
-      { price: 52.64, amount: 148.0638, totalUsd: 46778.59, depthPercent: 52.64 },
-      { price: 52.63, amount: 307.5171, totalUsd: 62963.21, depthPercent: 70.86 },
-      { price: 52.62, amount: 216.4009, totalUsd: 74350.23, depthPercent: 83.67 },
-    ],
-    asks: [
-      { price: 52.69, amount: 216.4009, totalUsd: 11402.16, depthPercent: 12.83 },
-      { price: 52.7, amount: 375.8542, totalUsd: 31209.68, depthPercent: 35.12 },
-      { price: 52.71, amount: 284.738, totalUsd: 46218.22, depthPercent: 52.01 },
-      { price: 52.72, amount: 193.6219, totalUsd: 56425.97, depthPercent: 63.5 },
-      { price: 52.73, amount: 353.0752, totalUsd: 75043.62, depthPercent: 84.45 },
-      { price: 52.74, amount: 261.959, totalUsd: 88859.34, depthPercent: 100 },
-    ],
-  },
-  XRP: {
-    bids: [
-      { price: 1.2037, amount: 7476.325, totalUsd: 8999.25, depthPercent: 10.13 },
-      { price: 1.2036, amount: 14454.2283, totalUsd: 26396.36, depthPercent: 29.72 },
-      { price: 1.2035, amount: 10466.855, totalUsd: 38993.22, depthPercent: 43.9 },
-      { price: 1.2034, amount: 6479.4816, totalUsd: 46790.63, depthPercent: 52.68 },
-      { price: 1.2033, amount: 13457.3849, totalUsd: 62983.9, depthPercent: 70.91 },
-      { price: 1.2032, amount: 9470.0116, totalUsd: 74378.22, depthPercent: 83.73 },
-    ],
-    asks: [
-      { price: 1.2039, amount: 9470.0116, totalUsd: 11400.95, depthPercent: 12.84 },
-      { price: 1.204, amount: 16447.9149, totalUsd: 31204.24, depthPercent: 35.13 },
-      { price: 1.2041, amount: 12460.5416, totalUsd: 46207.97, depthPercent: 52.02 },
-      { price: 1.2042, amount: 8473.1683, totalUsd: 56411.36, depthPercent: 63.51 },
-      { price: 1.2043, amount: 15451.0716, totalUsd: 75019.09, depthPercent: 84.46 },
-      { price: 1.2044, amount: 11463.6983, totalUsd: 88825.97, depthPercent: 100 },
-    ],
-  },
-  TON: {
-    bids: [
-      { price: 1.7068, amount: 5272.4077, totalUsd: 8998.95, depthPercent: 10.13 },
-      { price: 1.7066, amount: 10193.3216, totalUsd: 26394.87, depthPercent: 29.71 },
-      { price: 1.7064, amount: 7381.3708, totalUsd: 38990.44, depthPercent: 43.89 },
-      { price: 1.7062, amount: 4569.42, totalUsd: 46786.78, depthPercent: 52.67 },
-      { price: 1.706, amount: 9490.3339, totalUsd: 62977.29, depthPercent: 70.89 },
-      { price: 1.7058, amount: 6678.3831, totalUsd: 74369.28, depthPercent: 83.71 },
-    ],
-    asks: [
-      { price: 1.7072, amount: 6678.3831, totalUsd: 11401.34, depthPercent: 12.83 },
-      { price: 1.7074, amount: 11599.297, totalUsd: 31205.98, depthPercent: 35.13 },
-      { price: 1.7076, amount: 8787.3462, totalUsd: 46211.25, depthPercent: 52.02 },
-      { price: 1.7078, amount: 5975.3954, totalUsd: 56416.03, depthPercent: 63.51 },
-      { price: 1.708, amount: 10896.3093, totalUsd: 75026.92, depthPercent: 84.45 },
-      { price: 1.7082, amount: 8084.3585, totalUsd: 88836.63, depthPercent: 100 },
-    ],
-  },
-};
 
 export type MarketCandle = {
   time: number;

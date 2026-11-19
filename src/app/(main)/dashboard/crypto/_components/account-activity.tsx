@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { type PaginationState, useTable } from "@tanstack/react-table";
 import { cn } from "cn";
 import { Search } from "lucide-react";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
@@ -20,17 +20,31 @@ import {
 } from "@/components/ui/pagination";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { dataTableFeatures } from "@/lib/data-table-features";
 
 import { activityColumns } from "./activity-columns";
 import { accountActivities } from "./data";
 
+const activityRanges = ["24h", "7D", "30D", "6M", "1Y"] as const;
+type ActivityRange = (typeof activityRanges)[number];
+const activityRangeDays: Record<ActivityRange, number> = { "24h": 1, "7D": 7, "30D": 30, "6M": 180, "1Y": 365 };
+
 export function AccountActivityTable() {
   const [globalFilter, setGlobalFilter] = useState("");
+  const [range, setRange] = useState<ActivityRange>("1Y");
+  const [rangeEnd] = useState(() => Date.now());
+  const activities = useMemo(() => {
+    const rangeStart = rangeEnd - activityRangeDays[range] * 24 * 60 * 60 * 1000;
+    return accountActivities.filter((activity) => {
+      const timestamp = new Date(activity.time).getTime();
+      return timestamp >= rangeStart && timestamp <= rangeEnd;
+    });
+  }, [range, rangeEnd]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const table = useTable({
     features: dataTableFeatures,
-    data: accountActivities,
+    data: activities,
     columns: activityColumns,
     state: { globalFilter, pagination },
     onGlobalFilterChange: setGlobalFilter,
@@ -43,10 +57,10 @@ export function AccountActivityTable() {
   const lastRow = Math.min((pagination.pageIndex + 1) * pagination.pageSize, activityCount);
 
   return (
-    <Card size="sm" id="crypto-activity" className="gap-0">
-      <CardHeader className="pb-3">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <CardTitle>Recent account activity</CardTitle>
+    <Card size="sm" id="crypto-activity" className="gap-4">
+      <CardHeader>
+        <CardTitle>Account activity</CardTitle>
+        <CardAction className="flex max-w-full flex-wrap items-center gap-2 max-sm:col-start-1 max-sm:row-start-2 max-sm:justify-self-start">
           <InputGroup className="h-7 w-full sm:w-48">
             <InputGroupAddon>
               <Search />
@@ -61,14 +75,34 @@ export function AccountActivityTable() {
               }}
             />
           </InputGroup>
-        </div>
+          <ToggleGroup
+            type="single"
+            size="sm"
+            variant="outline"
+            spacing={0}
+            value={range}
+            aria-label="Account activity time range"
+            onValueChange={(value) => {
+              const selectedRange = activityRanges.find((item) => item === value);
+              if (!selectedRange) return;
+              setRange(selectedRange);
+              table.setPageIndex(0);
+            }}
+          >
+            {activityRanges.map((item) => (
+              <ToggleGroupItem key={item} value={item} className="min-w-10">
+                {item}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </CardAction>
       </CardHeader>
       <CardContent className="px-0">
         <Table
-          className="min-w-180 [&_td]:h-11 [&_td]:px-4 [&_td]:py-2 [&_th]:h-9 [&_th]:px-4"
-          aria-label="Recent account activity"
+          className="min-w-180 [&_td]:h-11 [&_td]:px-4 [&_td]:py-2 [&_td:nth-child(4)]:pl-8 [&_th]:h-9 [&_th]:px-4 [&_th:nth-child(4)]:pl-8"
+          aria-label="Account activity"
         >
-          <TableHeader className="[&_th]:text-muted-foreground [&_th]:font-normal">
+          <TableHeader className="bg-muted/50 [&_th]:text-muted-foreground border-t [&_th]:font-mono [&_th]:font-normal [&_th]:uppercase">
             {table.getHeaderGroups().map((group) => (
               <TableRow key={group.id} className="hover:bg-transparent">
                 {group.headers.map((header) => (
@@ -94,11 +128,11 @@ export function AccountActivityTable() {
                 <TableCell colSpan={activityColumns.length}>
                   <Empty className="min-h-40">
                     <EmptyHeader>
-                      <EmptyTitle>{globalFilter ? "No matching activity" : "No account activity yet"}</EmptyTitle>
+                      <EmptyTitle>{globalFilter ? "No matching activity" : "No activity in this period"}</EmptyTitle>
                       <EmptyDescription>
                         {globalFilter
                           ? "Try searching for another asset or activity."
-                          : "Your account activity will appear here."}
+                          : "Choose a longer time range to see more activity."}
                       </EmptyDescription>
                     </EmptyHeader>
                   </Empty>
