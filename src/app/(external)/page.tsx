@@ -55,7 +55,7 @@ export default function Home() {
             aria-label="Studio Admin home"
             prefetch={false}
           >
-            <AppLogo className="size-4 shrink-0" viewBox="72 96 356 308" />
+            <AppLogo className="size-4 shrink-0" />
             <span>Studio Admin</span>
           </Link>
           <LandingThemeSwitcher />

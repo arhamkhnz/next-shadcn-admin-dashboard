@@ -3,8 +3,7 @@ import { ImageResponse } from "next/og";
 import { AppLogo } from "@/components/app-logo";
 
 export function createAppIcon(size: number) {
-  const logoWidth = size * 0.72;
-  const logoHeight = logoWidth * (308 / 356);
+  const logoSize = size * 0.72;
 
   return new ImageResponse(
     <div
@@ -18,7 +17,7 @@ export function createAppIcon(size: number) {
         color: "white",
       }}
     >
-      <AppLogo viewBox="72 96 356 308" width={logoWidth} height={logoHeight} />
+      <AppLogo width={logoSize} height={logoSize} />
     </div>,
     { width: size, height: size },
   );
