@@ -166,10 +166,9 @@ export const sidebarItems: NavGroup[] = [
       {
         id: "hr",
         title: "HR",
-        url: "/dashboard/coming-soon",
+        url: "/dashboard/hr",
         icon: ContactRound,
-        badge: "soon",
-        disabled: true,
+        badge: "new",
       },
       {
         id: "restaurant",
