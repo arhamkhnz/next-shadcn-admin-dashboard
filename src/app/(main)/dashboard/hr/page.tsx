@@ -6,6 +6,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 import { AttendanceOverview } from "./_components/attendance-overview";
 import { departments } from "./_components/data";
+import { EmployeeTenure } from "./_components/employee-tenure";
+import { GenderDistribution } from "./_components/gender-distribution";
+import { HiringPipeline } from "./_components/hiring-pipeline";
 import { KpiCards } from "./_components/kpi-cards";
 import { OvertimeOverview } from "./_components/overtime-overview";
 
@@ -51,6 +54,11 @@ export default function Page() {
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <AttendanceOverview />
         <OvertimeOverview />
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <EmployeeTenure />
+        <GenderDistribution />
+        <HiringPipeline />
       </div>
     </div>
   );

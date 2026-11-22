@@ -29,6 +29,32 @@ export const overtimePeriods = [
   },
 ];
 
+export const genderByAgeGroup = [
+  { ageGroup: "20–24", female: 12, male: 25 },
+  { ageGroup: "25–29", female: 34, male: 18 },
+  { ageGroup: "30–34", female: 22, male: 38 },
+  { ageGroup: "35–39", female: 30, male: 20 },
+  { ageGroup: "40–44", female: 14, male: 24 },
+  { ageGroup: "45–49", female: 16, male: 7 },
+  { ageGroup: "50+", female: 8, male: 4 },
+];
+
+export const employeeTenure = [
+  { years: "<1 yr", employees: 42 },
+  { years: "1–2 yrs", employees: 76 },
+  { years: "3–5 yrs", employees: 94 },
+  { years: "6–9 yrs", employees: 44 },
+  { years: "10+ yrs", employees: 16 },
+];
+
+export const hiringPipeline = [
+  { stage: "Applied", candidates: 124 },
+  { stage: "Screening", candidates: 38 },
+  { stage: "Assessment", candidates: 24 },
+  { stage: "Interview", candidates: 18 },
+  { stage: "Offer", candidates: 6 },
+];
+
 export const kpiMetrics = [
   {
     label: "Total employees",
