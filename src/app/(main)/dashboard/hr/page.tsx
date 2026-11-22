@@ -4,18 +4,9 @@ import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+import { AttendanceOverview } from "./_components/attendance-overview";
+import { departments } from "./_components/data";
 import { KpiCards } from "./_components/kpi-cards";
-
-const departments = [
-  "Finance",
-  "Development",
-  "Design",
-  "Marketing",
-  "Sales",
-  "Human resources",
-  "Operations",
-  "Support",
-];
 
 export const metadata: Metadata = {
   title: "HR Dashboard",
@@ -30,7 +21,7 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl tracking-tight">Good morning, Arham</h1>
+          <h1 className="text-3xl leading-none tracking-tight">Good morning, Arham</h1>
           <p className="text-muted-foreground text-sm">Here’s what’s happening with your team today.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -56,6 +47,9 @@ export default function Page() {
         </div>
       </header>
       <KpiCards />
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <AttendanceOverview />
+      </div>
     </div>
   );
 }

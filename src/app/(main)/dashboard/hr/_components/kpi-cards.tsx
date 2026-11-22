@@ -1,44 +1,6 @@
-import { BriefcaseBusiness, CalendarDays, UserRoundMinus, UserRoundPlus, Users } from "lucide-react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const kpiMetrics = [
-  {
-    label: "Total employees",
-    value: "272",
-    icon: Users,
-    change: "+6%",
-    comparison: "vs last month",
-  },
-  {
-    label: "New hires",
-    value: "18",
-    icon: UserRoundPlus,
-    change: "+4",
-    comparison: "vs last month",
-  },
-  {
-    label: "Open positions",
-    value: "12",
-    icon: BriefcaseBusiness,
-    change: "",
-    comparison: "5 departments hiring",
-  },
-  {
-    label: "On leave today",
-    value: "8",
-    icon: CalendarDays,
-    change: "",
-    comparison: "3 returning tomorrow",
-  },
-  {
-    label: "Employees left",
-    value: "6",
-    icon: UserRoundMinus,
-    change: "",
-    comparison: "This month",
-  },
-];
+import { kpiMetrics } from "./data";
 
 export function KpiCards() {
   return (

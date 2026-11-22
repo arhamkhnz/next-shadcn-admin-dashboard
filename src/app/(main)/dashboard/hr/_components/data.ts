@@ -1,0 +1,68 @@
+import { BriefcaseBusiness, CalendarDays, UserRoundMinus, UserRoundPlus, Users } from "lucide-react";
+
+export const departments = [
+  "Finance",
+  "Development",
+  "Design",
+  "Marketing",
+  "Sales",
+  "Human resources",
+  "Operations",
+  "Support",
+];
+
+export const kpiMetrics = [
+  {
+    label: "Total employees",
+    value: "272",
+    icon: Users,
+    change: "+6%",
+    comparison: "vs last month",
+  },
+  {
+    label: "New hires",
+    value: "18",
+    icon: UserRoundPlus,
+    change: "+4",
+    comparison: "vs last month",
+  },
+  {
+    label: "Open positions",
+    value: "12",
+    icon: BriefcaseBusiness,
+    change: "",
+    comparison: "5 departments hiring",
+  },
+  {
+    label: "On leave today",
+    value: "8",
+    icon: CalendarDays,
+    change: "",
+    comparison: "3 returning tomorrow",
+  },
+  {
+    label: "Employees left",
+    value: "6",
+    icon: UserRoundMinus,
+    change: "",
+    comparison: "This month",
+  },
+];
+
+export const attendanceData = [
+  { date: "2026-11-02", present: 208, onLeave: 18, absent: 9 },
+  { date: "2026-11-03", present: 248, onLeave: 7, absent: 4 },
+  { date: "2026-11-04", present: 178, onLeave: 28, absent: 14 },
+  { date: "2026-11-05", present: 236, onLeave: 12, absent: 6 },
+  { date: "2026-11-06", present: 162, onLeave: 24, absent: 10 },
+  { date: "2026-11-09", present: 222, onLeave: 9, absent: 5 },
+  { date: "2026-11-10", present: 194, onLeave: 32, absent: 16 },
+  { date: "2026-11-11", present: 254, onLeave: 6, absent: 3 },
+  { date: "2026-11-12", present: 172, onLeave: 26, absent: 18 },
+  { date: "2026-11-13", present: 148, onLeave: 35, absent: 12 },
+  { date: "2026-11-16", present: 232, onLeave: 14, absent: 8 },
+  { date: "2026-11-17", present: 184, onLeave: 30, absent: 15 },
+  { date: "2026-11-18", present: 258, onLeave: 5, absent: 3 },
+  { date: "2026-11-19", present: 216, onLeave: 20, absent: 11 },
+  { date: "2026-11-20", present: 168, onLeave: 8, absent: 19 },
+];
