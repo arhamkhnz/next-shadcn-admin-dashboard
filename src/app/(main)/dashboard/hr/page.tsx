@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { AttendanceOverview } from "./_components/attendance-overview";
 import { departments } from "./_components/data";
 import { KpiCards } from "./_components/kpi-cards";
+import { OvertimeOverview } from "./_components/overtime-overview";
 
 export const metadata: Metadata = {
   title: "HR Dashboard",
@@ -49,6 +50,7 @@ export default function Page() {
       <KpiCards />
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <AttendanceOverview />
+        <OvertimeOverview />
       </div>
     </div>
   );

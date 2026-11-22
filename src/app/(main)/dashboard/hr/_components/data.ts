@@ -11,6 +11,24 @@ export const departments = [
   "Support",
 ];
 
+export const overtimePeriods = [
+  {
+    value: "this-month",
+    label: "This month",
+    data: { approved: 98, pending: 20, rejected: 8 },
+  },
+  {
+    value: "last-month",
+    label: "Last month",
+    data: { approved: 84, pending: 10, rejected: 6 },
+  },
+  {
+    value: "last-3-months",
+    label: "Last 3 months",
+    data: { approved: 254, pending: 36, rejected: 20 },
+  },
+];
+
 export const kpiMetrics = [
   {
     label: "Total employees",
