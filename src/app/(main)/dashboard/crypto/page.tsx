@@ -13,10 +13,11 @@ import { PortfolioHoldings } from "./_components/portfolio-holdings";
 import { PriceChart } from "./_components/price-chart";
 
 export const metadata: Metadata = {
-  title: "Crypto Dashboard",
-  robots: {
-    index: false,
-    follow: true,
+  title: "Open Source Crypto Dashboard with shadcn/ui",
+  description:
+    "Explore an open source crypto dashboard UI with portfolio holdings, price charts, exchange allocation, and account activity.",
+  alternates: {
+    canonical: "/dashboard/crypto",
   },
 };
 

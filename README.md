@@ -70,6 +70,7 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 - File Manager  
 - Patient Monitoring  
 - Crypto Dashboard  
+- HR Dashboard  
 - Products Page  
 - Chat Page  
 - Email Page  
@@ -84,7 +85,10 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 - Legacy: Default v1, CRM v1, Finance v1, Analytics v1
 
 ### Planned
-I’ve added all the planned screens. Feel free to open an issue for requesting something specific.
+- Healthcare Dashboard
+- POS Dashboard
+- Restaurant Dashboard
+- Hotel Dashboard
 
 ## Colocation File System Architecture
 

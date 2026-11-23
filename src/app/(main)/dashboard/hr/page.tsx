@@ -13,10 +13,11 @@ import { KpiCards } from "./_components/kpi-cards";
 import { OvertimeOverview } from "./_components/overtime-overview";
 
 export const metadata: Metadata = {
-  title: "HR Dashboard",
-  robots: {
-    index: false,
-    follow: true,
+  title: "Open Source HR Dashboard with shadcn/ui",
+  description:
+    "Explore an open source HR dashboard with workforce metrics, attendance, overtime, employee tenure, and a hiring pipeline.",
+  alternates: {
+    canonical: "/dashboard/hr",
   },
 };
 
